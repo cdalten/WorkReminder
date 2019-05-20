@@ -1,0 +1,98 @@
+<resources>
+    <string name="app_name">WorkReminder</string>
+
+    <string name="work_notification_title_template">Work: %1$s</string>
+
+    <!-- TODO: remove this placeholder text -->
+    <string name="work_notification_placeholder_text_template">You said %1$s and lorem ipsum dolor
+        sit amet, consectetur adipiscing elit. Etiam non enim magna. Morbi dictum, velit vel semper
+        venenatis, magna odio volutpat velit, at ullamcorper nulla lacus sed turpis. Pellentesque
+        vitae metus elit, nec tincidunt tellus. Integer sed nisl sem, ullamcorper ornare lacus. Duis
+        ac mauris sed massa congue volutpat. Donec sed erat sit amet turpis viverra rhoncus sit amet
+        nec magna. Donec lacinia ligula at libero volutpat volutpat nec nec tortor.
+    </string>
+
+    <string name="action_share">Share</string>
+    <string name="action_reply">Reply</string>
+    <string name="SUNDAY">SUNDAY</string>
+    <string name="MONDAY">MONDAY</string>
+    <string name="TUESDAY">TUESDAY</string>
+    <string name="WEDNESDAY">WEDNESDAY</string>
+    <string name="THURSDAY">THURSDAY</string>
+    <string name="FRIDAY">FRIDAY</string>
+    <string name="SATURDAY">SATURDAY</string>
+
+    <string name="I_WORK_TODAY">I_WORK_TODAY</string>
+    <string name="DAY_OF_WEEK">DAY_OF_WEEK</string>
+
+    <string name="START_HOUR">START_HOUR</string>
+    <string name="START_MINUTE">START_MINUTE</string>
+
+    <string name="START_AM_OR_PM"></string>
+    <string name="END_HOUR">END_HOUR</string>
+    <string name="END_MINUTE">END_MINUTE</string>
+    <string name="END_AM_OR_PM"></string>
+
+    <string-array name="day_of_the_week">
+        <item>SUNDAY</item>
+        <item>MONDAY</item>
+        <item>TUESDAY</item>
+        <item>WEDNESDAY</item>
+        <item>THURSDAY</item>
+        <item>FRIDAY</item>
+        <item>SATURDAY</item>
+        <item>OFF</item>
+    </string-array>
+    <string-array name="start_hour">
+        <item>00</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+    </string-array>
+    <string-array name="start_minute">
+        <item>00</item>
+        <item>15</item>
+        <item>30</item>
+        <item>45</item>
+    </string-array>
+    <string-array name="start_am_or_pm">
+        <item>AM</item>
+        <item>PM</item>
+    </string-array>
+    <string-array name="end_hour">
+        <item>00</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+    </string-array>
+    <string-array name="end_minute">
+        <item>00</item>
+        <item>15</item>
+        <item>30</item>
+        <item>45</item>
+    </string-array>
+    <string-array name="end_am_or_pm">
+        <item>AM</item>
+        <item>PM</item>
+    </string-array>
+
+    <string name="SUNDAY_START_HOUR">SUNDAY_START_HOUR</string>
+</resources>
