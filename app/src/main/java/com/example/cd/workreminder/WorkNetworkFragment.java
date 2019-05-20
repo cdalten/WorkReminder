@@ -231,7 +231,6 @@ public class WorkNetworkFragment extends Fragment {
             //Bug. Shows already connected. Why 9 - 26 - 2018
             //String serverCookie = connection.getHeaderField("Set-Cookie");
             //Log.i(PRODUCTION_TAG, "The server side cookie is: " + serverCookie);
-
             //connection.setRequestProperty("Cookie", serverCookie);
 
             //Need to set cookie also? 9 - 26 - 2018

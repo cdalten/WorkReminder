@@ -1,7 +1,5 @@
 package com.example.cd.workreminder;
 
-//package com.example.cd.shiftreminder;
-
 import android.annotation.TargetApi;
 import android.app.ListActivity;
 import android.content.ContentValues;
@@ -969,7 +967,6 @@ public class CurrentWeekSchedule extends ListActivity {
         //Log.e(PRODUCTION_TAG, "THE UPDATED ALARM MINUTE IS: " + newWorkHours.getStartMilitaryMinute());
 
         newWorkHours.setCurrentPosition(currentPosition);
-
         //Added getStartOfday)() to newWorkHours object??
         //if (!newStartDay.equals("OFF"))
         //mondayHours.setDayofWeek("OFF");

@@ -1,7 +1,5 @@
 package com.example.cd.workreminder;
 
-//package com.example.cd.shiftreminder;
-
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.util.Log;

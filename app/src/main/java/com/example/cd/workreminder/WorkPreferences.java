@@ -129,7 +129,6 @@ public class WorkPreferences extends AppCompatActivity {
     public void onBackPressed() {
         AlertDialog.Builder builder =
         new AlertDialog.Builder(this);
-
         builder.setTitle("Discard Changes");
         builder.setMessage("ARE YOU SURE YOU WANT TO DISCARD ANY POSSIBLE CHANGES?");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {

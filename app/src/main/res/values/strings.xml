@@ -93,6 +93,5 @@
         <item>AM</item>
         <item>PM</item>
     </string-array>
-
     <string name="SUNDAY_START_HOUR">SUNDAY_START_HOUR</string>
 </resources>

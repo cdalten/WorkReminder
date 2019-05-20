@@ -1,7 +1,5 @@
 package com.example.cd.workreminder;
 
-//package com.example.cd.shiftreminder;
-
 import android.net.NetworkInfo;
 import android.util.Log;
 

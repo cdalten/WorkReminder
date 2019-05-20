@@ -15,7 +15,6 @@ import java.lang.annotation.Target;
 
 public class AlarmTimer extends AppCompatActivity {
     //private final String PRODUCTION_TAG = "LG_WORK_PHONE"; //Added on 4 - 17 - 2019
-
     private static Calendar cal;
     private SharedPreferences pref; //Added on 5 - 14 - 2019
 

@@ -30,7 +30,6 @@ public class HourFormat extends FragmentActivity {
     Intent intent; //Added on 1 - 24 - 2019
     Intent forceBacktoMain; //Added on 1 - 31 - 2019
     Button finish; //Added on 2 - 1- 2019
-
     private final String PRODUCTION_TAG = "LG_WORK_PHONE";
 
     @Override

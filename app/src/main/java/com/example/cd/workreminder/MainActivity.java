@@ -1410,7 +1410,6 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
                 Log.e(PRODUCTION_TAG, "SCHEDULE HAS BEEN UPDATED");
                     //getSchedule.setVisibility(View.VISIBLE);
 
-
                 //startActivity(intent); //caused multiple flickering
                     //} //end inner if.
 

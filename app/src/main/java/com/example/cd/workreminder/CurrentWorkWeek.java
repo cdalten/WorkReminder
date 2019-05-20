@@ -60,7 +60,6 @@ public class CurrentWorkWeek extends com.example.cd.workreminder.MainActivity im
         setEndHour("");
         setEndMinute("");
         setEndAmOrPm("0");
-
         /*SharedPreferences.Editor editor = pref.edit();
         editor.putInt("HOUR", 99); //military
         editor.putInt("MINUTES", 99);

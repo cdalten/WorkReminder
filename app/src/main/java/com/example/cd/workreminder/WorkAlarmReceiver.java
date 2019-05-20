@@ -32,9 +32,8 @@ public class WorkAlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
-        //Calendar cal = Calendar.getInstance();
 
+        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
         Calendar c=Calendar.getInstance();
         c.setTimeInMillis(System.currentTimeMillis());
         //c.setTimeInMillis(SystemClock.elapsedRealtime());
