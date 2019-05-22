@@ -190,7 +190,8 @@ public class CurrentWeekSchedule extends ListActivity {
                     case 2:
                         if (week.get(2).get(0).equals("OFF")) {
                             i.putExtra("DAY_WEEK", position);
-                            i.putExtra("START_HOUR", 12);
+                            i.putExtra("START_HOUR",
+                                    Integer.parseInt(WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
                             i.putExtra("START_MINUTE", 0);
                             i.putExtra("START_AM_OR_PM", 0);
 
