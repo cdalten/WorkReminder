@@ -104,13 +104,10 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     //protected TabLayout th; //added on 9 - 28 - 2017
 
     private final String name = "9857701"; //modified on 1 - 8 - 201
-
-    //protected ConnectionStatus connectionStatus = new ConnectionStatus(); //added on 6 - 6 - 2018
     public static boolean refreshDisplay = true; //added on 6 - 14 - 2018
 
     private final String PRODUCTION_TAG = "LG_WORK_WEB: "; //used for hardware only
 
-    private String ThisWeeksScrewJob = "schedule.html"; //added on 7 - 22 - 2018
     private final boolean debug = true; //added on 7 - 22 - 2018
 
     private String schedule = ""; //added on 7 - 25 - 2018
@@ -119,24 +116,11 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     //private boolean notConnected = false; //modified on 9 - 5- 2018
     private TextView offline; //added on 9 - 8 - 2018
     private String connectionStatus = ""; //added on 9 - 18 - 2018
-
-
-    //Added on 10 - 10 - 2018.
-    public final int DAY = 0;
-    public final int MONTH = 1;
-    public final int DATE = 2;
-
-    public static final int ThisWeek = 35; //added on 9 - 18 - 2018
     public static String CurrentSchedule = "CurrentSchedule"; //added on 9 - 19 - 2018
-
     public String fileContents = ""; //default is ""
     private SharedPreferences pref; //added on 9 - 21 - 2018
     private boolean doIWorkToday = false; //added on 10 - 17 - 2018
     CurrentWorkHours date; //added on 10 - 22 - 2018
-
-    private final int HOUR = 0; //Added on 10 - 23 - 2018
-    private final int MINUTES = 1; //Added on 10 - 23 - 2018
-    CurrentWorkWeek currentWorkWeek; //Added on 11 - 5 - 2018
 
     private boolean pageEnded = false; //Added on 11 - 12 - 2018
     private boolean onClick = false; //Added on 11 - 13 - 2018
@@ -155,9 +139,6 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     // downloads with consecutive button clicks.
     private boolean mDownloading = false;
     private static boolean scheduleGotUpdated = false; //Added on 1 - 22 - 2019
-    private static boolean updateSchedule = false; //Added on 2 - 6 - 2019
-    //private Spinner startHour; //added on 2 - 11 - 2019
-    //private Spinner endHour;
 
     private CurrentWorkWeek sundayWorkHours; //Added on 2 - 17 - 2019
     private CurrentWorkWeek mondayWorkHours;
@@ -212,15 +193,12 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
                     @Override
                     public void onClick(View view) {
                         Intent workPreferenceIntent = new Intent(MainActivity.this, WorkPreferences.class);
-                        //getSchedule.setVisibility(View.INVISIBLE);
                         startActivity(workPreferenceIntent);
                     }
                 }
         );
 
-        //reverseMe("neenah".toCharArray()); //Added breakpoint
         //checkDrivePermissions(); //Temporarily disabled on 1 - 16 - 2019
-
 
         //Disabled network broadcast on 8 -27 - 2018.
         //IntentFilter filter = new IntentFilter(AlarmManager);
@@ -246,14 +224,6 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
             //);
             //int defaultValue = getResources().getInteger("UPDATE_SCHEDULE");
 
-            //Log.e(PRODUCTION_TAG, "THE SAVED DATE IS: " +
-            //pref.getString(getString(R.string.com_example_cd_shiftreminder_SAVED_DOWNLOAD_DATE), "SUNDAY")
-            //);
-
-            //Log.e(PRODUCTION_TAG,
-            //        "THE SAVED DATE IS: " + sp.getString(getString(R.string.com_example_cd_shiftreminder_SAVED_DOWNLOAD_DATE), "SUNDAY")
-            //        );
-
             getSchedule = (WebView) this.findViewById(R.id.CurrentSchedule);
             getSchedule.setWebViewClient(new WWebViewClient());
             getSchedule.addJavascriptInterface(new MainActivity.JavaScriptBridge(this), "OFFLINE");
@@ -272,8 +242,6 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
             //force load???
             getSchedule.loadUrl(LOGIN_URL);
             getSchedule.setVisibility(View.VISIBLE); //disable for debugging.
-
-
 
             getSchedule.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -297,7 +265,6 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
                     "</html>";
             //readFromInternalDirectory(new File(CurrentSchedule + ThisWeek));
             date = new CurrentWorkHours();
-
 
             pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
 
