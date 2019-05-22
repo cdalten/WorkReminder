@@ -25,5 +25,13 @@ public final class WorkReaderContract {
         public static final String END_HOUR_DEFAULT = "12";
         public static final String END_MINUTE_DEFAULT = "0";
         public static final String END_AM_OR_PM_DEFAULT = "AM";
+
+        public static final int SUNDAY = 0;
+        public static final int MONDAY = 1;
+        public static final int TUESDAY = 2;
+        public static final int WEDNESAY = 3;
+        public static final int THURSDAY = 4;
+        public static final int FRIDAY = 5;
+        public static final int SATURDAY = 6;
     }
 }//end class

@@ -64,7 +64,7 @@ public class CurrentWeekSchedule extends ListActivity {
     private String newEndAmOrPm;
 
     private String getCurrentHours;  //Added on 3 - 6 - 2019
-
+    private WorkAlarmReceiver workAlarmReceiver; //Added on 5 - 22 - 2019
     CurrentWorkWeek newWorkHours; //Added on 3 - 2 - 2019
     SharedPreferences pref;
 
@@ -115,7 +115,7 @@ public class CurrentWeekSchedule extends ListActivity {
 
 
         IntentFilter intentFilter = new IntentFilter();
-        WorkAlarmReceiver workAlarmReceiver = new WorkAlarmReceiver();
+        workAlarmReceiver = new WorkAlarmReceiver();
         registerReceiver(workAlarmReceiver, intentFilter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -127,9 +127,9 @@ public class CurrentWeekSchedule extends ListActivity {
                 currentPosition = position; //position on clicked list
                 //i = new Intent(CurrentWeekSchedule.this, HourFormat.class);
                 switch (position) {
-                    case 0:
+                    case WorkReaderContract.WorkEntry.SUNDAY:
                         //currentPosition = 6; //handle integer wrap around case
-                        if (week.get(0).get(0).equals("OFF")) {
+                        if (week.get(WorkReaderContract.WorkEntry.SUNDAY).get(0).equals("OFF")) {
                             i.putExtra("DAY_WEEK", position);
                             i.putExtra("START_HOUR", 12);
                             i.putExtra("START_MINUTE", 0);
@@ -157,8 +157,8 @@ public class CurrentWeekSchedule extends ListActivity {
                             }
                         }
                         break;
-                    case 1:
-                        if (week.get(1).get(0).equals("OFF")) {
+                    case WorkReaderContract.WorkEntry.MONDAY:
+                        if (week.get(WorkReaderContract.WorkEntry.MONDAY).get(0).equals("OFF")) {
                             i.putExtra("DAY_WEEK", position);
                             i.putExtra("START_HOUR", 12);
                             i.putExtra("START_MINUTE", 0);
@@ -187,17 +187,20 @@ public class CurrentWeekSchedule extends ListActivity {
                             }
                         }
                         break;
-                    case 2:
-                        if (week.get(2).get(0).equals("OFF")) {
+                    case WorkReaderContract.WorkEntry.TUESDAY:
+                        if (week.get(WorkReaderContract.WorkEntry.TUESDAY).get(0).equals("OFF")) {
                             i.putExtra("DAY_WEEK", position);
                             i.putExtra("START_HOUR",
                                     Integer.parseInt(WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
-                            i.putExtra("START_MINUTE", 0);
-                            i.putExtra("START_AM_OR_PM", 0);
+                            i.putExtra("START_MINUTE",
+                                    Integer.parseInt(WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
+                            i.putExtra("START_AM_OR_PM", WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT);
 
-                            i.putExtra("END_HOUR", 12);
-                            i.putExtra("END_MINUTE", 0);
-                            i.putExtra("END_AM_OR_PM", 0);
+                            i.putExtra("END_HOUR",
+                                    Integer.parseInt(WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
+                            i.putExtra("END_MINUTE",
+                                    Integer.parseInt(WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
+                            i.putExtra("END_AM_OR_PM", WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT);
                         } else {
                             i.putExtra("DAY_WEEK", position);
                             i.putExtra("START_HOUR", Integer.parseInt(tuesdayHours.getStartHour()));
@@ -217,8 +220,8 @@ public class CurrentWeekSchedule extends ListActivity {
                             }
                         }
                         break;
-                    case 3:
-                        if (week.get(3).get(0).equals("OFF")) {
+                    case WorkReaderContract.WorkEntry.WEDNESAY:
+                        if (week.get(WorkReaderContract.WorkEntry.WEDNESAY).get(0).equals("OFF")) {
                             i.putExtra("DAY_WEEK", position);
                             i.putExtra("START_HOUR", 12);
                             i.putExtra("START_MINUTE", 0);
@@ -246,8 +249,8 @@ public class CurrentWeekSchedule extends ListActivity {
                             }
                         }
                         break;
-                    case 4:
-                        if (week.get(4).get(0).equals("OFF")){
+                    case WorkReaderContract.WorkEntry.THURSDAY:
+                        if (week.get(WorkReaderContract.WorkEntry.THURSDAY).get(0).equals("OFF")){
                             i.putExtra("DAY_WEEK", position);
                             i.putExtra("START_HOUR", 12);
                             i.putExtra("START_MINUTE", 0);
@@ -275,8 +278,8 @@ public class CurrentWeekSchedule extends ListActivity {
                             }
                         }
                         break;
-                    case 5:
-                        if (week.get(5).get(0).equals("OFF")){
+                    case WorkReaderContract.WorkEntry.FRIDAY:
+                        if (week.get(WorkReaderContract.WorkEntry.FRIDAY).get(0).equals("OFF")){
                             i.putExtra("DAY_WEEK", position);
                             i.putExtra("START_HOUR", 12);
                             i.putExtra("START_MINUTE", 0);
@@ -304,8 +307,8 @@ public class CurrentWeekSchedule extends ListActivity {
                             }
                         }
                         break;
-                    case 6:
-                        if (week.get(6).get(0).equals("OFF")) {
+                    case WorkReaderContract.WorkEntry.SATURDAY:
+                        if (week.get(WorkReaderContract.WorkEntry.SATURDAY).get(0).equals("OFF")) {
                             i.putExtra("DAY_WEEK", position);
                             i.putExtra("START_HOUR", 12);
                             i.putExtra("START_MINUTE", 0);
@@ -381,77 +384,76 @@ public class CurrentWeekSchedule extends ListActivity {
             week = new ArrayList<ArrayList<String>>();
             //week.clear(); //stupid hack. Don't ask.
 
-            week.add(0, new myArrayList());
-            week.add(1, new myArrayList());
-            week.add(2, new myArrayList());
-            week.add(3, new myArrayList());
-            week.add(4, new myArrayList());
-            week.add(5, new myArrayList());
-            week.add(6, new myArrayList());
+            week.add(WorkReaderContract.WorkEntry.SUNDAY, new myArrayList());
+            week.add(WorkReaderContract.WorkEntry.MONDAY, new myArrayList());
+            week.add(WorkReaderContract.WorkEntry.TUESDAY, new myArrayList());
+            week.add(WorkReaderContract.WorkEntry.WEDNESAY, new myArrayList());
+            week.add(WorkReaderContract.WorkEntry.THURSDAY, new myArrayList());
+            week.add(WorkReaderContract.WorkEntry.FRIDAY, new myArrayList());
+            week.add(WorkReaderContract.WorkEntry.SATURDAY, new myArrayList());
 
             sundayHours = intent.getParcelableExtra("SundayHours");
-            week.get(0).add(0, sundayHours.getDayOfWeek());
-            week.get(0).add(1, sundayHours.getStartHour());
-
-            week.get(0).add(2, sundayHours.getStartMinute());
-            week.get(0).add(3, sundayHours.getStartAmOrPm());
-            week.get(0).add(4, sundayHours.getEndHour());
-            week.get(0).add(5, sundayHours.getEndMinute());
-            week.get(0).add(6, sundayHours.getStartAmOrPm());
+            week.get(WorkReaderContract.WorkEntry.SUNDAY).add(0, sundayHours.getDayOfWeek());
+            week.get(WorkReaderContract.WorkEntry.SUNDAY).add(1, sundayHours.getStartHour());
+            week.get(WorkReaderContract.WorkEntry.SUNDAY).add(2, sundayHours.getStartMinute());
+            week.get(WorkReaderContract.WorkEntry.SUNDAY).add(3, sundayHours.getStartAmOrPm());
+            week.get(WorkReaderContract.WorkEntry.SUNDAY).add(4, sundayHours.getEndHour());
+            week.get(WorkReaderContract.WorkEntry.SUNDAY).add(5, sundayHours.getEndMinute());
+            week.get(WorkReaderContract.WorkEntry.SUNDAY).add(6, sundayHours.getStartAmOrPm());
 
             mondayHours = intent.getParcelableExtra("MondayHours");
-            week.get(1).add(0, mondayHours.getDayOfWeek());
-            week.get(1).add(1, mondayHours.getStartHour());
-            week.get(1).add(2, mondayHours.getStartMinute());
-            week.get(1).add(3, mondayHours.getStartAmOrPm());
-            week.get(1).add(4, mondayHours.getEndHour());
-            week.get(1).add(5, mondayHours.getEndMinute());
-            week.get(1).add(6, mondayHours.getStartAmOrPm());
+            week.get(WorkReaderContract.WorkEntry.MONDAY).add(0, mondayHours.getDayOfWeek());
+            week.get(WorkReaderContract.WorkEntry.MONDAY).add(1, mondayHours.getStartHour());
+            week.get(WorkReaderContract.WorkEntry.MONDAY).add(2, mondayHours.getStartMinute());
+            week.get(WorkReaderContract.WorkEntry.MONDAY).add(3, mondayHours.getStartAmOrPm());
+            week.get(WorkReaderContract.WorkEntry.MONDAY).add(4, mondayHours.getEndHour());
+            week.get(WorkReaderContract.WorkEntry.MONDAY).add(5, mondayHours.getEndMinute());
+            week.get(WorkReaderContract.WorkEntry.MONDAY).add(6, mondayHours.getStartAmOrPm());
 
             tuesdayHours = intent.getParcelableExtra("TuesdayHours");
-            week.get(2).add(0, tuesdayHours.getDayOfWeek());
-            week.get(2).add(1, tuesdayHours.getStartHour());
-            week.get(2).add(2, tuesdayHours.getStartMinute());
-            week.get(2).add(3, tuesdayHours.getStartAmOrPm());
-            week.get(2).add(4, tuesdayHours.getEndHour());
-            week.get(2).add(5, tuesdayHours.getEndMinute());
-            week.get(2).add(6, tuesdayHours.getStartAmOrPm());
+            week.get(WorkReaderContract.WorkEntry.TUESDAY).add(0, tuesdayHours.getDayOfWeek());
+            week.get(WorkReaderContract.WorkEntry.TUESDAY).add(1, tuesdayHours.getStartHour());
+            week.get(WorkReaderContract.WorkEntry.TUESDAY).add(2, tuesdayHours.getStartMinute());
+            week.get(WorkReaderContract.WorkEntry.TUESDAY).add(3, tuesdayHours.getStartAmOrPm());
+            week.get(WorkReaderContract.WorkEntry.TUESDAY).add(4, tuesdayHours.getEndHour());
+            week.get(WorkReaderContract.WorkEntry.TUESDAY).add(5, tuesdayHours.getEndMinute());
+            week.get(WorkReaderContract.WorkEntry.TUESDAY).add(6, tuesdayHours.getStartAmOrPm());
 
             wednesdayHours = intent.getParcelableExtra("WednesdayHours");
-            week.get(3).add(0, wednesdayHours.getDayOfWeek());
-            week.get(3).add(1, wednesdayHours.getStartHour());
-            week.get(3).add(2, wednesdayHours.getStartMinute());
-            week.get(3).add(3, wednesdayHours.getStartAmOrPm());
-            week.get(3).add(4, wednesdayHours.getEndHour());
-            week.get(3).add(5, wednesdayHours.getEndMinute());
-            week.get(3).add(6, wednesdayHours.getStartAmOrPm());
+            week.get(WorkReaderContract.WorkEntry.WEDNESAY).add(0, wednesdayHours.getDayOfWeek());
+            week.get(WorkReaderContract.WorkEntry.WEDNESAY).add(1, wednesdayHours.getStartHour());
+            week.get(WorkReaderContract.WorkEntry.WEDNESAY).add(2, wednesdayHours.getStartMinute());
+            week.get(WorkReaderContract.WorkEntry.WEDNESAY).add(3, wednesdayHours.getStartAmOrPm());
+            week.get(WorkReaderContract.WorkEntry.WEDNESAY).add(4, wednesdayHours.getEndHour());
+            week.get(WorkReaderContract.WorkEntry.WEDNESAY).add(5, wednesdayHours.getEndMinute());
+            week.get(WorkReaderContract.WorkEntry.WEDNESAY).add(6, wednesdayHours.getStartAmOrPm());
 
             thursdayHours = intent.getParcelableExtra("ThursdayHours");
-            week.get(4).add(0, thursdayHours.getDayOfWeek());
-            week.get(4).add(1, thursdayHours.getStartHour());
-            week.get(4).add(2, thursdayHours.getStartMinute());
-            week.get(4).add(3, thursdayHours.getStartAmOrPm());
-            week.get(4).add(4, thursdayHours.getEndHour());
-            week.get(4).add(5, thursdayHours.getEndMinute());
-            week.get(4).add(6, thursdayHours.getStartAmOrPm());
+            week.get(WorkReaderContract.WorkEntry.THURSDAY).add(0, thursdayHours.getDayOfWeek());
+            week.get(WorkReaderContract.WorkEntry.THURSDAY).add(1, thursdayHours.getStartHour());
+            week.get(WorkReaderContract.WorkEntry.THURSDAY).add(2, thursdayHours.getStartMinute());
+            week.get(WorkReaderContract.WorkEntry.THURSDAY).add(3, thursdayHours.getStartAmOrPm());
+            week.get(WorkReaderContract.WorkEntry.THURSDAY).add(4, thursdayHours.getEndHour());
+            week.get(WorkReaderContract.WorkEntry.THURSDAY).add(5, thursdayHours.getEndMinute());
+            week.get(WorkReaderContract.WorkEntry.THURSDAY).add(6, thursdayHours.getStartAmOrPm());
 
             fridayHours = intent.getParcelableExtra("FridayHours");
-            week.get(5).add(0, fridayHours.getDayOfWeek());
-            week.get(5).add(1, fridayHours.getStartHour());
-            week.get(5).add(2, fridayHours.getStartMinute());
-            week.get(5).add(3, fridayHours.getStartAmOrPm());
-            week.get(5).add(4, fridayHours.getEndHour());
-            week.get(5).add(5, fridayHours.getEndMinute());
-            week.get(5).add(6, fridayHours.getStartAmOrPm());
+            week.get(WorkReaderContract.WorkEntry.FRIDAY).add(0, fridayHours.getDayOfWeek());
+            week.get(WorkReaderContract.WorkEntry.FRIDAY).add(1, fridayHours.getStartHour());
+            week.get(WorkReaderContract.WorkEntry.FRIDAY).add(2, fridayHours.getStartMinute());
+            week.get(WorkReaderContract.WorkEntry.FRIDAY).add(3, fridayHours.getStartAmOrPm());
+            week.get(WorkReaderContract.WorkEntry.FRIDAY).add(4, fridayHours.getEndHour());
+            week.get(WorkReaderContract.WorkEntry.FRIDAY).add(5, fridayHours.getEndMinute());
+            week.get(WorkReaderContract.WorkEntry.FRIDAY).add(6, fridayHours.getStartAmOrPm());
 
             saturdayHours = intent.getParcelableExtra("SaturdayHours");
-            week.get(6).add(0, saturdayHours.getDayOfWeek());
-            week.get(6).add(1, saturdayHours.getStartHour());
-            week.get(6).add(2, saturdayHours.getStartMinute());
-            week.get(6).add(3, saturdayHours.getStartAmOrPm());
-            week.get(6).add(4, saturdayHours.getEndHour());
-            week.get(6).add(5, saturdayHours.getEndMinute());
-            week.get(6).add(6, saturdayHours.getStartAmOrPm());
+            week.get(WorkReaderContract.WorkEntry.SATURDAY).add(0, saturdayHours.getDayOfWeek());
+            week.get(WorkReaderContract.WorkEntry.SATURDAY).add(1, saturdayHours.getStartHour());
+            week.get(WorkReaderContract.WorkEntry.SATURDAY).add(2, saturdayHours.getStartMinute());
+            week.get(WorkReaderContract.WorkEntry.SATURDAY).add(3, saturdayHours.getStartAmOrPm());
+            week.get(WorkReaderContract.WorkEntry.SATURDAY).add(4, saturdayHours.getEndHour());
+            week.get(WorkReaderContract.WorkEntry.SATURDAY).add(5, saturdayHours.getEndMinute());
+            week.get(WorkReaderContract.WorkEntry.SATURDAY).add(6, saturdayHours.getStartAmOrPm());
 
 
             //Force debug mode
@@ -1025,4 +1027,9 @@ public class CurrentWeekSchedule extends ListActivity {
         return currentDay;
     }
 
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(workAlarmReceiver);
+        super.onDestroy();
+    }
 }//End class
