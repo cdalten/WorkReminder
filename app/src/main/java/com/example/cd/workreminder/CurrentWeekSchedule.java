@@ -463,22 +463,21 @@ public class CurrentWeekSchedule extends ListActivity {
 
             dayPair = new HashMap<>();
             dayList = new ArrayList();
-            dayPair.put(0, sundayHours.getDayOfWeek());
-            dayPair.put(1, mondayHours.getDayOfWeek());
-            dayPair.put(2, tuesdayHours.getDayOfWeek());
-            dayPair.put(3, wednesdayHours.getDayOfWeek());
-            dayPair.put(4, thursdayHours.getDayOfWeek());
-            dayPair.put(5, fridayHours.getDayOfWeek());
-            dayPair.put(6, saturdayHours.getDayOfWeek());
+            dayPair.put(WorkReaderContract.WorkEntry.SUNDAY, sundayHours.getDayOfWeek());
+            dayPair.put(WorkReaderContract.WorkEntry.MONDAY, mondayHours.getDayOfWeek());
+            dayPair.put(WorkReaderContract.WorkEntry.TUESDAY, tuesdayHours.getDayOfWeek());
+            dayPair.put(WorkReaderContract.WorkEntry.WEDNESAY, wednesdayHours.getDayOfWeek());
+            dayPair.put(WorkReaderContract.WorkEntry.THURSDAY, thursdayHours.getDayOfWeek());
+            dayPair.put(WorkReaderContract.WorkEntry.FRIDAY, fridayHours.getDayOfWeek());
+            dayPair.put(WorkReaderContract.WorkEntry.SATURDAY, saturdayHours.getDayOfWeek());
 
-            //spinnerPair.put("4", "THURSDAY");
-            dayList.add(0, dayPair);
-            dayList.add(1, dayPair);
-            dayList.add(2, dayPair);
-            dayList.add(3, dayPair);
-            dayList.add(4, dayPair);
-            dayList.add(5, dayPair);
-            dayList.add(6, dayPair);
+            dayList.add(WorkReaderContract.WorkEntry.SUNDAY, dayPair);
+            dayList.add(WorkReaderContract.WorkEntry.MONDAY, dayPair);
+            dayList.add(WorkReaderContract.WorkEntry.TUESDAY, dayPair);
+            dayList.add(WorkReaderContract.WorkEntry.WEDNESAY, dayPair);
+            dayList.add(WorkReaderContract.WorkEntry.THURSDAY, dayPair);
+            dayList.add(WorkReaderContract.WorkEntry.FRIDAY, dayPair);
+            dayList.add(WorkReaderContract.WorkEntry.SATURDAY, dayPair);
 
 
             //if (savedInstanceState == null) {

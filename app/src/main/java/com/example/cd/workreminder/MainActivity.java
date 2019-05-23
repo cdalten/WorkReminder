@@ -363,7 +363,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
                 wednesdayWorkHours = new CurrentWorkWeek(pref,
                         this,
                         getString(R.string.WEDNESDAY),
-                        "1",
+                        "3",
                         "30",
                         "PM",
                         "6",
@@ -377,8 +377,6 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
             //        wednesdayWorkHours.getStartAmOrPm(),
             //        wednesdayWorkHours.getEndHour(), wednesdayWorkHours.getEndMinute(), wednesdayWorkHours.getEndAmOrPm());
 
-            Log.e(PRODUCTION_TAG, "WED TOTAL START TIME IS: " + wednesdayWorkHours.getTotalMilitaryStartTime());
-            Log.e(PRODUCTION_TAG, "WED TOTAL END TIME IS: " + wednesdayWorkHours.getTotalMilitaryEndTime());
 
             editor.putString("WENDESDAY_START_HOUR", wednesdayWorkHours.getStartHour());
             editor.putString("WEDNESDAY_START_MINUTE", wednesdayWorkHours.getStartMinute());
@@ -393,17 +391,12 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
             thursdayWorkHours =  new CurrentWorkWeek( pref,
                     this,
                     getString(R.string.THURSDAY),
+                    "1",
+                    "30",
+                    "PM",
                     "9",
                     "00",
-                    "AM",
-                    "1",
-                    "00",
                     "PM");
-            Log.e(PRODUCTION_TAG, "THURS TOTAL START TIME IS: " + thursdayWorkHours.getTotalMilitaryStartTime());
-            Log.e(PRODUCTION_TAG, "THURS TOTAL END TIME IS: " + thursdayWorkHours.getTotalMilitaryEndTime());
-
-            editor.putInt("Thursday_Start", thursdayWorkHours.getTotalMilitaryStartTime());
-            editor.putInt("Thursday_End", thursdayWorkHours.getTotalMilitaryEndTime());
 
             editor.putString("THURSDAY_START_HOUR", thursdayWorkHours.getStartHour());
             editor.putString("THURSDAY_START_MINUTE", thursdayWorkHours.getStartMinute());
@@ -448,8 +441,6 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
 
             //intent.putExtra(getString(R.string.com_example_cd_shiftreminder_FRIDAY), fridayWorkHours.getCurrentWorkHours());
 
-            Log.e(PRODUCTION_TAG, "FRIDAY TOTAL START TIME IS: " + fridayWorkHours.getTotalMilitaryStartTime());
-            Log.e(PRODUCTION_TAG, "FRIDAY TOTAL END TIME IS: " + fridayWorkHours.getTotalMilitaryEndTime());
 
             intent.putExtra("FridayHours", fridayWorkHours);
 
@@ -466,9 +457,6 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
                     "00",
                     "AM");
             //intent.putExtra(getString(R.string.com_example_cd_shiftreminder_SATURDAY), saturdayWorkHours.getCurrentWorkHours());
-
-            Log.e(PRODUCTION_TAG, "SATURDAY TOTAL START TIME IS: " + saturdayWorkHours.getTotalMilitaryStartTime());
-            Log.e(PRODUCTION_TAG, "SATURDAY TOTAL END TIME IS: " + saturdayWorkHours.getTotalMilitaryEndTime());
 
             editor.putString("SATURDAY_START_HOUR", saturdayWorkHours.getStartHour());
             editor.putString("SATURDAY_START_MINUTE", saturdayWorkHours.getStartMinute());
@@ -501,11 +489,6 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
             //        new IntentFilter(
             //                ConnectivityManager.CONNECTIVITY_ACTION));
 
-            //registerReceiver(
-            //        new AlarmReceiver(),
-            //        new IntentFilter(
-            //                ConnectivityManager.CONNECTIVITY_ACTION));
-
             getSchedule = (WebView) this.findViewById(R.id.CurrentSchedule);
             getSchedule.setWebViewClient(new WWebViewClient());
             getSchedule.addJavascriptInterface(new JavaScriptBridge(this), "OFFLINE");
@@ -526,9 +509,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
 
             //force load???
             getSchedule.loadUrl(LOGIN_URL);
-
             getSchedule.setVisibility(View.VISIBLE);
-
 
             getSchedule.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -541,12 +522,10 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
 
             });
 
-
         }
 
 
         //getSchedule.getSettings().setDatabaseEnabled(true); //added on 10 - 5- 2017
-
 
         /*getSchedule.setWebChromeClient(new WebChromeClient() {
 
@@ -589,7 +568,6 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         return networkInfo;
 
     }
-
 
     @Override
     public void finishDownloading() {
@@ -655,7 +633,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
                 //        thursdayWorkHours.getStartMilitaryMinute(),
                 //        Integer.parseInt(pref.getString("ALARM_MINUTES", "")));
                 if (doIWorkToday == true) {
-                    setAlarmTime(this, sundayWorkHours.getStartMilitaryHour(),
+                    alarmTimer.setAlarmTime(this, sundayWorkHours.getStartMilitaryHour(),
                             sundayWorkHours.getStartMilitaryMinute(),
                             Integer.parseInt(pref.getString("ALARM_MINUTES", WorkReaderContract.WorkEntry.ALARM_DEFAULT)));
                     //intent.putExtra(getString(R.string.com_example_cd_shiftreminder_I_WORK_TODAY), thursdayWorkHours.toString());
@@ -676,7 +654,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
                 //        thursdayWorkHours.getStartMilitaryMinute(),
                 //        Integer.parseInt(pref.getString("ALARM_MINUTES", "")));
                 if (doIWorkToday == true) {
-                    setAlarmTime(this, mondayWorkHours.getStartMilitaryHour(),
+                    alarmTimer.setAlarmTime(this, mondayWorkHours.getStartMilitaryHour(),
                             mondayWorkHours.getStartMilitaryMinute(),
                             Integer.parseInt(pref.getString("ALARM_MINUTES", WorkReaderContract.WorkEntry.ALARM_DEFAULT)));
                     //intent.putExtra(getString(R.string.com_example_cd_shiftreminder_I_WORK_TODAY), thursdayWorkHours.toString());
@@ -692,13 +670,8 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
                 if (getStartingHour(tuesdayWorkHours.getStartMilitaryHour() + "",
                         thursdayWorkHours.getStartMilitaryMinute() + "",
                         tuesdayWorkHours.getStartAmOrPm())) doIWorkToday = true;
-                //else doIWorkToday = false;
-                //cal.set(DAY_THURSDAY, Calendar.THURSDAY);
-                //AlarmTimer.setAlarmTime(this, thursdayWorkHours.getStartMilitaryHour(),
-                //        thursdayWorkHours.getStartMilitaryMinute(),
-                //        Integer.parseInt(pref.getString("ALARM_MINUTES", "")));
                 if (doIWorkToday == true) {
-                    setAlarmTime(this, tuesdayWorkHours.getStartMilitaryHour(),
+                    alarmTimer.setAlarmTime(this, tuesdayWorkHours.getStartMilitaryHour(),
                             tuesdayWorkHours.getStartMilitaryMinute(),
                             Integer.parseInt(pref.getString("ALARM_MINUTES", WorkReaderContract.WorkEntry.ALARM_DEFAULT)));
                     //intent.putExtra(getString(R.string.com_example_cd_shiftreminder_I_WORK_TODAY), thursdayWorkHours.toString());
@@ -719,7 +692,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
                 //        thursdayWorkHours.getStartMilitaryMinute(),
                 //        Integer.parseInt(pref.getString("ALARM_MINUTES", "")));
                 if (doIWorkToday == true) {
-                    setAlarmTime(this, wednesdayWorkHours.getStartMilitaryHour(),
+                    alarmTimer.setAlarmTime(this, wednesdayWorkHours.getStartMilitaryHour(),
                             wednesdayWorkHours.getStartMilitaryMinute(),
                             Integer.parseInt(pref.getString("ALARM_MINUTES", WorkReaderContract.WorkEntry.ALARM_DEFAULT)));
                     //intent.putExtra(getString(R.string.com_example_cd_shiftreminder_I_WORK_TODAY), thursdayWorkHours.toString());
@@ -736,12 +709,8 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
                 doIWorkToday = getStartingHour(thursdayWorkHours.getStartMilitaryHour() + "",
                         thursdayWorkHours.getStartMilitaryMinute() + "",
                         thursdayWorkHours.getStartAmOrPm());
-                //cal.set(DAY_THURSDAY, Calendar.THURSDAY);
-                //AlarmTimer.setAlarmTime(this, thursdayWorkHours.getStartMilitaryHour(),
-                //        thursdayWorkHours.getStartMilitaryMinute(),
-                //        Integer.parseInt(pref.getString("ALARM_MINUTES", "")));
                 if (doIWorkToday == true) {
-                    setAlarmTime(this, thursdayWorkHours.getStartMilitaryHour(),
+                    alarmTimer.setAlarmTime(this, thursdayWorkHours.getStartMilitaryHour(),
                             thursdayWorkHours.getStartMilitaryMinute(),
                             Integer.parseInt(pref.getString("ALARM_MINUTES", WorkReaderContract.WorkEntry.ALARM_DEFAULT)));
                     //intent.putExtra(getString(R.string.com_example_cd_shiftreminder_I_WORK_TODAY), thursdayWorkHours.toString());
@@ -762,7 +731,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
                 //        thursdayWorkHours.getStartMilitaryMinute(),
                 //        Integer.parseInt(pref.getString("ALARM_MINUTES", "")));
                 if (doIWorkToday == true) {
-                    setAlarmTime(this, fridayWorkHours.getStartMilitaryHour(),
+                    alarmTimer.setAlarmTime(this, fridayWorkHours.getStartMilitaryHour(),
                             fridayWorkHours.getStartMilitaryMinute(),
                             Integer.parseInt(pref.getString("ALARM_MINUTES", WorkReaderContract.WorkEntry.ALARM_DEFAULT)));
                     //intent.putExtra(getString(R.string.com_example_cd_shiftreminder_I_WORK_TODAY), thursdayWorkHours.toString());
@@ -778,12 +747,8 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
                 doIWorkToday = getStartingHour(saturdayWorkHours.getStartMilitaryHour() + "",
                         saturdayWorkHours.getStartMilitaryMinute() + "",
                         saturdayWorkHours.getStartAmOrPm());
-                //cal.set(DAY_THURSDAY, Calendar.THURSDAY);
-                //AlarmTimer.setAlarmTime(this, thursdayWorkHours.getStartMilitaryHour(),
-                //        thursdayWorkHours.getStartMilitaryMinute(),
-                //        Integer.parseInt(pref.getString("ALARM_MINUTES", "")));
                 if (doIWorkToday == true) {
-                    setAlarmTime(this, saturdayWorkHours.getStartMilitaryHour(),
+                    alarmTimer.setAlarmTime(this, saturdayWorkHours.getStartMilitaryHour(),
                             saturdayWorkHours.getStartMilitaryMinute(),
                             Integer.parseInt(pref.getString("ALARM_MINUTES", WorkReaderContract.WorkEntry.ALARM_DEFAULT)));
                     //intent.putExtra(getString(R.string.com_example_cd_shiftreminder_I_WORK_TODAY), thursdayWorkHours.toString());
@@ -794,70 +759,6 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         }//end untested if
 
     }
-
-    @TargetApi(24)
-    public void setAlarmTime(Context context, int startMilitaryHour, int startMilitaryMinute, int timeBeforeShift) {
-        Calendar cal;
-        int endMilitaryHour = 0;
-        int endMilitaryMinute = 0;
-        int newMilitaryHour = 0;
-        int newMilitaryMinute = 0;
-
-        if (timeBeforeShift < 60) {
-            newMilitaryHour = startMilitaryHour;
-            endMilitaryMinute = timeBeforeShift;
-        }
-
-        //newMilitaryHour = startMilitaryHour - endMilitaryHour;
-        newMilitaryMinute = startMilitaryMinute - endMilitaryMinute;
-
-        if (newMilitaryMinute < 0) {
-            newMilitaryMinute = newMilitaryMinute + 60;
-            newMilitaryHour = newMilitaryHour - 1;
-
-        } else {
-            newMilitaryHour = newMilitaryHour - endMilitaryHour;
-        }
-
-        cal = Calendar.getInstance();
-        cal.setTimeInMillis(System.currentTimeMillis());
-        cal.set(Calendar.HOUR_OF_DAY, newMilitaryHour);
-        cal.set(Calendar.MINUTE, newMilitaryMinute);
-
-
-        Log.e("LG_WORK_PHONE", "ALARM GOT CALLED");
-        //pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
-        //SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putInt("HOUR", cal.get(Calendar.HOUR)); //military
-        editor.putInt("MINUTES", cal.get(Calendar.MINUTE));
-
-        editor.commit();
-        /*AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(MainActivity.this, WorkAlarmReceiver.class);
-        intent.putExtra("HOUR_OF_DAY", cal.get(Calendar.HOUR_OF_DAY));
-        //intent.putExtra("MINUTE", (cal.get(Calendar.MINUTE) - timeBeforeShift));
-        intent.putExtra("MINUTE", newMilitaryMinute);
-        intent.putExtra("MILLISECONDS", cal.getTimeInMillis());
-
-
-        startActivity(intent);
-        //context.sendBroadcast(intent);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-        //alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
-        //        AlarmManager.INTERVAL_DAY, pendingIntent);
-        //if (true) {
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
-                1000 * 60 * 20, pendingIntent);
-        //}
-        //}
-
-
-
-    }//setAlarmTime
-
-
-
 
 
     @Override
@@ -1420,7 +1321,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
                         "javascript:var bld = document.getElementById('EmpID').style.color = 'red' " + ";"
                                 + "javascript:var x = document.getElementById('EmpID').value = " + name + ";"
                                 + "javascript:var y = document.getElementById('Password').style.display = 'none' " + ";"
-                                + "javascript:var a = '  '" + ";"
+                                + "javascript:var a = ''" + ";"
                                 + "javascript:var b = document.getElementById('Password').value = " + 'a' + ";"
 
                 );

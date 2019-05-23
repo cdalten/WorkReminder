@@ -144,8 +144,6 @@ public class CurrentWorkWeek extends com.example.cd.workreminder.MainActivity im
             setStartMilitaryMinute(startMilitaryMinute);
         }
 
-        totalStartMilitaryTime(startMilitaryHour, startMilitaryMinute);
-
         if (endAmOrPm.equals("PM")) {
             endMilitaryHour = Integer.parseInt(endHour) + 12;
             setEndMilitaryHour(endMilitaryHour);
@@ -161,27 +159,8 @@ public class CurrentWorkWeek extends com.example.cd.workreminder.MainActivity im
             setEndMilitaryMinute(endMilitaryMinute);
         }
 
-        totalEndMilitaryTime(endMiltiaryHour, endMilitaryMinute);
     }
 
-    //Added on 5 - 15 - 2019
-    private void totalStartMilitaryTime(int startMilitaryHour, int startMilitaryMinute) {
-        totalMilitaryStartTime = startMilitaryHour*60 + startMilitaryMinute;
-    }
-
-    private void totalEndMilitaryTime(int endMiltiaryHour, int endMilitaryMinute) {
-        totalMilitaryEndTime = endMiltiaryHour*60 + endMilitaryMinute;
-
-    }
-
-    //Added on 5 - 15 - 2019
-    public int getTotalMilitaryStartTime(){
-        return this.totalMilitaryStartTime;
-    }
-
-    public int getTotalMilitaryEndTime() {
-        return this.totalMilitaryEndTime;
-    }
 
     //Added on 4 - 15 - 2019.
     //Can remove from date object??

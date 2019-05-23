@@ -13,14 +13,14 @@ import android.util.Log;
 
 import java.lang.annotation.Target;
 
-public class AlarmTimer extends AppCompatActivity {
+public class AlarmTimer extends AppCompatActivity implements AlarmInterface {
     //private final String PRODUCTION_TAG = "LG_WORK_PHONE"; //Added on 4 - 17 - 2019
     private static Calendar cal;
     private SharedPreferences pref; //Added on 5 - 14 - 2019
 
     @TargetApi(24)
     public void setAlarmTime(Context context, int startMilitaryHour, int startMilitaryMinute, int timeBeforeShift) {
-        pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
         int endMilitaryHour = 0;
         int endMilitaryMinute = 0;
         int newMilitaryHour = 0;
@@ -47,10 +47,7 @@ public class AlarmTimer extends AppCompatActivity {
         cal.set(Calendar.HOUR_OF_DAY, newMilitaryHour);
         cal.set(Calendar.MINUTE, newMilitaryMinute);
 
-
         Log.e("LG_WORK_PHONE", "ALARM GOT CALLED");
-        //pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
-        //SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         editor.putInt("HOUR", cal.get(Calendar.HOUR)); //military
         editor.putInt("MINUTES", cal.get(Calendar.MINUTE));
