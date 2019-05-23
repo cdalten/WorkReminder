@@ -1312,7 +1312,6 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
             final String viewUrl = view.getUrl();
             final String myUrl = url.toString();
 
-
             if (getSchedule.getUrl().equals(LOGIN_URL)) {
                 //if (view.getUrl().equals(url)) {
                 //getSchedule.setVisibility(View.VISIBLE);
