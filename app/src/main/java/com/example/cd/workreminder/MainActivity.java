@@ -1325,7 +1325,6 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
                                 + "javascript:var b = document.getElementById('Password').value = " + 'a' + ";"
 
                 );
-
             }
 
             //Password expired. Need to handle change password case.

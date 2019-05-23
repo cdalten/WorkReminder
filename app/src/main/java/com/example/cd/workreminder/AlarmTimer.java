@@ -83,21 +83,6 @@ public class AlarmTimer extends AppCompatActivity implements AlarmInterface {
         //}
         //}
         */
-
     }//setAlarmTime
 
-    @TargetApi(24)
-    public static int getNewAlarmHour() {
-        return cal.get(Calendar.HOUR); //Convert military time back to civilian
-    }
-
-    @TargetApi(24)
-    public static int getNewAlarmMinute() {
-        return cal.get(Calendar.MINUTE);
-    }
-
-    @TargetApi(24)
-    public static long getAlarmTimeInMilliseconds() {
-        return cal.getTimeInMillis();
-    }
 }//end class
