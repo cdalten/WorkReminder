@@ -121,7 +121,6 @@ public class HourFormat extends FragmentActivity {
                         parent.getItemAtPosition(position).toString());
                 setResult(0, intent);
                 //startActivity(forceBacktoMain);
-
                 //}
 
             }

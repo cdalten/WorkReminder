@@ -375,7 +375,6 @@ public class CurrentWeekSchedule extends ListActivity {
         });
         */
 
-
         intent = getIntent();
 
 

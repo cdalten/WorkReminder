@@ -1348,7 +1348,6 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
             }
 
 
-
             //Update schedule
             else if (url.equals("about:blank")) {
 
