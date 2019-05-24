@@ -860,7 +860,7 @@ public class CurrentWeekSchedule extends ListActivity {
                 sundayHours.setEndMinute(newEndMinute);
                 sundayHours.setEndAmOrPm(newEndAmOrPm);
                 break;
-            case 1:
+            case WorkReaderContract.WorkEntry.MONDAY:
                 mondayHours.setStartHour(newStartHour);
                 mondayHours.setStartMinute(newStartMinute);
                 mondayHours.setStartAmOrPm(newStartAmOrPm);
@@ -868,7 +868,7 @@ public class CurrentWeekSchedule extends ListActivity {
                 mondayHours.setEndMinute(newEndMinute);
                 mondayHours.setEndAmOrPm(newEndAmOrPm);
                 break;
-            case 2:
+            case WorkReaderContract.WorkEntry.TUESDAY:
                 tuesdayHours.setStartHour(newStartHour);
                 tuesdayHours.setStartMinute(newStartMinute);
                 tuesdayHours.setStartAmOrPm(newStartAmOrPm);
@@ -876,7 +876,7 @@ public class CurrentWeekSchedule extends ListActivity {
                 tuesdayHours.setEndMinute(newEndMinute);
                 tuesdayHours.setEndAmOrPm(newEndAmOrPm);
                 break;
-            case 3:
+            case WorkReaderContract.WorkEntry.WEDNESAY:
                 wednesdayHours.setStartHour(newStartHour);
                 wednesdayHours.setStartMinute(newStartMinute);
                 wednesdayHours.setStartAmOrPm(newStartAmOrPm);
@@ -884,7 +884,7 @@ public class CurrentWeekSchedule extends ListActivity {
                 wednesdayHours.setEndMinute(newEndMinute);
                 wednesdayHours.setEndAmOrPm(newEndAmOrPm);
                 break;
-            case 4:
+            case WorkReaderContract.WorkEntry.THURSDAY:
                 thursdayHours.setStartHour(newStartHour);
                 thursdayHours.setStartMinute(newStartMinute);
                 thursdayHours.setStartAmOrPm(newStartAmOrPm);
@@ -892,7 +892,7 @@ public class CurrentWeekSchedule extends ListActivity {
                 thursdayHours.setEndMinute(newEndMinute);
                 thursdayHours.setEndAmOrPm(newEndAmOrPm);
                 break;
-            case 5:
+            case WorkReaderContract.WorkEntry.FRIDAY:
                 //Emulate Intent SEND. Fuck Java.
                 //intent.setAction(Intent.ACTION_SEND);
                 //intent.putStringArrayListExtra(getString(R.string.com_example_cd_shiftreminder_FRIDAY), updateCurrrentHour);
@@ -903,7 +903,7 @@ public class CurrentWeekSchedule extends ListActivity {
                 fridayHours.setEndMinute(newEndMinute);
                 fridayHours.setEndAmOrPm(newEndAmOrPm);
                 break;
-            case 6:
+            case WorkReaderContract.WorkEntry.SATURDAY:
                 saturdayHours.setStartHour(newStartHour);
                 saturdayHours.setStartMinute(newStartMinute);
                 saturdayHours.setStartAmOrPm(newStartAmOrPm);
@@ -928,15 +928,6 @@ public class CurrentWeekSchedule extends ListActivity {
         Calendar cal = Calendar.getInstance();
 
         String newAlarmMinute = "";
-        //String newDownloadDate = "";
-        //newAlarmMinute = data.getIntExtra(workPreferenceIntent.getStringExtra("GET_NEW_ALARM_MINUTE"), 0);
-        //if (resultCode == 1) {
-        //newAlarmMinute = data.getStringExtra("GET_NEW_ALARM_MINUTE"); //Convert to Int??
-        //newDownloadDate = data.getStringExtra("GET_NEW_DOWNLOAD_DATE");
-        //Log.e(PRODUCTION_TAG, "THE REVISED DOWNLOAD DATE IS: " + newDownloadDate);
-        //}
-        //else {
-
         int weekPosition = data.getIntExtra(getString(R.string.DAY_OF_WEEK), 0);
         //int weekPosition = data.getIntExtra("NEW_DOWNLOAD_DATE", 0);
 
