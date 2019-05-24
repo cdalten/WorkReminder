@@ -346,7 +346,6 @@ public class CurrentWeekSchedule extends ListActivity {
             }
         });
 
-
         //Save changes
         /*Update.setOnClickListener(new View.OnClickListener() {
             //String saveUpdatedHours;
