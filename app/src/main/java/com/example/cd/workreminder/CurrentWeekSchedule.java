@@ -307,6 +307,7 @@ public class CurrentWeekSchedule extends ListActivity {
                             }
                         }
                         break;
+
                     case WorkReaderContract.WorkEntry.SATURDAY:
                         if (week.get(WorkReaderContract.WorkEntry.SATURDAY).get(0).equals("OFF")) {
                             i.putExtra("DAY_WEEK", position);
