@@ -969,8 +969,6 @@ public class CurrentWeekSchedule extends ListActivity {
         //mondayHours.setDayofWeek("OFF");
         //week.get(1).remove(0);
         //week.get(1).add(0, mondayHours.getDayOfWeek());
-
-        //change currentPosition in switch from 6 back to zero??
         if (cal.get(Calendar.DAY_OF_WEEK) == getCurrentDay(weekPosition)) {
             intent.putExtra(getString(R.string.I_WORK_TODAY), newWorkHours.toString());
             //WorkNotification.notify(this,
