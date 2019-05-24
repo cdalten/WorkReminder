@@ -920,7 +920,6 @@ public class CurrentWeekSchedule extends ListActivity {
     }
 
     //Added on 2 - 27 - 2019
-    //Because I don't have to pass data from the spinner to the listview
     @TargetApi(24)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
