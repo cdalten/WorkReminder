@@ -852,7 +852,7 @@ public class CurrentWeekSchedule extends ListActivity {
 
         //editor.putString(getString(R.string.com_example_cd_shiftreminder_SAVE_DAY), updatedHour);
         switch(currentPosition){
-            case 0:
+            case WorkReaderContract.WorkEntry.SUNDAY:
                 sundayHours.setStartHour(newStartHour);
                 sundayHours.setStartMinute(newStartMinute);
                 sundayHours.setStartAmOrPm(newStartAmOrPm);
