@@ -976,7 +976,6 @@ public class CurrentWeekSchedule extends ListActivity {
 
         }//end if
         //}
-
     }
 
     //Added on 4 - 5 - 2019
