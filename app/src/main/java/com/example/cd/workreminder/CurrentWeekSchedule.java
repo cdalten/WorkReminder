@@ -936,7 +936,6 @@ public class CurrentWeekSchedule extends ListActivity {
         //newDownloadDate = data.getStringExtra("GET_NEW_DOWNLOAD_DATE");
         //Log.e(PRODUCTION_TAG, "THE REVISED DOWNLOAD DATE IS: " + newDownloadDate);
         //}
-
         //else {
 
         int weekPosition = data.getIntExtra(getString(R.string.DAY_OF_WEEK), 0);
