@@ -131,13 +131,13 @@ public class CurrentWeekSchedule extends ListActivity {
                         //currentPosition = 6; //handle integer wrap around case
                         if (week.get(WorkReaderContract.WorkEntry.SUNDAY).get(0).equals("OFF")) {
                             i.putExtra("DAY_WEEK", position);
-                            i.putExtra("START_HOUR", 12);
-                            i.putExtra("START_MINUTE", 0);
-                            i.putExtra("START_AM_OR_PM", 0);
+                            i.putExtra("START_HOUR",  Integer.parseInt(WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
+                            i.putExtra("START_MINUTE",  Integer.parseInt(WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
+                            i.putExtra("START_AM_OR_PM",  WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT);
 
-                            i.putExtra("END_HOUR", 12);
-                            i.putExtra("END_MINUTE", 0);
-                            i.putExtra("END_AM_OR_PM", 0);
+                            i.putExtra("END_HOUR",  Integer.parseInt(WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
+                            i.putExtra("END_MINUTE",  Integer.parseInt(WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
+                            i.putExtra("END_AM_OR_PM",  WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT);
                         } else {
                             i.putExtra("DAY_WEEK", position);
                             i.putExtra("START_HOUR", Integer.parseInt(sundayHours.getStartHour()));
@@ -160,13 +160,13 @@ public class CurrentWeekSchedule extends ListActivity {
                     case WorkReaderContract.WorkEntry.MONDAY:
                         if (week.get(WorkReaderContract.WorkEntry.MONDAY).get(0).equals("OFF")) {
                             i.putExtra("DAY_WEEK", position);
-                            i.putExtra("START_HOUR", 12);
-                            i.putExtra("START_MINUTE", 0);
-                            i.putExtra("START_AM_OR_PM", 0);
+                            i.putExtra("START_HOUR",  Integer.parseInt(WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
+                            i.putExtra("START_MINUTE",  Integer.parseInt(WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
+                            i.putExtra("START_AM_OR_PM",  WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT);
 
-                            i.putExtra("END_HOUR", 12);
-                            i.putExtra("END_MINUTE", 0);
-                            i.putExtra("END_AM_OR_PM", 0);
+                            i.putExtra("END_HOUR",  Integer.parseInt(WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
+                            i.putExtra("END_MINUTE",  Integer.parseInt(WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
+                            i.putExtra("END_AM_OR_PM",  WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT);
 
                         } else {
                             i.putExtra("DAY_WEEK", position);
@@ -223,13 +223,13 @@ public class CurrentWeekSchedule extends ListActivity {
                     case WorkReaderContract.WorkEntry.WEDNESAY:
                         if (week.get(WorkReaderContract.WorkEntry.WEDNESAY).get(0).equals("OFF")) {
                             i.putExtra("DAY_WEEK", position);
-                            i.putExtra("START_HOUR", 12);
-                            i.putExtra("START_MINUTE", 0);
-                            i.putExtra("START_AM_OR_PM", 0);
+                            i.putExtra("START_HOUR", Integer.parseInt(WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
+                            i.putExtra("START_MINUTE", Integer.parseInt(WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
+                            i.putExtra("START_AM_OR_PM",  WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT);
 
-                            i.putExtra("END_HOUR", 12);
-                            i.putExtra("END_MINUTE", 0);
-                            i.putExtra("END_AM_OR_PM", 0);
+                            i.putExtra("END_HOUR",  Integer.parseInt(WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
+                            i.putExtra("END_MINUTE",  Integer.parseInt(WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
+                            i.putExtra("END_AM_OR_PM",  WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT);
                         } else {
                             i.putExtra("DAY_WEEK", position);
                             i.putExtra("START_HOUR", Integer.parseInt(wednesdayHours.getStartHour()));
@@ -252,13 +252,13 @@ public class CurrentWeekSchedule extends ListActivity {
                     case WorkReaderContract.WorkEntry.THURSDAY:
                         if (week.get(WorkReaderContract.WorkEntry.THURSDAY).get(0).equals("OFF")){
                             i.putExtra("DAY_WEEK", position);
-                            i.putExtra("START_HOUR", 12);
-                            i.putExtra("START_MINUTE", 0);
-                            i.putExtra("START_AM_OR_PM", 0);
+                            i.putExtra("START_HOUR",  Integer.parseInt(WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
+                            i.putExtra("START_MINUTE",  Integer.parseInt(WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
+                            i.putExtra("START_AM_OR_PM",  WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT);
 
-                            i.putExtra("END_HOUR", 12);
-                            i.putExtra("END_MINUTE", 0);
-                            i.putExtra("END_AM_OR_PM", 0);
+                            i.putExtra("END_HOUR",  Integer.parseInt(WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
+                            i.putExtra("END_MINUTE",  Integer.parseInt(WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
+                            i.putExtra("END_AM_OR_PM",  WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT);
                         } else {
                             i.putExtra("DAY_WEEK", position);
                             i.putExtra("START_HOUR", Integer.parseInt(thursdayHours.getStartHour()));
@@ -281,13 +281,13 @@ public class CurrentWeekSchedule extends ListActivity {
                     case WorkReaderContract.WorkEntry.FRIDAY:
                         if (week.get(WorkReaderContract.WorkEntry.FRIDAY).get(0).equals("OFF")){
                             i.putExtra("DAY_WEEK", position);
-                            i.putExtra("START_HOUR", 12);
-                            i.putExtra("START_MINUTE", 0);
-                            i.putExtra("START_AM_OR_PM", 0);
+                            i.putExtra("START_HOUR",  Integer.parseInt(WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
+                            i.putExtra("START_MINUTE",  Integer.parseInt(WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
+                            i.putExtra("START_AM_OR_PM",  WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT);
 
-                            i.putExtra("END_HOUR", 12);
-                            i.putExtra("END_MINUTE", 0);
-                            i.putExtra("END_AM_OR_PM", 0);
+                            i.putExtra("END_HOUR",  Integer.parseInt(WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
+                            i.putExtra("END_MINUTE",  Integer.parseInt(WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
+                            i.putExtra("END_AM_OR_PM",  WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT);
                         } else {
                             i.putExtra("DAY_WEEK", position);
                             i.putExtra("START_HOUR", Integer.parseInt(fridayHours.getStartHour()));
@@ -310,13 +310,13 @@ public class CurrentWeekSchedule extends ListActivity {
                     case WorkReaderContract.WorkEntry.SATURDAY:
                         if (week.get(WorkReaderContract.WorkEntry.SATURDAY).get(0).equals("OFF")) {
                             i.putExtra("DAY_WEEK", position);
-                            i.putExtra("START_HOUR", 12);
-                            i.putExtra("START_MINUTE", 0);
-                            i.putExtra("START_AM_OR_PM", 0);
+                            i.putExtra("START_HOUR",  Integer.parseInt(WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
+                            i.putExtra("START_MINUTE",  Integer.parseInt(WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
+                            i.putExtra("START_AM_OR_PM",  WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT);
 
-                            i.putExtra("END_HOUR", 12);
-                            i.putExtra("END_MINUTE", 0);
-                            i.putExtra("END_AM_OR_PM", 0);
+                            i.putExtra("END_HOUR",  Integer.parseInt(WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
+                            i.putExtra("END_MINUTE",  Integer.parseInt(WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
+                            i.putExtra("END_AM_OR_PM",  WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT);
                         } else {
                             i.putExtra("DAY_WEEK", position);
                             i.putExtra("START_HOUR", Integer.parseInt(saturdayHours.getStartHour()));

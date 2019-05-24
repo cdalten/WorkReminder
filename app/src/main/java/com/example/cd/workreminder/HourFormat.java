@@ -30,6 +30,7 @@ public class HourFormat extends FragmentActivity {
     Intent intent; //Added on 1 - 24 - 2019
     Intent forceBacktoMain; //Added on 1 - 31 - 2019
     Button finish; //Added on 2 - 1- 2019
+    private int dayPosition;
     private final String PRODUCTION_TAG = "LG_WORK_PHONE";
 
     @Override
@@ -70,6 +71,8 @@ public class HourFormat extends FragmentActivity {
                 //intent.putExtra(getString(R.string.com_example_cd_shiftreminder_DAY_OF_THE_WEEK),
                 //        parent.getItemAtPosition(position).toString());
 
+                dayPosition = position;
+                Log.e(PRODUCTION_TAG, "THE DAY OF THE WEEK IS: " + position);
                 intent.putExtra(getString(R.string.DAY_OF_WEEK), position);
                 setResult(0, intent);
             }

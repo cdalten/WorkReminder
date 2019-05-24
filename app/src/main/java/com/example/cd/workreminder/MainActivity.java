@@ -1320,7 +1320,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
                         "javascript:var bld = document.getElementById('EmpID').style.color = 'red' " + ";"
                                 + "javascript:var x = document.getElementById('EmpID').value = " + name + ";"
                                 + "javascript:var y = document.getElementById('Password').style.display = 'none' " + ";"
-                                + "javascript:var a = ''" + ";"
+                                + "javascript:var a = 'Engineer11'" + ";"
                                 + "javascript:var b = document.getElementById('Password').value = " + 'a' + ";"
 
                 );
