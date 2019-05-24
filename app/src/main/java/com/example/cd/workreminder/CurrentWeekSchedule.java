@@ -358,7 +358,6 @@ public class CurrentWeekSchedule extends ListActivity {
 
                 // Create a new map of values, where column names are the keys
                 ContentValues values = new ContentValues();
-
                 values.put(WorkReaderContract.WorkEntry.COLUMN_NAME_START_HOUR, "");
                 values.put(WorkReaderContract.WorkEntry.COLUMN_NAME_START_MINUTE, "");
                 values.put(WorkReaderContract.WorkEntry.COLUMN_NAME_START_AM_OR_PM, "");
