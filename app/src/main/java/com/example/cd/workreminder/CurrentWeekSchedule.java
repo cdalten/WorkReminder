@@ -356,7 +356,6 @@ public class CurrentWeekSchedule extends ListActivity {
                 // Gets the data repository in write mode
                 SQLiteDatabase db = workReaderDbHelper.getWritableDatabase();
 
-
                 // Create a new map of values, where column names are the keys
                 ContentValues values = new ContentValues();
 
