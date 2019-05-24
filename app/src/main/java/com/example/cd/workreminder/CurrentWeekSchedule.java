@@ -369,8 +369,6 @@ public class CurrentWeekSchedule extends ListActivity {
                 values.put(WorkReaderContract.WorkEntry.COLUMN_NAME_END_AM_OR_PM, "");
 
                 long newRowId = db.insert(FeedEntry.TABLE_NAME, null, values);
-
-
             }
         });
         */
