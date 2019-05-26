@@ -23,7 +23,7 @@ public class CurrentWorkWeek extends com.example.cd.workreminder.MainActivity im
 
     private String startHour;
     private String startMinute;
-    private String startAmOrPm ;
+    private String startAmOrPm;
     private String endHour;
     private String endMinute;
     private String endAmOrPm;

@@ -151,7 +151,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     private SharedPreferences.Editor saveMe; //Added on 4 - 25 - 2019
     private Button workPreferences; //Added on 5 - 9 - 2019
 
-    private BroadcastReceiver receiver;
+    private BroadcastReceiver WorkAlarmReceiver;
 
     @SuppressLint("ClickableViewAccessibility")
     @TargetApi(19)
@@ -160,12 +160,11 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_job_schedule);
         Log.e(PRODUCTION_TAG, "ONCREATE() BEFORE SAVEDINSTANCE()");
-        Log.e(PRODUCTION_TAG, "SCHEDULE UPDATED FROM MAIN? " + scheduleGotUpdated);
-
         IntentFilter filter = new IntentFilter();
         filter.addAction("android.intent.action.TIME_TICK");
 
-        registerReceiver(new WorkAlarmReceiver(), filter);
+        WorkAlarmReceiver = new WorkAlarmReceiver();
+        registerReceiver( WorkAlarmReceiver, filter);
 
         //offline = (TextView)findViewById(R.id.offline);
         //offlineUpdate = (Button) findViewById(R.id.offlineUpdate);
@@ -282,12 +281,12 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
             sundayWorkHours =  new CurrentWorkWeek( pref,
                     this,
                     getString(R.string.SUNDAY),
-                    pref.getString("SUNDAY_START_HOUR", "12"),
-                    pref.getString("SUNDAY_START_MINUTE", "0"),
-                    pref.getString("SUNDAY_START_AM_OR_PM", "AM"),
-                    pref.getString("SUNDAY_END_HOUR", "12"),
-                    pref.getString("SUNDAY_END_MINUTE", "0"),
-                    pref.getString("SUNDAY_END_AM_OR_PM", "AM"));
+                    pref.getString("SUNDAY_START_HOUR", WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
+                    pref.getString("SUNDAY_START_MINUTE", WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
+                    pref.getString("SUNDAY_START_AM_OR_PM", WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT),
+                    pref.getString("SUNDAY_END_HOUR", WorkReaderContract.WorkEntry.END_HOUR_DEFAULT),
+                    pref.getString("SUNDAY_END_MINUTE", WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
+                    pref.getString("SUNDAY_END_AM_OR_PM", WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
 
 
             editor.putString("SUNDAY_START_HOUR", sundayWorkHours.getStartHour());
@@ -310,12 +309,12 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
                 mondayWorkHours = new CurrentWorkWeek(pref,
                         this,
                         getString(R.string.MONDAY),
-                        pref.getString("MONDAY_START_HOUR", "12"),
-                        pref.getString("MONDAY_START_MINUTE", "0"),
-                        pref.getString("MONDAY_START_AM_OR_PM", "AM"),
-                        pref.getString("MONDAY_END_HOUR", "12"),
-                        pref.getString("MONDAY_END_MINUTE", "0"),
-                        pref.getString("MONDAY_END_AM_OR_PM", "PM")
+                        pref.getString("MONDAY_START_HOUR", WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
+                        pref.getString("MONDAY_START_MINUTE", WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
+                        pref.getString("MONDAY_START_AM_OR_PM", WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT),
+                        pref.getString("MONDAY_END_HOUR", WorkReaderContract.WorkEntry.END_HOUR_DEFAULT),
+                        pref.getString("MONDAY_END_MINUTE", WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
+                        pref.getString("MONDAY_END_AM_OR_PM", WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT)
                 );
             editor.putString("MONDAY_START_HOUR", mondayWorkHours.getStartHour());
             editor.putString("MONDAY_START_MINUTE", mondayWorkHours.getStartMinute());
@@ -425,7 +424,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
             fridayWorkHours = new CurrentWorkWeek( pref,
                     this,
                     getString(R.string.FRIDAY),
-                    "7",
+                    pref.getString(getString(R.string.FRIDAY_START_HOUR), "0"),
                     "45",
                     "PM",
                     "11",
@@ -557,7 +556,6 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         } else {
             Log.e(PRODUCTION_TAG, "GOT DATA FROM ASYNCTASK ERROR"); //Force up the stack??
         }
-
     }
 
     @Override
@@ -980,33 +978,10 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         //    if (connectionStatus != null) {
         //        this.unregisterReceiver(connectionStatus);
         //    }
-        Log.i(PRODUCTION_TAG, "ON DESTROY");
+        unregisterReceiver(WorkAlarmReceiver);
         super.onDestroy(); //why?
     }
 
-
-    //added on 1 - 11 - 2018
-    /*
-     * Changed login LOGIN_URL to the Landing Page url in a effort to debug shit.
-     * Changed /ESS/ to /ESS/AuthN/Swylogin.aspx?ReturnUrl=%2fESS%2f on 4 - 20 - 2018
-     */
-    private void loadLogin() {
-        //getSchedule.loadUrl("https://" + LOGIN_URL);
-        String postData ="EmpID=name&Password=pass";
-
-        try {
-            // "/ESS/AuthN/" causes the authorization to break while "/ESS/" doesn't
-            // getSchedule.postUrl("https://" + LANDINGPAGE_URL
-            //         , Base64.encode(postData.getBytes(), Base64.DEFAULT)); //Stupid network hack. Remove from production release.
-
-          ;
-            Log.i(PRODUCTION_TAG, "Login");
-        } catch (Exception e) {
-            Log.i(PRODUCTION_TAG, e.getMessage());
-
-        }
-
-    }
 
 
     /*

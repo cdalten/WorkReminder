@@ -28,10 +28,10 @@ public class HourFormat extends FragmentActivity {
     Spinner dayOfTheWeek; //Added on 2 - 1 - 2019
 
     Intent intent; //Added on 1 - 24 - 2019
-    Intent forceBacktoMain; //Added on 1 - 31 - 2019
     Button finish; //Added on 2 - 1- 2019
     private int dayPosition;
     private final String PRODUCTION_TAG = "LG_WORK_PHONE";
+    private SharedPreferences pref; //Added on 5 - 24 - 2019
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,6 @@ public class HourFormat extends FragmentActivity {
 
         //Pipe data back.
         intent = getIntent();
-        //forceBacktoMain = new Intent(this, MainActivity.class);
 
         //Day of the week
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -60,13 +59,6 @@ public class HourFormat extends FragmentActivity {
         dayOfTheWeek.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                /*SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putInt(getString(R.string.saved_high_score_key), newHighScore);
-                editor.commit();
-                */
-
 
                 //intent.putExtra(getString(R.string.com_example_cd_shiftreminder_DAY_OF_THE_WEEK),
                 //        parent.getItemAtPosition(position).toString());
@@ -94,6 +86,49 @@ public class HourFormat extends FragmentActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 //if (position != 0) { //Possible bug??
+                pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+
+                //setAlarmTime(9, 10, Integer.parseInt(pref.getString("ALARM_MINUTES", "")));
+
+                SharedPreferences.Editor editor = pref.edit();
+                switch (dayPosition) {
+                    case WorkReaderContract.WorkEntry.SUNDAY:
+                        editor.putString(getString(R.string.SUNDAY_START_HOUR),
+                                parent.getItemAtPosition(position).toString());
+                        Log.e(PRODUCTION_TAG, "SUNDAY START HOUR");
+                        break;
+                    case WorkReaderContract.WorkEntry.MONDAY:
+                        editor.putString(getString(R.string.MONDAY_START_HOUR),
+                                parent.getItemAtPosition(position).toString());
+                        Log.e(PRODUCTION_TAG, "MONDAY START HOUR");
+                        break;
+                    case WorkReaderContract.WorkEntry.TUESDAY:
+                        editor.putString(getString(R.string.TUESDAY_START_HOUR),
+                                parent.getItemAtPosition(position).toString());
+                        Log.e(PRODUCTION_TAG, "TUESDAY START HOUR");
+                        break;
+                    case WorkReaderContract.WorkEntry.WEDNESAY:
+                        editor.putString(getString(R.string.WEDNESDAY_START_HOUR),
+                                parent.getItemAtPosition(position).toString());
+                        Log.e(PRODUCTION_TAG, "WEDNESDAY START HOUR");
+                        break;
+                    case WorkReaderContract.WorkEntry.THURSDAY:
+                        editor.putString(getString(R.string.WEDNESDAY_START_HOUR),
+                                parent.getItemAtPosition(position).toString());
+                        Log.e(PRODUCTION_TAG, "THURSDAY START HOUR");
+                        break;
+                    case WorkReaderContract.WorkEntry.FRIDAY:
+                        editor.putString(getString(R.string.FRIDAY_START_HOUR),
+                                parent.getItemAtPosition(position).toString());
+                        Log.e(PRODUCTION_TAG, "FRIDAY START HOUR");
+                        break;
+                    case WorkReaderContract.WorkEntry.SATURDAY:
+                        editor.putString(getString(R.string.SATURDAY_START_HOUR),
+                                parent.getItemAtPosition(position).toString());
+                        Log.e(PRODUCTION_TAG, "SATURDAY START HOUR");
+                        break;
+                }
+                editor.apply();
                 intent.putExtra(getString(R.string.START_HOUR),
                         parent.getItemAtPosition(position).toString());
                 setResult(0, intent);
@@ -115,13 +150,35 @@ public class HourFormat extends FragmentActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Log.e(PRODUCTION_TAG, "THE POSITION BEFORE IS: " + position);
-                //if (position != 0) {
+                switch (dayPosition) {
+                    case WorkReaderContract.WorkEntry.SUNDAY:
+                        Log.e(PRODUCTION_TAG, "SUNDAY START MINUTE");
+                        break;
+                    case WorkReaderContract.WorkEntry.MONDAY:
+                        Log.e(PRODUCTION_TAG, "MONDAY START MINUTE");
+                        break;
+                    case WorkReaderContract.WorkEntry.TUESDAY:
+                        Log.e(PRODUCTION_TAG, "TUESDAY START MINUTE");
+                        break;
+                    case WorkReaderContract.WorkEntry.WEDNESAY:
+                        Log.e(PRODUCTION_TAG, "WEDNESDAY START MINUTE");
+                        break;
+                    case WorkReaderContract.WorkEntry.THURSDAY:
+                        Log.e(PRODUCTION_TAG, "THURSDAY START MINUTE");
+                        break;
+                    case WorkReaderContract.WorkEntry.FRIDAY:
+                        Log.e(PRODUCTION_TAG, "FRIDAY START MINUTE");
+                        break;
+                    case WorkReaderContract.WorkEntry.SATURDAY:
+                        Log.e(PRODUCTION_TAG, "SATURDAY START MINUTE");
+                        break;
+                }
                 //forceBacktoMain.putExtra(Days.START_MINUTE, parent.getItemAtPosition(position).toString()); //stupid hack
                 intent.putExtra(getString(R.string.START_MINUTE),
                         parent.getItemAtPosition(position).toString());
                 setResult(0, intent);
                 //startActivity(forceBacktoMain);
-                //}
+
 
             }
 
@@ -141,8 +198,30 @@ public class HourFormat extends FragmentActivity {
         startAmOrPm.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                intent.putExtra(getString(R.string.START_AM_OR_PM),
-                        parent.getItemAtPosition(position).toString());
+                switch (dayPosition) {
+                    case WorkReaderContract.WorkEntry.SUNDAY:
+                        Log.e(PRODUCTION_TAG, "SUNDAY");
+                        break;
+                    case WorkReaderContract.WorkEntry.MONDAY:
+                        Log.e(PRODUCTION_TAG, "MONDAY");
+                        break;
+                    case WorkReaderContract.WorkEntry.TUESDAY:
+                        Log.e(PRODUCTION_TAG, "TUESDAY");
+                        break;
+                    case WorkReaderContract.WorkEntry.WEDNESAY:
+                        Log.e(PRODUCTION_TAG, "WEDNESDAY");
+                        break;
+                    case WorkReaderContract.WorkEntry.THURSDAY:
+                        Log.e(PRODUCTION_TAG, "THURSDAY");
+                        break;
+                    case WorkReaderContract.WorkEntry.FRIDAY:
+                        Log.e(PRODUCTION_TAG, "FRIDAY");
+                        break;
+                    case WorkReaderContract.WorkEntry.SATURDAY:
+                        Log.e(PRODUCTION_TAG, "SATURDAY");
+                        break;
+                }
+                intent.putExtra(getString(R.string.START_AM_OR_PM), parent.getItemAtPosition(position).toString());
                 //if  (position != 0) { //possible bug??
                 //forceBacktoMain.putExtra(getString(R.string.com_example_cd_shiftreminder_START_AM_OR_PM),
                 //        parent.getItemAtPosition(position).toString());
@@ -165,8 +244,29 @@ public class HourFormat extends FragmentActivity {
         endHour.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //forceBacktoMain.putExtra(getString(R.string.com_example_cd_shiftreminder_END_HOUR),
-                //        parent.getItemAtPosition(position).toString());
+                switch (dayPosition) {
+                    case WorkReaderContract.WorkEntry.SUNDAY:
+                        Log.e(PRODUCTION_TAG, "SUNDAY END HOUR");
+                        break;
+                    case WorkReaderContract.WorkEntry.MONDAY:
+                        Log.e(PRODUCTION_TAG, "MONDAY END HOUR");
+                        break;
+                    case WorkReaderContract.WorkEntry.TUESDAY:
+                        Log.e(PRODUCTION_TAG, "TUESDAY END HOUR");
+                        break;
+                    case WorkReaderContract.WorkEntry.WEDNESAY:
+                        Log.e(PRODUCTION_TAG, "WEDNESDAY END HOUR");
+                        break;
+                    case WorkReaderContract.WorkEntry.THURSDAY:
+                        Log.e(PRODUCTION_TAG, "THURSDAY END HOUR");
+                        break;
+                    case WorkReaderContract.WorkEntry.FRIDAY:
+                        Log.e(PRODUCTION_TAG, "FRIDAY END HOUR");
+                        break;
+                    case WorkReaderContract.WorkEntry.SATURDAY:
+                        Log.e(PRODUCTION_TAG, "SATURDAY END HOUR");
+                        break;
+                }
                 intent.putExtra(getString(R.string.END_HOUR),
                         parent.getItemAtPosition(position).toString());
                 setResult(0, intent);
@@ -186,8 +286,30 @@ public class HourFormat extends FragmentActivity {
         endMinute.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                intent.putExtra(getString(R.string.END_MINUTE),
-                        parent.getItemAtPosition(position).toString());
+                switch (dayPosition) {
+                    case WorkReaderContract.WorkEntry.SUNDAY:
+                        Log.e(PRODUCTION_TAG, "SUNDAY END MINUTE");
+                        break;
+                    case WorkReaderContract.WorkEntry.MONDAY:
+                        Log.e(PRODUCTION_TAG, "MONDAY END MINUTE");
+                        break;
+                    case WorkReaderContract.WorkEntry.TUESDAY:
+                        Log.e(PRODUCTION_TAG, "TUESDAY END MINUTE");
+                        break;
+                    case WorkReaderContract.WorkEntry.WEDNESAY:
+                        Log.e(PRODUCTION_TAG, "WEDNESDAY END MINUTE");
+                        break;
+                    case WorkReaderContract.WorkEntry.THURSDAY:
+                        Log.e(PRODUCTION_TAG, "THURSDAY END MINUTE");
+                        break;
+                    case WorkReaderContract.WorkEntry.FRIDAY:
+                        Log.e(PRODUCTION_TAG, "FRIDAY END MINUTE");
+                        break;
+                    case WorkReaderContract.WorkEntry.SATURDAY:
+                        Log.e(PRODUCTION_TAG, "SATURDAY END MINUTE");
+                        break;
+                }
+                intent.putExtra(getString(R.string.END_MINUTE), parent.getItemAtPosition(position).toString());
                 setResult(0, intent);
                 //forceBacktoMain.putExtra(Days.END_MINUTE, parent.getItemAtPosition(position).toString());
             }
@@ -209,8 +331,30 @@ public class HourFormat extends FragmentActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 //forceBacktoMain.putExtra(getString(R.string.com_example_cd_shiftreminder_END_AM_OR_PM),
                 //        parent.getItemAtPosition(position).toString());
-                intent.putExtra(getString(R.string.END_AM_OR_PM),
-                        parent.getItemAtPosition(position).toString());
+                switch (dayPosition) {
+                    case WorkReaderContract.WorkEntry.SUNDAY:
+                        Log.e(PRODUCTION_TAG, "SUNDAY");
+                        break;
+                    case WorkReaderContract.WorkEntry.MONDAY:
+                        Log.e(PRODUCTION_TAG, "MONDAY");
+                        break;
+                    case WorkReaderContract.WorkEntry.TUESDAY:
+                        Log.e(PRODUCTION_TAG, "TUESDAY");
+                        break;
+                    case WorkReaderContract.WorkEntry.WEDNESAY:
+                        Log.e(PRODUCTION_TAG, "WEDNESDAY");
+                        break;
+                    case WorkReaderContract.WorkEntry.THURSDAY:
+                        Log.e(PRODUCTION_TAG, "THURSDAY");
+                        break;
+                    case WorkReaderContract.WorkEntry.FRIDAY:
+                        Log.e(PRODUCTION_TAG, "FRIDAY");
+                        break;
+                    case WorkReaderContract.WorkEntry.SATURDAY:
+                        Log.e(PRODUCTION_TAG, "SATURDAY");
+                        break;
+                }
+                intent.putExtra(getString(R.string.END_AM_OR_PM), parent.getItemAtPosition(position).toString());
                 setResult(0, intent);
 
             }
