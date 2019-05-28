@@ -644,7 +644,6 @@ public class CurrentWeekSchedule extends ListActivity {
                 ((TextView) convertView.findViewById(R.id.hour_separator)).setText("");
                 ((TextView) convertView.findViewById(R.id.endTime)).setText("");
 
-
             } else {
                 //week.remove(position);
                 //week.get(0).add(dayPair.get(position));

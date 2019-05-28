@@ -185,7 +185,6 @@ public class HourFormat extends FragmentActivity {
                         break;
                 }
                 editor.apply();
-
                 intent.putExtra(getString(R.string.START_MINUTE),
                         parent.getItemAtPosition(position).toString());
                 setResult(0, intent);
