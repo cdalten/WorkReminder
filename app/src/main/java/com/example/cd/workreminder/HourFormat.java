@@ -32,6 +32,7 @@ public class HourFormat extends FragmentActivity {
     private int dayPosition;
     private final String PRODUCTION_TAG = "LG_WORK_PHONE";
     private SharedPreferences pref; //Added on 5 - 24 - 2019
+    private int saveDay = 0; //Added on 5 - 28 - 2019
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +66,58 @@ public class HourFormat extends FragmentActivity {
 
                 dayPosition = position;
                 switch (position) {
+                    case WorkReaderContract.WorkEntry.SUNDAY:
+                        saveDay = position;
+                        Log.e(PRODUCTION_TAG, "THE DAY IS SUNDAY");
+                        break;
+                    case WorkReaderContract.WorkEntry.MONDAY:
+                        saveDay = position;
+                        Log.e(PRODUCTION_TAG, "THE DAY IS MONDAY");
+                        break;
+                    case WorkReaderContract.WorkEntry.TUESDAY:
+                        saveDay = position;
+                        Log.e(PRODUCTION_TAG, "THE DAY IS TUESDAY");
+                        break;
+                    case WorkReaderContract.WorkEntry.WEDNESAY:
+                        saveDay = position;
+                        Log.e(PRODUCTION_TAG, "THE DAY IS WEDNESDAY");
+                        break;
+                    case WorkReaderContract.WorkEntry.THURSDAY:
+                        saveDay = position;
+                        Log.e(PRODUCTION_TAG, "THE DAY IS THURSDAY");
+                        break;
+                    case WorkReaderContract.WorkEntry.FRIDAY:
+                        saveDay = position;
+                        Log.e(PRODUCTION_TAG, "THE DAY IS FRIDAY");
+                        break;
+                    case WorkReaderContract.WorkEntry.SATURDAY:
+                        saveDay = position;
+                        Log.e(PRODUCTION_TAG, "THE DAY IS SATURDAY");
+                        break;
                     case WorkReaderContract.WorkEntry.OFF:
+                        switch(saveDay) {
+                            case WorkReaderContract.WorkEntry.SUNDAY:
+                                Log.e(PRODUCTION_TAG, "THE DAY OFF IS SUNDAY");
+                                break;
+                            case WorkReaderContract.WorkEntry.MONDAY:
+                                Log.e(PRODUCTION_TAG, "THE DAY OFF IS MONDAY");
+                                break;
+                            case WorkReaderContract.WorkEntry.TUESDAY:
+                                Log.e(PRODUCTION_TAG, "THE DAY OFF S TUESDAY");
+                                break;
+                            case WorkReaderContract.WorkEntry.WEDNESAY:
+                                Log.e(PRODUCTION_TAG, "THE DAY OFF IS WEDNESDAY");
+                                break;
+                            case WorkReaderContract.WorkEntry.THURSDAY:
+                                Log.e(PRODUCTION_TAG, "THE DAY OFF IS THURSDAY");
+                                break;
+                            case WorkReaderContract.WorkEntry.FRIDAY:
+                                Log.e(PRODUCTION_TAG, "THE DAY OFF IS FRIDAY");
+                                break;
+                            case WorkReaderContract.WorkEntry.SATURDAY:
+                                Log.e(PRODUCTION_TAG, "THE DAY OFF IS SATURDAY");
+                                break;
+                        }
                         startHour.setVisibility(View.INVISIBLE);
                         startMinute.setVisibility(View.INVISIBLE);
                         startAmOrPm.setVisibility(View.INVISIBLE);
