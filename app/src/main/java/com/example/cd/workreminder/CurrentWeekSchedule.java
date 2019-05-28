@@ -606,67 +606,60 @@ public class CurrentWeekSchedule extends ListActivity {
         //super.onSaveInstanceState(outState);
         //Bundle map = new Bundle();
         outState.putString("DAY_SUNDAY", sundayHours.getDayOfWeek());
-        outState.putString("SUNDAY_START_HOUR", sundayHours.getStartHour());
-        outState.putString("SUNDAY_START_MINUTE", sundayHours.getStartMinute());
-        outState.putString("SUNDAY_START_AM_OR_PM", sundayHours.getStartAmOrPm());
-        outState.putString("SUNDAY_END_HOUR", sundayHours.getEndHour());
-        outState.putString("SUNDAY_END_MINUTE", sundayHours.getEndMinute());
-        outState.putString("SUNDAY_END_AM_OR_PM", sundayHours.getEndAmOrPm());
-
-        /*map.putString(outState.getString("DAY_SUNDAY"), "N/A"); //
-        map.putString(outState.getString("SUNDAY_START_HOUR"), "N/A");
-        map.putString(outState.getString("SUNDAY_START_MINUTE"), "N/A");
-        map.putString(outState.getString("SUNDAY_START_AM_OR_MAP"), "N/A");
-        outState.putBundle("SAVED_WEEK", map);
-        */
+        outState.putString(getString(R.string.SUNDAY_START_HOUR), sundayHours.getStartHour());
+        outState.putString(getString(R.string.SUNDAY_START_MINUTE), sundayHours.getStartMinute());
+        outState.putString(getString(R.string.SUNDAY_START_AM_OR_PM), sundayHours.getStartAmOrPm());
+        outState.putString(getString(R.string.SUNDAY_END_HOUR), sundayHours.getEndHour());
+        outState.putString(getString(R.string.SUNDAY_END_MINUTE), sundayHours.getEndMinute());
+        outState.putString(getString(R.string.SUNDAY_END_AM_OR_PM), sundayHours.getEndAmOrPm());
 
         outState.putString("DAY_MONDAY", mondayHours.getDayOfWeek());
-        outState.putString("MONDAY_START_HOUR", mondayHours.getStartHour());
-        outState.putString("MONDAY_START_MINUTE", mondayHours.getStartMinute());
-        outState.putString("MONDAY_START_AM_OR_PM", mondayHours.getStartAmOrPm());
-        outState.putString("MONDAY_END_HOUR", mondayHours.getEndHour());
-        outState.putString("MONDAY_END_MINUTE", mondayHours.getEndMinute());
-        outState.putString("MONDAY_END_AM_OR_PM", mondayHours.getEndAmOrPm());
+        outState.putString(getString(R.string.MONDAY_START_HOUR), mondayHours.getStartHour());
+        outState.putString(getString(R.string.MONDAY_START_MINUTE), mondayHours.getStartMinute());
+        outState.putString(getString(R.string.MONDAY_START_AM_OR_PM), mondayHours.getStartAmOrPm());
+        outState.putString(getString(R.string.MONDAY_END_HOUR), mondayHours.getEndHour());
+        outState.putString(getString(R.string.MONDAY_END_MINUTE), mondayHours.getEndMinute());
+        outState.putString(getString(R.string.MONDAY_END_AM_OR_PM), mondayHours.getEndAmOrPm());
 
         outState.putString("DAY_TUESDAY", tuesdayHours.getDayOfWeek());
-        outState.putString("TUESDAY_START_HOUR", tuesdayHours.getStartHour());
-        outState.putString("TUESDAY_START_MINUTE", tuesdayHours.getStartMinute());
-        outState.putString("TUESDAY_START_AM_OR_PM", tuesdayHours.getStartAmOrPm());
-        outState.putString("TUESDAY_END_HOUR", tuesdayHours.getEndHour());
-        outState.putString("TUESDAY_END_MINUTE", tuesdayHours.getEndMinute());
-        outState.putString("TUESDAY_END_AM_OR_PM", tuesdayHours.getEndAmOrPm());
+        outState.putString(getString(R.string.TUESDAY_START_HOUR), tuesdayHours.getStartHour());
+        outState.putString(getString(R.string.TUESDAY_START_MINUTE), tuesdayHours.getStartMinute());
+        outState.putString(getString(R.string.TUESDAY_START_AM_OR_PM), tuesdayHours.getStartAmOrPm());
+        outState.putString(getString(R.string.TUESDAY_END_HOUR), tuesdayHours.getEndHour());
+        outState.putString(getString(R.string.TUESDAY_END_MINUTE), tuesdayHours.getEndMinute());
+        outState.putString(getString(R.string.TUESDAY_END_AM_OR_PM), tuesdayHours.getEndAmOrPm());
 
         outState.putString("DAY_WEDNESDAY", wednesdayHours.getDayOfWeek());
-        outState.putString("WEDNESDAY_START_HOUR", wednesdayHours.getStartHour());
-        outState.putString("WEDNESDAY_START_MINUTE", wednesdayHours.getStartMinute());
-        outState.putString("WEDNESDAY_START_AM_OR_PM", wednesdayHours.getStartAmOrPm());
-        outState.putString("WEDNESDAY_END_HOUR", wednesdayHours.getEndHour());
-        outState.putString("WEDNESDAY_END_MINUTE", wednesdayHours.getEndMinute());
-        outState.putString("WEDNESDAY_END_AM_OR_PM", wednesdayHours.getEndAmOrPm());
+        outState.putString(getString(R.string.WEDNESDAY_START_HOUR), wednesdayHours.getStartHour());
+        outState.putString(getString(R.string.WEDNESDAY_START_MINUTE), wednesdayHours.getStartMinute());
+        outState.putString(getString(R.string.WEDNESDAY_START_AM_OR_PM), wednesdayHours.getStartAmOrPm());
+        outState.putString(getString(R.string.WEDNESDAY_END_HOUR), wednesdayHours.getEndHour());
+        outState.putString(getString(R.string.WEDNESDAY_END_MINUTE), wednesdayHours.getEndMinute());
+        outState.putString(getString(R.string.WEDNESDAY_END_AM_OR_PM), wednesdayHours.getEndAmOrPm());
 
         outState.putString("DAY_THURSDAY", thursdayHours.getDayOfWeek());
-        outState.putString("THURSDAY_START_HOUR", thursdayHours.getStartHour());
-        outState.putString("THURSDAY_START_MINUTE", thursdayHours.getStartMinute());
-        outState.putString("THURSDAY_START_AM_OR_PM", thursdayHours.getStartAmOrPm());
-        outState.putString("THURSDAY_END_HOUR", thursdayHours.getEndHour());
-        outState.putString("THURSDAY_END_MINUTE", thursdayHours.getEndMinute());
-        outState.putString("THURSDAY_END_AM_OR_PM", thursdayHours.getEndAmOrPm());
+        outState.putString(getString(R.string.THURSDAY_START_HOUR), thursdayHours.getStartHour());
+        outState.putString(getString(R.string.THURSDAY_START_MINUTE), thursdayHours.getStartMinute());
+        outState.putString(getString(R.string.THURSDAY_START_AM_OR_PM), thursdayHours.getStartAmOrPm());
+        outState.putString(getString(R.string.THURSDAY_END_HOUR), thursdayHours.getEndHour());
+        outState.putString(getString(R.string.THURSDAY_END_MINUTE), thursdayHours.getEndMinute());
+        outState.putString(getString(R.string.THURSDAY_END_AM_OR_PM), thursdayHours.getEndAmOrPm());
 
         outState.putString("DAY_FRIDAY", fridayHours.getDayOfWeek());
-        outState.putString("FRIDAY_START_HOUR", fridayHours.getStartHour());
-        outState.putString("FRIDAY_START_MINUTE", fridayHours.getStartMinute());
-        outState.putString("FRIDAY_START_AM_OR_PM", fridayHours.getStartAmOrPm());
-        outState.putString("FRIDAY_END_HOUR", fridayHours.getEndHour());
-        outState.putString("FRIDAY_END_MINUTE", fridayHours.getEndMinute());
-        outState.putString("FRIDAY_END_AM_OR_PM", fridayHours.getEndAmOrPm());
+        outState.putString(getString(R.string.FRIDAY_START_HOUR), fridayHours.getStartHour());
+        outState.putString(getString(R.string.FRIDAY_START_MINUTE), fridayHours.getStartMinute());
+        outState.putString(getString(R.string.FRIDAY_START_AM_OR_PM), fridayHours.getStartAmOrPm());
+        outState.putString(getString(R.string.FRIDAY_END_HOUR), fridayHours.getEndHour());
+        outState.putString(getString(R.string.FRIDAY_END_MINUTE), fridayHours.getEndMinute());
+        outState.putString(getString(R.string.FRIDAY_END_AM_OR_PM), fridayHours.getEndAmOrPm());
 
         outState.putString("DAY_SATURDAY", saturdayHours.getDayOfWeek());
-        outState.putString("SATURDAY_START_HOUR", saturdayHours.getStartHour());
-        outState.putString("SATURDAY_START_MINUTE", saturdayHours.getStartMinute());
-        outState.putString("SATURDAY_START_AM_OR_PM", saturdayHours.getStartAmOrPm());
-        outState.putString("SATURDAY_END_HOUR", saturdayHours.getEndHour());
-        outState.putString("SATURDAY_END_MINUTE", saturdayHours.getEndMinute());
-        outState.putString("SATURDAY_END_AM_OR_PM", saturdayHours.getEndAmOrPm());
+        outState.putString(getString(R.string.SATURDAY_START_HOUR), saturdayHours.getStartHour());
+        outState.putString(getString(R.string.SATURDAY_START_MINUTE), saturdayHours.getStartMinute());
+        outState.putString(getString(R.string.SATURDAY_START_AM_OR_PM), saturdayHours.getStartAmOrPm());
+        outState.putString(getString(R.string.SATURDAY_END_HOUR), saturdayHours.getEndHour());
+        outState.putString(getString(R.string.SATURDAY_END_MINUTE), saturdayHours.getEndMinute());
+        outState.putString(getString(R.string.SATURDAY_END_AM_OR_PM), saturdayHours.getEndAmOrPm());
 
         super.onSaveInstanceState(outState);
     }

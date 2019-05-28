@@ -97,49 +97,49 @@
     <string name="SUNDAY_START_HOUR">SUNDAY_START_HOUR</string>
     <string name="SUNDAY_START_MINUTE">SUNDAY_START_MINUTE</string>
     <string name="SUNDAY_START_AM_OR_PM">SUNDAY_START_AM_OR_PM</string>
-    <string name="SUNDAY_END_HOUR">SUNDAY_START_HOUR</string>
+    <string name="SUNDAY_END_HOUR">SUNDAY_END_HOUR</string>
     <string name="SUNDAY_END_MINUTE">SUNDAY_END_MINUTE</string>
     <string name="SUNDAY_END_AM_OR_PM">SUNDAY_END_AM_OR_PM</string>
 
     <string name="MONDAY_START_HOUR">MONDAY_START_HOUR</string>
     <string name="MONDAY_START_MINUTE">MONDAY_START_MINUTE</string>
     <string name="MONDAY_START_AM_OR_PM">MONDAY_START_AM_OR_PM</string>
-    <string name="MONDAY_END_HOUR">MONDAY_START_HOUR</string>
+    <string name="MONDAY_END_HOUR">MONDAY_END_HOUR</string>
     <string name="MONDAY_END_MINUTE">MONDAY_END_MINUTE</string>
     <string name="MONDAY_END_AM_OR_PM">MONDAY_END_AM_OR_PM</string>
 
     <string name="TUESDAY_START_HOUR">TUESDAY_START_HOUR</string>
     <string name="TUESDAY_START_MINUTE">TUESDAY_START_MINUTE</string>
     <string name="TUESDAY_START_AM_OR_PM">TUESDAY_START_AM_OR_PM</string>
-    <string name="TUESDAY_END_HOUR">TUESDAY_START_HOUR</string>
+    <string name="TUESDAY_END_HOUR">TUESDAY_END_HOUR</string>
     <string name="TUESDAY_END_MINUTE">TUESDAY_END_MINUTE</string>
     <string name="TUESDAY_END_AM_OR_PM">TUESDAY_END_AM_OR_PM</string>
 
     <string name="WEDNESDAY_START_HOUR">WEDNESDAY_START_HOUR</string>
     <string name="WEDNESDAY_START_MINUTE">WEDNESDAY_START_MINUTE</string>
     <string name="WEDNESDAY_START_AM_OR_PM">WEDNESDAY_START_AM_OR_PM</string>
-    <string name="WEDNESDAY_END_HOUR">WEDNESDAY_START_HOUR</string>
+    <string name="WEDNESDAY_END_HOUR">WEDNESDAY_END_HOUR</string>
     <string name="WEDNESDAY_END_MINUTE">WEDNESDAY_END_MINUTE</string>
     <string name="WEDNESDAY_END_AM_OR_PM">WEDNESDAY_END_AM_OR_PM</string>
 
     <string name="THURSDAY_START_HOUR">THURSDAY_START_HOUR</string>
     <string name="THURSDAY_START_MINUTE">THURSDAY_START_MINUTE</string>
     <string name="THURSDAY_START_AM_OR_PM">THURSDAY_START_AM_OR_PM</string>
-    <string name="THURSDAY_END_HOUR">THURSDAY_START_HOUR</string>
+    <string name="THURSDAY_END_HOUR">THURSDAY_END_HOUR</string>
     <string name="THURSDAY_END_MINUTE">THURSDAY_END_MINUTE</string>
     <string name="THURSDAY_END_AM_OR_PM">THURSDAY_END_AM_OR_PM</string>
 
     <string name="FRIDAY_START_HOUR">FRIDAY_START_HOUR</string>
     <string name="FRIDAY_START_MINUTE">FRIDAY_START_MINUTE</string>
     <string name="FRIDAY_START_AM_OR_PM">FRIDAY_START_AM_OR_PM</string>
-    <string name="FRIDAY_END_HOUR">FRIDAY_START_HOUR</string>
+    <string name="FRIDAY_END_HOUR">FRIDAY_END_HOUR</string>
     <string name="FRIDAY_END_MINUTE">FRIDAY_END_MINUTE</string>
     <string name="FRIDAY_END_AM_OR_PM">FRIDAY_END_AM_OR_PM</string>
 
     <string name="SATURDAY_START_HOUR">SATURDAY_START_HOUR</string>
     <string name="SATURDAY_START_MINUTE">SATURDAY_START_MINUTE</string>
     <string name="SATURDAY_START_AM_OR_PM">SATURDAY_START_AM_OR_PM</string>
-    <string name="SATURDAY_END_HOUR">SATURDAY_START_HOUR</string>
+    <string name="SATURDAY_END_HOUR">SATURDAY_END_HOUR</string>
     <string name="SATURDAY_END_MINUTE">SATURDAY_END_MINUTE</string>
     <string name="SATURDAY_END_AM_OR_PM">SATURDAY_END_AM_OR_PM</string>
 </resources>
