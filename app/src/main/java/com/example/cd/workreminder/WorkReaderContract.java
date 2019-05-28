@@ -33,5 +33,6 @@ public final class WorkReaderContract {
         public static final int THURSDAY = 4;
         public static final int FRIDAY = 5;
         public static final int SATURDAY = 6;
+        public static final int OFF = 7; //Added on 5 - 28 - 2019
     }
 }//end class
