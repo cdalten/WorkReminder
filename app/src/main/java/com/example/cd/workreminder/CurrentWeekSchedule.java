@@ -682,17 +682,16 @@ public class CurrentWeekSchedule extends ListActivity {
                 if (intent.getStringExtra(getString(R.string.I_WORK_TODAY)) != null) {
 
 
-                    WorkNotification.notify(getContext(), week.get(position).get(0) + " " +
-                            intent.getStringExtra(getString(R.string.I_WORK_TODAY)), 0);
-                    //WorkNotification.notify(getContext(), "10:40 AM", 0);
-                    //WorkNotification.notify(getContext(),
-                            //"Upcoming alarm", 0, "
-                            //week.get(position).get(0),
-                            //        intent.getStringExtra(
-                            //
-                            //                getString(R.string.I_WORK_TODAY))
-                   //         , 0);
+                    //WorkNotification.notify(getContext(), week.get(position).get(0) + " " +
+                    //        intent.getStringExtra(getString(R.string.I_WORK_TODAY)), 0);
 
+                    WorkNotification.notify(getContext(), week.get(position).get(0) + " " +
+                            week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
+                                    + ":" +
+                                    week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE)
+                                    + " " +
+                                    week.get(position).get(WorkReaderContract.WorkEntry.START_AM_OR_PM),
+                            0);
 
                     text_start_hour.setTypeface(text_start_hour.getTypeface(), Typeface.BOLD);  //vs null??
                     text_separator.setTypeface(text_separator.getTypeface(), Typeface.BOLD);  //vs null??
