@@ -34,6 +34,7 @@ public class HourFormat extends FragmentActivity {
     private SharedPreferences pref; //Added on 5 - 24 - 2019
     private int saveDay = 0; //Added on 5 - 28 - 2019
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,25 +98,28 @@ public class HourFormat extends FragmentActivity {
                     case WorkReaderContract.WorkEntry.OFF:
                         switch(saveDay) {
                             case WorkReaderContract.WorkEntry.SUNDAY:
-                                Log.e(PRODUCTION_TAG, "THE DAY OFF IS SUNDAY");
+                                intent.putExtra("POSITION", WorkReaderContract.WorkEntry.SUNDAY);
                                 break;
                             case WorkReaderContract.WorkEntry.MONDAY:
-                                Log.e(PRODUCTION_TAG, "THE DAY OFF IS MONDAY");
+                                intent.putExtra("POSITION", WorkReaderContract.WorkEntry.MONDAY);
                                 break;
                             case WorkReaderContract.WorkEntry.TUESDAY:
-                                Log.e(PRODUCTION_TAG, "THE DAY OFF S TUESDAY");
+                                intent.putExtra("POSITION", WorkReaderContract.WorkEntry.TUESDAY);
                                 break;
                             case WorkReaderContract.WorkEntry.WEDNESAY:
-                                Log.e(PRODUCTION_TAG, "THE DAY OFF IS WEDNESDAY");
+                                intent.putExtra("POSITION", WorkReaderContract.WorkEntry.WEDNESAY);
                                 break;
                             case WorkReaderContract.WorkEntry.THURSDAY:
-                                Log.e(PRODUCTION_TAG, "THE DAY OFF IS THURSDAY");
+                                intent.putExtra("POSITION", WorkReaderContract.WorkEntry.THURSDAY);
                                 break;
                             case WorkReaderContract.WorkEntry.FRIDAY:
-                                Log.e(PRODUCTION_TAG, "THE DAY OFF IS FRIDAY");
+                                intent.putExtra("POSITION", WorkReaderContract.WorkEntry.FRIDAY);
                                 break;
                             case WorkReaderContract.WorkEntry.SATURDAY:
-                                Log.e(PRODUCTION_TAG, "THE DAY OFF IS SATURDAY");
+                                //intent.putExtra(getString(R.string.START_HOUR), "");
+                                intent.putExtra("POSITION", WorkReaderContract.WorkEntry.SATURDAY);
+                                //amIoff = true;
+                                //intent.putExtra("AM_I_OFF", amIoff);
                                 break;
                         }
                         startHour.setVisibility(View.INVISIBLE);
@@ -184,6 +188,9 @@ public class HourFormat extends FragmentActivity {
                         break;
                 }
                 editor.apply();
+                //Log.e(PRODUCTION_TAG, "THE START HOUR IS:" +  startHour.getItemAtPosition(startHour.getSelectedItemPosition()).toString());
+                //startHour.setSelection(2);
+                //Log.e(PRODUCTION_TAG, "THE NEW START HOUR IS:" +  startHour.getItemAtPosition(startHour.getSelectedItemPosition()).toString());
                 intent.putExtra(getString(R.string.START_HOUR),
                         parent.getItemAtPosition(position).toString());
                 setResult(0, intent);

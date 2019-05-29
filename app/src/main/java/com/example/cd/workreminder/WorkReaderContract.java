@@ -34,5 +34,14 @@ public final class WorkReaderContract {
         public static final int FRIDAY = 5;
         public static final int SATURDAY = 6;
         public static final int OFF = 7; //Added on 5 - 28 - 2019
+
+        public static final int START_HOUR = 1; //Added on 5 - 29 - 2019
+        public static final int START_MINUTE = 2;
+        public static final int START_AM_OR_PM = 3;
+        public static final int END_HOUR = 4;
+        public static final int END_MINUTE = 5;
+        public static final int END_AM_OR_PM = 6;
+
+
     }
 }//end class
