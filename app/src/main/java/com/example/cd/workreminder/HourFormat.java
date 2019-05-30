@@ -126,8 +126,7 @@ public class HourFormat extends FragmentActivity {
                             case WorkReaderContract.WorkEntry.SATURDAY:
                                 //intent.putExtra(getString(R.string.START_HOUR), "");
                                 intent.putExtra("POSITION", WorkReaderContract.WorkEntry.SATURDAY);
-                                //amIoff = true;
-                                //intent.putExtra("AM_I_OFF", amIoff);
+
                                 break;
                         }
                         editor.apply();

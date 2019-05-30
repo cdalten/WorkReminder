@@ -372,9 +372,6 @@ public class CurrentWeekSchedule extends ListActivity {
             //week.get(1).remove(0);
             //week.get(1).add(0, mondayHours.getDayOfWeek());
 
-
-
-
         }
     } //end onCreate()
 

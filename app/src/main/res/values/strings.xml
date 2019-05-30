@@ -95,7 +95,6 @@
         <item>PM</item>
     </string-array>
 
-
     <string name="SUNDAY_START_HOUR">SUNDAY_START_HOUR</string>
     <string name="SUNDAY_START_MINUTE">SUNDAY_START_MINUTE</string>
     <string name="SUNDAY_START_AM_OR_PM">SUNDAY_START_AM_OR_PM</string>

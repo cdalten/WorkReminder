@@ -1272,7 +1272,6 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
             //getSchedule.requestLayout();
-
             final String viewUrl = view.getUrl();
             final String myUrl = url.toString();
 
