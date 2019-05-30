@@ -276,7 +276,11 @@ public class CurrentWeekSchedule extends ListActivity {
                             i.putExtra("END_AM_OR_PM",  WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT);
                         } else {
                             i.putExtra("DAY_WEEK", position);
-                            i.putExtra("START_HOUR", Integer.parseInt(fridayHours.getStartHour()));
+                            try {
+                                i.putExtra("START_HOUR", Integer.parseInt(fridayHours.getStartHour()));
+                            } catch (Exception e) {
+                                i.putExtra("START_HOUR", "");
+                            }
                             i.putExtra("START_MINUTE", Integer.parseInt(fridayHours.getStartMinute()) / 15);
                             if (fridayHours.getStartAmOrPm().equals("AM")) {
                                 i.putExtra("START_AM_OR_PM", 0);
@@ -678,7 +682,6 @@ public class CurrentWeekSchedule extends ListActivity {
 
             Calendar cal = Calendar.getInstance();
             if (cal.get(Calendar.DAY_OF_WEEK) == getCurrentDay(position)){
-                Log.e(PRODUCTION_TAG, "THE CURRENT POSITION IS: " + currentPosition);
                 if (intent.getStringExtra(getString(R.string.I_WORK_TODAY)) != null) {
 
 
@@ -697,7 +700,6 @@ public class CurrentWeekSchedule extends ListActivity {
                     text_separator.setTypeface(text_separator.getTypeface(), Typeface.BOLD);  //vs null??
                     text_end_hour.setTypeface(text_end_hour.getTypeface(), Typeface.BOLD);  //vs null??
                     text_day.setTypeface(text_day.getTypeface(), Typeface.BOLD);
-                    Log.e(PRODUCTION_TAG, "BOLD TEXT GOT CALLED");
 
                     //text_hours.setText(Html.fromHtml("<b> " + getItem(position) + "</b>"));
                     //text_day.setText(Html.fromHtml("<b> " + days[position] + "</b>"));
@@ -806,11 +808,15 @@ public class CurrentWeekSchedule extends ListActivity {
         super.onActivityResult(requestCode, resultCode, data);
         Calendar cal = Calendar.getInstance();
 
+        SharedPreferences.Editor editor = pref.edit();
         int newPosition = 0;
         int weekPosition = data.getIntExtra(getString(R.string.DAY_OF_WEEK), 0);
         //int weekPosition = data.getIntExtra("NEW_DOWNLOAD_DATE", 0);
 
         if (weekPosition == 7) {
+            Log.e(PRODUCTION_TAG, "1)FRIDAY NEW POSITION AGAIN IS: " + intent.getIntExtra("POSITION", 0));
+            Log.e(PRODUCTION_TAG, "2)FRIDAY NEW POSITION AGAIN IS: " + data.getStringExtra("POSITION"));
+            Log.e(PRODUCTION_TAG, "NEW FRIDAY HOURS ARE: " + pref.getString(getString(R.string.FRIDAY_START_HOUR), ""));
             newPosition = intent.getIntExtra("POSITION", 0);
             switch (newPosition) {
                 case WorkReaderContract.WorkEntry.SUNDAY:
@@ -829,6 +835,8 @@ public class CurrentWeekSchedule extends ListActivity {
                     amIOff = true;
                     break;
                 case WorkReaderContract.WorkEntry.FRIDAY:
+                    editor.putString(getString(R.string.FRIDAY_START_HOUR), "0");
+                    Log.e(PRODUCTION_TAG, "NEW FRIDAY HOURS ARE: " + pref.getString(getString(R.string.FRIDAY_START_HOUR), "99"));
                     amIOff = true;
                     break;
                 case WorkReaderContract.WorkEntry.SATURDAY:
@@ -837,6 +845,7 @@ public class CurrentWeekSchedule extends ListActivity {
 
             } //end switch
         }
+        editor.apply();
 
         newStartDay = week.get(weekPosition).get(0);
         newStartHour = data.getStringExtra(getString(R.string.START_HOUR));
@@ -870,14 +879,21 @@ public class CurrentWeekSchedule extends ListActivity {
         }
 
         if (Calendar.DAY_OF_WEEK >= getCurrentDay(weekPosition)) {
-            //get rid of nenWorkHours.getCurrentWorkHours() method?
-            updateHours(newWorkHours.getDayOfWeek(), newWorkHours.getStartHour(), newWorkHours.getStartMinute(),
+            //clear memory
+            if (amIOff == true) {
+                updateHours("OFF", "", "",
+                        "", "", "",
+                        "");
+                amIOff = false;
+            } else {
+                updateHours(newWorkHours.getDayOfWeek(), newWorkHours.getStartHour(), newWorkHours.getStartMinute(),
                     newWorkHours.getStartAmOrPm(), newWorkHours.getEndHour(), newWorkHours.getEndMinute(),
                     newWorkHours.getEndAmOrPm());
 
+            }//end if else
 
-        }//end if
-        //}
+
+        }
     }
 
     //Added on 4 - 5 - 2019

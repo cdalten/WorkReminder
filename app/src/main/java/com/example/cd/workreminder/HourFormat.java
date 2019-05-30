@@ -96,6 +96,7 @@ public class HourFormat extends FragmentActivity {
                         Log.e(PRODUCTION_TAG, "THE DAY IS SATURDAY");
                         break;
                     case WorkReaderContract.WorkEntry.OFF:
+                        SharedPreferences.Editor editor = pref.edit();
                         switch(saveDay) {
                             case WorkReaderContract.WorkEntry.SUNDAY:
                                 intent.putExtra("POSITION", WorkReaderContract.WorkEntry.SUNDAY);
@@ -113,7 +114,14 @@ public class HourFormat extends FragmentActivity {
                                 intent.putExtra("POSITION", WorkReaderContract.WorkEntry.THURSDAY);
                                 break;
                             case WorkReaderContract.WorkEntry.FRIDAY:
+                                editor.putString(getString(R.string.FRIDAY_START_HOUR), "");
+                                editor.putString(getString(R.string.FRIDAY_START_MINUTE), "");
+                                editor.putString(getString(R.string.FRIDAY_START_AM_OR_PM), "");
+                                editor.putString(getString(R.string.FRIDAY_END_HOUR), "");
+                                editor.putString(getString(R.string.FRIDAY_END_MINUTE), "");
+                                editor.putString(getString(R.string.FRIDAY_END_AM_OR_PM), "");
                                 intent.putExtra("POSITION", WorkReaderContract.WorkEntry.FRIDAY);
+                                Log.e(PRODUCTION_TAG, "GOT FRIDAY DAY OFF AT POSITION: " + intent.getIntExtra("POSITION", 0));
                                 break;
                             case WorkReaderContract.WorkEntry.SATURDAY:
                                 //intent.putExtra(getString(R.string.START_HOUR), "");
@@ -122,6 +130,8 @@ public class HourFormat extends FragmentActivity {
                                 //intent.putExtra("AM_I_OFF", amIoff);
                                 break;
                         }
+                        editor.apply();
+
                         startHour.setVisibility(View.INVISIBLE);
                         startMinute.setVisibility(View.INVISIBLE);
                         startAmOrPm.setVisibility(View.INVISIBLE);

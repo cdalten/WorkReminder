@@ -27,7 +27,6 @@ public class CurrentWorkWeek extends com.example.cd.workreminder.MainActivity im
     private String endHour;
     private String endMinute;
     private String endAmOrPm;
-    private String currentWorkHours; //Modified on 3 - 8 - 2019
     private String dayOfWeek = "OFF"; //Added o n 3 - 12 - 2019
 
     private int hourBeforeShift;
@@ -49,8 +48,6 @@ public class CurrentWorkWeek extends com.example.cd.workreminder.MainActivity im
     private int startMilitaryMinute = 0; //Added on 5 - 14 - 2019
     private int endMiltiaryHour = 0;
     private int endMilitaryMinute = 0; //Added on 5 - 15 - 2019
-    private int totalMilitaryStartTime = 0; //Added on 5 - 15 - 2019
-    private int totalMilitaryEndTime = 0; //Added on 5 - 15 - 2019
 
     //Modified on 4 - 29 - 2019
     public CurrentWorkWeek() {
@@ -306,9 +303,6 @@ public class CurrentWorkWeek extends com.example.cd.workreminder.MainActivity im
         this.currentPosition = currentPosition;
     }
 
-    public int getCurrentPosition() {
-        return this.currentPosition;
-    }
 
     //ugly format hack. Don't need to save preferences
     @Override

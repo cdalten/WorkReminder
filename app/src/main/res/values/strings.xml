@@ -21,6 +21,7 @@
     <string name="THURSDAY">THURSDAY</string>
     <string name="FRIDAY">FRIDAY</string>
     <string name="SATURDAY">SATURDAY</string>
+    <string name="OFF">OFF</string>
 
     <string name="I_WORK_TODAY">I_WORK_TODAY</string>
     <string name="DAY_OF_WEEK">DAY_OF_WEEK</string>
@@ -93,6 +94,7 @@
         <item>AM</item>
         <item>PM</item>
     </string-array>
+
 
     <string name="SUNDAY_START_HOUR">SUNDAY_START_HOUR</string>
     <string name="SUNDAY_START_MINUTE">SUNDAY_START_MINUTE</string>
