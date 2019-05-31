@@ -730,8 +730,10 @@ public class CurrentWeekSchedule extends ListActivity {
         week.remove(currentPosition); //??
         week.add(currentPosition, updatedHour); //??
 
+        SharedPreferences.Editor editor = pref.edit();
         //editor.putString(getString(R.string.com_example_cd_shiftreminder_SAVE_DAY), updatedHour);
         switch(currentPosition){
+
             case WorkReaderContract.WorkEntry.SUNDAY:
                 sundayHours.setStartHour(newStartHour);
                 sundayHours.setStartMinute(newStartMinute);
@@ -775,7 +777,9 @@ public class CurrentWeekSchedule extends ListActivity {
             case WorkReaderContract.WorkEntry.FRIDAY:
                 //Emulate Intent SEND. Fuck Java.
                 //intent.setAction(Intent.ACTION_SEND);
-                //intent.putStringArrayListExtra(getString(R.string.com_example_cd_shiftreminder_FRIDAY), updateCurrrentHour);
+                //intent.putStringArrayListExtra(getString(R.string.com_example_cd_shiftreminder_FRIDAY), updateCurrrentHour)
+                //editor.putString(getString(R.string.FRIDAY), "FRIDAY");
+                fridayHours.setDayofWeek("FRIDAY");
                 fridayHours.setStartHour(newStartHour);
                 fridayHours.setStartMinute(newStartMinute);
                 fridayHours.setStartAmOrPm(newStartAmOrPm);
@@ -793,6 +797,7 @@ public class CurrentWeekSchedule extends ListActivity {
                 break;
         }
 
+        editor.apply();
         //adapter.remove("foo");
         //adapter.insert(updatedHour.toString() , currentPosition);
         adapter.notifyDataSetChanged();
@@ -843,8 +848,8 @@ public class CurrentWeekSchedule extends ListActivity {
             } //end switch
         }
         editor.apply();
-
-        newStartDay = week.get(weekPosition).get(0);
+        newStartDay = week.get(weekPosition).get(0); //BUG  -- DEFAULTS TO SUNDAY
+        //data.getStringExtra(getString(R.string.DAY_OF_WEEK)); //CORRECTED VERSION
         newStartHour = data.getStringExtra(getString(R.string.START_HOUR));
         newStartMinute = data.getStringExtra(getString(R.string.START_MINUTE));
         newStartAmOrPm = data.getStringExtra(getString(R.string.START_AM_OR_PM));

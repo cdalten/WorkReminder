@@ -114,6 +114,7 @@ public class HourFormat extends FragmentActivity {
                                 intent.putExtra("POSITION", WorkReaderContract.WorkEntry.THURSDAY);
                                 break;
                             case WorkReaderContract.WorkEntry.FRIDAY:
+                                editor.putString(getString(R.string.FRIDAY), "OFF");
                                 editor.putString(getString(R.string.FRIDAY_START_HOUR), "");
                                 editor.putString(getString(R.string.FRIDAY_START_MINUTE), "");
                                 editor.putString(getString(R.string.FRIDAY_START_AM_OR_PM), "");
@@ -141,7 +142,8 @@ public class HourFormat extends FragmentActivity {
                 }//end switch
 
                 Log.e(PRODUCTION_TAG, "THE DAY OF THE WEEK IS: " + position);
-                intent.putExtra(getString(R.string.DAY_OF_WEEK), position);
+                //intent.putExtra(getString(R.string.DAY_OF_WEEK), position);
+                intent.putExtra(getString(R.string.DAY_OF_WEEK),  parent.getItemAtPosition(position).toString());
                 setResult(0, intent);
             }
 

@@ -288,7 +288,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
                     pref.getString(getString(R.string.SUNDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
                     pref.getString(getString(R.string.SUNDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
 
-
+            editor.putString(getString(R.string.SUNDAY), sundayWorkHours.getDayOfWeek());
             editor.putString(getString(R.string.SUNDAY_START_HOUR), sundayWorkHours.getStartHour());
             editor.putString(getString(R.string.SUNDAY_START_MINUTE), sundayWorkHours.getStartMinute());
             editor.putString(getString(R.string.SUNDAY_START_AM_OR_PM), sundayWorkHours.getStartAmOrPm());
@@ -316,6 +316,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
                         pref.getString(getString(R.string.MONDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
                         pref.getString(getString(R.string.MONDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT)
                 );
+            editor.putString(getString(R.string.MONDAY), mondayWorkHours.getDayOfWeek());
             editor.putString(getString(R.string.MONDAY_START_HOUR), mondayWorkHours.getStartHour());
             editor.putString(getString(R.string.MONDAY_START_MINUTE), mondayWorkHours.getStartMinute());
             editor.putString(getString(R.string.MONDAY_START_AM_OR_PM), mondayWorkHours.getStartAmOrPm());
@@ -347,6 +348,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
                     intent.putExtra("TuesdayHours", tuesdayWorkHours);
             }
             //intent.putExtra(getString(R.string.com_example_cd_shiftreminder_TUESDAY), tuesdayWorkHours.getCurrentWorkHours());
+            editor.putString(getString(R.string.TUESDAY), tuesdayWorkHours.getDayOfWeek());
             editor.putString("TUESDAY_START_HOUR", tuesdayWorkHours.getStartHour());
             editor.putString("TUESDAY_START_MINUTE", tuesdayWorkHours.getStartMinute());
             editor.putString("TUESDAY_START_AM_OR_PM", tuesdayWorkHours.getStartAmOrPm());
@@ -378,7 +380,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
             //        wednesdayWorkHours.getStartAmOrPm(),
             //        wednesdayWorkHours.getEndHour(), wednesdayWorkHours.getEndMinute(), wednesdayWorkHours.getEndAmOrPm());
 
-
+            editor.putString(getString(R.string.WEDNESDAY), wednesdayWorkHours.getDayOfWeek());
             editor.putString(getString(R.string.WEDNESDAY_START_HOUR), wednesdayWorkHours.getStartHour());
             editor.putString(getString(R.string.WEDNESDAY_START_MINUTE), wednesdayWorkHours.getStartMinute());
             editor.putString(getString(R.string.WEDNESDAY_START_AM_OR_PM), wednesdayWorkHours.getStartAmOrPm());
@@ -399,6 +401,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
                     pref.getString(getString(R.string.THURSDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
                     pref.getString(getString(R.string.THURSDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
 
+            editor.putString(getString(R.string.THURSDAY), thursdayWorkHours.getDayOfWeek());
             editor.putString(getString(R.string.THURSDAY_START_HOUR), thursdayWorkHours.getStartHour());
             editor.putString(getString(R.string.THURSDAY_START_MINUTE), thursdayWorkHours.getStartMinute());
             editor.putString(getString(R.string.THURSDAY_START_AM_OR_PM), thursdayWorkHours.getStartAmOrPm());
@@ -410,17 +413,25 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
             intent.putExtra("ThursdayHours", thursdayWorkHours);
 
             //12AM represents midnight on my phone
-            fridayWorkHours = new CurrentWorkWeek( pref,
-                    this,
-                    pref.getString(getString(R.string.FRIDAY), "FRIDAY"),
-                    pref.getString(getString(R.string.FRIDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
-                    pref.getString(getString(R.string.FRIDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
-                    pref.getString(getString(R.string.FRIDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT),
-                    pref.getString(getString(R.string.FRIDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT),
-                    pref.getString(getString(R.string.FRIDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
-                    pref.getString(getString(R.string.FRIDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT)
-            );
+            //workToday = fridayWorkHours.getDayOfWeek();
+            workToday = pref.getString(getString(R.string.FRIDAY), "FRIDAY");
+            if (!workToday.equals("OFF")) {
+                fridayWorkHours = new CurrentWorkWeek(pref,
+                        this,
+                        pref.getString(getString(R.string.FRIDAY), "FRIDAY"),
+                        pref.getString(getString(R.string.FRIDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
+                        pref.getString(getString(R.string.FRIDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
+                        pref.getString(getString(R.string.FRIDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT),
+                        pref.getString(getString(R.string.FRIDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT),
+                        pref.getString(getString(R.string.FRIDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
+                        pref.getString(getString(R.string.FRIDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT)
+                );
+            } else {
+                fridayWorkHours = new CurrentWorkWeek();
+                intent.putExtra("FridayHours", fridayWorkHours);
+            }
 
+            editor.putString(getString(R.string.FRIDAY), fridayWorkHours.getDayOfWeek());
             editor.putString(getString(R.string.FRIDAY_START_HOUR), fridayWorkHours.getStartHour());
             editor.putString(getString(R.string.FRIDAY_START_MINUTE), fridayWorkHours.getStartMinute());
             editor.putString(getString(R.string.FRIDAY_START_AM_OR_PM), fridayWorkHours.getStartAmOrPm());
@@ -446,8 +457,9 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
                     pref.getString(getString(R.string.SATURDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
                     pref.getString(getString(R.string.SATURDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT)
             );
-            //intent.putExtra(getString(R.string.com_example_cd_shiftreminder_SATURDAY), saturdayWorkHours.getCurrentWorkHours());
 
+
+            editor.putString(getString(R.string.SATURDAY), saturdayWorkHours.getDayOfWeek());
             editor.putString(getString(R.string.SATURDAY_START_HOUR), saturdayWorkHours.getStartHour());
             editor.putString(getString(R.string.SATURDAY_START_MINUTE), saturdayWorkHours.getStartMinute());
             editor.putString(getString(R.string.SATURDAY_START_AM_OR_PM), saturdayWorkHours.getStartAmOrPm());
