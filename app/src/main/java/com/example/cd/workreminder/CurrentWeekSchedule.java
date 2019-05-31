@@ -850,6 +850,7 @@ public class CurrentWeekSchedule extends ListActivity {
         editor.apply();
         newStartDay = week.get(weekPosition).get(0); //BUG  -- DEFAULTS TO SUNDAY
         //data.getStringExtra(getString(R.string.DAY_OF_WEEK)); //CORRECTED VERSION
+
         newStartHour = data.getStringExtra(getString(R.string.START_HOUR));
         newStartMinute = data.getStringExtra(getString(R.string.START_MINUTE));
         newStartAmOrPm = data.getStringExtra(getString(R.string.START_AM_OR_PM));
