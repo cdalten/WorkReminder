@@ -96,7 +96,6 @@ public class CurrentWorkWeek extends com.example.cd.workreminder.MainActivity im
             //editor.putString(context.getString(R.string.SAVE_DAY), this.dayOfWeek);
             //editor.apply();
         }//end if
-
     }
 
     public void convertCivilanTimeToMilitaryTime(String startHour, String startMinute, String startAmOrPm) {

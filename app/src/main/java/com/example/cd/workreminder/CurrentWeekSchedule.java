@@ -466,7 +466,7 @@ public class CurrentWeekSchedule extends ListActivity {
         //week.get(1).remove(0);
         //week.get(1).add(0, mondayHours.getDayOfWeek());
 
-        dayPair = new HashMap<>();
+        /*dayPair = new HashMap<>();
         dayList = new ArrayList();
         dayPair.put(WorkReaderContract.WorkEntry.SUNDAY, sundayHours.getDayOfWeek());
         dayPair.put(WorkReaderContract.WorkEntry.MONDAY, mondayHours.getDayOfWeek());
@@ -483,6 +483,7 @@ public class CurrentWeekSchedule extends ListActivity {
         dayList.add(WorkReaderContract.WorkEntry.THURSDAY, dayPair);
         dayList.add(WorkReaderContract.WorkEntry.FRIDAY, dayPair);
         dayList.add(WorkReaderContract.WorkEntry.SATURDAY, dayPair);
+        */
 
         adapter = new WS(this,
                 R.layout.schedule_list, week); //Bug in values because values in null!!!
