@@ -323,7 +323,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
             editor.putString(getString(R.string.MONDAY_END_HOUR), mondayWorkHours.getEndHour());
             editor.putString(getString(R.string.MONDAY_END_MINUTE), mondayWorkHours.getEndMinute());
             editor.putString(getString(R.string.MONDAY_END_AM_OR_PM), mondayWorkHours.getStartAmOrPm());
-                intent.putExtra("MondayHours", mondayWorkHours);
+            intent.putExtra("MondayHours", mondayWorkHours);
             //} else {
             //    mondayWorkHours = new CurrentWorkWeek();
             //    intent.putExtra("MondayHours", mondayWorkHours);

@@ -29,10 +29,10 @@
     <string name="START_HOUR">START_HOUR</string>
     <string name="START_MINUTE">START_MINUTE</string>
 
-    <string name="START_AM_OR_PM"></string>
+    <string name="START_AM_OR_PM">START_AM_OR_PM</string>
     <string name="END_HOUR">END_HOUR</string>
     <string name="END_MINUTE">END_MINUTE</string>
-    <string name="END_AM_OR_PM"></string>
+    <string name="END_AM_OR_PM">START_AM_OR_PM</string>
 
     <string-array name="day_of_the_week">
         <item>SUNDAY</item>
