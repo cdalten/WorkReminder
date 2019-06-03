@@ -390,7 +390,6 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
 
             intent.putExtra("WednesdayHours", wednesdayWorkHours);
 
-
             thursdayWorkHours =  new CurrentWorkWeek( pref,
                     this,
                     pref.getString(getString(R.string.THURSDAY), "THURSDAY"),
@@ -408,7 +407,6 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
             editor.putString(getString(R.string.THURSDAY_END_HOUR), thursdayWorkHours.getEndHour());
             editor.putString(getString(R.string.THURSDAY_END_MINUTE), thursdayWorkHours.getEndMinute());
             editor.putString(getString(R.string.THURSDAY_END_AM_OR_PM), thursdayWorkHours.getStartAmOrPm());
-            //intent.putExtra(getString(R.string.com_example_cd_shiftreminder_THURSDAY),thursdayWorkHours.getCurrentWorkHours());
 
             intent.putExtra("ThursdayHours", thursdayWorkHours);
 
@@ -438,9 +436,6 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
             editor.putString(getString(R.string.FRIDAY_END_HOUR), fridayWorkHours.getEndHour());
             editor.putString(getString(R.string.FRIDAY_END_MINUTE), fridayWorkHours.getEndMinute());
             editor.putString(getString(R.string.FRIDAY_END_AM_OR_PM), fridayWorkHours.getStartAmOrPm());
-
-            //intent.putExtra(getString(R.string.com_example_cd_shiftreminder_FRIDAY), fridayWorkHours.getCurrentWorkHours());
-
 
             intent.putExtra("FridayHours", fridayWorkHours);
 

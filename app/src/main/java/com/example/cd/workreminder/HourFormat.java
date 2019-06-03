@@ -79,7 +79,7 @@ public class HourFormat extends FragmentActivity {
                         saveDay = position;
                         Log.e(PRODUCTION_TAG, "THE DAY IS TUESDAY");
                         break;
-                    case WorkReaderContract.WorkEntry.WEDNESAY:
+                    case WorkReaderContract.WorkEntry.WEDNESDAY:
                         saveDay = position;
                         Log.e(PRODUCTION_TAG, "THE DAY IS WEDNESDAY");
                         break;
@@ -107,8 +107,8 @@ public class HourFormat extends FragmentActivity {
                             case WorkReaderContract.WorkEntry.TUESDAY:
                                 intent.putExtra("POSITION", WorkReaderContract.WorkEntry.TUESDAY);
                                 break;
-                            case WorkReaderContract.WorkEntry.WEDNESAY:
-                                intent.putExtra("POSITION", WorkReaderContract.WorkEntry.WEDNESAY);
+                            case WorkReaderContract.WorkEntry.WEDNESDAY:
+                                intent.putExtra("POSITION", WorkReaderContract.WorkEntry.WEDNESDAY);
                                 break;
                             case WorkReaderContract.WorkEntry.THURSDAY:
                                 intent.putExtra("POSITION", WorkReaderContract.WorkEntry.THURSDAY);
@@ -182,7 +182,7 @@ public class HourFormat extends FragmentActivity {
                         editor.putString(getString(R.string.TUESDAY_START_HOUR),
                                 parent.getItemAtPosition(position).toString());
                         break;
-                    case WorkReaderContract.WorkEntry.WEDNESAY:
+                    case WorkReaderContract.WorkEntry.WEDNESDAY:
                         editor.putString(getString(R.string.WEDNESDAY_START_HOUR),
                                 parent.getItemAtPosition(position).toString());
                         break;
@@ -238,7 +238,7 @@ public class HourFormat extends FragmentActivity {
                         editor.putString(getString(R.string.TUESDAY_START_MINUTE),
                                 parent.getItemAtPosition(position).toString());
                         break;
-                    case WorkReaderContract.WorkEntry.WEDNESAY:
+                    case WorkReaderContract.WorkEntry.WEDNESDAY:
                         editor.putString(getString(R.string.WEDNESDAY_START_MINUTE),
                                 parent.getItemAtPosition(position).toString());
                         break;
@@ -292,7 +292,7 @@ public class HourFormat extends FragmentActivity {
                         editor.putString(getString(R.string.TUESDAY_START_AM_OR_PM),
                                 parent.getItemAtPosition(position).toString());
                         break;
-                    case WorkReaderContract.WorkEntry.WEDNESAY:
+                    case WorkReaderContract.WorkEntry.WEDNESDAY:
                         editor.putString(getString(R.string.WEDNESDAY_START_AM_OR_PM),
                                 parent.getItemAtPosition(position).toString());
                         break;
@@ -347,7 +347,7 @@ public class HourFormat extends FragmentActivity {
                         editor.putString(getString(R.string.TUESDAY_END_HOUR),
                                 parent.getItemAtPosition(position).toString());
                         break;
-                    case WorkReaderContract.WorkEntry.WEDNESAY:
+                    case WorkReaderContract.WorkEntry.WEDNESDAY:
                         editor.putString(getString(R.string.WEDNESDAY_END_HOUR),
                                 parent.getItemAtPosition(position).toString());
                         break;
@@ -398,7 +398,7 @@ public class HourFormat extends FragmentActivity {
                         editor.putString(getString(R.string.TUESDAY_END_MINUTE),
                                 parent.getItemAtPosition(position).toString());
                         break;
-                    case WorkReaderContract.WorkEntry.WEDNESAY:
+                    case WorkReaderContract.WorkEntry.WEDNESDAY:
                         editor.putString(getString(R.string.WEDNESDAY_END_MINUTE),
                                 parent.getItemAtPosition(position).toString());
                         break;
@@ -449,7 +449,7 @@ public class HourFormat extends FragmentActivity {
                         editor.putString(getString(R.string.TUESDAY_END_AM_OR_PM),
                                 parent.getItemAtPosition(position).toString());
                         break;
-                    case WorkReaderContract.WorkEntry.WEDNESAY:
+                    case WorkReaderContract.WorkEntry.WEDNESDAY:
                         editor.putString(getString(R.string.WEDNESDAY_END_AM_OR_PM),
                                 parent.getItemAtPosition(position).toString());
                         break;
