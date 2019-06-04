@@ -295,7 +295,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
             editor.putString(getString(R.string.SUNDAY_END_HOUR), sundayWorkHours.getEndHour());
             editor.putString(getString(R.string.SUNDAY_END_MINUTE), sundayWorkHours.getEndMinute());
             editor.putString(getString(R.string.SUNDAY_END_AM_OR_PM), sundayWorkHours.getStartAmOrPm());
-            intent.putExtra("SundayHours", sundayWorkHours);
+            //intent.putExtra("SundayHours", sundayWorkHours);
 
             //intent.getParcelableExtra("SundayHours");
 
@@ -323,7 +323,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
             editor.putString(getString(R.string.MONDAY_END_HOUR), mondayWorkHours.getEndHour());
             editor.putString(getString(R.string.MONDAY_END_MINUTE), mondayWorkHours.getEndMinute());
             editor.putString(getString(R.string.MONDAY_END_AM_OR_PM), mondayWorkHours.getStartAmOrPm());
-            intent.putExtra("MondayHours", mondayWorkHours);
+            //intent.putExtra("MondayHours", mondayWorkHours);
             //} else {
             //    mondayWorkHours = new CurrentWorkWeek();
             //    intent.putExtra("MondayHours", mondayWorkHours);
@@ -355,7 +355,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
             editor.putString("TUESDAY_END_HOUR", tuesdayWorkHours.getEndHour());
             editor.putString("TUESDAY_END_MINUTE", tuesdayWorkHours.getEndMinute());
             editor.putString("TUESDAY_END_AM_OR_PM", tuesdayWorkHours.getStartAmOrPm());
-            intent.putExtra("TuesdayHours", tuesdayWorkHours);
+            //intent.putExtra("TuesdayHours", tuesdayWorkHours);
 
             //intent.putExtra(getString(R.string.com_example_cd_shiftreminder_TUESDAY),
             //        tuesdayWorkHours.getWorkHours(this));
@@ -388,7 +388,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
             editor.putString(getString(R.string.WEDNESDAY_END_MINUTE), wednesdayWorkHours.getEndMinute());
             editor.putString(getString(R.string.WEDNESDAY_END_AM_OR_PM), wednesdayWorkHours.getStartAmOrPm());
 
-            intent.putExtra("WednesdayHours", wednesdayWorkHours);
+            //intent.putExtra("WednesdayHours", wednesdayWorkHours);
 
             thursdayWorkHours =  new CurrentWorkWeek( pref,
                     this,
@@ -408,7 +408,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
             editor.putString(getString(R.string.THURSDAY_END_MINUTE), thursdayWorkHours.getEndMinute());
             editor.putString(getString(R.string.THURSDAY_END_AM_OR_PM), thursdayWorkHours.getStartAmOrPm());
 
-            intent.putExtra("ThursdayHours", thursdayWorkHours);
+            //intent.putExtra("ThursdayHours", thursdayWorkHours);
 
             //12AM represents midnight on my phone
             //workToday = fridayWorkHours.getDayOfWeek();
@@ -437,10 +437,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
             editor.putString(getString(R.string.FRIDAY_END_MINUTE), fridayWorkHours.getEndMinute());
             editor.putString(getString(R.string.FRIDAY_END_AM_OR_PM), fridayWorkHours.getStartAmOrPm());
 
-            intent.putExtra("FridayHours", fridayWorkHours);
-
-            //intent.putExtra(getString(R.string.com_example_cd_shiftreminder_FRIDAY),
-            //        fridayWorkHours.getWorkHours(this));
+            //intent.putExtra("FridayHours", fridayWorkHours);
 
             saturdayWorkHours = new CurrentWorkWeek( pref,
                     this,
@@ -461,7 +458,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
             editor.putString(getString(R.string.SATURDAY_END_HOUR), saturdayWorkHours.getEndHour());
             editor.putString(getString(R.string.SATURDAY_END_MINUTE), saturdayWorkHours.getEndMinute());
             editor.putString(getString(R.string.SATURDAY_END_AM_OR_PM), saturdayWorkHours.getStartAmOrPm());
-            intent.putExtra("SaturdayHours", saturdayWorkHours);
+            //intent.putExtra("SaturdayHours", saturdayWorkHours);
 
             doIWorkToday();
 
