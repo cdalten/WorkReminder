@@ -225,7 +225,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
 
             getSchedule = (WebView) this.findViewById(R.id.CurrentSchedule);
             getSchedule.setWebViewClient(new WWebViewClient());
-            getSchedule.addJavascriptInterface(new MainActivity.JavaScriptBridge(this), "OFFLINE");
+            //getSchedule.addJavascriptInterface(new MainActivity.JavaScriptBridge(this), "OFFLINE");
             getSchedule.getSettings().setLoadWithOverviewMode(true);
             getSchedule.getSettings().setUseWideViewPort(true);
             getSchedule.getSettings().setJavaScriptEnabled(true);
@@ -330,9 +330,9 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
            // }
 
 
-            tuesdayWorkHours = new CurrentWorkWeek("OFF");
-            String workToday = tuesdayWorkHours.getDayOfWeek();
-            if (!workToday.equals("OFF")) {
+            //tuesdayWorkHours = new CurrentWorkWeek("OFF");
+            //String workToday = tuesdayWorkHours.getDayOfWeek();
+            //if (!workToday.equals("OFF")) {
                 tuesdayWorkHours = new CurrentWorkWeek(pref,
                         this,
                         pref.getString(getString(R.string.TUESDAY), "TUESDAY"),
@@ -343,10 +343,10 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
                         pref.getString(getString(R.string.TUESDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
                         pref.getString(getString(R.string.TUESDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT)
                 );
-            } else {
-                    tuesdayWorkHours = new CurrentWorkWeek();
-                    intent.putExtra("TuesdayHours", tuesdayWorkHours);
-            }
+            //} else {
+            //        tuesdayWorkHours = new CurrentWorkWeek();
+            //        intent.putExtra("TuesdayHours", tuesdayWorkHours);
+            //}
             //intent.putExtra(getString(R.string.com_example_cd_shiftreminder_TUESDAY), tuesdayWorkHours.getCurrentWorkHours());
             editor.putString(getString(R.string.TUESDAY), tuesdayWorkHours.getDayOfWeek());
             editor.putString("TUESDAY_START_HOUR", tuesdayWorkHours.getStartHour());
@@ -412,8 +412,8 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
 
             //12AM represents midnight on my phone
             //workToday = fridayWorkHours.getDayOfWeek();
-            workToday = pref.getString(getString(R.string.FRIDAY), "FRIDAY");
-            if (!workToday.equals("OFF")) {
+            //workToday = pref.getString(getString(R.string.FRIDAY), "FRIDAY");
+            //if (!workToday.equals("OFF")) {
                 fridayWorkHours = new CurrentWorkWeek(pref,
                         this,
                         pref.getString(getString(R.string.FRIDAY), "FRIDAY"),
@@ -424,10 +424,10 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
                         pref.getString(getString(R.string.FRIDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
                         pref.getString(getString(R.string.FRIDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT)
                 );
-            } else {
-                fridayWorkHours = new CurrentWorkWeek();
-                intent.putExtra("FridayHours", fridayWorkHours);
-            }
+            //} else {
+            //    fridayWorkHours = new CurrentWorkWeek();
+            //    intent.putExtra("FridayHours", fridayWorkHours);
+           // }
 
             editor.putString(getString(R.string.FRIDAY), fridayWorkHours.getDayOfWeek());
             editor.putString(getString(R.string.FRIDAY_START_HOUR), fridayWorkHours.getStartHour());
@@ -485,7 +485,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
 
             getSchedule = (WebView) this.findViewById(R.id.CurrentSchedule);
             getSchedule.setWebViewClient(new WWebViewClient());
-            getSchedule.addJavascriptInterface(new JavaScriptBridge(this), "OFFLINE");
+            //getSchedule.addJavascriptInterface(new JavaScriptBridge(this), "OFFLINE");
 
             getSchedule.setVerticalScrollBarEnabled(true);
             getSchedule.setHorizontalScrollBarEnabled(true); //for landscape??
@@ -777,12 +777,6 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
     }
 
 
-    //added on 9 - 17 - 2018
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-
-    }
-
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
@@ -821,27 +815,6 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
         return file;
     }
 
-
-    /*
-     *Attempt to get JS to load into webview, and then have it execute *after* the remote job scheduler
-     * loads the corresponding css files.
-     */
-    public class JavaScriptBridge {
-        Context context;
-
-        JavaScriptBridge (Context context) {
-            this.context = context;
-        }
-
-        @android.webkit.JavascriptInterface
-        public void processHTML(String status) {
-            //getSchedule.loadUrl("http://" + status);
-            //getSchedule.setWebViewClient(new WWebViewClient());
-            Log.i(PRODUCTION_TAG, "Before Bridge got called");
-            Toast.makeText(context, status, Toast.LENGTH_SHORT).show();
-            Log.i(PRODUCTION_TAG, "After Bridge got called");
-        }
-    }
 
 
     //Added on 11 - 10 - 2018
@@ -1287,7 +1260,7 @@ public class MainActivity extends FragmentActivity implements ConnectionCallback
                         "javascript:var bld = document.getElementById('EmpID').style.color = 'red' " + ";"
                                 + "javascript:var x = document.getElementById('EmpID').value = " + name + ";"
                                 + "javascript:var y = document.getElementById('Password').style.display = 'none' " + ";"
-                                + "javascript:var a = ''" + ";"
+                                + "javascript:var a = ' '" + ";"
                                 + "javascript:var b = document.getElementById('Password').value = " + 'a' + ";"
 
                 );

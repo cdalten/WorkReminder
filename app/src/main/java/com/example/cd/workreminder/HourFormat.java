@@ -143,7 +143,8 @@ public class HourFormat extends FragmentActivity {
 
 
                 Log.e(PRODUCTION_TAG, "THE DAY OF THE WEEK IS: " + position);
-                //intent.putExtra(getString(R.string.DAY_OF_WEEK), position);
+
+                intent.putExtra("CURRENT_DAY", position);
                 intent.putExtra(getString(R.string.DAY_OF_WEEK),  parent.getItemAtPosition(position).toString());
                 setResult(0, intent);
             }
