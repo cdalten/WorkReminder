@@ -777,7 +777,7 @@ public class CurrentWeekSchedule extends ListActivity {
         public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             //super.getView(position, convertView, parent);
             View view;
-            Log.e(PRODUCTION_TAG, "THE CURRENT POSITION IS: " + position);
+            //Log.e(PRODUCTION_TAG, "THE CURRENT POSITION IS: " + position);
 
             if (convertView == null) {
                 //Log.e(PRODUCTION_TAG, "CONVERT VIEW IS NULL");
@@ -1077,7 +1077,6 @@ public class CurrentWeekSchedule extends ListActivity {
         SharedPreferences.Editor editor = pref.edit();
         int newPosition = data.getIntExtra("CURRENT_DAY", 0);
         int weekPosition = data.getIntExtra(getString(R.string.DAY_OF_WEEK), 0);
-
         editor.apply();
         newStartDay = week.get(weekPosition).get(0); //BUG  -- DEFAULTS TO SUNDAY
         //data.getStringExtra(getString(R.string.DAY_OF_WEEK)); //CORRECTED VERSION
@@ -1116,46 +1115,54 @@ public class CurrentWeekSchedule extends ListActivity {
         switch(newPosition) {
             case WorkReaderContract.WorkEntry.SUNDAY:
                 updateHours(newWorkHours.getDayOfWeek(),
-                        newWorkHours.getStartHour(), newWorkHours.getStartMinute(),
+                        pref.getString(getString(R.string.SUNDAY_START_HOUR),
+                                WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
+                        newWorkHours.getStartMinute(),
                         newWorkHours.getStartAmOrPm(), newWorkHours.getEndHour(), newWorkHours.getEndMinute(),
                         newWorkHours.getEndAmOrPm());
                 break;
             case WorkReaderContract.WorkEntry.MONDAY:
-                updateHours(newWorkHours.getDayOfWeek(), newWorkHours.getStartHour(), newWorkHours.getStartMinute(),
+                updateHours(newWorkHours.getDayOfWeek(),
+                        newWorkHours.getStartHour(), newWorkHours.getStartMinute(),
                         newWorkHours.getStartAmOrPm(), newWorkHours.getEndHour(), newWorkHours.getEndMinute(),
                         newWorkHours.getEndAmOrPm());
                 break;
             case WorkReaderContract.WorkEntry.TUESDAY:
-                updateHours(newWorkHours.getDayOfWeek(), newWorkHours.getStartHour(), newWorkHours.getStartMinute(),
+                updateHours(newWorkHours.getDayOfWeek(),
+                        newWorkHours.getStartHour(), newWorkHours.getStartMinute(),
                         newWorkHours.getStartAmOrPm(), newWorkHours.getEndHour(), newWorkHours.getEndMinute(),
                         newWorkHours.getEndAmOrPm());
                 break;
             case WorkReaderContract.WorkEntry.WEDNESDAY:
-                updateHours(newWorkHours.getDayOfWeek(), newWorkHours.getStartHour(), newWorkHours.getStartMinute(),
+                updateHours(newWorkHours.getDayOfWeek(),
+                        newWorkHours.getStartHour(), newWorkHours.getStartMinute(),
                         newWorkHours.getStartAmOrPm(), newWorkHours.getEndHour(), newWorkHours.getEndMinute(),
                         newWorkHours.getEndAmOrPm());
                 break;
             case WorkReaderContract.WorkEntry.THURSDAY:
-                updateHours(newWorkHours.getDayOfWeek(), newWorkHours.getStartHour(), newWorkHours.getStartMinute(),
+                updateHours(newWorkHours.getDayOfWeek(),
+                        newWorkHours.getStartHour(), newWorkHours.getStartMinute(),
                         newWorkHours.getStartAmOrPm(), newWorkHours.getEndHour(), newWorkHours.getEndMinute(),
                         newWorkHours.getEndAmOrPm());
                 break;
             case WorkReaderContract.WorkEntry.FRIDAY:
-                updateHours(newWorkHours.getDayOfWeek(), newWorkHours.getStartHour(), newWorkHours.getStartMinute(),
+                updateHours(newWorkHours.getDayOfWeek(),
+                        newWorkHours.getStartHour(), newWorkHours.getStartMinute(),
                         newWorkHours.getStartAmOrPm(), newWorkHours.getEndHour(), newWorkHours.getEndMinute(),
                         newWorkHours.getEndAmOrPm());
                 break;
             case WorkReaderContract.WorkEntry.SATURDAY:
-                updateHours(newWorkHours.getDayOfWeek(), newWorkHours.getStartHour(), newWorkHours.getStartMinute(),
+                updateHours(newWorkHours.getDayOfWeek(),
+                        newWorkHours.getStartHour(), newWorkHours.getStartMinute(),
                         newWorkHours.getStartAmOrPm(), newWorkHours.getEndHour(), newWorkHours.getEndMinute(),
                         newWorkHours.getEndAmOrPm());
                 break;
             case 7:
-                updateHours("OFF", newWorkHours.getStartHour(), newWorkHours.getStartMinute(),
+                updateHours("OFF",
+                        newWorkHours.getStartHour(), newWorkHours.getStartMinute(),
                         newWorkHours.getStartAmOrPm(), newWorkHours.getEndHour(), newWorkHours.getEndMinute(),
                         newWorkHours.getEndAmOrPm());
         }
-
 
     }
 
