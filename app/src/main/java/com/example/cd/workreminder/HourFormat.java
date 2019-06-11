@@ -99,6 +99,13 @@ public class HourFormat extends FragmentActivity {
                         SharedPreferences.Editor editor = pref.edit();
                         switch(saveDay) {
                             case WorkReaderContract.WorkEntry.SUNDAY:
+                                editor.putString(getString(R.string.SUNDAY), "OFF");
+                                editor.putString(getString(R.string.SUNDAY_START_HOUR), "");
+                                editor.putString(getString(R.string.SUNDAY_START_MINUTE), "");
+                                editor.putString(getString(R.string.SUNDAY_START_AM_OR_PM), "");
+                                editor.putString(getString(R.string.SUNDAY_END_HOUR), "");
+                                editor.putString(getString(R.string.SUNDAY_END_MINUTE), "");
+                                editor.putString(getString(R.string.SUNDAY_END_AM_OR_PM), "");
                                 intent.putExtra("POSITION", WorkReaderContract.WorkEntry.SUNDAY);
                                 break;
                             case WorkReaderContract.WorkEntry.MONDAY:
@@ -112,12 +119,33 @@ public class HourFormat extends FragmentActivity {
                                 intent.putExtra("POSITION", WorkReaderContract.WorkEntry.MONDAY);
                                 break;
                             case WorkReaderContract.WorkEntry.TUESDAY:
+                                editor.putString(getString(R.string.TUESDAY), "OFF");
+                                editor.putString(getString(R.string.TUESDAY_START_HOUR), "");
+                                editor.putString(getString(R.string.TUESDAY_START_MINUTE), "");
+                                editor.putString(getString(R.string.TUESDAY_START_AM_OR_PM), "");
+                                editor.putString(getString(R.string.TUESDAY_END_HOUR), "");
+                                editor.putString(getString(R.string.WEDNESDAY_END_MINUTE), "");
+                                editor.putString(getString(R.string.WEDNESDAY_END_AM_OR_PM), "");
                                 intent.putExtra("POSITION", WorkReaderContract.WorkEntry.TUESDAY);
                                 break;
                             case WorkReaderContract.WorkEntry.WEDNESDAY:
+                                editor.putString(getString(R.string.WEDNESDAY), "OFF");
+                                editor.putString(getString(R.string.WEDNESDAY_START_HOUR), "");
+                                editor.putString(getString(R.string.WEDNESDAY_START_MINUTE), "");
+                                editor.putString(getString(R.string.WEDNESDAY_START_AM_OR_PM), "");
+                                editor.putString(getString(R.string.WEDNESDAY_END_HOUR), "");
+                                editor.putString(getString(R.string.WEDNESDAY_END_MINUTE), "");
+                                editor.putString(getString(R.string.WEDNESDAY_END_AM_OR_PM), "");
                                 intent.putExtra("POSITION", WorkReaderContract.WorkEntry.WEDNESDAY);
                                 break;
                             case WorkReaderContract.WorkEntry.THURSDAY:
+                                editor.putString(getString(R.string.THURSDAY), "OFF");
+                                editor.putString(getString(R.string.THURSDAY_START_HOUR), "");
+                                editor.putString(getString(R.string.THURSDAY_START_MINUTE), "");
+                                editor.putString(getString(R.string.THURSDAY_START_AM_OR_PM), "");
+                                editor.putString(getString(R.string.THURSDAY_END_HOUR), "");
+                                editor.putString(getString(R.string.THURSDAY_END_MINUTE), "");
+                                editor.putString(getString(R.string.THURSDAY_END_AM_OR_PM), "");
                                 intent.putExtra("POSITION", WorkReaderContract.WorkEntry.THURSDAY);
                                 break;
                             case WorkReaderContract.WorkEntry.FRIDAY:
@@ -132,6 +160,13 @@ public class HourFormat extends FragmentActivity {
                                 Log.e(PRODUCTION_TAG, "GOT FRIDAY DAY OFF AT POSITION: " + intent.getIntExtra("POSITION", 0));
                                 break;
                             case WorkReaderContract.WorkEntry.SATURDAY:
+                                editor.putString(getString(R.string.SATURDAY), "OFF");
+                                editor.putString(getString(R.string.SATURDAY_START_HOUR), "");
+                                editor.putString(getString(R.string.SATURDAY_START_MINUTE), "");
+                                editor.putString(getString(R.string.SATURDAY_START_AM_OR_PM), "");
+                                editor.putString(getString(R.string.SATURDAY_END_HOUR), "");
+                                editor.putString(getString(R.string.SATURDAY_END_MINUTE), "");
+                                editor.putString(getString(R.string.SATURDAY_END_AM_OR_PM), "");
                                 //intent.putExtra(getString(R.string.START_HOUR), "");
                                 intent.putExtra("POSITION", WorkReaderContract.WorkEntry.SATURDAY);
 

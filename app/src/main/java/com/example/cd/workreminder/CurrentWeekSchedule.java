@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class CurrentWeekSchedule extends ListActivity {
+public class CurrentWeekSchedule extends ListActivity  {
 //public class CurrentWeekSchedule extends ListFragment {
 
     private static final String PRODUCTION_TAG = "LG_WORK_PHONE";
@@ -342,7 +342,7 @@ public class CurrentWeekSchedule extends ListActivity {
                             i.putExtra("END_MINUTE",
                                     Integer.parseInt(pref.getString(getString(R.string.FRIDAY_END_MINUTE),
                                             WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT)) / 15);
-                            if (pref.getString(getString(R.string.SATURDAY_END_AM_OR_PM),
+                            if (pref.getString(getString(R.string.FRIDAY_END_AM_OR_PM),
                                     WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT).equals("AM")) {
                                 i.putExtra("END_AM_OR_PM", 0);
                             } else {
@@ -382,7 +382,8 @@ public class CurrentWeekSchedule extends ListActivity {
                             i.putExtra("END_MINUTE",
                                     Integer.parseInt(pref.getString(getString(R.string.SATURDAY_END_MINUTE),
                                             WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT)) / 15);
-                            if (saturdayHours.getEndAmOrPm().equals("AM")) {
+                            if (pref.getString(getString(R.string.SATURDAY_END_AM_OR_PM),
+                                    WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT).equals("AM")) {
                                 i.putExtra("END_AM_OR_PM", 0);
                             } else {
                                 i.putExtra("END_AM_OR_PM", 1);
@@ -1091,12 +1092,14 @@ public class CurrentWeekSchedule extends ListActivity {
         //get day when I already have it??
         newWorkHours = new CurrentWorkWeek(pref, this, newStartDay,
                 newStartHour, newStartMinute, newStartAmOrPm,
-                newEndHour, newEndMinute, newEndAmOrPm);
+              newEndHour, newEndMinute, newEndAmOrPm);
 
-        newWorkHours.convertCivilanTimeToMilitaryTime(newStartHour, newStartMinute, newStartAmOrPm);
+
+        MilitaryTime militaryTime = MilitaryTime.getInstance();
+        militaryTime.convertCivilanTimeToMilitaryTime(newStartHour, newStartMinute, newStartAmOrPm);
         AlarmTimer alarmTimer = new AlarmTimer();
-        alarmTimer.setAlarmTime(this, newWorkHours.getStartMilitaryHour(),
-                newWorkHours.getStartMilitaryMinute(),
+        alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(),
+                militaryTime.getStartMilitaryMinute(),
                 Integer.parseInt(pref.getString("ALARM_MINUTES", WorkReaderContract.WorkEntry.ALARM_DEFAULT)));
         //Log.e(PRODUCTION_TAG, "THE UPDATED ALARM HOUR IS: " + newWorkHours.getStartMilitaryHour());
         //Log.e(PRODUCTION_TAG, "THE UPDATED ALARM MINUTE IS: " + newWorkHours.getStartMilitaryMinute());
