@@ -1,7 +1,5 @@
 package com.example.cd.workreminder;
 
-import android.Manifest;
-//import android.app.FragmentTransaction;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
@@ -12,13 +10,10 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.http.HttpResponseCache;
-import android.os.Parcelable;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.provider.AlarmClock;
-import android.provider.BaseColumns;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -33,21 +28,14 @@ import android.os.AsyncTask;
 import android.os.Build;
 //import android.provider.AlarmClock;
 
-import android.os.Environment;
-import android.os.Handler;
-//import android.app.Fragment;
-import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-//import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.HttpAuthHandler;
 import android.webkit.SslErrorHandler;
-//import android.webkit.ValueCallback;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
@@ -59,60 +47,29 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.cd.workreminder.AlarmTimer;
-import com.example.cd.workreminder.ConnectionCallback;
-import com.example.cd.workreminder.CurrentWeekSchedule;
-import com.example.cd.workreminder.CurrentWorkHours;
-import com.example.cd.workreminder.CurrentWorkWeek;
-import com.example.cd.workreminder.R;
-import com.example.cd.workreminder.WorkAlarmReceiver;
-import com.example.cd.workreminder.WorkNetworkFragment;
-import com.example.cd.workreminder.WorkReaderContract;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
-import java.util.HashMap;
 
 import javax.net.ssl.HttpsURLConnection;
 
-//import org.apache.http.util.EncodingUtils; //stupid hack. Added on 7 - 1 - 2018
-
 public class MainActivity extends AppCompatActivity implements ConnectionCallback{
-//public class MainActivity extends MilitaryTime implements ConnectionCallback {
     private WebView getSchedule;
     public String LANDINGPAGE_URL = "myschedule.safeway.com";
-    public static String TEST_URL = "https://sfbay.craigslist.org"; //added on 12 - 6 - 2017 for debugging
     public static String LOGIN_URL = "https://myschedule.safeway.com/ESS/AuthN/SwyLogin.aspx?ReturnUrl=%2fESS";
     protected static final String UA = "Pak N Slave Mobile App; Written by cda@stanford.edu; Uhh...Hi Mom!";
 
     ConnectionCallback connectionCallback; //added on 10 - 7 - 2018
-    //private TabLayout.Tab alarm; //added on 9 - 14 - 2017
-    //private TabHost alarm; //added on 9 - 14 - 2017
-    //protected Context context; // added on 8 - 22 - 2017
-    //public File file; //added on 9 - 21 - 2017. Changed to public on 7 - 31 - 2018
-    //protected TabLayout th; //added on 9 - 28 - 2017
 
     private final String name = "9857701"; //modified on 1 - 8 - 201
     public static boolean refreshDisplay = true; //added on 6 - 14 - 2018
 
     private final String PRODUCTION_TAG = "LG_WORK_WEB: "; //used for hardware only
-
-    private final boolean debug = true; //added on 7 - 22 - 2018
-
-    private String schedule = ""; //added on 7 - 25 - 2018
-    private boolean BECAUSE_INTENTS_ON_DEVACTIVED_PHONES_DONT_FUCKING_WORK = false;
 
     //private boolean notConnected = false; //modified on 9 - 5- 2018
     private TextView offline; //added on 9 - 8 - 2018
@@ -159,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.getSupportActionBar().hide();
         setContentView(R.layout.activity_update_job_schedule);
         Log.e(PRODUCTION_TAG, "ONCREATE() BEFORE SAVEDINSTANCE()");
         IntentFilter filter = new IntentFilter();
@@ -288,6 +246,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                     //pref.getString(getString(R.string.SUNDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
                     //pref.getString(getString(R.string.SUNDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
 
+            //Change "SUNDAY" to getString(R.String.SUNDAY)???
             editor.putString(getString(R.string.SUNDAY), pref.getString(getString(R.string.SUNDAY),"SUNDAY"));
             editor.putString(getString(R.string.SUNDAY_START_HOUR),
                     pref.getString(getString(R.string.SUNDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
@@ -310,20 +269,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             //      sundayWorkHours.getWorkHours(this));
             //intent.setType("text/plain");
 
-            //mondayWorkHours = new CurrentWorkWeek("OFF");
-            //String workToday = mondayWorkHours.getDayOfWeek();
-           // if (!workToday.equals("OFF")) {
-                /*mondayWorkHours = new CurrentWorkWeek(pref,
-                        this,
-                        pref.getString(getString(R.string.MONDAY), "MONDAY"),
-                        pref.getString(getString(R.string.MONDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
-                        pref.getString(getString(R.string.MONDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
-                        pref.getString(getString(R.string.MONDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT),
-                        pref.getString(getString(R.string.MONDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT),
-                        pref.getString(getString(R.string.MONDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
-                        pref.getString(getString(R.string.MONDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT)
-                );
-                */
             editor.putString(getString(R.string.MONDAY), pref.getString(getString(R.string.MONDAY), "MONDAY"));
             editor.putString(getString(R.string.MONDAY_START_HOUR), pref.getString(getString(R.string.MONDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
             editor.putString(getString(R.string.MONDAY_START_MINUTE), pref.getString(getString(R.string.MONDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
@@ -338,24 +283,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
            // }
 
 
-            //tuesdayWorkHours = new CurrentWorkWeek("OFF");
-            //String workToday = tuesdayWorkHours.getDayOfWeek();
-            //if (!workToday.equals("OFF")) {
-                //tuesdayWorkHours = new CurrentWorkWeek(pref,
-                //        this,
-                //        ,
-                       //,
-                       //,
-                       // ,
-                       // ,
-                      // ,
-
-                //);
-            //} else {
-            //        tuesdayWorkHours = new CurrentWorkWeek();
-            //        intent.putExtra("TuesdayHours", tuesdayWorkHours);
-            //}
-            //intent.putExtra(getString(R.string.com_example_cd_shiftreminder_TUESDAY), tuesdayWorkHours.getCurrentWorkHours());
             editor.putString(getString(R.string.TUESDAY), pref.getString(getString(R.string.TUESDAY), "TUESDAY") );
             editor.putString("TUESDAY_START_HOUR",
                     pref.getString(getString(R.string.TUESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
@@ -369,19 +296,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                     pref.getString(getString(R.string.TUESDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
             editor.putString("TUESDAY_END_AM_OR_PM",
                     pref.getString(getString(R.string.TUESDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
-            //intent.putExtra("TuesdayHours", tuesdayWorkHours);
-
-
-            //wednesdayWorkHours = new CurrentWorkWeek(pref,
-            //        this,
-            //        ,
-            //        ,
-                    //,
-                   //,
-                    //,
-                   //,
-
-            //);
 
 
             editor.putString(getString(R.string.WEDNESDAY),
@@ -399,17 +313,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             editor.putString(getString(R.string.WEDNESDAY_END_AM_OR_PM),
                     pref.getString(getString(R.string.WEDNESDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
 
-            //intent.putExtra("WednesdayHours", wednesdayWorkHours);
-
-            //thursdayWorkHours =  new CurrentWorkWeek( pref,
-            //        this,
-                   //,
-                   //,
-                   // ,
-                   // ,
-                   //,
-                   // ,
-                   // );
 
             editor.putString(getString(R.string.THURSDAY),
                     pref.getString(getString(R.string.THURSDAY), "THURSDAY"));
@@ -426,21 +329,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             editor.putString(getString(R.string.THURSDAY_END_AM_OR_PM),
                     pref.getString(getString(R.string.THURSDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
 
-            //intent.putExtra("ThursdayHours", thursdayWorkHours);
-
             //12AM represents midnight on my phone
-
-                //fridayWorkHours = new CurrentWorkWeek(pref,
-                //        this,
-                //        ,
-                        //,
-                        //,
-                        //,
-                        //,
-                       //,
-
-                //);
-
 
             editor.putString(getString(R.string.FRIDAY),
                     pref.getString(getString(R.string.FRIDAY), "FRIDAY"));
@@ -456,20 +345,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                     pref.getString(getString(R.string.FRIDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
             editor.putString(getString(R.string.FRIDAY_END_AM_OR_PM),
                     pref.getString(getString(R.string.FRIDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
-
-            //intent.putExtra("FridayHours", fridayWorkHours);
-
-            //saturdayWorkHours = new CurrentWorkWeek( pref,
-            //        this,
-                   //,
-                    //,
-                    //,
-                    //,
-                    //,
-                    //,
-
-            //);
-
 
             editor.putString(getString(R.string.SATURDAY),
                     pref.getString(getString(R.string.SATURDAY ), "SATURDAY"));
@@ -491,9 +366,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
             editor.apply();
 
-
-            //CALL LOADURL????
-            //getSchedule.loadUrl("https://" + LANDINGPAGE_URL);
 
 
         } else {
@@ -608,13 +480,11 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     }
 
 
-
-
     //Added on 10 - 15 - 2018
     private void doIWorkToday() {
 
         MilitaryTime militaryTime = MilitaryTime.getInstance();
-        AlarmTimer alarmTimer = new AlarmTimer();
+        AlarmTimer alarmTimer = AlarmTimer.getInstance();
         if (Build.VERSION.SDK_INT >= 24) {
             Calendar cal = Calendar.getInstance();
             if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
@@ -793,114 +663,9 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         //getSchedule.restoreState(savedInstanceState);
     }
 
-    //added on 8 - 9 - 2018.
-    //checkStoragePermissions connections to checkPermissions. Uhh...I do it to debug shit.
-    public void checkStoragePermissions() {
-        //if (mainActivityFragment != null) {
-        //mainActivityFragment.checkPermissions();
-        //}
-    }
-
-
     public void onStart() {
         super.onStart();
     }//end onStart()
-
-
-
-    //Keep when I attempt to get the current schedule on Friday Afternoon
-
-    /*
-     *Converts directory to a FILE.
-     */
-    public File getPublicScheduleStorageFile(String thisWeeksSchedule) {
-        File file = new File(Environment.getExternalStorageDirectory(), thisWeeksSchedule);
-
-        if(!file.mkdirs()) {
-            Log.e(PRODUCTION_TAG, "Directory not created");
-        }
-        return file;
-    }
-
-
-
-    //Added on 11 - 10 - 2018
-    private void saveCurrentSchedule(String currentSchedule, int week) {
-        File file = new File(getFilesDir(), currentSchedule + "" + week);
-        if (file.exists()) {
-            writeToInternalDirectory(file);
-        }
-    }
-
-    /*
-     *Added on 7 - 24 - 2018
-     */
-    private File writeToInternalDirectory(File file) {
-        FileOutputStream outputStream = null;
-        OutputStreamWriter outputStreamWriter = null;
-        BufferedWriter bufferedWriter = null;
-
-        Log.i(PRODUCTION_TAG, "Application context is " + getApplicationContext());
-        Log.i(PRODUCTION_TAG, "The base context is " + getBaseContext());
-
-        //Need to change to fileProvider to make world readable??
-
-        try {
-            //added getApplicationContext() on 9 - 20 - 2018
-            outputStream = openFileOutput(file.getName(), Context.MODE_PRIVATE);
-            //outputStream.write(UpdatedSchedule.getBytes());
-            outputStream.close();
-            //outputStream.write(htmlString.getBytes()); //commented out on 8 - 23 for debugging only
-            Log.i(PRODUCTION_TAG, "Writing to internal directory");
-
-            if (!isExternalStorageReadable()) {
-                Log.e(PRODUCTION_TAG, "Can't read from drive");
-            }
-
-            readFromInternalDirectory(file);
-            outputStream.close();
-            //bufferedWriter.close();
-            //outputStreamWriter.close();
-        } catch (Exception e) {
-            e.printStackTrace(); //vs log or pass??
-        }
-
-
-        //File file = getPublicScheduleStorageDir(ThisWeeksScrewJob);
-        //schedule = file.toString(); //don't askf
-        //try {
-        //    schedule = readCurrentSchedule(file);
-        //} catch (Exception e) {
-        //    Log.e(PRODUCTION_TAG, "---BEGIN TTY WRITE DUMP ERROR---"); //doesn't show context reference???
-        //    e.printStackTrace(); //added on 7 - 31 - 2018
-        //}
-        return file;
-    }
-
-    //Added on 11 - 13 - 2018. Use this file for getschedule.loadurl("file://")
-    //Pass file as field?
-    private String readFromInternalDirectory(File file) {
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(new FileReader(file));
-        } catch (Exception e) {
-            //pass
-        }
-        String line;
-        String text = "";
-
-        try {
-            while ((line = br.readLine()) != null) {
-                text = text + line;
-                Log.i(PRODUCTION_TAG, text + "\n");
-                text = text + "\n";
-            }
-        } catch (Exception e) {
-            //pass
-        }
-
-        return text;
-    }
 
 
     @Override
@@ -908,7 +673,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         super.onPause();
 
     }
-
 
     //Crashes when I press the back key. 8 - 13 - 2018
     @Override
@@ -1267,7 +1031,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                         "javascript:var bld = document.getElementById('EmpID').style.color = 'red' " + ";"
                                 + "javascript:var x = document.getElementById('EmpID').value = " + name + ";"
                                 + "javascript:var y = document.getElementById('Password').style.display = 'none' " + ";"
-                                + "javascript:var a = ''" + ";"
+                                + "javascript:var a = '  '" + ";"
                                 + "javascript:var b = document.getElementById('Password').value = " + 'a' + ";"
 
                 );
@@ -1347,7 +1111,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         }
 
         //Distinguish between client side vs server side JavaScript.
-        @Override
+        // @Override
         public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
             //put super() before getschedule cache()?
             //super.onReceivedError(view, request, error);
@@ -1393,54 +1157,5 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
     }
 
-
-
-    //Because using an intent as per docs doesn't fucking work.
-    //****************************************************************************************
-
-    //I do the MIT thing and just copy and the paste code from the technical docs.
-    public boolean isExternalStorageWritable() {
-        String state = Environment.getExternalStorageState();
-
-        if(Environment.MEDIA_MOUNTED.equals(state)) {
-            return true;
-        }
-        return false;
-    }
-
-    public boolean isExternalStorageReadable() {
-        String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state) ||
-                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-            return true;
-        }
-        return false;
-    }
-
-    /*
-     *If the drive ain't mounted, I can't read it. This only becomes obvious when my idiot carrier drops
-     * my phone signal while I'm watching porn on the BART. 7 - 31 - 2018
-     */
-    private void checkDrivePermissions() {
-        //change to or? 8 - 25 - 2018
-        if (isExternalStorageReadable() && isExternalStorageWritable()) {
-            checkFilePermissions();
-        } else if (isExternalStorageReadable()) {
-            checkFilePermissions();
-        }else {
-            BECAUSE_INTENTS_ON_DEVACTIVED_PHONES_DONT_FUCKING_WORK = true;
-            Log.e(PRODUCTION_TAG, "Can't read drive");
-        }
-    }
-
-    private void checkFilePermissions() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_GRANTED) {
-            Log.i(PRODUCTION_TAG, "Read storage permission already exists");
-
-        } else {
-            BECAUSE_INTENTS_ON_DEVACTIVED_PHONES_DONT_FUCKING_WORK = true;
-        }
-    }
 
 }//end MainActivity

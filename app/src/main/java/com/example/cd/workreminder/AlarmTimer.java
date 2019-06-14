@@ -13,10 +13,20 @@ import android.util.Log;
 
 import java.lang.annotation.Target;
 
-public class AlarmTimer extends AppCompatActivity implements AlarmInterface {
+public class AlarmTimer extends AppCompatActivity {
     //private final String PRODUCTION_TAG = "LG_WORK_PHONE"; //Added on 4 - 17 - 2019
     private static Calendar cal;
     private SharedPreferences pref; //Added on 5 - 14 - 2019
+    private static AlarmTimer instance = new AlarmTimer();
+
+    private AlarmTimer() {
+
+    }
+
+    //Added on 6 - 13 - 2019
+    public static AlarmTimer getInstance(){
+        return instance;
+    }
 
     @TargetApi(24)
     public void setAlarmTime(Context context, int startMilitaryHour, int startMilitaryMinute, int timeBeforeShift) {

@@ -230,7 +230,7 @@ public class HourFormat extends FragmentActivity {
                                 parent.getItemAtPosition(position).toString());
                         break;
                     case WorkReaderContract.WorkEntry.THURSDAY:
-                        editor.putString(getString(R.string.WEDNESDAY_START_HOUR),
+                        editor.putString(getString(R.string.THURSDAY_START_HOUR),
                                 parent.getItemAtPosition(position).toString());
                         break;
                     case WorkReaderContract.WorkEntry.FRIDAY:
