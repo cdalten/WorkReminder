@@ -4,12 +4,14 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.http.HttpResponseCache;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.provider.AlarmClock;
@@ -30,9 +32,11 @@ import android.os.Build;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.CookieManager;
 import android.webkit.HttpAuthHandler;
 import android.webkit.SslErrorHandler;
@@ -43,6 +47,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -98,19 +103,12 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     private boolean mDownloading = false;
     private static boolean scheduleGotUpdated = false; //Added on 1 - 22 - 2019
 
-    private CurrentWorkWeek sundayWorkHours; //Added on 2 - 17 - 2019
-    private CurrentWorkWeek mondayWorkHours;
-    private CurrentWorkWeek tuesdayWorkHours;
-    private CurrentWorkWeek wednesdayWorkHours;
-    private CurrentWorkWeek thursdayWorkHours;
-    private CurrentWorkWeek fridayWorkHours;
-    private CurrentWorkWeek saturdayWorkHours;
-
     private SharedPreferences.Editor saveMe; //Added on 4 - 25 - 2019
     private Button workPreferences; //Added on 5 - 9 - 2019
 
     private BroadcastReceiver WorkAlarmReceiver;
-
+    private Handler handler = new Handler();
+    private int progressStatus = 0;
     @SuppressLint("ClickableViewAccessibility")
     @TargetApi(19)
     @Override
@@ -119,6 +117,44 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         this.getSupportActionBar().hide();
         setContentView(R.layout.activity_update_job_schedule);
         Log.e(PRODUCTION_TAG, "ONCREATE() BEFORE SAVEDINSTANCE()");
+        final ProgressBar progressBar = findViewById(R.id.progressBar);
+        //progressBar.setLayoutParams(new ViewGroup.LayoutParams(150, 10));
+        ViewGroup.LayoutParams layoutParams = progressBar.getLayoutParams();
+        //Log.e(PRODUCTION_TAG, "THE CURRENT LAYOUTWIDTH IS: " + layoutParams.width);
+        layoutParams.width = 450; //450dp ??
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        this.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int screenHeight = displayMetrics.heightPixels;
+        int screenWidth = displayMetrics.widthPixels;
+
+        Log.e(PRODUCTION_TAG, "THE SCREEN WIDTH IN PIXELS IS: " + screenWidth);
+        progressBar.setLayoutParams(layoutParams);
+        progressBar.setVisibility(View.VISIBLE);
+        progressBar.bringToFront();
+
+        new Thread(new Runnable() {
+            public void run() {
+                while (progressStatus < 100) {
+                    progressStatus += 1;
+                    // Update the progress bar and display the
+                    //current value in the text view
+                    handler.post(new Runnable() {
+                        public void run() {
+                            progressBar.setProgress(progressStatus);
+                            //textView.setText(progressStatus+"/"+progressBar.getMax());
+                        }
+                    });
+                    try {
+                        // Sleep for 200 milliseconds.
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+
+
         IntentFilter filter = new IntentFilter();
         filter.addAction("android.intent.action.TIME_TICK");
 
@@ -217,17 +253,11 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
             OfflineMessage = "<html>" +
                     "<font size =\"32\"><b>THIS PAGE CANNOT BE LOADED BECAUSE YOUR CELL PHONE CARRIER" +
-                    "IS TOO BUSY SPYING ON YOU. MAYBE YOU SHOULD GO SLEEP WITH YOUR WIFE AND THEN TRY" +
-                    " AGAIN IN A FEW HOURS? </b> </font>" +
-                    "<p> </p>"+
-                    "</html>";
             //readFromInternalDirectory(new File(CurrentSchedule + ThisWeek));
-            //date = new CurrentWorkHours();
-
-            pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
-
             //setAlarmTime(9, 10, Integer.parseInt(pref.getString("ALARM_MINUTES", "")));
             intent.setAction(Intent.ACTION_SEND);
+
+            pref = this.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
 
             SharedPreferences.Editor editor = pref.edit();
 
@@ -873,8 +903,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         @TargetApi(21)
         @Override
         public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request){
-            //Log.e(PRODUCTION_TAG, "STARTED DOWNLOAD IN MAINACTIVITY()"); //don't ask
-
             Log.d(PRODUCTION_TAG, " ");
             Log.d(PRODUCTION_TAG, "URI AUTHORITY " + request.getUrl().getAuthority() + "");
             Log.d(PRODUCTION_TAG, "URI ENCODING " + request.getUrl().getEncodedPath() + "");
@@ -951,7 +979,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
          */
         //@Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
-            super.onPageStarted(view, url, favicon);
 
             //produces infinite get requests when offline.
             Log.i(PRODUCTION_TAG, "The url is: " + url);
@@ -995,17 +1022,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
                 //getSchedule.setVisibility(View.INVISIBLE); //suppress server css/html/javascript
 
-                if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY) {
                     getSchedule.setVisibility(View.INVISIBLE);
-                    /*getSchedule.loadDataWithBaseURL("myschedule.safeway.com",
-                            "<html><font size =\"14\"><b>" +
-                                    "DOWNLOADING NEW SCHEDULE" +
-                                    "</b></font></html>",
-                            "text/html",
-                            "uft-8",
-                            null);
-                            */
-
                     return false;
                     //return true;// need to change back to false
                 }
@@ -1023,6 +1041,9 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             final String viewUrl = view.getUrl();
             final String myUrl = url.toString();
 
+            final ProgressBar progressBar = findViewById(R.id.progressBar);
+            progressBar.setVisibility(View.INVISIBLE);
+
             if (getSchedule.getUrl().equals(LOGIN_URL)) {
                 //if (view.getUrl().equals(url)) {
                 //getSchedule.setVisibility(View.VISIBLE);
@@ -1031,7 +1052,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                         "javascript:var bld = document.getElementById('EmpID').style.color = 'red' " + ";"
                                 + "javascript:var x = document.getElementById('EmpID').value = " + name + ";"
                                 + "javascript:var y = document.getElementById('Password').style.display = 'none' " + ";"
-                                + "javascript:var a = '  '" + ";"
+                                + "javascript:var a = ''" + ";"
                                 + "javascript:var b = document.getElementById('Password').value = " + 'a' + ";"
 
                 );
@@ -1116,7 +1137,22 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             //put super() before getschedule cache()?
             //super.onReceivedError(view, request, error);
             if (Build.VERSION.SDK_INT >= 24) {
-                //notConnected = true;
+                /*getSchedule.loadDataWithBaseURL("myschedule.safeway.com",
+                        "<html><br></br>" +
+                                "<br></br>" +
+                                "<br></br>" +
+                                "<br></br>" +
+                                "<br></br>" +
+                                "<br></br>" +
+                                "<font size =\"24\"><b>" +
+                                "CAN'T LOAD. NO INTERNET CONNECTION" +
+                                "</b></font></html>",
+                        "text/html",
+                        "uft-8",
+                        null);
+                        (*/
+                Intent offlineSchedule = new Intent(MainActivity.this, CurrentWeekSchedule.class);
+                startActivity(offlineSchedule);
                 Log.e(PRODUCTION_TAG, "Error: " + error.getDescription().toString() +
                         " Is connected? " + refreshDisplay);
                 Toast.makeText(getApplicationContext(), "" +
