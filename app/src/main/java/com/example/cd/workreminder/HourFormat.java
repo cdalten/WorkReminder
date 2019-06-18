@@ -524,7 +524,6 @@ public class HourFormat extends FragmentActivity {
         finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //startActivity(forceBacktoMain);
                 finish();
             }
         });

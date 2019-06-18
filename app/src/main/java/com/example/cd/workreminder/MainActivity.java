@@ -187,7 +187,9 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                     @Override
                     public void onClick(View view) {
                         Intent workPreferenceIntent = new Intent(MainActivity.this, WorkPreferences.class);
+                        //Intent workPreferenceIntent = new Intent(getApplicationContext(), WorkPreferences.class);
                         startActivity(workPreferenceIntent);
+                        //finish();
                     }
                 }
         );
@@ -1052,7 +1054,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                         "javascript:var bld = document.getElementById('EmpID').style.color = 'red' " + ";"
                                 + "javascript:var x = document.getElementById('EmpID').value = " + name + ";"
                                 + "javascript:var y = document.getElementById('Password').style.display = 'none' " + ";"
-                                + "javascript:var a = ''" + ";"
+                                + "javascript:var a = ' '" + ";"
                                 + "javascript:var b = document.getElementById('Password').value = " + 'a' + ";"
 
                 );
