@@ -62,19 +62,13 @@ public class CurrentWeekSchedule extends ListActivity  {
     private String newEndAmOrPm;
 
     private WorkAlarmReceiver workAlarmReceiver; //Added on 5 - 22 - 2019
-    CurrentWorkWeek newWorkHours; //Added on 3 - 2 - 2019
+    //CurrentWorkWeek newWorkHours; //Added on 3 - 2 - 2019
     SharedPreferences pref;
 
     HashMap<Integer, String> dayPair;
     ArrayList <HashMap<Integer,String>> dayList;
 
-    CurrentWorkWeek sundayHours; //Added on 3 - 27 - 2019
-    CurrentWorkWeek mondayHours;
-    CurrentWorkWeek tuesdayHours;
-    CurrentWorkWeek wednesdayHours;
-    CurrentWorkWeek thursdayHours;
-    CurrentWorkWeek fridayHours;
-    CurrentWorkWeek saturdayHours;
+
 
     //Need to eventually remove
     private String[] days = {"SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "OFF"}; //Added on 2 - 10 - 2019
