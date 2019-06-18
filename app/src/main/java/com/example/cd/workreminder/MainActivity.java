@@ -531,7 +531,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 //AlarmTimer.setAlarmTime(this, thursdayWorkHours.getStartMilitaryHour(),
                 //        thursdayWorkHours.getStartMilitaryMinute(),
                 //        Integer.parseInt(pref.getString("ALARM_MINUTES", "")));
-                if (doIWorkToday == true) {
+                //if (doIWorkToday == true) {
                     alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
                             Integer.parseInt(pref.getString("ALARM_MINUTES", WorkReaderContract.WorkEntry.ALARM_DEFAULT)));
                     //intent.putExtra(getString(R.string.com_example_cd_shiftreminder_I_WORK_TODAY), thursdayWorkHours.toString());
@@ -539,7 +539,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                             pref.getString(getString(R.string.SUNDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT) + ":" +
                                     pref.getString(getString(R.string.SUNDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT
                                             + pref.getString(getString(R.string.SUNDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT)));
-                }
+                //}
             }
 
             else if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY) {
@@ -553,7 +553,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 //AlarmTimer.setAlarmTime(this, thursdayWorkHours.getStartMilitaryHour(),
                 //        thursdayWorkHours.getStartMilitaryMinute(),
                 //        Integer.parseInt(pref.getString("ALARM_MINUTES", "")));
-                if (doIWorkToday == true) {
+                //if (doIWorkToday == true) {
                     alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
                             Integer.parseInt(pref.getString("ALARM_MINUTES", WorkReaderContract.WorkEntry.ALARM_DEFAULT)));
                     //intent.putExtra(getString(R.string.com_example_cd_shiftreminder_I_WORK_TODAY), thursdayWorkHours.toString());
@@ -561,7 +561,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                             pref.getString(getString(R.string.MONDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT) + ":" +
                                     pref.getString(getString(R.string.MONDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT
                                     + pref.getString(getString(R.string.MONDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT)));
-                }
+                //}
             }
 
             else if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.TUESDAY) {
@@ -571,14 +571,14 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 if (militaryTime.getStartingHour(militaryTime.getStartMilitaryHour() + "",
                         militaryTime.getStartMilitaryMinute() + "",
                         pref.getString(getString(R.string.TUESDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT))) //doIWorkToday = true;
-                if (doIWorkToday == true) {
+                //if (doIWorkToday == true) {
                     alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
                             Integer.parseInt(pref.getString("ALARM_MINUTES", WorkReaderContract.WorkEntry.ALARM_DEFAULT)));
                     intent.putExtra(getString(R.string.I_WORK_TODAY),
                             pref.getString(getString(R.string.TUESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT) + ":" +
                                     pref.getString(getString(R.string.TUESDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT
                                             + pref.getString(getString(R.string.TUESDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT)));
-                }
+                //}
             }
 
             else if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.WEDNESDAY) {
@@ -592,14 +592,14 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 //AlarmTimer.setAlarmTime(this, thursdayWorkHours.getStartMilitaryHour(),
                 //        thursdayWorkHours.getStartMilitaryMinute(),
                 //        Integer.parseInt(pref.getString("ALARM_MINUTES", "")));
-                if (doIWorkToday == true) {
+                //if (doIWorkToday == true) {
                     alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
                             Integer.parseInt(pref.getString("ALARM_MINUTES", WorkReaderContract.WorkEntry.ALARM_DEFAULT)));
                     intent.putExtra(getString(R.string.I_WORK_TODAY),
                             pref.getString(getString(R.string.WEDNESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT) + ":" +
                                     pref.getString(getString(R.string.WEDNESDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT
                                             + pref.getString(getString(R.string.WEDNESDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT)));
-                }
+                //}
             }
 
 
@@ -610,14 +610,14 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 doIWorkToday = militaryTime.getStartingHour(militaryTime.getStartMilitaryHour() + "",
                         militaryTime.getStartMilitaryMinute() + "",
                         pref.getString(getString(R.string.THURSDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-                if (doIWorkToday == true) {
+                //if (doIWorkToday == true) {
                     alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
                             Integer.parseInt(pref.getString("ALARM_MINUTES", WorkReaderContract.WorkEntry.ALARM_DEFAULT)));
                     intent.putExtra(getString(R.string.I_WORK_TODAY),
                             pref.getString(getString(R.string.THURSDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT) + ":" +
                                     pref.getString(getString(R.string.THURSDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT
                                             + pref.getString(getString(R.string.THURSDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT)));
-                }
+                //}
             }
 
 
@@ -631,14 +631,14 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 //AlarmTimer.setAlarmTime(this, thursdayWorkHours.getStartMilitaryHour(),
                 //        thursdayWorkHours.getStartMilitaryMinute(),
                 //        Integer.parseInt(pref.getString("ALARM_MINUTES", "")));
-                if (doIWorkToday == true) {
+                //if (doIWorkToday == true) {
                     alarmTimer.setAlarmTime(this,militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
                             Integer.parseInt(pref.getString("ALARM_MINUTES", WorkReaderContract.WorkEntry.ALARM_DEFAULT)));
                     intent.putExtra(getString(R.string.I_WORK_TODAY),
                             pref.getString(getString(R.string.FRIDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT) + ":" +
                                     pref.getString(getString(R.string.FRIDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT
                                             + pref.getString(getString(R.string.FRIDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT)));
-                }
+                //}
             }
 
             else if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
@@ -648,7 +648,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 doIWorkToday = militaryTime.getStartingHour(militaryTime.getStartMilitaryHour() + "",
                         militaryTime.getStartMilitaryMinute() + "",
                         pref.getString(getString(R.string.SATURDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-                if (doIWorkToday == true) {
+                //if (doIWorkToday == true) {
                     alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
                             Integer.parseInt(pref.getString("ALARM_MINUTES", WorkReaderContract.WorkEntry.ALARM_DEFAULT)));
                     //intent.putExtra(getString(R.string.com_example_cd_shiftreminder_I_WORK_TODAY), thursdayWorkHours.toString());
@@ -656,7 +656,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                             pref.getString(getString(R.string.SATURDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT) + ":" +
                                     pref.getString(getString(R.string.SATURDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT
                                             + pref.getString(getString(R.string.SATURDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT)));
-                }
+                //}
             }
         }//end untested if
 
@@ -1054,7 +1054,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                         "javascript:var bld = document.getElementById('EmpID').style.color = 'red' " + ";"
                                 + "javascript:var x = document.getElementById('EmpID').value = " + name + ";"
                                 + "javascript:var y = document.getElementById('Password').style.display = 'none' " + ";"
-                                + "javascript:var a = ' '" + ";"
+                                + "javascript:var a = ''" + ";"
                                 + "javascript:var b = document.getElementById('Password').value = " + 'a' + ";"
 
                 );
