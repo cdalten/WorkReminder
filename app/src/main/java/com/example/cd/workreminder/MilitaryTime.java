@@ -4,8 +4,9 @@ import android.app.ListActivity;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
+//Because I don't have the time nor patience to install the new fangled library the device emulator.
+//Maybe they shouldn't fucking dep. shit?
 public class MilitaryTime extends FragmentActivity {
-//public class MilitaryTime extends ListActivity {
     private int startMilitaryHour = 0;
     private int endMilitaryHour = 0; //Need to convert back to string??
     private int startMilitaryMinute = 0;
@@ -22,12 +23,14 @@ public class MilitaryTime extends FragmentActivity {
         return instance;
     }
     public void convertCivilanTimeToMilitaryTime(String startHour, String startMinute, String startAmOrPm) {
-
         if (startAmOrPm.equals("PM")) {
-            startMilitaryHour = Integer.parseInt(startHour) + 12;
+            startMilitaryHour = Integer.parseInt(startHour) +12;
             //setStartMilitaryHour(startMilitaryHour);
             //setStartMilitaryMinute(Integer.parseInt(startMinute));
-        } else {
+        } else if (startAmOrPm.equals("AM") && startHour.equals("12")) {
+            startMilitaryHour = 24;
+        }
+        else {
             try {
                 startMilitaryHour = Integer.parseInt(startHour);
                 //startMilitaryMinute = Integer.parseInt(startMinute);

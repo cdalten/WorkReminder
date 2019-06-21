@@ -47,19 +47,20 @@ public class AlarmTimer extends AppCompatActivity {
         if (newMilitaryMinute < 0) {
             newMilitaryMinute = newMilitaryMinute + 60;
             newMilitaryHour = newMilitaryHour - 1;
-
         } else {
             newMilitaryHour = newMilitaryHour - endMilitaryHour;
         }
 
         cal = Calendar.getInstance();
         cal.setTimeInMillis(System.currentTimeMillis());
-        cal.set(Calendar.HOUR_OF_DAY, newMilitaryHour);
+        cal.set(Calendar.HOUR, newMilitaryHour);
+        cal.set(Calendar.HOUR_OF_DAY, newMilitaryHour); //24 hour
         cal.set(Calendar.MINUTE, newMilitaryMinute);
 
         Log.e("LG_WORK_PHONE", "ALARM GOT CALLED");
         SharedPreferences.Editor editor = pref.edit();
-        editor.putInt("HOUR", cal.get(Calendar.HOUR)); //military
+        editor.putInt("ALARM_HOUR", cal.get(Calendar.HOUR)); //military
+        editor.putInt("HOUR", cal.get(Calendar.HOUR_OF_DAY)); //military
         editor.putInt("MINUTES", cal.get(Calendar.MINUTE));
         editor.commit();
 

@@ -13,6 +13,7 @@ import android.icu.util.Calendar;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
+import android.support.v4.util.CircularArray;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,34 +63,27 @@ public class CurrentWeekSchedule extends ListActivity  {
     private String newEndAmOrPm;
 
     private WorkAlarmReceiver workAlarmReceiver; //Added on 5 - 22 - 2019
-    //CurrentWorkWeek newWorkHours; //Added on 3 - 2 - 2019
     SharedPreferences pref;
 
-    HashMap<Integer, String> dayPair;
-    ArrayList <HashMap<Integer,String>> dayList;
-
-
-
     //Need to eventually remove
-    private String[] days = {"SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "OFF"}; //Added on 2 - 10 - 2019
-    private boolean amIOff = false; //Added on 5 - 29 - 2019
+    private String[] days = {"SATURDAY", "SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"}; //Added on 2 - 10 - 2019
+    CircularArray <String>dayOfWeek; //Added on 6 - 20 - 2019
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
+        //dayOfWeek = new CircularArray<>(7);
+
         pref = this.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
-        //week = new String[7];
-        //values = new ArrayList<>(Arrays.asList(week));
-        //String thursdayStartHour = pref.getString(Days.THURSDAY_START_HOUR, "OFF"); //empty string represents default value
-        //Log.e(PRODUCTION_TAG, "THURSDAY START HOUR IS: " + thursdayStartHour);
 
         //Update = (Button) findViewById(R.id.Update);
         //WorkPrefences = (Button) findViewById(R.id.ferences);
 
         //Finish = (Button) findViewById(R.id.Finish);
         //list = (ListView) findViewById(android.R.id.list);
+
         list = getListView();
         i = new Intent(CurrentWeekSchedule.this, HourFormat.class);
 
@@ -784,7 +778,7 @@ public class CurrentWeekSchedule extends ListActivity  {
             //((TextView) view.findViewById(android.R.id.text1)).setText("-");
             // Need to erase values that trail "off" header byes??
             if (week.get(position).get(0).equals("OFF")) {
-                ((TextView) convertView.findViewById(R.id.dayOfWeek)).setText(days[position]);
+                ((TextView) convertView.findViewById(R.id.dayOfWeek)).setText("");
                 ((TextView) convertView.findViewById(R.id.startTime)).setText("");
                 ((TextView) convertView.findViewById(R.id.hour_separator)).setText("");
                 ((TextView) convertView.findViewById(R.id.endTime)).setText("");
@@ -792,7 +786,8 @@ public class CurrentWeekSchedule extends ListActivity  {
             } else {
                 //week.remove(position);
                 //week.get(0).add(dayPair.get(position));
-                ((TextView) convertView.findViewById(R.id.dayOfWeek)).setText(days[position]);
+                ((TextView) convertView.findViewById(R.id.dayOfWeek)).setText(week.get(position).get(0)
+                );
                 ((TextView) convertView.findViewById(R.id.startTime))
                         .setText(week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
                                 + ":" + week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE) + " "
@@ -843,14 +838,75 @@ public class CurrentWeekSchedule extends ListActivity  {
             if (cal.get(Calendar.DAY_OF_WEEK) == getCurrentDay(position)){
                 if (intent.getStringExtra(getString(R.string.I_WORK_TODAY)) != null) {
 
-                    WorkNotification.notify(getContext(), week.get(position).get(0) + " " +
-                            week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
-                                    + ":" +
-                                    week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE)
-                                    + " " +
-                                    week.get(position).get(WorkReaderContract.WorkEntry.START_AM_OR_PM),
-                            0);
+                    if (week.get(position).get(0).equals("OFF")) {
+                        if (week.get(position + 1).get(0).equals("OFF")) {
+                            WorkNotification.notify(getContext(), "" +
+                                            //week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
+                                            ""
+                                            + ":" +
+                                            //week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE)
+                                            ""
+                                            + " " +
+                                            "", //bug when reaches 12
+                                    0);
+                        } else {
+                            WorkNotification.notify(getContext(), "PREVIOUS DAY" +
+                                            //week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
+                                            pref.getInt("ALARM_HOUR", 0)
+                                            + ":" +
+                                            //week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE)
+                                            pref.getInt("MINUTES", 0)
+                                            + " " +
+                                            "PM", //bug when reaches 12
+                                    0);
+                        }
 
+                    } else if (week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR).equals("12")) {
+                        if (week.get(position).get(WorkReaderContract.WorkEntry.START_AM_OR_PM).equals("AM") ) {
+                             Log.e(PRODUCTION_TAG, "TODAY IS MIDNIGHT");
+                            WorkNotification.notify(getContext(), days[position] +
+                                            //week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
+                                            pref.getInt("ALARM_HOUR", 0)
+                                            + ":" +
+                                            //week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE)
+                                            pref.getInt("MINUTES", 0)
+                                            + " " +
+                                            "PM", //bug when reaches 12
+                                    0);
+
+                        } else  if (week.get(position).get(WorkReaderContract.WorkEntry.START_AM_OR_PM).equals("PM") ) {
+                            WorkNotification.notify(getContext(), week.get(position).get(0) + " " +
+                                            //week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
+                                            pref.getInt("ALARM_HOUR", 0)
+                                            + ":" +
+                                            //week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE)
+                                            pref.getInt("MINUTES", 0)
+                                            + " " +
+                                            "AM", //bug when reaches 12
+                                    0);
+                        }
+                    } else if (pref.getInt("ALARM_HOUR", 0) == 0){
+                        WorkNotification.notify(getContext(), week.get(position).get(0) + " " +
+                                        //week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
+                                        //pref.getInt("ALARM_HOUR", 0)
+                                        "12"
+                                        + ":" +
+                                        //week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE)
+                                        pref.getInt("MINUTES", 0)
+                                        + " " +
+                                        week.get(position).get(WorkReaderContract.WorkEntry.START_AM_OR_PM), //bug when reaches 12
+                                0);
+                    } else {
+                        WorkNotification.notify(getContext(), week.get(position).get(0) + " " +
+                                        //week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
+                                        pref.getInt("ALARM_HOUR", 0)
+                                        + ":" +
+                                        //week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE)
+                                        pref.getInt("MINUTES", 0)
+                                        + " " +
+                                        week.get(position).get(WorkReaderContract.WorkEntry.START_AM_OR_PM), //bug when reaches 12
+                                0);
+                    }
                     text_start_hour.setTypeface(text_start_hour.getTypeface(), Typeface.BOLD);  //vs null??
                     text_separator.setTypeface(text_separator.getTypeface(), Typeface.BOLD);  //vs null??
                     text_end_hour.setTypeface(text_end_hour.getTypeface(), Typeface.BOLD);  //vs null??
