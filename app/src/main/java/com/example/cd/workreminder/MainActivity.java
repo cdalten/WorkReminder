@@ -524,9 +524,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 militaryTime.convertCivilanTimeToMilitaryTime(pref.getString(getString(R.string.SUNDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
                         pref.getString(getString(R.string.SUNDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
                         pref.getString(getString(R.string.SUNDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-                doIWorkToday = militaryTime.getStartingHour(militaryTime.getStartMilitaryHour() + "",
-                        militaryTime.getStartMilitaryMinute() + "",
-                        pref.getString(getString(R.string.SUNDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
+                doIWorkToday = militaryTime.getStartingHour(militaryTime.getStartMilitaryHour(),
+                        militaryTime.getStartMilitaryMinute());
                 //cal.set(DAY_THURSDAY, Calendar.THURSDAY);
                 //AlarmTimer.setAlarmTime(this, thursdayWorkHours.getStartMilitaryHour(),
                 //        thursdayWorkHours.getStartMilitaryMinute(),
@@ -546,9 +545,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 militaryTime.convertCivilanTimeToMilitaryTime(pref.getString(getString(R.string.MONDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
                         pref.getString(getString(R.string.MONDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
                         pref.getString(getString(R.string.MONDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-                doIWorkToday = militaryTime.getStartingHour(militaryTime.getStartMilitaryHour() + "",
-                        militaryTime.getStartMilitaryMinute() + "",
-                        pref.getString(getString(R.string.MONDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
+                doIWorkToday = militaryTime.getStartingHour(militaryTime.getStartMilitaryHour(),
+                        militaryTime.getStartMilitaryMinute());
                 //cal.set(DAY_THURSDAY, Calendar.THURSDAY);
                 //AlarmTimer.setAlarmTime(this, thursdayWorkHours.getStartMilitaryHour(),
                 //        thursdayWorkHours.getStartMilitaryMinute(),
@@ -568,9 +566,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 militaryTime.convertCivilanTimeToMilitaryTime(pref.getString(getString(R.string.TUESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
                         pref.getString(getString(R.string.TUESDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
                         pref.getString(getString(R.string.TUESDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-                if (militaryTime.getStartingHour(militaryTime.getStartMilitaryHour() + "",
-                        militaryTime.getStartMilitaryMinute() + "",
-                        pref.getString(getString(R.string.TUESDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT))) //doIWorkToday = true;
+                if (militaryTime.getStartingHour(militaryTime.getStartMilitaryHour(),
+                        militaryTime.getStartMilitaryMinute()))
                 //if (doIWorkToday == true) {
                     alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
                             Integer.parseInt(pref.getString("ALARM_MINUTES", WorkReaderContract.WorkEntry.ALARM_DEFAULT)));
@@ -585,9 +582,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 militaryTime.convertCivilanTimeToMilitaryTime(pref.getString(getString(R.string.WEDNESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
                         pref.getString(getString(R.string.WEDNESDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
                         pref.getString(getString(R.string.WEDNESDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-                doIWorkToday = militaryTime.getStartingHour(militaryTime.getStartMilitaryHour() + "",
-                        militaryTime.getStartMilitaryMinute() + "",
-                        pref.getString(getString(R.string.WEDNESDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
+                doIWorkToday = militaryTime.getStartingHour(militaryTime.getStartMilitaryHour() ,
+                        militaryTime.getStartMilitaryMinute());
                 //cal.set(DAY_THURSDAY, Calendar.THURSDAY);
                 //AlarmTimer.setAlarmTime(this, thursdayWorkHours.getStartMilitaryHour(),
                 //        thursdayWorkHours.getStartMilitaryMinute(),
@@ -607,9 +603,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 militaryTime.convertCivilanTimeToMilitaryTime(pref.getString(getString(R.string.THURSDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
                         pref.getString(getString(R.string.THURSDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
                         pref.getString(getString(R.string.THURSDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-                doIWorkToday = militaryTime.getStartingHour(militaryTime.getStartMilitaryHour() + "",
-                        militaryTime.getStartMilitaryMinute() + "",
-                        pref.getString(getString(R.string.THURSDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
+                doIWorkToday = militaryTime.getStartingHour(militaryTime.getStartMilitaryHour(),
+                        militaryTime.getStartMilitaryMinute());
                 //if (doIWorkToday == true) {
                     alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
                             Integer.parseInt(pref.getString("ALARM_MINUTES", WorkReaderContract.WorkEntry.ALARM_DEFAULT)));
@@ -625,9 +620,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 militaryTime.convertCivilanTimeToMilitaryTime(pref.getString(getString(R.string.FRIDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
                         pref.getString(getString(R.string.FRIDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
                         pref.getString(getString(R.string.FRIDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-                doIWorkToday = militaryTime.getStartingHour(militaryTime.getStartMilitaryHour() + "",
-                        militaryTime.getStartMilitaryMinute() + "",
-                        pref.getString(getString(R.string.FRIDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
+                doIWorkToday = militaryTime.getStartingHour(militaryTime.getStartMilitaryHour() ,
+                        militaryTime.getStartMilitaryMinute());
                 //AlarmTimer.setAlarmTime(this, thursdayWorkHours.getStartMilitaryHour(),
                 //        thursdayWorkHours.getStartMilitaryMinute(),
                 //        Integer.parseInt(pref.getString("ALARM_MINUTES", "")));
@@ -645,9 +639,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 militaryTime.convertCivilanTimeToMilitaryTime(pref.getString(getString(R.string.SATURDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
                         pref.getString(getString(R.string.SATURDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
                         pref.getString(getString(R.string.SATURDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-                doIWorkToday = militaryTime.getStartingHour(militaryTime.getStartMilitaryHour() + "",
-                        militaryTime.getStartMilitaryMinute() + "",
-                        pref.getString(getString(R.string.SATURDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
+                doIWorkToday = militaryTime.getStartingHour(militaryTime.getStartMilitaryHour() ,
+                        militaryTime.getStartMilitaryMinute());
                 //if (doIWorkToday == true) {
                     alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
                             Integer.parseInt(pref.getString("ALARM_MINUTES", WorkReaderContract.WorkEntry.ALARM_DEFAULT)));

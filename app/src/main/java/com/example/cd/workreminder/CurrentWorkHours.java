@@ -49,7 +49,7 @@ public class CurrentWorkHours extends Date {
     //Added on 10 - 22 - 2018. Changed to boolean on 11 - 1 - 2018
     //need to add end time
     //Change time in milliseconds to elapsed system phone time???
-    public boolean doIWorkToday(String startHour, String startMinute, String startAmOrPm) {
+    public boolean doIWorkToday(int startHour, int startMinute) {
         //startMilitaryTime = convertToMilitaryTime(startHour + ":" + startMinute + "" + startAmOrPm);
         //currentMilitaryTime = getCurrentTime(); //returns HH:mm in military time format. Convert to milliseconds??
         //currentTimeInMilliseconds= System.currentTimeMillis();
@@ -83,10 +83,10 @@ public class CurrentWorkHours extends Date {
     }
 
     //Added on 2 - 25 - 2019
-    private long convertSystemTimeToMilliseconds(String currentHour, String currentMinute) {
+    private long convertSystemTimeToMilliseconds(int currentHour, int currentMinute) {
         Calendar mycalendar = Calendar.getInstance();
-        mycalendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(currentHour));
-        mycalendar.set(Calendar.MINUTE, Integer.parseInt(currentMinute));
+        mycalendar.set(Calendar.HOUR_OF_DAY, currentHour);
+        mycalendar.set(Calendar.MINUTE, currentMinute);
         mycalendar.set(Calendar.SECOND, 0);
 
         return mycalendar.getTimeInMillis();

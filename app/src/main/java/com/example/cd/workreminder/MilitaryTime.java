@@ -54,11 +54,11 @@ public class MilitaryTime extends FragmentActivity {
     }
 
     //Added on 10 - 18 - 2018. True if I work. False if I'm either done working or have the day off.
-    public boolean getStartingHour(String startHour, String startMinute, String startAmOrPm) {
+    public boolean getStartingHour(int startHour, int startMinute) {
         //today = "12:30am - 3:30am"; //debugging only
         //dateDebugMode(today);
 
-        if (startHour.equals("12")) {
+        /*if (startHour.equals("12")) {
             if (startAmOrPm.equals("AM")) {
                 return true;
             }
@@ -71,8 +71,8 @@ public class MilitaryTime extends FragmentActivity {
         //Can I remove this test case??
         if (startHour.equals("OFF")) { //2 --->6a or 6A
             return false;
-        }
+        }*/
 
-        return currentWorkHours.doIWorkToday(startHour, startMinute, startAmOrPm);
+        return currentWorkHours.doIWorkToday(startHour, startMinute);
     }
 }
