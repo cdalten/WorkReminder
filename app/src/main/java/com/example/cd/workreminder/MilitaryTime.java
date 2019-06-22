@@ -33,12 +33,10 @@ public class MilitaryTime extends FragmentActivity {
         else {
             try {
                 startMilitaryHour = Integer.parseInt(startHour);
-                //startMilitaryMinute = Integer.parseInt(startMinute);
             } catch (Exception e) {
                 Log.e("LG_WORK_PHONE",  "BLANK: " + e);
             }
-            //setStartMilitaryHour(startMilitaryHour);
-            //setStartMilitaryMinute(startMilitaryMinute);
+
         }
 
     }
@@ -49,7 +47,6 @@ public class MilitaryTime extends FragmentActivity {
 
 
     public int getStartMilitaryMinute() {
-        //return Integer.parseInt(this.startMinute);
         return this.startMilitaryMinute;
     }
 

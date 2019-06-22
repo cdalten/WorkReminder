@@ -9,7 +9,7 @@ public final class WorkReaderContract {
 
     public static class WorkEntry implements BaseColumns {
 
-        public static final String ALARM_DEFAULT = "20"; //20 minutes before start of shift
+        public static final int ALARM_DEFAULT = 20; //20 minutes before start of shift
         public static final String START_HOUR_DEFAULT = "12"; //Added on 5 - 22 - 2019
         public static final String START_MINUTE_DEFAULT = "00";
         public static final String START_AM_OR_PM_DEFAULT = "AM";

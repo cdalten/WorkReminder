@@ -532,7 +532,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 //        Integer.parseInt(pref.getString("ALARM_MINUTES", "")));
                 //if (doIWorkToday == true) {
                     alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
-                            Integer.parseInt(pref.getString("ALARM_MINUTES", WorkReaderContract.WorkEntry.ALARM_DEFAULT)));
+                            pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
                     //intent.putExtra(getString(R.string.com_example_cd_shiftreminder_I_WORK_TODAY), thursdayWorkHours.toString());
                     intent.putExtra(getString(R.string.I_WORK_TODAY),
                             pref.getString(getString(R.string.SUNDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT) + ":" +
@@ -548,12 +548,9 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 doIWorkToday = militaryTime.getStartingHour(militaryTime.getStartMilitaryHour(),
                         militaryTime.getStartMilitaryMinute());
                 //cal.set(DAY_THURSDAY, Calendar.THURSDAY);
-                //AlarmTimer.setAlarmTime(this, thursdayWorkHours.getStartMilitaryHour(),
-                //        thursdayWorkHours.getStartMilitaryMinute(),
-                //        Integer.parseInt(pref.getString("ALARM_MINUTES", "")));
                 //if (doIWorkToday == true) {
                     alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
-                            Integer.parseInt(pref.getString("ALARM_MINUTES", WorkReaderContract.WorkEntry.ALARM_DEFAULT)));
+                            pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
                     //intent.putExtra(getString(R.string.com_example_cd_shiftreminder_I_WORK_TODAY), thursdayWorkHours.toString());
                     intent.putExtra(getString(R.string.I_WORK_TODAY),
                             pref.getString(getString(R.string.MONDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT) + ":" +
@@ -570,7 +567,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                         militaryTime.getStartMilitaryMinute()))
                 //if (doIWorkToday == true) {
                     alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
-                            Integer.parseInt(pref.getString("ALARM_MINUTES", WorkReaderContract.WorkEntry.ALARM_DEFAULT)));
+                            pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
                     intent.putExtra(getString(R.string.I_WORK_TODAY),
                             pref.getString(getString(R.string.TUESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT) + ":" +
                                     pref.getString(getString(R.string.TUESDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT
@@ -590,7 +587,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 //        Integer.parseInt(pref.getString("ALARM_MINUTES", "")));
                 //if (doIWorkToday == true) {
                     alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
-                            Integer.parseInt(pref.getString("ALARM_MINUTES", WorkReaderContract.WorkEntry.ALARM_DEFAULT)));
+                            pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
                     intent.putExtra(getString(R.string.I_WORK_TODAY),
                             pref.getString(getString(R.string.WEDNESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT) + ":" +
                                     pref.getString(getString(R.string.WEDNESDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT
@@ -607,7 +604,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                         militaryTime.getStartMilitaryMinute());
                 //if (doIWorkToday == true) {
                     alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
-                            Integer.parseInt(pref.getString("ALARM_MINUTES", WorkReaderContract.WorkEntry.ALARM_DEFAULT)));
+                            pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
                     intent.putExtra(getString(R.string.I_WORK_TODAY),
                             pref.getString(getString(R.string.THURSDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT) + ":" +
                                     pref.getString(getString(R.string.THURSDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT
@@ -627,7 +624,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 //        Integer.parseInt(pref.getString("ALARM_MINUTES", "")));
                 //if (doIWorkToday == true) {
                     alarmTimer.setAlarmTime(this,militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
-                            Integer.parseInt(pref.getString("ALARM_MINUTES", WorkReaderContract.WorkEntry.ALARM_DEFAULT)));
+                            pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
                     intent.putExtra(getString(R.string.I_WORK_TODAY),
                             pref.getString(getString(R.string.FRIDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT) + ":" +
                                     pref.getString(getString(R.string.FRIDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT
@@ -643,7 +640,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                         militaryTime.getStartMilitaryMinute());
                 //if (doIWorkToday == true) {
                     alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
-                            Integer.parseInt(pref.getString("ALARM_MINUTES", WorkReaderContract.WorkEntry.ALARM_DEFAULT)));
+                            pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
                     //intent.putExtra(getString(R.string.com_example_cd_shiftreminder_I_WORK_TODAY), thursdayWorkHours.toString());
                     intent.putExtra(getString(R.string.I_WORK_TODAY),
                             pref.getString(getString(R.string.SATURDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT) + ":" +
@@ -875,8 +872,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
 
     class WWebViewClient extends WebViewClient {
-
-
         //Added on 12 - 13 - 2018.
         @Override
         public String toString() {
@@ -884,15 +879,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             return "IMAGE";
         }
 
-        /*@Override
-        public void onLoadResource(WebView view, String url) {
-            super.onLoadResource(view, url);
-            Log.i("RESOURCE VIEW URL", view.getUrl());
-            //Log.i("RESOURCE VIEW ORIG URL", view.getOriginalUrl());
-            Log.i("RESORUCE HOST", Uri.parse(url).getHost());
-            Log.i("RESOURCE PATH", Uri.parse(url).getPath());
-        }
-        */
 
         //log path
         @TargetApi(21)
@@ -1010,10 +996,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                     //if (cal.get(Calendar.DAY_OF_WEEK) != pref.getInt(getString(R.string.com_example_cd_shiftreminder_SAVED_DOWNLOAD_DATE),00)
                     //        && pageEnded == true) {
                 Log.e(PRODUCTION_TAG, "SCHEDULE HAS BEEN UPDATED");
-                    //getSchedule.setVisibility(View.VISIBLE);
-
-                //startActivity(intent); //caused multiple flickering
-                    //} //end inner if.
 
                 //getSchedule.setVisibility(View.INVISIBLE); //suppress server css/html/javascript
 
@@ -1032,9 +1014,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
-            //getSchedule.requestLayout();
-            final String viewUrl = view.getUrl();
-            final String myUrl = url.toString();
 
             final ProgressBar progressBar = findViewById(R.id.progressBar);
             progressBar.setVisibility(View.INVISIBLE);
@@ -1062,8 +1041,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                                 "</b></font></li></html>",
                         "text/html",
                         "uft-8",
-                        null);
-            }
+                        null); }
 
 
             else if (url.equals("https://myschedule.safeway.com/ESS/Schedule.aspx")) {
@@ -1115,44 +1093,29 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             Log.i(PRODUCTION_TAG, "---RECEIVED HTTP AUTH REQUEST");
         }
 
-
         //Spits back on 404
         @Override
+        @TargetApi(23)
         public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
             super.onReceivedHttpError(view, request, errorResponse);
-            if (Build.VERSION.SDK_INT >= 23) {
-                Log.e(PRODUCTION_TAG, "Http error code: " + errorResponse.getStatusCode());
-                Log.e(PRODUCTION_TAG, "Http request url: " + request.getUrl());
-            }
+            Log.e(PRODUCTION_TAG, "Http error code: " + errorResponse.getStatusCode());
+            Log.e(PRODUCTION_TAG, "Http request url: " + request.getUrl());
+
         }
 
         //Distinguish between client side vs server side JavaScript.
         // @Override
+        @TargetApi(24)
         public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
             //put super() before getschedule cache()?
             //super.onReceivedError(view, request, error);
-            if (Build.VERSION.SDK_INT >= 24) {
-                /*getSchedule.loadDataWithBaseURL("myschedule.safeway.com",
-                        "<html><br></br>" +
-                                "<br></br>" +
-                                "<br></br>" +
-                                "<br></br>" +
-                                "<br></br>" +
-                                "<br></br>" +
-                                "<font size =\"24\"><b>" +
-                                "CAN'T LOAD. NO INTERNET CONNECTION" +
-                                "</b></font></html>",
-                        "text/html",
-                        "uft-8",
-                        null);
-                        (*/
-                Intent offlineSchedule = new Intent(MainActivity.this, CurrentWeekSchedule.class);
-                startActivity(offlineSchedule);
-                Log.e(PRODUCTION_TAG, "Error: " + error.getDescription().toString() +
+            Intent offlineSchedule = new Intent(MainActivity.this, CurrentWeekSchedule.class);
+            startActivity(offlineSchedule);
+            Log.e(PRODUCTION_TAG, "Error: " + error.getDescription().toString() +
                         " Is connected? " + refreshDisplay);
-                Toast.makeText(getApplicationContext(), "" +
-                        "NO WIFI. NOT CONNECTED (DEBUG MODE)", Toast.LENGTH_LONG).show();
-            }
+            Toast.makeText(getApplicationContext(), "" +
+                    "NO WIFI. NOT CONNECTED (DEBUG MODE)", Toast.LENGTH_LONG).show();
+
 
         }
 
@@ -1172,20 +1135,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             }
 
         }
-
-    }
-
-
-    //Added on 4 - 11 - 2019
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //super.onActivityResult(requestCode, resultCode, data);
-        Log.e(PRODUCTION_TAG, "ALARM DATA: " + data.getExtras());
-        finish();
-    }
-
-    protected void setTextReminder() {
-
     }
 
 

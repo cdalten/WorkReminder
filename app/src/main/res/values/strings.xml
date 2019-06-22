@@ -34,6 +34,8 @@
     <string name="END_MINUTE">END_MINUTE</string>
     <string name="END_AM_OR_PM">START_AM_OR_PM</string>
 
+    <string name="ALARM_MINUTES">ALARM_MINUTES</string>
+
     <string-array name="day_of_the_week">
         <item>SUNDAY</item>
         <item>MONDAY</item>
