@@ -1092,7 +1092,7 @@ public class CurrentWeekSchedule extends ListActivity  {
         AlarmTimer alarmTimer = AlarmTimer.getInstance();
         alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(),
                 militaryTime.getStartMilitaryMinute(),
-                Integer.parseInt(pref.getString("ALARM_MINUTES", WorkReaderContract.WorkEntry.ALARM_DEFAULT)));
+                pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
 
 
         //newWorkHours.setCurrentPosition(currentPosition);
