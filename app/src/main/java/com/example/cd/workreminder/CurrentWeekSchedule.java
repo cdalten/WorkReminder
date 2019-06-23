@@ -838,7 +838,10 @@ public class CurrentWeekSchedule extends ListActivity  {
             if (cal.get(Calendar.DAY_OF_WEEK) == getCurrentDay(position)){
                 if (intent.getStringExtra(getString(R.string.I_WORK_TODAY)) != null) {
 
-                    if (week.get(position).get(0).equals("OFF")) {
+                    if (week.get(position).get(0).equals("SUNDAY")) {
+                        getPreviousDay();
+                    }
+                    else if (week.get(position).get(0).equals("OFF")) {
                         if (week.get(position + 1).get(0).equals("OFF")) {
                             WorkNotification.notify(getContext(), "" +
                                             //week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
@@ -924,6 +927,46 @@ public class CurrentWeekSchedule extends ListActivity  {
 
     }//end inner class
 
+    //Added on 6 - 23 - 2019
+    @TargetApi(24)
+    private void getPreviousDay() {
+        Calendar cal = Calendar.getInstance();
+        MilitaryTime militaryTime = MilitaryTime.getInstance();
+        AlarmTimer alarmTimer = AlarmTimer.getInstance();
+        militaryTime.convertCivilanTimeToMilitaryTime(
+                pref.getString("PREVIOUS_SATURDAY_START_HOUR", WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
+                pref.getString("PREVIOUS_SATURDAY_START_MINUTE", WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
+                pref.getString("PREVIOUS_SATURDAY_START_AM_OR_PM", WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
+
+        alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
+                pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
+
+        Log.e(PRODUCTION_TAG, "THE CURRENT DAY_OF_MONTH IS:" + cal.get(Calendar.DAY_OF_MONTH));
+        if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+            cal.add(Calendar.DAY_OF_MONTH, -7);
+            WorkNotification.notify(this, "PREVIOUS DAY" +
+                            //week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
+                            pref.getInt("ALARM_HOUR", 0)
+                            + ":" +
+                            //week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE)
+                            pref.getInt("MINUTES", 0)
+                            + " " +
+                            "PM", //bug when reaches 12
+                    0);
+        }
+        Log.e(PRODUCTION_TAG, "THE PREVIOUS DAY_OF_MONTH IS:" + cal.get(Calendar.DAY_OF_MONTH));
+    }
+
+    //Handle week rollover
+    private void savePreviousSaturday() {
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("PREVIOUS_SATURDAY_START_HOUR", pref.getString(getString(R.string.SATURDAY_START_HOUR), ""));
+        editor.putString("PREVIOUS_SATURDAY_START_MINUTE", pref.getString(getString(R.string.SATURDAY_START_MINUTE), ""));
+        editor.putString("PREVIOUS_SATURDAY_START_AM_OR_PM", pref.getString(getString(R.string.SATURDAY_START_AM_OR_PM), ""));
+        editor.putString("PREVIOUS_SATURDAY_END_HOUR", pref.getString(getString(R.string.SATURDAY_END_HOUR), ""));
+        editor.putString("PREVIOUS_SATURDAY_END_MINUTE", pref.getString(getString(R.string.SATURDAY_END_MINUTE), ""));
+        editor.putString("PREVIOUS_SATURDAY_END_AM_OR_PM", pref.getString(getString(R.string.SATURDAY_END_AM_OR_PM), ""));
+    }
     //Added on 3 - 6 - 2019
     //Need to figure out how to save updated changes.
     //private void updateHours(ArrayList<String> updateCurrrentHour) {
