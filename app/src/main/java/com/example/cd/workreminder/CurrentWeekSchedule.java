@@ -777,6 +777,9 @@ public class CurrentWeekSchedule extends ListActivity  {
 
             //((TextView) view.findViewById(android.R.id.text1)).setText("-");
             // Need to erase values that trail "off" header byes??
+            if (week.get(position).get(0).equals("SUNDAY")) {
+                savePreviousSaturday();
+            }
             if (week.get(position).get(0).equals("OFF")) {
                 ((TextView) convertView.findViewById(R.id.dayOfWeek)).setText("");
                 ((TextView) convertView.findViewById(R.id.startTime)).setText("");
@@ -943,8 +946,8 @@ public class CurrentWeekSchedule extends ListActivity  {
 
         Log.e(PRODUCTION_TAG, "THE CURRENT DAY_OF_MONTH IS:" + cal.get(Calendar.DAY_OF_MONTH));
         if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
-            cal.add(Calendar.DAY_OF_MONTH, -7);
-            WorkNotification.notify(this, "PREVIOUS DAY" +
+            //cal.add(Calendar.DAY_OF_MONTH, -7);
+            /*WorkNotification.notify(this, "SATURDAY" +
                             //week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
                             pref.getInt("ALARM_HOUR", 0)
                             + ":" +
@@ -953,6 +956,77 @@ public class CurrentWeekSchedule extends ListActivity  {
                             + " " +
                             "PM", //bug when reaches 12
                     0);
+            */
+            if (week.get(0).get(0).equals("OFF")) {
+                if (week.get(0 + 1).get(0).equals("OFF")) {
+                    WorkNotification.notify(this, "" +
+                                    //week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
+                                    ""
+                                    + ":" +
+                                    //week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE)
+                                    ""
+                                    + " " +
+                                    "", //bug when reaches 12
+                            0);
+                } else {
+                    WorkNotification.notify(this, "PREVIOUS DAY" +
+                                    //week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
+                                    pref.getInt("ALARM_HOUR", 0)
+                                    + ":" +
+                                    //week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE)
+                                    pref.getInt("MINUTES", 0)
+                                    + " " +
+                                    "PM", //bug when reaches 12
+                            0);
+                }
+
+            } else if (week.get(0).get(WorkReaderContract.WorkEntry.START_HOUR).equals("12")) {
+                if (week.get(0).get(WorkReaderContract.WorkEntry.START_AM_OR_PM).equals("AM") ) {
+                    Log.e(PRODUCTION_TAG, "TODAY IS MIDNIGHT");
+                    WorkNotification.notify(this, days[0] +
+                                    //week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
+                                    pref.getInt("ALARM_HOUR", 0)
+                                    + ":" +
+                                    //week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE)
+                                    pref.getInt("MINUTES", 0)
+                                    + " " +
+                                    "PM", //bug when reaches 12
+                            0);
+
+                } else  if (week.get(0).get(WorkReaderContract.WorkEntry.START_AM_OR_PM).equals("PM") ) {
+                    WorkNotification.notify(this, week.get(0).get(0) + " " +
+                                    //week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
+                                    pref.getInt("ALARM_HOUR", 0)
+                                    + ":" +
+                                    //week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE)
+                                    pref.getInt("MINUTES", 0)
+                                    + " " +
+                                    "AM", //bug when reaches 12s
+                            0);
+                }
+            } else if (pref.getInt("ALARM_HOUR", 0) == 0){
+                WorkNotification.notify(this, week.get(0).get(0) + " " +
+                                //week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
+                                //pref.getInt("ALARM_HOUR", 0)
+                                "12"
+                                + ":" +
+                                //week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE)
+                                pref.getInt("MINUTES", 0)
+                                + " " +
+                                week.get(0).get(WorkReaderContract.WorkEntry.START_AM_OR_PM), //bug when reaches 12
+                        0);
+            } else {
+                WorkNotification.notify(this, week.get(0).get(0) + " " +
+                                //week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
+                                pref.getInt("ALARM_HOUR", 0)
+                                + ":" +
+                                //week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE)
+                                pref.getInt("MINUTES", 0)
+                                + " " +
+                                week.get(0).get(WorkReaderContract.WorkEntry.START_AM_OR_PM), //bug when reaches 12
+                        0);
+            }
+
         }
         Log.e(PRODUCTION_TAG, "THE PREVIOUS DAY_OF_MONTH IS:" + cal.get(Calendar.DAY_OF_MONTH));
     }
@@ -963,9 +1037,18 @@ public class CurrentWeekSchedule extends ListActivity  {
         editor.putString("PREVIOUS_SATURDAY_START_HOUR", pref.getString(getString(R.string.SATURDAY_START_HOUR), ""));
         editor.putString("PREVIOUS_SATURDAY_START_MINUTE", pref.getString(getString(R.string.SATURDAY_START_MINUTE), ""));
         editor.putString("PREVIOUS_SATURDAY_START_AM_OR_PM", pref.getString(getString(R.string.SATURDAY_START_AM_OR_PM), ""));
-        editor.putString("PREVIOUS_SATURDAY_END_HOUR", pref.getString(getString(R.string.SATURDAY_END_HOUR), ""));
+
+        /*editor.putString("PREVIOUS_SATURDAY_END_HOUR", pref.getString(getString(R.string.SATURDAY_END_HOUR), ""));
         editor.putString("PREVIOUS_SATURDAY_END_MINUTE", pref.getString(getString(R.string.SATURDAY_END_MINUTE), ""));
         editor.putString("PREVIOUS_SATURDAY_END_AM_OR_PM", pref.getString(getString(R.string.SATURDAY_END_AM_OR_PM), ""));
+        */
+
+        /*editor.putString("PREVIOUS_SATURDAY_START_HOUR", "10");
+        editor.putString("PREVIOUS_SATURDAY_START_MINUTE", "10");
+        editor.putString("PREVIOUS_SATURDAY_START_AM_OR_PM", "PM");
+        */
+
+        editor.apply();
     }
     //Added on 3 - 6 - 2019
     //Need to figure out how to save updated changes.

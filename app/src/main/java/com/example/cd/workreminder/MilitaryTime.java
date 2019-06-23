@@ -25,14 +25,17 @@ public class MilitaryTime extends FragmentActivity {
     public void convertCivilanTimeToMilitaryTime(String startHour, String startMinute, String startAmOrPm) {
         if (startAmOrPm.equals("PM")) {
             startMilitaryHour = Integer.parseInt(startHour) +12;
+            startMilitaryMinute = Integer.parseInt(startMinute);
             //setStartMilitaryHour(startMilitaryHour);
             //setStartMilitaryMinute(Integer.parseInt(startMinute));
         } else if (startAmOrPm.equals("AM") && startHour.equals("12")) {
             startMilitaryHour = 24;
+            startMilitaryMinute = Integer.parseInt(startMinute);
         }
         else {
             try {
                 startMilitaryHour = Integer.parseInt(startHour);
+                startMilitaryMinute = Integer.parseInt(startMinute);
             } catch (Exception e) {
                 Log.e("LG_WORK_PHONE",  "BLANK: " + e);
             }
