@@ -22,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ public class CurrentWeekSchedule extends ListActivity  {
     Button Finish; //Added on 12 - 2 - 2018
     Button WorkPrefences; //Added on 4 - 3 - 2019
 
-    LinearLayout WorkHours; //Added on 12 - 6 - 2018
+
     private int currentPosition = 0; //Added on 1 - 20 - 2019
     static List<String> values; //Modified on 1 - 18 - 2019
     private ArrayAdapter<String> adapter;
@@ -53,7 +54,6 @@ public class CurrentWeekSchedule extends ListActivity  {
     ArrayList<ArrayList<String>> week; //added on 2 - 24 - 2019
     private int currentDay = 0; //Added on 3 - 3 - 2019
 
-    private int newPosition; //Added on 3 - 4 - 2019 Need??
     private String newStartDay; //Added on 3 - 12 - 2019
     private String newStartHour; //Added on 3 - 2 - 2019
     private String newStartMinute;
@@ -62,12 +62,14 @@ public class CurrentWeekSchedule extends ListActivity  {
     private String newEndMinute;
     private String newEndAmOrPm;
 
+    private Button workSettings; //Added on 6 - 24 - 2019
     private WorkAlarmReceiver workAlarmReceiver; //Added on 5 - 22 - 2019
     SharedPreferences pref;
 
+
     //Need to eventually remove
     private String[] days = {"SATURDAY", "SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"}; //Added on 2 - 10 - 2019
-    CircularArray <String>dayOfWeek; //Added on 6 - 20 - 2019
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +92,15 @@ public class CurrentWeekSchedule extends ListActivity  {
         IntentFilter intentFilter = new IntentFilter();
         workAlarmReceiver = new WorkAlarmReceiver();
         registerReceiver(workAlarmReceiver, intentFilter);
+        workSettings = (Button) findViewById(R.id.workSettings);
+        workSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(CurrentWeekSchedule.this, WorkPreferences.class));
+            }
+        });
+
+        //Send hours when I click on a particular day in the list view
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -379,6 +390,7 @@ public class CurrentWeekSchedule extends ListActivity  {
                         break;
                 }//end
 
+
                 //pipe shit forward
 
                 Log.e(PRODUCTION_TAG, "TEXT AT: " + position + " IS: " + value);
@@ -411,7 +423,6 @@ public class CurrentWeekSchedule extends ListActivity  {
         });
         */
 
-        intent = getIntent();
 
         if (savedInstanceState == null) {
             addHours();
@@ -426,6 +437,7 @@ public class CurrentWeekSchedule extends ListActivity  {
     } //end onCreate()
 
     //Added on 5 - 28 - 2019
+    //Add current week hours to list view
     private void addHours() {
         //week[0] = "THE GOOGLE CALENDAR API SUCKS MASSIVE DICK"
         week = new ArrayList<ArrayList<String>>();
@@ -603,6 +615,10 @@ public class CurrentWeekSchedule extends ListActivity  {
         //week.get(1).remove(0);
         //week.get(1).add(0, mondayHours.getDayOfWeek());
 
+        //adapter.setDropDownViewResource(R.id.dayOfTheWeek);
+        //Spinner spinner = (Spinner)findViewById(R.id.dayOfTheWeek);
+
+        //spinner.setAdapter(adapter);
         adapter = new WS(this,
                 R.layout.schedule_list, week); //Bug in values because values in null!!!
 
@@ -611,6 +627,7 @@ public class CurrentWeekSchedule extends ListActivity  {
 
     }
     //Added on 3 - 28 - 2019
+    //Save data when screen changes from portrait to landscape
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         //super.onSaveInstanceState(outState);
@@ -723,9 +740,13 @@ public class CurrentWeekSchedule extends ListActivity  {
         }
     }
 
+    //I use list view because HTML fonts don't get preserved when the device changes orientation.
     private class WS<String> extends ArrayAdapter<java.lang.String> {
+        private int visibleMenuOptions = 3; //3 is for debugging only
+
         WS(Context context, int resource, List<java.lang.String> Objects) {
             super(context, resource, Objects);
+            this.visibleMenuOptions = visibleMenuOptions;
         }
 
         @Override
@@ -743,6 +764,24 @@ public class CurrentWeekSchedule extends ListActivity  {
         @Override
         public java.lang.String getItem(int position) {
             return week.get(position).toString();
+        }
+
+        //Added on 6 - 24 - 2019
+
+        @Override
+        public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            //return super.getDropDownView(position, convertView, parent);
+            Log.e(PRODUCTION_TAG, "MENU GOT HIDDEN AT POSITION: " + position);
+            View v = null;
+            if (position == visibleMenuOptions) {
+                Log.e(PRODUCTION_TAG, "MENU GOT HIDDEN AT POSITION: " + position);
+                TextView tv = new TextView(getContext());
+                tv.setVisibility(View.GONE);
+                v = tv;
+            } else {
+                v = super.getDropDownView(position, null, parent);
+            }
+            return v;
         }
 
         @TargetApi(24)
@@ -773,13 +812,13 @@ public class CurrentWeekSchedule extends ListActivity  {
             */
 
 
-            //((TextView) convertView.findViewById(android.R.id.text1)).setText(days[position]);
-
             //((TextView) view.findViewById(android.R.id.text1)).setText("-");
             // Need to erase values that trail "off" header byes??
             if (week.get(position).get(0).equals("SUNDAY")) {
                 savePreviousSaturday();
             }
+
+            //set list view to a blank line
             if (week.get(position).get(0).equals("OFF")) {
                 ((TextView) convertView.findViewById(R.id.dayOfWeek)).setText("");
                 ((TextView) convertView.findViewById(R.id.startTime)).setText("");
@@ -832,28 +871,25 @@ public class CurrentWeekSchedule extends ListActivity  {
 
             //text_day.setText(days[position]);
 
-            //Update selected day
-            //if (intent.getIntExtra(getString(R.string.com_example_cd_shiftreminder_POSITION), 0)  == position) {
-            //    Log.e(PRODUCTION_TAG, "THE SELECTED DAY FOR UPDATING IS: " + days[position]);
-            //}
+
 
             Calendar cal = Calendar.getInstance();
             if (cal.get(Calendar.DAY_OF_WEEK) == getCurrentDay(position)){
-                if (intent.getStringExtra(getString(R.string.I_WORK_TODAY)) != null) {
+                if (getIntent().getStringExtra(getString(R.string.I_WORK_TODAY)) != null) {
 
+                    //If Sunday, get Saturday hours from the previous week
                     if (week.get(position).get(0).equals("SUNDAY")) {
                         getPreviousDay();
                     }
+                    //If I'm off, I check the next day. If I work at Midnight, set the alarm for the current day.
                     else if (week.get(position).get(0).equals("OFF")) {
                         if (week.get(position + 1).get(0).equals("OFF")) {
                             WorkNotification.notify(getContext(), "" +
-                                            //week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
                                             ""
                                             + ":" +
-                                            //week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE)
                                             ""
                                             + " " +
-                                            "", //bug when reaches 12
+                                            "",
                                     0);
                         } else {
                             WorkNotification.notify(getContext(), "PREVIOUS DAY" +
@@ -863,10 +899,10 @@ public class CurrentWeekSchedule extends ListActivity  {
                                             //week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE)
                                             pref.getInt("MINUTES", 0)
                                             + " " +
-                                            "PM", //bug when reaches 12
+                                            "PM",
                                     0);
                         }
-
+                        //If 12 AM, I want the larm minutes before this time. In which case it becomes PM
                     } else if (week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR).equals("12")) {
                         if (week.get(position).get(WorkReaderContract.WorkEntry.START_AM_OR_PM).equals("AM") ) {
                              Log.e(PRODUCTION_TAG, "TODAY IS MIDNIGHT");
@@ -880,17 +916,18 @@ public class CurrentWeekSchedule extends ListActivity  {
                                             "PM", //bug when reaches 12
                                     0);
 
+                            //if 12 PM, I want the alarm minutes before this time. In which case it becomes AM
                         } else  if (week.get(position).get(WorkReaderContract.WorkEntry.START_AM_OR_PM).equals("PM") ) {
                             WorkNotification.notify(getContext(), week.get(position).get(0) + " " +
-                                            //week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
+
                                             pref.getInt("ALARM_HOUR", 0)
                                             + ":" +
-                                            //week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE)
                                             pref.getInt("MINUTES", 0)
                                             + " " +
-                                            "AM", //bug when reaches 12
+                                            "AM",
                                     0);
                         }
+                        //If the hour starts at zero instead of one, make the clock show 12.
                     } else if (pref.getInt("ALARM_HOUR", 0) == 0){
                         WorkNotification.notify(getContext(), week.get(position).get(0) + " " +
                                         //week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
@@ -931,6 +968,7 @@ public class CurrentWeekSchedule extends ListActivity  {
     }//end inner class
 
     //Added on 6 - 23 - 2019
+    //Get the previous Saturday.
     @TargetApi(24)
     private void getPreviousDay() {
         Calendar cal = Calendar.getInstance();
@@ -1031,7 +1069,7 @@ public class CurrentWeekSchedule extends ListActivity  {
         Log.e(PRODUCTION_TAG, "THE PREVIOUS DAY_OF_MONTH IS:" + cal.get(Calendar.DAY_OF_MONTH));
     }
 
-    //Handle week rollover
+    //Save previous Saturday and not the current one. Used to handle the start of the week.
     private void savePreviousSaturday() {
         SharedPreferences.Editor editor = pref.edit();
         editor.putString("PREVIOUS_SATURDAY_START_HOUR", pref.getString(getString(R.string.SATURDAY_START_HOUR), ""));
@@ -1051,8 +1089,7 @@ public class CurrentWeekSchedule extends ListActivity  {
         editor.apply();
     }
     //Added on 3 - 6 - 2019
-    //Need to figure out how to save updated changes.
-    //private void updateHours(ArrayList<String> updateCurrrentHour) {
+    //Update new hours in the list view
     private void updateHours(String newStartDay, String newStartHour, String newStartMinute, String newStartAmOrPm,
                              String newEndHour, String newEndMinute, String newEndAmOrPm) {
         //int pos = list.getCheckedItemPosition();
@@ -1213,6 +1250,7 @@ public class CurrentWeekSchedule extends ListActivity  {
               */
 
 
+        //Create the object only one time.
         MilitaryTime militaryTime = MilitaryTime.getInstance();
         militaryTime.convertCivilanTimeToMilitaryTime(newStartHour, newStartMinute, newStartAmOrPm);
         AlarmTimer alarmTimer = AlarmTimer.getInstance();

@@ -181,20 +181,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         //   }
         //}
 
-        workPreferences = (Button) findViewById(R.id.workPreferences);
-        workPreferences.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent workPreferenceIntent = new Intent(MainActivity.this, WorkPreferences.class);
-                        //Intent workPreferenceIntent = new Intent(getApplicationContext(), WorkPreferences.class);
-                        startActivity(workPreferenceIntent);
-                        //finish();
-                    }
-                }
-        );
 
-        //checkDrivePermissions(); //Temporarily disabled on 1 - 16 - 2019
 
         //Disabled network broadcast on 8 -27 - 2018.
         //IntentFilter filter = new IntentFilter(AlarmManager);
@@ -513,8 +500,10 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
 
     //Added on 10 - 15 - 2018
+    //Find the current day in the week and based on the day, determine if I have to work.
     private void doIWorkToday() {
 
+        //Create the object only one time
         MilitaryTime militaryTime = MilitaryTime.getInstance();
         AlarmTimer alarmTimer = AlarmTimer.getInstance();
         if (Build.VERSION.SDK_INT >= 24) {
@@ -880,7 +869,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         }
 
 
-        //log path
+        //Log path. Used from debugging purposes only.
         @TargetApi(21)
         @Override
         public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request){
@@ -968,6 +957,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
         }
 
+        //Only download the schedule once a week. Rest of the time have the client handle the connection.
         @TargetApi(24)
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
@@ -1010,7 +1000,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             return true;
         }
 
-        //Need to eventually change the UID to my email address.
+        //I use JavaScript to automate the login sequence.
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
@@ -1027,7 +1017,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                                 + "javascript:var x = document.getElementById('EmpID').value = " + name + ";"
                                 + "javascript:var y = document.getElementById('Password').style.display = 'none' " + ";"
                                 + "javascript:var a = ''" + ";"
-                                + "javascript:var b = document.getElementById('Password').value = " + 'a' + ";"
+                                + "javascript:var b = document.getElementById('').value = " + 'a' + ";"
 
                 );
             }
@@ -1103,7 +1093,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
         }
 
-        //Distinguish between client side vs server side JavaScript.
+        //Display schedule right away if there is no internet connection
         // @Override
         @TargetApi(24)
         public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {

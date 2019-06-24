@@ -53,7 +53,7 @@ public class HourFormat extends FragmentActivity {
         //Pipe data back.
         intent = getIntent();
 
-        //Day of the week
+        //Get day of week from drop down menu. If off, make list view row blank
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.day_of_the_week, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -198,7 +198,7 @@ public class HourFormat extends FragmentActivity {
         });
 
 
-        //-----START TIME--------------
+        //Get starting hour from drop down menu
         adapter = ArrayAdapter.createFromResource(this,
                 R.array.start_hour, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -258,6 +258,8 @@ public class HourFormat extends FragmentActivity {
             }
         });
 
+
+        //Get starting minute from drop down menu
         adapter = ArrayAdapter.createFromResource(this,
                 R.array.start_minute, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -312,6 +314,8 @@ public class HourFormat extends FragmentActivity {
             }
         });
 
+
+        //Get starting am or pm from down down menu
         adapter = ArrayAdapter.createFromResource(this,
                 R.array.start_am_or_pm, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -367,7 +371,7 @@ public class HourFormat extends FragmentActivity {
             }
         });
 
-        //----END TIME--------------
+        //Get end hour from drop down menu.
         adapter = ArrayAdapter.createFromResource(this,
                 R.array.end_hour, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -419,6 +423,7 @@ public class HourFormat extends FragmentActivity {
             }
         });
 
+        //Get end minute from drop down menu
         adapter = ArrayAdapter.createFromResource(this,
                 R.array.end_minute, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -470,6 +475,7 @@ public class HourFormat extends FragmentActivity {
             }
         });
 
+        //Get end am or pm from drop down menu
         adapter = ArrayAdapter.createFromResource(this,
                 R.array.end_am_or_pm, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

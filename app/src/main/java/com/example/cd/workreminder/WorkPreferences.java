@@ -33,14 +33,18 @@ public class WorkPreferences extends AppCompatActivity {
     private SharedPreferences pref;
     private String newAlarmTime;
 
+    private Button save; //Added on 6 - 24 - 2019
+    private EditText getAlarmMinutesPreference; //Added on 6 - 24 - 2019
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_work_preferences);
         //dayPreference = (Spinner) findViewById(R.id.dayPreference);
         alarmMinutesPreference = (EditText) findViewById(R.id.alarmMinutesPreference);
+        newAlarmTime = alarmMinutesPreference.getText().toString();
         //currentPassword = (EditText) findViewById(R.id.currentPassword);
-        //savePreferences = (Button) findViewById(R.id.savePreferences);
+        save = (Button) findViewById(R.id.save);
 
         this.pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
         i = getIntent();
@@ -52,29 +56,7 @@ public class WorkPreferences extends AppCompatActivity {
         newAlarmTime = alarmMinutesPreference.getText().toString();
         i.putExtra("NEW_ALARM_TIME", newAlarmTime);
         editPref.putString("UPDATED_ALARM_TIME", alarmMinutesPreference.getText().toString()); //don't check for length
-        //alarmMinutesPreference.setText(i.getStringExtra("SAVE_ALARM_MINUTES"));
-        //String x = pref.getInt("ALARM_MINUTES", 0) + "";
-        //alarmMinutesPreference.setText(pref.getString("ALARM_MINUTES", "15"));
-        //editPref.apply();
 
-        //alarmMinutesPreference.setText(i.getStringExtra("NEW_ALARM_TIME"));
-        /*alarmMinutesPreference.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                alarmMinutesPreference.setText("30");
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        */
 
         //editPref = pref.edit();
         //editPref.putString("PASSWORD", currentPassword.getText().toString());
@@ -106,21 +88,21 @@ public class WorkPreferences extends AppCompatActivity {
             }
         });
         */
-        /*savePreferences.setOnClickListener(new View.OnClickListener() {
+        save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String updateTime = alarmMinutesPreference.getText().toString();
                 Log.e("LG_WORK_PHONE", "NEW ALARM TIME IS: " + newAlarmTime );
                 Log.e("LG_WORK_PHONE", "NEW ALARM TIME AGAIN IS: " + updateTime);
                 editPref = pref.edit();
-                editPref.putString("ALARM_MINUTES", updateTime);
-                editPref.putInt("NEW_DOWNLOAD_DATE", 3);
+                editPref.putInt(getString(R.string.ALARM_MINUTES), Integer.parseInt(updateTime));
+                //editPref.putInt("NEW_DOWNLOAD_DATE", 3);
                 editPref.apply();
                 //alarmMinutesPreference.setText(updateTime);
                 finish();
             }
         });
-        */
+
 
     }//end onCreate()
 
