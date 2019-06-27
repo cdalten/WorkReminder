@@ -33,6 +33,6 @@ public final class WorkReaderContract {
         public static final int END_MINUTE = 5;
         public static final int END_AM_OR_PM = 6;
 
-
+        public static boolean updateSchesdule = false; //Added on 6 - 26 - 2019
     }
 }//end class

@@ -17,6 +17,7 @@ public class AlarmTimer extends AppCompatActivity {
     //private final String PRODUCTION_TAG = "LG_WORK_PHONE"; //Added on 4 - 17 - 2019
     private static Calendar cal;
     private SharedPreferences pref; //Added on 5 - 14 - 2019
+    private int startMilitaryMinute; //Added on 6 - 27 -2019
     private static AlarmTimer instance = new AlarmTimer();
 
     private AlarmTimer() {
@@ -31,6 +32,8 @@ public class AlarmTimer extends AppCompatActivity {
     @TargetApi(24)
     public void setAlarmTime(Context context, int startMilitaryHour, int startMilitaryMinute, int timeBeforeShift) {
         pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        this.startMilitaryMinute = startMilitaryMinute;
+
         int endMilitaryHour = 0;
         int endMilitaryMinute = 0;
         int newMilitaryHour = 0;
@@ -95,5 +98,9 @@ public class AlarmTimer extends AppCompatActivity {
         //}
         */
     }//setAlarmTime
+
+    public int getMilitaryMinute() {
+        return this.startMilitaryMinute;
+    }
 
 }//end class

@@ -41,26 +41,32 @@ public class WorkPreferences extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_work_preferences);
         //dayPreference = (Spinner) findViewById(R.id.dayPreference);
+        this.pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
         alarmMinutesPreference = (EditText) findViewById(R.id.alarmMinutesPreference);
+        //alarmMinutesPreference.setText(pref.getString("NEW_ALARM_TIME", ""));
         newAlarmTime = alarmMinutesPreference.getText().toString();
+        String minutes = pref.getString("NEW_ALARM_TIME", "");
+        alarmMinutesPreference.setText(minutes);
         //currentPassword = (EditText) findViewById(R.id.currentPassword);
         save = (Button) findViewById(R.id.save);
 
-        this.pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+
         i = getIntent();
 
         editPref = pref.edit();
         //i.putExtra("SAVE_ALARM_MINUTES", alarmMinutesPreference.getText().toString());
 
         //editPref.putString("NEW_ALARM_MINUTES", "15");
-        newAlarmTime = alarmMinutesPreference.getText().toString();
+        //alarmMinutesPreference.setText(pref.getString("UPDATED_ALARM_TIME", ""));
+        //newAlarmTime = alarmMinutesPreference.getText().toString();
+        //editPref.putString("UPDATED_ALARM_TIME", newAlarmTime);
         i.putExtra("NEW_ALARM_TIME", newAlarmTime);
         editPref.putString("UPDATED_ALARM_TIME", alarmMinutesPreference.getText().toString()); //don't check for length
-
 
         //editPref = pref.edit();
         //editPref.putString("PASSWORD", currentPassword.getText().toString());
         editPref.apply();
+
 
         //ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
         //        R.array.day_Preference, android.R.layout.simple_spinner_item);
@@ -95,10 +101,32 @@ public class WorkPreferences extends AppCompatActivity {
                 Log.e("LG_WORK_PHONE", "NEW ALARM TIME IS: " + newAlarmTime );
                 Log.e("LG_WORK_PHONE", "NEW ALARM TIME AGAIN IS: " + updateTime);
                 editPref = pref.edit();
+                //newAlarmTime = alarmMinutesPreference.getText().toString();
+                //alarmMinutesPreference.setText(newAlarmTime);
+                //alarmMinutesPreference.app;
+                i.putExtra("NEW_ALARM_TIME", newAlarmTime);
+                //editPref.putString("NEW_ALARM_TIME", newAlarmTime);
+                editPref.putString("NEW_ALARM_TIME", updateTime);
                 editPref.putInt(getString(R.string.ALARM_MINUTES), Integer.parseInt(updateTime));
                 //editPref.putInt("NEW_DOWNLOAD_DATE", 3);
                 editPref.apply();
+
                 //alarmMinutesPreference.setText(updateTime);
+
+                AlarmTimer alarmTimer = AlarmTimer.getInstance();
+
+                alarmTimer.setAlarmTime(getBaseContext(), pref.getInt("HOUR", 0),alarmTimer.getMilitaryMinute(), Integer.parseInt(updateTime) );
+                WorkNotification.notify(getBaseContext(), //week.get(position).get(0) + " " +
+                        //week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
+                        pref.getInt("ALARM_HOUR", 0)
+                                + ":" +
+                                //week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE)
+                                pref.getInt("MINUTES", 0),
+                        //+ " "
+                        //+ week.get(position).get(WorkReaderContract.WorkEntry.START_AM_OR_PM), //bug when reaches 12
+                        0);
+
+                setResult(1, getIntent());
                 finish();
             }
         });
@@ -128,34 +156,4 @@ public class WorkPreferences extends AppCompatActivity {
         ;
     }
 
-    //Added on 4 - 4 - 2019
-    @TargetApi(24)
-    private int getDownloadDate(int day) {
-        int newDay = 0;
-        //Calendar cal = Calendar.getInstance();
-        switch(day) {
-            case 0:
-                newDay = Calendar.SUNDAY;
-                break;
-            case 1:
-                newDay = Calendar.MONDAY;
-                break;
-            case 2:
-                newDay = Calendar.TUESDAY;
-                break;
-            case 3:
-                newDay = Calendar.WEDNESDAY;
-                break;
-            case 4:
-                newDay = Calendar.THURSDAY;
-                break;
-            case 5:
-                newDay = Calendar.FRIDAY;
-                break;
-            case 6:
-                newDay = Calendar.SATURDAY;
-                break;
-        }
-        return newDay;
-    }
 }//end class}
