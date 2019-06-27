@@ -18,6 +18,7 @@ public class AlarmTimer extends AppCompatActivity {
     private static Calendar cal;
     private SharedPreferences pref; //Added on 5 - 14 - 2019
     private int startMilitaryMinute; //Added on 6 - 27 -2019
+    private int startMilitaryHour; //Added on 6 - 27 -2017
     private static AlarmTimer instance = new AlarmTimer();
 
     private AlarmTimer() {
@@ -33,6 +34,7 @@ public class AlarmTimer extends AppCompatActivity {
     public void setAlarmTime(Context context, int startMilitaryHour, int startMilitaryMinute, int timeBeforeShift) {
         pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
         this.startMilitaryMinute = startMilitaryMinute;
+        this.startMilitaryHour = startMilitaryHour;
 
         int endMilitaryHour = 0;
         int endMilitaryMinute = 0;
@@ -101,6 +103,10 @@ public class AlarmTimer extends AppCompatActivity {
 
     public int getMilitaryMinute() {
         return this.startMilitaryMinute;
+    }
+
+    public int getStartMilitaryHour() {
+        return this.startMilitaryHour;
     }
 
 }//end class

@@ -115,7 +115,7 @@ public class WorkPreferences extends AppCompatActivity {
 
                 AlarmTimer alarmTimer = AlarmTimer.getInstance();
 
-                alarmTimer.setAlarmTime(getBaseContext(), pref.getInt("HOUR", 0),alarmTimer.getMilitaryMinute(), Integer.parseInt(updateTime) );
+                alarmTimer.setAlarmTime(getBaseContext(), alarmTimer.getStartMilitaryHour(),alarmTimer.getMilitaryMinute(), Integer.parseInt(updateTime) );
                 WorkNotification.notify(getBaseContext(), //week.get(position).get(0) + " " +
                         //week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
                         pref.getInt("ALARM_HOUR", 0)
