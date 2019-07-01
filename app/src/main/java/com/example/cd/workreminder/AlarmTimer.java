@@ -109,4 +109,12 @@ public class AlarmTimer extends AppCompatActivity {
         return this.startMilitaryHour;
     }
 
+    //Added on 6 - 28 - 2019
+    public String getAMorPM () {
+        if (startMilitaryHour >= 12){
+            return "PM";
+        } else {
+            return "AM";
+        }
+    }
 }//end class

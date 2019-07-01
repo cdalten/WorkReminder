@@ -875,28 +875,18 @@ public class CurrentWeekSchedule extends ListActivity  {
 
             //text_day.setText(days[position]);
 
-
-
             Calendar cal = Calendar.getInstance();
             if (cal.get(Calendar.DAY_OF_WEEK) == getCurrentDay(position)){
-                if (getIntent().getStringExtra(getString(R.string.I_WORK_TODAY)) != null) {
-                    //Have the alarm start on Saturday when I have to work Sunday night
-                    /*if(week.get(position).get(0).equals("SATURDAY")) {
-                        if (week.get(position).get(0).equals("NEW_SUNDAY")) {
-                            getNewSundayHours();
-                        }
-                    }
-                    */
+                handleSundayNight(position);
 
-                    if (week.get(position).get(0).equals("WEDNESDAY")) {
-                        getNewSundayHours();
-                    }
+                if (getIntent().getStringExtra(getString(R.string.I_WORK_TODAY)) != null) {
+
                     //If Sunday, get Saturday hours from the previous week
-                    if (week.get(position).get(0).equals("SUNDAY")) {
-                        getPreviousDay();
-                    }
+                    //if (week.get(position).get(0).equals("SUNDAY")) {
+                    //    getPreviousDay();
+                    //}
                     //If I'm off, I check the next day. If I work at Midnight, set the alarm for the current day.
-                    else if (week.get(position).get(0).equals("OFF")) {
+                    if (week.get(position).get(0).equals("OFF") && position!=6) {
                         if (week.get(position + 1).get(0).equals("OFF")) {
                             WorkNotification.notify(getContext(), "" +
                                             ""
@@ -905,8 +895,9 @@ public class CurrentWeekSchedule extends ListActivity  {
                                             + " " +
                                             "",
                                     0);
-                        } else {
-                            WorkNotification.notify(getContext(), "PREVIOUS DAY" +
+                        }
+                        else {
+                            /*WorkNotification.notify(getContext(), "PREVIOUS DAY" +
                                             //week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
                                             pref.getInt("ALARM_HOUR", 0)
                                             + ":" +
@@ -915,6 +906,8 @@ public class CurrentWeekSchedule extends ListActivity  {
                                             + " " +
                                             "PM",
                                     0);
+                                    */
+
                         }
                         //If 12 AM, I want the slarm minutes before this time. In which case it becomes PM
                     } else if (week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR).equals("12")) {
@@ -953,7 +946,7 @@ public class CurrentWeekSchedule extends ListActivity  {
                                         + " " +
                                         week.get(position).get(WorkReaderContract.WorkEntry.START_AM_OR_PM), //bug when reaches 12
                                 0);
-                    } else {
+                    } else if (position !=6) {
                         WorkNotification.notify(getContext(), week.get(position).get(0) + " " +
                                         //week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
                                         pref.getInt("ALARM_HOUR", 0)
@@ -981,6 +974,245 @@ public class CurrentWeekSchedule extends ListActivity  {
 
     }//end inner class
 
+    //Added on 7 - 1 - 2019
+    @TargetApi(24)
+    private void handleSundayNight(int position) {
+        Calendar cal = Calendar.getInstance();
+        MilitaryTime militaryTime = MilitaryTime.getInstance();
+        AlarmTimer alarmTimer = AlarmTimer.getInstance();
+        if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.SUNDAY) {
+            //getPreviousDay();
+            if (week.get(WorkReaderContract.WorkEntry.MONDAY).get(1).equals("12")
+                    && week.get(WorkReaderContract.WorkEntry.MONDAY).get(3).equals("AM")) {
+                militaryTime.convertCivilanTimeToMilitaryTime(pref.getString(getString(R.string.MONDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
+                        pref.getString(getString(R.string.MONDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
+                        pref.getString(getString(R.string.MONDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
+                alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
+                        pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
+                WorkNotification.notify(this, "" +
+                                getString(R.string.SUNDAY) + " " +
+                                pref.getInt("ALARM_HOUR", 0) + ":" +
+                                pref.getInt("MINUTES", 0) + " "
+                                +alarmTimer.getAMorPM(),
+                        0);
+            } else if(!week.get(position).get(0).equals("OFF")) {
+                militaryTime.convertCivilanTimeToMilitaryTime(pref.getString(getString(R.string.SUNDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
+                        pref.getString(getString(R.string.SUNDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
+                        pref.getString(getString(R.string.SUNDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
+                alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
+                        pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
+                WorkNotification.notify(this, getString(R.string.SUNDAY) +
+                                //week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
+                                pref.getInt("ALARM_HOUR", 0)
+                                + ":" +
+                                //week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE)
+                                pref.getInt("MINUTES", 0)
+                                + " " +
+                                week.get(position).get(WorkReaderContract.WorkEntry.START_AM_OR_PM),
+                        0);
+            }
+        }  else if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.MONDAY) {
+            if (week.get(WorkReaderContract.WorkEntry.TUESDAY).get(1).equals("12")
+                    && week.get(WorkReaderContract.WorkEntry.TUESDAY).get(3).equals("AM")) {
+                militaryTime.convertCivilanTimeToMilitaryTime(pref.getString(getString(R.string.TUESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
+                        pref.getString(getString(R.string.TUESDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
+                        pref.getString(getString(R.string.TUESDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
+                alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
+                        pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
+
+                WorkNotification.notify(this, "" +
+                                getString(R.string.MONDAY) + " " +
+                                pref.getInt("ALARM_HOUR", 0) + ":" +
+                                pref.getInt("MINUTES", 0) + " "
+                                +alarmTimer.getAMorPM(),
+                        0);
+            }
+            /*if (week.get(WorkReaderContract.WorkEntry.MONDAY).get(0).equals("OFF")) {
+                WorkNotification.notify(this, "" ,
+                        0);
+            }
+            */
+            else if (!week.get(WorkReaderContract.WorkEntry.MONDAY).get(0).equals("OFF")){
+                militaryTime.convertCivilanTimeToMilitaryTime(pref.getString(getString(R.string.MONDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
+                        pref.getString(getString(R.string.MONDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
+                        pref.getString(getString(R.string.MONDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
+                alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
+                        pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
+
+                WorkNotification.notify(this, getString(R.string.MONDAY) +
+                                //week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
+                                pref.getInt("ALARM_HOUR", 0)
+                                + ":" +
+                                //week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE)
+                                pref.getInt("MINUTES", 0)
+                                + " " +
+                                week.get(position).get(WorkReaderContract.WorkEntry.START_AM_OR_PM),
+                        0);
+                /*else if(week.get(position).get(0).equals("OFF")) {
+                WorkNotification.notify(this, "TUESDAY OFF",
+                        0);
+            }
+            */
+            }
+
+        }else if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.TUESDAY) {
+            if (week.get(WorkReaderContract.WorkEntry.WEDNESDAY).get(1).equals("12")
+                    && week.get(WorkReaderContract.WorkEntry.WEDNESDAY).get(3).equals("AM")) {
+                militaryTime.convertCivilanTimeToMilitaryTime(pref.getString(getString(R.string.WEDNESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
+                        pref.getString(getString(R.string.WEDNESDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
+                        pref.getString(getString(R.string.WEDNESDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
+                alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
+                        pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
+                WorkNotification.notify(this, "" +
+                                getString(R.string.TUESDAY) + " " +
+                                pref.getInt("ALARM_HOUR", 0) + ":" +
+                                pref.getInt("MINUTES", 0) + " "
+                                +alarmTimer.getAMorPM(),
+                        0);
+            } else if(!week.get(position).get(0).equals("OFF")) {
+                militaryTime.convertCivilanTimeToMilitaryTime(pref.getString(getString(R.string.TUESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
+                        pref.getString(getString(R.string.TUESDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
+                        pref.getString(getString(R.string.TUESDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
+                alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
+                        pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
+                WorkNotification.notify(this, getString(R.string.TUESDAY) +
+                                //week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
+                                pref.getInt("ALARM_HOUR", 0)
+                                + ":" +
+                                //week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE)
+                                pref.getInt("MINUTES", 0)
+                                + " " +
+                                week.get(position).get(WorkReaderContract.WorkEntry.START_AM_OR_PM),
+                        0);
+            }
+
+        } else if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.WEDNESDAY) {
+            if (week.get(WorkReaderContract.WorkEntry.THURSDAY).get(1).equals("12")
+                    && week.get(WorkReaderContract.WorkEntry.THURSDAY).get(3).equals("AM")) {
+                militaryTime.convertCivilanTimeToMilitaryTime(pref.getString(getString(R.string.THURSDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
+                        pref.getString(getString(R.string.THURSDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
+                        pref.getString(getString(R.string.THURSDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
+                alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
+                        pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
+                WorkNotification.notify(this, "" +
+                                getString(R.string.WEDNESDAY) + " " +
+                                pref.getInt("ALARM_HOUR", 0) + ":" +
+                                pref.getInt("MINUTES", 0) + " "
+                                +alarmTimer.getAMorPM(),
+                        0);
+            } else if(!week.get(position).get(0).equals("OFF")) {
+                militaryTime.convertCivilanTimeToMilitaryTime(pref.getString(getString(R.string.WEDNESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
+                        pref.getString(getString(R.string.WEDNESDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
+                        pref.getString(getString(R.string.WEDNESDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
+                alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
+                        pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
+                WorkNotification.notify(this, getString(R.string.WEDNESDAY) +
+                                //week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
+                                pref.getInt("ALARM_HOUR", 0)
+                                + ":" +
+                                //week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE)
+                                pref.getInt("MINUTES", 0)
+                                + " " +
+                                week.get(position).get(WorkReaderContract.WorkEntry.START_AM_OR_PM),
+                        0);
+            }
+
+        }else if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.THURSDAY) {
+            if (week.get(WorkReaderContract.WorkEntry.FRIDAY).get(1).equals("12")
+                    && week.get(WorkReaderContract.WorkEntry.FRIDAY).get(3).equals("AM")) {
+                militaryTime.convertCivilanTimeToMilitaryTime(pref.getString(getString(R.string.FRIDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
+                        pref.getString(getString(R.string.FRIDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
+                        pref.getString(getString(R.string.FRIDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
+                alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
+                        pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
+                WorkNotification.notify(this, "" +
+                                getString(R.string.THURSDAY) + " " +
+                                pref.getInt("ALARM_HOUR", 0) + ":" +
+                                pref.getInt("MINUTES", 0) + " "
+                                +alarmTimer.getAMorPM(),
+                        0);
+            } else if(!week.get(position).get(0).equals("OFF")) {
+                militaryTime.convertCivilanTimeToMilitaryTime(pref.getString(getString(R.string.THURSDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
+                        pref.getString(getString(R.string.THURSDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
+                        pref.getString(getString(R.string.THURSDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
+                alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
+                        pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
+                WorkNotification.notify(this, getString(R.string.THURSDAY) +
+                                //week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
+                                pref.getInt("ALARM_HOUR", 0)
+                                + ":" +
+                                //week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE)
+                                pref.getInt("MINUTES", 0)
+                                + " " +
+                                week.get(position).get(WorkReaderContract.WorkEntry.START_AM_OR_PM),
+                        0);
+            }
+
+        } else if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.FRIDAY) {
+            if (week.get(WorkReaderContract.WorkEntry.SATURDAY).get(1).equals("12")
+                    && week.get(WorkReaderContract.WorkEntry.SATURDAY).get(3).equals("AM")) {
+                militaryTime.convertCivilanTimeToMilitaryTime(pref.getString(getString(R.string.SATURDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
+                        pref.getString(getString(R.string.SATURDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
+                        pref.getString(getString(R.string.SATURDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
+                alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
+                        pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
+                WorkNotification.notify(this, "" +
+                                getString(R.string.FRIDAY) + " " +
+                                pref.getInt("ALARM_HOUR", 0) + ":" +
+                                pref.getInt("MINUTES", 0) + " "
+                                +alarmTimer.getAMorPM(),
+                        0);
+            } else if(!week.get(position).get(0).equals("OFF")) {
+                militaryTime.convertCivilanTimeToMilitaryTime(pref.getString(getString(R.string.FRIDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
+                        pref.getString(getString(R.string.FRIDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
+                        pref.getString(getString(R.string.FRIDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
+                alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
+                        pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
+                WorkNotification.notify(this, getString(R.string.FRIDAY) +
+                                //week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
+                                pref.getInt("ALARM_HOUR", 0)
+                                + ":" +
+                                //week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE)
+                                pref.getInt("MINUTES", 0)
+                                + " " +
+                                week.get(position).get(WorkReaderContract.WorkEntry.START_AM_OR_PM),
+                        0);
+            }
+
+        }
+        else if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.SATURDAY) {
+            if (week.get(WorkReaderContract.WorkEntry.SUNDAY).get(1).equals("12")) {
+                militaryTime.convertCivilanTimeToMilitaryTime(pref.getString(getString(R.string.SUNDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
+                        pref.getString(getString(R.string.SUNDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
+                        pref.getString(getString(R.string.SUNDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
+                alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
+                        pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
+                WorkNotification.notify(this, "" +
+                                "SATURDAY" + " " +
+                                pref.getInt("ALARM_HOUR", 0) + ":" +
+                                pref.getInt("MINUTES", 0) + " "
+                                +alarmTimer.getAMorPM(),
+                        0);
+            } else if(!week.get(position).get(0).equals("OFF")) {
+                militaryTime.convertCivilanTimeToMilitaryTime(pref.getString(getString(R.string.SATURDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
+                        pref.getString(getString(R.string.SATURDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
+                        pref.getString(getString(R.string.SATURDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
+                alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
+                        pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
+                WorkNotification.notify(this, getString(R.string.SATURDAY) +
+                                //week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
+                                pref.getInt("ALARM_HOUR", 0)
+                                + ":" +
+                                //week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE)
+                                pref.getInt("MINUTES", 0)
+                                + " " +
+                                week.get(position).get(WorkReaderContract.WorkEntry.START_AM_OR_PM),
+                        0);
+            } else {
+
+            }
+        }
+    }
     @TargetApi(24)
     //Added on 6 - 26 - 2019
     private void getNewSundayHours() {
@@ -1291,6 +1523,7 @@ public class CurrentWeekSchedule extends ListActivity  {
         int weekPosition = data.getIntExtra(getString(R.string.DAY_OF_WEEK), 0);
         editor.apply();
         newStartDay = week.get(weekPosition).get(0); //BUG  -- DEFAULTS TO SUNDAY
+        //newStartDay = week.get(newPosition).get(0);
         //data.getStringExtra(getString(R.string.DAY_OF_WEEK)); //CORRECTED VERSION
 
         newStartHour = data.getStringExtra(getString(R.string.START_HOUR));
@@ -1300,6 +1533,14 @@ public class CurrentWeekSchedule extends ListActivity  {
         newEndMinute = data.getStringExtra(getString(R.string.END_MINUTE));
         newEndAmOrPm = data.getStringExtra(getString(R.string.END_AM_OR_PM));
 
+        //Update hours but NOT alarm time
+        if (newStartDay.equals("OFF")) {
+            WorkNotification.notify(this, "" ,
+                    0);
+        }
+        WorkNotification.notify(this, newStartDay + "" + newStartHour + ":" + newStartMinute + " " +
+                newStartAmOrPm + "(GOT UPDATED)",
+                0);
         //get day when I already have it??
         /*newWorkHours = new CurrentWorkWeek(pref, this, newStartDay,
                 newStartHour, newStartMinute, newStartAmOrPm,
@@ -1332,12 +1573,7 @@ public class CurrentWeekSchedule extends ListActivity  {
             //newWorkHours.setCurrentPosition(currentPosition);
             //if (cal.get(Calendar.DAY_OF_WEEK) == getCurrentDay(weekPosition)) {
             //    intent.putExtra(getString(R.string.I_WORK_TODAY), newWorkHours.toString());
-            //WorkNotification.notify(this,
-            //        "XXX",
-            //        dayList.get(currentPosition).get(currentPosition)+ " " +
-            //        newWorkHours.toString(),
-            //        0);
-            //}
+
 
             //Yes I know this sucks.
             switch (newPosition) {

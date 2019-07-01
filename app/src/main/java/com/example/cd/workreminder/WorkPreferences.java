@@ -121,8 +121,9 @@ public class WorkPreferences extends AppCompatActivity {
                         pref.getInt("ALARM_HOUR", 0)
                                 + ":" +
                                 //week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE)
-                                pref.getInt("MINUTES", 0),
-                        //+ " "
+                                pref.getInt("MINUTES", 0)
+                                + " "
+                                + alarmTimer.getAMorPM(),
                         //+ week.get(position).get(WorkReaderContract.WorkEntry.START_AM_OR_PM), //bug when reaches 12
                         0);
 
