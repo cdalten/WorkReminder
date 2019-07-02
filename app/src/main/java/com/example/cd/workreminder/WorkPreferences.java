@@ -127,7 +127,8 @@ public class WorkPreferences extends AppCompatActivity {
                         //+ week.get(position).get(WorkReaderContract.WorkEntry.START_AM_OR_PM), //bug when reaches 12
                         0);
 
-                setResult(1, getIntent());
+                //setResult(1, getIntent());
+                setResult(1, i);
                 finish();
             }
         });

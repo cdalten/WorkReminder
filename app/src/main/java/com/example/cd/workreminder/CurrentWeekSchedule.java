@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -1501,9 +1502,8 @@ public class CurrentWeekSchedule extends ListActivity  {
         super.onActivityResult(requestCode, resultCode, data);
         //Calendar cal = Calendar.getInstance();
 
-        SharedPreferences.Editor editor = pref.edit();
+        //SharedPreferences.Editor editor = pref.edit();
         int newPosition = data.getIntExtra("CURRENT_DAY", 0);  //position in listview
-        String day = data.getStringExtra(getString(R.string.DAY_OF_WEEK));
         //editor.apply();
         //newStartDay = week.get(weekPosition).get(0); //BUG  -- DEFAULTS TO SUNDAY
         //newStartDay = week.get(newPosition).get(0);
@@ -1517,20 +1517,28 @@ public class CurrentWeekSchedule extends ListActivity  {
         newEndAmOrPm = data.getStringExtra(getString(R.string.END_AM_OR_PM));
 
         //Update hours but NOT alarm time
-        if (!day.equals("OFF")) {
-            //WorkNotification.notify(this, "",
-            //        0);
+        //try {
+        String day = data.getStringExtra(getString(R.string.DAY_OF_WEEK));
+        if (resultCode == 1) {
+            if (day != null){
+                if (!day.equals("OFF")) {
+                    //WorkNotification.notify(this, "",
+                    //        0);
 
-            WorkNotification.notify(this, day + "" + newStartHour + ":" + newStartMinute + " " +
-                            newStartAmOrPm + "(GOT UPDATED)",
-                    0);
+                    WorkNotification.notify(this, day + "" + newStartHour + ":" + newStartMinute + " " +
+                                    newStartAmOrPm + "(GOT UPDATED)",
+                            0);
+                }
+            }
         }
-        //get day when I already have it??
+            //get day when I already have it??
         /*newWorkHours = new CurrentWorkWeek(pref, this, newStartDay,
                 newStartHour, newStartMinute, newStartAmOrPm,
               newEndHour, newEndMinute, newEndAmOrPm);
               */
-
+        //} catch (Exception e) {
+        //    e.printStackTrace();
+        //}
         if (resultCode == 1) {
             /*WorkNotification.notify(this, //week.get(position).get(0) + " " +
                     //week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
