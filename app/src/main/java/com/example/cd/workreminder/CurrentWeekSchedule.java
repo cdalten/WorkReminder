@@ -941,7 +941,7 @@ public class CurrentWeekSchedule extends ListActivity  {
 
                     //text_hours.setText(Html.fromHtml("<b> " + getItem(position) + "</b>"));
                     //text_day.setText(Html.fromHtml("<b> " + days[position] + "</b>"));
-                } else {
+                } else if (!week.get(position).get(0).equals("OFF")){
                     WorkNotification.notify(getContext(), "YOU MISSED YOUR SHIFT?",
                             0);
                 }
@@ -1514,13 +1514,14 @@ public class CurrentWeekSchedule extends ListActivity  {
         newEndAmOrPm = data.getStringExtra(getString(R.string.END_AM_OR_PM));
 
         //Update hours but NOT alarm time
-        if (day.equals("OFF")) {
-            WorkNotification.notify(this, "" ,
+        if (!day.equals("OFF")) {
+            //WorkNotification.notify(this, "",
+            //        0);
+
+            WorkNotification.notify(this, day + "" + newStartHour + ":" + newStartMinute + " " +
+                            newStartAmOrPm + "(GOT UPDATED)",
                     0);
         }
-        WorkNotification.notify(this, day + "" + newStartHour + ":" + newStartMinute + " " +
-                newStartAmOrPm + "(GOT UPDATED)",
-                0);
         //get day when I already have it??
         /*newWorkHours = new CurrentWorkWeek(pref, this, newStartDay,
                 newStartHour, newStartMinute, newStartAmOrPm,
