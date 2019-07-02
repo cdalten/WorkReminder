@@ -877,7 +877,7 @@ public class CurrentWeekSchedule extends ListActivity  {
 
             Calendar cal = Calendar.getInstance();
             if (cal.get(Calendar.DAY_OF_WEEK) == getCurrentDay(position)){
-                handleSundayNight(position);
+                handleThirdShift(position);
 
                 if (getIntent().getStringExtra(getString(R.string.I_WORK_TODAY)) != null) {
 
@@ -886,31 +886,8 @@ public class CurrentWeekSchedule extends ListActivity  {
                     //    getPreviousDay();
                     //}
                     //If I'm off, I check the next day. If I work at Midnight, set the alarm for the current day.
-                    if (week.get(position).get(0).equals("OFF") && position!=6) {
-                        if (week.get(position + 1).get(0).equals("OFF")) {
-                            WorkNotification.notify(getContext(), "" +
-                                            ""
-                                            + ":" +
-                                            ""
-                                            + " " +
-                                            "",
-                                    0);
-                        }
-                        else {
-                            /*WorkNotification.notify(getContext(), "PREVIOUS DAY" +
-                                            //week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
-                                            pref.getInt("ALARM_HOUR", 0)
-                                            + ":" +
-                                            //week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE)
-                                            pref.getInt("MINUTES", 0)
-                                            + " " +
-                                            "PM",
-                                    0);
-                                    */
-
-                        }
                         //If 12 AM, I want the slarm minutes before this time. In which case it becomes PM
-                    } else if (week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR).equals("12")) {
+                    if (week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR).equals("12")) {
                         if (week.get(position).get(WorkReaderContract.WorkEntry.START_AM_OR_PM).equals("AM") ) {
                              Log.e(PRODUCTION_TAG, "TODAY IS MIDNIGHT");
                             WorkNotification.notify(getContext(), days[position] +
@@ -964,6 +941,9 @@ public class CurrentWeekSchedule extends ListActivity  {
 
                     //text_hours.setText(Html.fromHtml("<b> " + getItem(position) + "</b>"));
                     //text_day.setText(Html.fromHtml("<b> " + days[position] + "</b>"));
+                } else {
+                    WorkNotification.notify(getContext(), "YOU MISSED YOUR SHIFT?",
+                            0);
                 }
             }
 
@@ -976,7 +956,7 @@ public class CurrentWeekSchedule extends ListActivity  {
 
     //Added on 7 - 1 - 2019
     @TargetApi(24)
-    private void handleSundayNight(int position) {
+    private void handleThirdShift(int position) {
         Calendar cal = Calendar.getInstance();
         MilitaryTime militaryTime = MilitaryTime.getInstance();
         AlarmTimer alarmTimer = AlarmTimer.getInstance();
@@ -1516,13 +1496,13 @@ public class CurrentWeekSchedule extends ListActivity  {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Calendar cal = Calendar.getInstance();
+        //Calendar cal = Calendar.getInstance();
 
         SharedPreferences.Editor editor = pref.edit();
-        int newPosition = data.getIntExtra("CURRENT_DAY", 0);
-        int weekPosition = data.getIntExtra(getString(R.string.DAY_OF_WEEK), 0);
-        editor.apply();
-        newStartDay = week.get(weekPosition).get(0); //BUG  -- DEFAULTS TO SUNDAY
+        int newPosition = data.getIntExtra("CURRENT_DAY", 0);  //position in listview
+        String day = data.getStringExtra(getString(R.string.DAY_OF_WEEK));
+        //editor.apply();
+        //newStartDay = week.get(weekPosition).get(0); //BUG  -- DEFAULTS TO SUNDAY
         //newStartDay = week.get(newPosition).get(0);
         //data.getStringExtra(getString(R.string.DAY_OF_WEEK)); //CORRECTED VERSION
 
@@ -1534,11 +1514,11 @@ public class CurrentWeekSchedule extends ListActivity  {
         newEndAmOrPm = data.getStringExtra(getString(R.string.END_AM_OR_PM));
 
         //Update hours but NOT alarm time
-        if (newStartDay.equals("OFF")) {
+        if (day.equals("OFF")) {
             WorkNotification.notify(this, "" ,
                     0);
         }
-        WorkNotification.notify(this, newStartDay + "" + newStartHour + ":" + newStartMinute + " " +
+        WorkNotification.notify(this, day + "" + newStartHour + ":" + newStartMinute + " " +
                 newStartAmOrPm + "(GOT UPDATED)",
                 0);
         //get day when I already have it??
@@ -1748,5 +1728,15 @@ public class CurrentWeekSchedule extends ListActivity  {
     protected void onDestroy() {
         unregisterReceiver(workAlarmReceiver);
         super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 }//End class

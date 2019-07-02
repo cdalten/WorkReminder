@@ -327,10 +327,14 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                     pref.getString(getString(R.string.WEDNESDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT) );
             editor.putString(getString(R.string.WEDNESDAY_END_HOUR),
                     pref.getString(getString(R.string.WEDNESDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
+            //editor.putString(getString(R.string.WEDNESDAY_END_MINUTE), "10");
+            //editor.putString(getString(R.string.WEDNESDAY_END_AM_OR_PM), "AM");
             editor.putString(getString(R.string.WEDNESDAY_END_MINUTE),
                     pref.getString(getString(R.string.WEDNESDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
+
             editor.putString(getString(R.string.WEDNESDAY_END_AM_OR_PM),
                     pref.getString(getString(R.string.WEDNESDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
+
 
 
             editor.putString(getString(R.string.THURSDAY),
@@ -536,6 +540,16 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                         pref.getString(getString(R.string.MONDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
                 doIWorkToday = militaryTime.getStartingHour(militaryTime.getStartMilitaryHour(),
                         militaryTime.getStartMilitaryMinute());
+                /*if (pref.getString(getString(R.string.TUESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT).equals("12") &&
+                pref.getString(getString(R.string.TUESDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT).equals("AM")) {
+                    WorkNotification.notify(this, "" +
+                                    "TUESDAY" + " " +
+                                    pref.getInt("ALARM_HOUR", 0) + ":" +
+                                    pref.getInt("MINUTES", 0) + " "
+                                    +alarmTimer.getAMorPM(),
+                            0);
+                }
+                */
                 //cal.set(DAY_THURSDAY, Calendar.THURSDAY);
                 if (doIWorkToday == true) {
                     alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
@@ -989,7 +1003,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
                 //getSchedule.setVisibility(View.INVISIBLE); //suppress server css/html/javascript
 
-                if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY) {
+                if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
                     getSchedule.setVisibility(View.INVISIBLE);
                     return false;
                     //return true;// need to change back to false
@@ -1012,12 +1026,21 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 //if (view.getUrl().equals(url)) {
                 //getSchedule.setVisibility(View.VISIBLE);
                 //Update.setVisibility(View.VISIBLE);
+                /*getSchedule.loadUrl(
+                        "javascript:var bld = document.getElementById('EmpID').style.color = 'red' " + ";"
+                                + "javascript:var x = document.getElementById('EmpID').value = " + name + ";"
+                                //+ "javascript:var y = document.getElementById('Password').style.display = 'none' " + ";"
+                                //+ "javascript:var a = ''" + ";"
+                                //+ "javascript:var b = document.getElementById('').value = " + 'a' + ";"
+
+                );
+                */
+
                 getSchedule.loadUrl(
                         "javascript:var bld = document.getElementById('EmpID').style.color = 'red' " + ";"
                                 + "javascript:var x = document.getElementById('EmpID').value = " + name + ";"
-                                + "javascript:var y = document.getElementById('Password').style.display = 'none' " + ";"
-                                + "javascript:var a = ''" + ";"
-                                + "javascript:var b = document.getElementById('').value = " + 'a' + ";"
+                        + "javascript:var y = document.getElementById('Password').value = '' " + ";"
+                                + "javascript:var z = document.getElementById('Password').style.display = 'none' " + ";"
 
                 );
             }

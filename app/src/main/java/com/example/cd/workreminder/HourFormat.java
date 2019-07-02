@@ -124,8 +124,8 @@ public class HourFormat extends FragmentActivity {
                                 editor.putString(getString(R.string.TUESDAY_START_MINUTE), "");
                                 editor.putString(getString(R.string.TUESDAY_START_AM_OR_PM), "");
                                 editor.putString(getString(R.string.TUESDAY_END_HOUR), "");
-                                editor.putString(getString(R.string.WEDNESDAY_END_MINUTE), "");
-                                editor.putString(getString(R.string.WEDNESDAY_END_AM_OR_PM), "");
+                                editor.putString(getString(R.string.TUESDAY_END_MINUTE), "");
+                                editor.putString(getString(R.string.TUESDAY_END_AM_OR_PM), "");
                                 intent.putExtra("POSITION", WorkReaderContract.WorkEntry.TUESDAY);
                                 break;
                             case WorkReaderContract.WorkEntry.WEDNESDAY:
