@@ -2,31 +2,25 @@ package com.example.cd.workreminder;
 
 import android.annotation.TargetApi;
 import android.app.ListActivity;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.icu.util.Calendar;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
-import android.support.v4.util.CircularArray;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class CurrentWeekSchedule extends ListActivity  {
@@ -63,6 +57,7 @@ public class CurrentWeekSchedule extends ListActivity  {
     private String newEndAmOrPm;
 
     private Button workSettings; //Added on 6 - 24 - 2019
+    private Button logout; //Added on 7 - 2- 2019
     private WorkAlarmReceiver workAlarmReceiver; //Added on 5 - 22 - 2019
     SharedPreferences pref;
 
@@ -93,6 +88,8 @@ public class CurrentWeekSchedule extends ListActivity  {
         workAlarmReceiver = new WorkAlarmReceiver();
         registerReceiver(workAlarmReceiver, intentFilter);
         workSettings = (Button) findViewById(R.id.workSettings);
+        logout = (Button) findViewById(R.id.logout);
+
         workSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -100,6 +97,12 @@ public class CurrentWeekSchedule extends ListActivity  {
             }
         });
 
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(CurrentWeekSchedule.this, Logout.class));
+            }
+        });
         //Send hours when I click on a particular day in the list view
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

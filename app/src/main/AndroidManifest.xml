@@ -12,7 +12,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,52 +19,73 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".CurrentWeekSchedule"
+        <activity
+            android:name=".CurrentWeekSchedule"
             android:label="@string/app_name">
             <intent-filter>
-                <!--<action android:name="android.intent.action.MAIN" />-->
-                <action android:name="android.intent.action.SEND"/>
+
+                <!-- <action android:name="android.intent.action.MAIN" /> -->
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".HourFormat"
+            android:label="@string/app_name">
+            <intent-filter>
+
+                <!-- <action android:name="android.intent.action.MAIN" /> -->
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".WorkPreferences"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Logout"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".AlarmTimer"
+            android:label="@string/app_name">
+            <intent-filter>
+
+                <!-- <action android:name="android.intent.action.MAIN" /> -->
+                <action android:name="android.intent.action.SEND" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".HourFormat"
-            android:label="@string/app_name">
+        <receiver
+            android:name=".WorkAlarmReceiver"
+            android:exported="true">
             <intent-filter>
-                <!--<action android:name="android.intent.action.MAIN" />-->
-                <action android:name="android.intent.action.SEND"/>
-                <category android:name="android.intent.category.LAUNCHER" />
+
+                <!-- <action android:name="android.intent.action.MAIN" /> -->
+                <action android:name="android.intent.action.SEND" />
             </intent-filter>
-        </activity>
+        </receiver>
 
-        <activity android:name=".WorkPreferences"
-            android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.SEND"/>
-                <category android:name="android.intent.category.LAUNCHER" />
-                <data android:mimeType="text/plain"/>
-            </intent-filter>
-        </activity>
-
-        <activity android:name=".AlarmTimer"
-            android:label="@string/app_name">
-            <intent-filter>
-                <!--<action android:name="android.intent.action.MAIN" />-->
-                <action android:name="android.intent.action.SEND"/>
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-       <receiver android:name="com.example.cd.workreminder.WorkAlarmReceiver" android:exported="true">
-           <intent-filter>
-               <!--<action android:name="android.intent.action.MAIN" />-->
-               <action android:name="android.intent.action.SEND"/>
-
-           </intent-filter>
-       </receiver>
 
     </application>
-
 
 </manifest>
