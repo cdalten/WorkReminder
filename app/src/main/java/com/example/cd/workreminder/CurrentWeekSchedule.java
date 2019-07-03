@@ -1502,8 +1502,10 @@ public class CurrentWeekSchedule extends ListActivity  {
         super.onActivityResult(requestCode, resultCode, data);
         //Calendar cal = Calendar.getInstance();
 
-        //SharedPreferences.Editor editor = pref.edit();
-        int newPosition = data.getIntExtra("CURRENT_DAY", 0);  //position in listview
+        int newPosition = -1; // don't enter switch
+        if (data != null) {
+            newPosition = data.getIntExtra("CURRENT_DAY", 0);  //position in listview
+        }
         //editor.apply();
         //newStartDay = week.get(weekPosition).get(0); //BUG  -- DEFAULTS TO SUNDAY
         //newStartDay = week.get(newPosition).get(0);

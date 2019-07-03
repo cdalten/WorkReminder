@@ -44,9 +44,11 @@ public class WorkPreferences extends AppCompatActivity {
         this.pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
         alarmMinutesPreference = (EditText) findViewById(R.id.alarmMinutesPreference);
         //alarmMinutesPreference.setText(pref.getString("NEW_ALARM_TIME", ""));
-        newAlarmTime = alarmMinutesPreference.getText().toString();
-        String minutes = pref.getString("NEW_ALARM_TIME", "");
+        //newAlarmTime = alarmMinutesPreference.getText().toString();
+        //Need to set *BEFORE* getting the pref string.
+        String minutes = pref.getString("NEW_ALARM_TIME", "20");
         alarmMinutesPreference.setText(minutes);
+        //alarmMinutesPreference.setText(newAlarmTime);
         //currentPassword = (EditText) findViewById(R.id.currentPassword);
         save = (Button) findViewById(R.id.save);
 
@@ -98,6 +100,13 @@ public class WorkPreferences extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String updateTime = alarmMinutesPreference.getText().toString();
+
+                //if (updateTime == "" || updateTime == null) {
+                if (updateTime.equals("")) {
+                    updateTime =  pref.getString("NEW_ALARM_TIME", "20");
+
+                }
+                //alarmMinutesPreference.setText(updateTime);
                 Log.e("LG_WORK_PHONE", "NEW ALARM TIME IS: " + newAlarmTime );
                 Log.e("LG_WORK_PHONE", "NEW ALARM TIME AGAIN IS: " + updateTime);
                 editPref = pref.edit();
