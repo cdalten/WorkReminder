@@ -1540,7 +1540,6 @@ public class CurrentWeekSchedule extends ListActivity  {
 
         //Update hours but NOT alarm time
         //try {
-
         if (resultCode == 1 && newPosition != -99) {
             if (day != null){
                 if (!day.equals("OFF")) {
@@ -1554,10 +1553,7 @@ public class CurrentWeekSchedule extends ListActivity  {
             }
         }
             //get day when I already have it??
-        /*newWorkHours = new CurrentWorkWeek(pref, this, newStartDay,
-                newStartHour, newStartMinute, newStartAmOrPm,
-              newEndHour, newEndMinute, newEndAmOrPm);
-              */
+
         //} catch (Exception e) {
         //    e.printStackTrace();
         //}
