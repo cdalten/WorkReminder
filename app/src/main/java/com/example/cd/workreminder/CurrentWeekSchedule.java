@@ -1507,21 +1507,23 @@ public class CurrentWeekSchedule extends ListActivity  {
         int newPosition = -1; // don't enter switch
         String day = "";
         if (data != null) {
-            newPosition = data.getIntExtra("CURRENT_DAY", 0);  //position in listview
-            newStartHour = data.getStringExtra(getString(R.string.START_HOUR)); //hardweare bug??
-            newStartMinute = data.getStringExtra(getString(R.string.START_MINUTE));
-            newStartAmOrPm = data.getStringExtra(getString(R.string.START_AM_OR_PM));
-            newEndHour = data.getStringExtra(getString(R.string.END_HOUR));
-            newEndMinute = data.getStringExtra(getString(R.string.END_MINUTE));
-            newEndAmOrPm = data.getStringExtra(getString(R.string.END_AM_OR_PM));
-            day = data.getStringExtra(getString(R.string.DAY_OF_WEEK));
+            newPosition = data.getIntExtra("CURRENT_DAY", -99);  //position in listview
+            if (newPosition != -99) {
+                newStartHour = data.getStringExtra(getString(R.string.START_HOUR)); //hardware bug??
+                newStartMinute = data.getStringExtra(getString(R.string.START_MINUTE));
+                newStartAmOrPm = data.getStringExtra(getString(R.string.START_AM_OR_PM));
+                newEndHour = data.getStringExtra(getString(R.string.END_HOUR));
+                newEndMinute = data.getStringExtra(getString(R.string.END_MINUTE));
+                newEndAmOrPm = data.getStringExtra(getString(R.string.END_AM_OR_PM));
+                day = data.getStringExtra(getString(R.string.DAY_OF_WEEK));
 
-            MilitaryTime militaryTime = MilitaryTime.getInstance();
-            militaryTime.convertCivilanTimeToMilitaryTime(newStartHour, newStartMinute, newStartAmOrPm);
-            AlarmTimer alarmTimer = AlarmTimer.getInstance();
-            alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(),
-                    militaryTime.getStartMilitaryMinute(),
-                    pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
+                MilitaryTime militaryTime = MilitaryTime.getInstance();
+                militaryTime.convertCivilanTimeToMilitaryTime(newStartHour, newStartMinute, newStartAmOrPm);
+                AlarmTimer alarmTimer = AlarmTimer.getInstance();
+                alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(),
+                        militaryTime.getStartMilitaryMinute(),
+                        pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
+            }
         }
         //editor.apply();
         //newStartDay = week.get(weekPosition).get(0); //BUG  -- DEFAULTS TO SUNDAY
@@ -1539,7 +1541,7 @@ public class CurrentWeekSchedule extends ListActivity  {
         //Update hours but NOT alarm time
         //try {
 
-        if (resultCode == 1) {
+        if (resultCode == 1 && newPosition != -99) {
             if (day != null){
                 if (!day.equals("OFF")) {
                     //WorkNotification.notify(this, "",

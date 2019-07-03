@@ -43,6 +43,8 @@ public class WorkPreferences extends AppCompatActivity {
             public void onClick(View view) {
                 editPref = pref.edit();
                 editPref.putBoolean("SAVE_PASSWORD", true);
+                editPref.apply();
+                finish();
             }
         });
         //alarmMinutesPreference.setText(newAlarmTime);
