@@ -1,33 +1,22 @@
 package com.example.cd.workreminder;
 
-import android.annotation.TargetApi;
-import android.app.AlarmManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.webkit.WebView;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
-
-import java.util.Calendar;
 
 public class WorkPreferences extends AppCompatActivity {
     Spinner dayPreference;
     private EditText alarmMinutesPreference; //Added on 4 - 5- 2019
     private EditText currentPassword; //Added on 4 - 4- 2019
-    private Button savePreferences;
+    private Button rememberPassword; //Added on 7 - 3- 2019
     private Intent i;
     private SharedPreferences.Editor editPref; //Added on 4 - 4 - 2019
     private SharedPreferences pref;
@@ -42,12 +31,20 @@ public class WorkPreferences extends AppCompatActivity {
         setContentView(R.layout.activity_work_preferences);
         //dayPreference = (Spinner) findViewById(R.id.dayPreference);
         this.pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
-        alarmMinutesPreference = (EditText) findViewById(R.id.alarmMinutesPreference);
+        alarmMinutesPreference = (EditText) findViewById(R.id.AlarmMinutesPreference);
+        rememberPassword = (Button) findViewById(R.id.RememberPassword);
         //alarmMinutesPreference.setText(pref.getString("NEW_ALARM_TIME", ""));
         //newAlarmTime = alarmMinutesPreference.getText().toString();
         //Need to set *BEFORE* getting the pref string.
         String minutes = pref.getString("NEW_ALARM_TIME", "20");
         alarmMinutesPreference.setText(minutes);
+        rememberPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                editPref = pref.edit();
+                editPref.putBoolean("SAVE_PASSWORD", true);
+            }
+        });
         //alarmMinutesPreference.setText(newAlarmTime);
         //currentPassword = (EditText) findViewById(R.id.currentPassword);
         save = (Button) findViewById(R.id.save);
