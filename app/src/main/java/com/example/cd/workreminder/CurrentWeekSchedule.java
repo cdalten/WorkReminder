@@ -1580,7 +1580,6 @@ public class CurrentWeekSchedule extends ListActivity  {
                     pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
            */
 
-
             //newWorkHours.setCurrentPosition(currentPosition);
             //if (cal.get(Calendar.DAY_OF_WEEK) == getCurrentDay(weekPosition)) {
             //    intent.putExtra(getString(R.string.I_WORK_TODAY), newWorkHours.toString());

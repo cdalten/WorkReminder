@@ -1040,7 +1040,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                     getSchedule.loadUrl(
                             "javascript:var bld = document.getElementById('EmpID').style.color = 'red' " + ";"
                                     + "javascript:var x = document.getElementById('EmpID').value = " + name + ";"
-                                    + "javascript:var y = document.getElementById('Password').value = '' " + ";"
+                                    + "javascript:var y = document.getElementById('Password').value = ' ' " + ";"
                                     + "javascript:var z = document.getElementById('Password').style.display = 'none' " + ";"
 
                     );
