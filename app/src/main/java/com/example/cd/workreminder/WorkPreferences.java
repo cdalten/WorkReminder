@@ -38,15 +38,7 @@ public class WorkPreferences extends AppCompatActivity {
         //Need to set *BEFORE* getting the pref string.
         String minutes = pref.getString("NEW_ALARM_TIME", "20");
         alarmMinutesPreference.setText(minutes);
-        rememberPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                editPref = pref.edit();
-                editPref.putBoolean("SAVE_PASSWORD", true);
-                editPref.apply();
-                finish();
-            }
-        });
+
         //alarmMinutesPreference.setText(newAlarmTime);
         //currentPassword = (EditText) findViewById(R.id.currentPassword);
         save = (Button) findViewById(R.id.save);
@@ -54,7 +46,7 @@ public class WorkPreferences extends AppCompatActivity {
 
         i = getIntent();
 
-        editPref = pref.edit();
+        //editPref = pref.edit();
         //i.putExtra("SAVE_ALARM_MINUTES", alarmMinutesPreference.getText().toString());
 
         //editPref.putString("NEW_ALARM_MINUTES", "15");
@@ -62,39 +54,17 @@ public class WorkPreferences extends AppCompatActivity {
         //newAlarmTime = alarmMinutesPreference.getText().toString();
         //editPref.putString("UPDATED_ALARM_TIME", newAlarmTime);
         i.putExtra("NEW_ALARM_TIME", newAlarmTime);
-        editPref.putString("UPDATED_ALARM_TIME", alarmMinutesPreference.getText().toString()); //don't check for length
+        //editPref.putString("UPDATED_ALARM_TIME", alarmMinutesPreference.getText().toString()); //don't check for length
 
         //editPref = pref.edit();
         //editPref.putString("PASSWORD", currentPassword.getText().toString());
-        editPref.apply();
-
-
-        //ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-        //        R.array.day_Preference, android.R.layout.simple_spinner_item);
-        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //dayPreference.setAdapter(adapter);
-
-        //dayPreference.setSelection(i.getIntExtra("NEW_DOWNLOAD_DATE",
-        //        pref.getInt(getString(R.string.com_example_cd_shiftreminder_SAVED_DOWNLOAD_DATE),0)));
-        //dayPreference.setSelection(pref.getInt(getString(R.string.com_example_cd_shiftreminder_SAVED_DOWNLOAD_DATE),0));
-        /*dayPreference.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        //editPref.apply();
+        rememberPassword.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //editPref = pref.edit();
-                //i.putExtra("GET_NEW_DOWNLOAD_DATE", parent.getItemAtPosition(position).toString());
-                //editPref.putString(getString(R.string.com_example_cd_shiftreminder_SAVED_DOWNLOAD_DATE), i.getStringExtra("GET_NEW_DOWNLOAD_DATE"));
-                //editPref.putInt(getString(R.string.com_example_cd_shiftreminder_SAVED_DOWNLOAD_DATE),
-                //        getDownloadDate(position));
-                editPref.apply();
-                setResult(1, i);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+            public void onClick(View view) {
+                startActivity(new Intent(WorkPreferences.this, RememberMe.class));
             }
         });
-        */
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

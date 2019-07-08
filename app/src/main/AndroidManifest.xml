@@ -85,7 +85,7 @@
             </intent-filter>
         </receiver>
 
-
+        <activity android:name=".RememberMe"></activity>
     </application>
 
 </manifest>

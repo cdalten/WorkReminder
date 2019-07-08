@@ -894,7 +894,7 @@ public class CurrentWeekSchedule extends ListActivity  {
                     //}
                     //If I'm off, I check the next day. If I work at Midnight, set the alarm for the current day.
                         //If 12 AM, I want the slarm minutes before this time. In which case it becomes PM
-                    if (week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR).equals("12")) {
+                    /*if (week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR).equals("12")) {
                         if (week.get(position).get(WorkReaderContract.WorkEntry.START_AM_OR_PM).equals("AM") ) {
                              Log.e(PRODUCTION_TAG, "TODAY IS MIDNIGHT");
                             WorkNotification.notify(getContext(), days[position] +
@@ -919,7 +919,9 @@ public class CurrentWeekSchedule extends ListActivity  {
                                     0);
                         }
                         //If the hour starts at zero instead of one, make the clock show 12.
-                    } else if (pref.getInt("ALARM_HOUR", 0) == 0){
+                    }
+                    */
+                    if (pref.getInt("ALARM_HOUR", 0) == 0){
                         WorkNotification.notify(getContext(), week.get(position).get(0) + " " +
                                         //week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
                                         //pref.getInt("ALARM_HOUR", 0)

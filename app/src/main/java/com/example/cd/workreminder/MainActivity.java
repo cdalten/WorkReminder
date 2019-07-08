@@ -1036,12 +1036,25 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 );
                 */
 
-                if (pref.getBoolean("SAVE_PASSWORD", true) == true) {
+                //Default on initial installation
+                /*if (pref.getBoolean("SAVE_PASSWORD", false) == false){
+                    startActivity(new Intent(MainActivity.this, RememberMe.class));
                     getSchedule.loadUrl(
                             "javascript:var bld = document.getElementById('EmpID').style.color = 'red' " + ";"
-                                    + "javascript:var x = document.getElementById('EmpID').value = " + name + ";"
-                                    + "javascript:var y = document.getElementById('Password').value = ' ' " + ";"
-                                    + "javascript:var z = document.getElementById('Password').style.display = 'none' " + ";"
+                                    + "javascript:var x = document.getElementById('EmpID').value = " + pref.getString("NAME", "0")+ ";"
+                                    + "javascript:var y = document.getElementById('Password').value = " + pref.getString("PASSWORD", "\'\'") + ";"
+                            //+ "javascript:var z = document.getElementById('Password').style.display = 'none' " + ";"
+
+                    );
+                }
+                */
+                if (pref.getBoolean("SAVE_PASSWORD", false) == true) {
+                    String defaultName =  pref.getString("NAME", "0");
+                    String defaultPassword = pref.getString("PASSWORD", "\'\'");
+                    getSchedule.loadUrl(
+                            "javascript:var bld = document.getElementById('EmpID').style.color = 'red' " + ";"
+                                    + "javascript:var x = document.getElementById('EmpID').value = " + defaultName+ ";"
+                                    + "javascript:var y = document.getElementById('Password').value = " + defaultPassword + ";"
 
                     );
                 }
