@@ -39,7 +39,7 @@ public class WorkAlarmReceiver extends BroadcastReceiver {
         //c.setTimeInMillis(SystemClock.elapsedRealtime());
         //Log.e(PRODUCTION_TAG, "THE ALARM TIME IN MILLISECONDS IS: " + intent.getLongExtra("MILLISECONDS", 0));
         //Log.e(PRODUCTION_TAG, "THE SYSTEM TIME SECONDS IS: " + (int)((System.currentTimeMillis()/1000)%3600));
-        Log.e(PRODUCTION_TAG, "THE SYSTEM ELSAPSED TIME TIME IS: " + SystemClock.elapsedRealtime());
+        Log.e(PRODUCTION_TAG, "THE SYSTEM ELAPSED TIME TIME IS: " + SystemClock.elapsedRealtime());
         Log.e(PRODUCTION_TAG, "THE SYSTEM ALARM HOUR IS: " + c.get(Calendar.HOUR));
         Log.e(PRODUCTION_TAG, "THE SYSTEM ALARM MINUTES ARE: " + c.get(Calendar.MINUTE));
         Log.e(PRODUCTION_TAG, "THE ALARM HOUR is: " + pref.getInt("HOUR", 0));

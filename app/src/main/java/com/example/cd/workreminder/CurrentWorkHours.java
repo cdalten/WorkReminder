@@ -1,7 +1,9 @@
 package com.example.cd.workreminder;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.os.Build;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import java.text.DateFormat;
@@ -14,7 +16,9 @@ import java.util.concurrent.TimeUnit;
 
 import static java.util.Calendar.HOUR;
 
-public class CurrentWorkHours extends Date {
+
+//Changed from Date to app compat act on 7 - 11 - 2019
+public class CurrentWorkHours extends AppCompatActivity {
     //I don't use second because the clocks aren't that accurate.
     private final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm"); //Handle military time
     //private final SimpleDateFormat todayFormat = new SimpleDateFormat("dd");
@@ -41,62 +45,97 @@ public class CurrentWorkHours extends Date {
         //sdf.format(new Date());
     }
 
-    public CurrentWorkHours(long time) {
-        super(time);
-        //IStartIn.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
+
+    //Added on 7 - 10 - 2019
+    /*
+      * If the shift is either 1pm - 9pm or 9pm to - 2am does 9pm represent the start of end of the shift?
+     */
+    private boolean isstartHour(long startTimeInMilliseconds, long endTimeInMilliseconds) {
+        if (startTimeInMilliseconds < endTimeInMilliseconds) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     //Added on 10 - 22 - 2018. Changed to boolean on 11 - 1 - 2018
     //need to add end time
     //Change time in milliseconds to elapsed system phone time???
-    public boolean doIWorkToday(int startHour, int startMinute) {
-        //startMilitaryTime = convertToMilitaryTime(startHour + ":" + startMinute + "" + startAmOrPm);
-        //currentMilitaryTime = getCurrentTime(); //returns HH:mm in military time format. Convert to milliseconds??
-        //currentTimeInMilliseconds= System.currentTimeMillis();
-        //endMilitaryTime = convertToMilitaryTime(endTime);
-
-        //startTimeInMilliseconds = convertSystemTimeToMilliseconds(startMilitaryTime)
-
-
+    public boolean doIWorkToday(Context context, int startMilitaryHour, int startMilitaryMinute, int endMilitaryHour, int endMilitaryMinute) {
+        startTimeInMilliseconds = convertStartSystemTimeToMilliseconds(startMilitaryHour, startMilitaryMinute);
         currentTimeInMilliseconds = System.currentTimeMillis();
-        startTimeInMilliseconds = convertSystemTimeToMilliseconds(startHour, startMinute);
+        endTimeInMilliseconds = convertEndSystemTimeToMilliseconds(endMilitaryHour, endMilitaryMinute);
 
-        return doIStart(startTimeInMilliseconds, currentTimeInMilliseconds, endTimeInMilliseconds);
-
+        return doIStart(context, startTimeInMilliseconds, currentTimeInMilliseconds, endTimeInMilliseconds);
     }
 
     //Added on 10 - 25 - 2018
-    private boolean doIStart(long startTime, long currentTime, long endTime) {
+    private boolean doIStart(Context context, long startTime, long currentTime, long endTime) {
         long temp = startTime - currentTime;
         long end = 0;
         //Date start = new Date(temp);
-        if (currentTime < startTime) {
-            //Log.i(PRODUCTION_TAG, "You start in: " + this.getCurrentTime());
-            Log.i(PRODUCTION_TAG, "You have to be to the slave camp today.");
-            return true;
-        } else if (currentTime > endTime){ //bug. Need to account for midnight or change in date??
-            end = currentTime - endTime;
-            Log.i(PRODUCTION_TAG, "You're done for the day");
-            return false;
+        if (isstartHour(startTime, endTime)) { //1pm - 9pm              1pm < 9pm
+            if (currentTime < startTime) {
+                //Log.i(PRODUCTION_TAG, "You start in: " + this.getCurrentTime());
+                Log.i(PRODUCTION_TAG, "You have to be to the slave camp today(1).");
+                return true;
+            }
+
+            if (currentTime < endTime && currentTime < startTime) {
+                WorkNotification.notify(context, "YOU ARE SUPPOSED TO BE AT WORK.",
+                        0);
+                Log.i(PRODUCTION_TAG, "You're supposed to be at work(2)");
+                return true; //Supposed to be at work?
+            }
+
+            if (currentTime > endTime){
+                Log.i(PRODUCTION_TAG, "You're done for the day(1)");
+                return false;
+            }
+        } else { // 9pm - 2am       9pm > 2am
+            if (currentTime > endTime) { //currentTime > 2am
+                Log.i(PRODUCTION_TAG, "You're done for the day(2)");
+                return false;
+            }
+
+            if (currentTime < endTime && currentTime < startTime) {
+                WorkNotification.notify(context, "YOU ARE SUPPOSED TO BE AT WORK.",
+                        0);
+                Log.i(PRODUCTION_TAG, "You're supposed to be at work(2)");
+                return true; //Supposed to be at work?
+            }
+
+            if (currentTime < endTime) { //currentTme < 9pm
+                Log.i(PRODUCTION_TAG, "You have to be to slave camp today(2");
+                return true;
+            }
         }
+
         return false; //else case??
     }
 
     //Added on 2 - 25 - 2019
-    private long convertSystemTimeToMilliseconds(int currentHour, int currentMinute) {
+    private long convertStartSystemTimeToMilliseconds(int startMilitaryHour, int startMilitaryMinute) {
         Calendar mycalendar = Calendar.getInstance();
-        mycalendar.set(Calendar.HOUR_OF_DAY, currentHour);
-        mycalendar.set(Calendar.MINUTE, currentMinute);
+        mycalendar.set(Calendar.HOUR_OF_DAY, startMilitaryHour);
+        mycalendar.set(Calendar.MINUTE, startMilitaryMinute);
         mycalendar.set(Calendar.SECOND, 0);
 
         return mycalendar.getTimeInMillis();
         //return mycalendar.get(Calendar.MILLISECOND);
     }
 
-    //Added on 4 - 23 - 2019
-    public long getCurrentTimeInMilliseconds() {
-        return currentTimeInMilliseconds;
+    //Added on 7 - 10 - 2019
+    private long convertEndSystemTimeToMilliseconds(int endMilitaryHour, int endMilitaryMinute) {
+        Calendar mycalendar = Calendar.getInstance();
+        mycalendar.set(Calendar.HOUR_OF_DAY, endMilitaryHour);
+        mycalendar.set(Calendar.MINUTE, endMilitaryMinute);
+        mycalendar.set(Calendar.SECOND, 0);
+
+        return mycalendar.getTimeInMillis();
+        //return mycalendar.get(Calendar.MILLISECOND);
     }
+
 
 
     @Override

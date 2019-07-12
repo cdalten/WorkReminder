@@ -1,6 +1,8 @@
 package com.example.cd.workreminder;
 
+import android.annotation.TargetApi;
 import android.app.ListActivity;
+import android.content.Context;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
@@ -10,7 +12,8 @@ public class MilitaryTime extends FragmentActivity {
     private int startMilitaryHour = 0;
     private int endMilitaryHour = 0; //Need to convert back to string??
     private int startMilitaryMinute = 0;
-
+    private int endMilitaryMinute = 0;
+    Context context;
 
     private static MilitaryTime instance = new MilitaryTime();
 
@@ -22,9 +25,34 @@ public class MilitaryTime extends FragmentActivity {
     public static MilitaryTime getInstance(){
         return instance;
     }
-    public void convertCivilanTimeToMilitaryTime(String startHour, String startMinute, String startAmOrPm) {
+
+    //Added on 7 - 9 - 2019
+    @TargetApi(24)
+    public void convertEndCivilianTimeToMilitaryTime(String endHour, String endMinute, String endAmOrPm) {
+        if (endAmOrPm.equals("PM")) {
+            endMilitaryHour = Integer.parseInt(endHour);
+            endMilitaryMinute = Integer.parseInt(endMinute);
+            //setStartMilitaryHour(startMilitaryHour);
+            //setStartMilitaryMinute(Integer.parseInt(startMinute));
+        } else if (endAmOrPm.equals("AM") && endHour.equals("12")) {
+            endMilitaryHour = 24;
+            endMilitaryMinute = Integer.parseInt(endMinute);
+        }
+        else {
+            try {
+                endMilitaryHour = Integer.parseInt(endHour);
+                endMilitaryMinute = Integer.parseInt(endMinute);
+            } catch (Exception e) {
+                Log.e("LG_WORK_PHONE",  "BLANK: " + e);
+            }
+
+        }
+    }
+
+    @TargetApi(24)
+    public void convertStartCivilianTimeToMilitaryTime(String startHour, String startMinute, String startAmOrPm) {
         if (startAmOrPm.equals("PM")) {
-            startMilitaryHour = Integer.parseInt(startHour) +12;
+            startMilitaryHour = Integer.parseInt(startHour);
             startMilitaryMinute = Integer.parseInt(startMinute);
             //setStartMilitaryHour(startMilitaryHour);
             //setStartMilitaryMinute(Integer.parseInt(startMinute));
@@ -41,38 +69,34 @@ public class MilitaryTime extends FragmentActivity {
             }
 
         }
-
     }
 
     public int getStartMilitaryHour() {
         return this.startMilitaryHour;
     }
 
-
     public int getStartMilitaryMinute() {
         return this.startMilitaryMinute;
     }
 
+    //Added on 7 - 9 - 2019
+    public int getEndMilitaryHour() {
+        return this.endMilitaryHour;
+    }
+
+    public int getEndMilitaryMinute() {
+        return this.endMilitaryMinute;
+    }
+
     //Added on 10 - 18 - 2018. True if I work. False if I'm either done working or have the day off.
     public boolean getStartingHour(int startHour, int startMinute) {
-        //today = "12:30am - 3:30am"; //debugging only
-        //dateDebugMode(today);
 
-        /*if (startHour.equals("12")) {
-            if (startAmOrPm.equals("AM")) {
-                return true;
-            }
-        }
-        //Handle initial installation case. Do I need?
-        if (!Character.isDigit(startHour.charAt(0))) {
-            return false;
-        }
+        return currentWorkHours.doIWorkToday(context, startHour, startMinute, endMilitaryHour, endMilitaryMinute);
+    }
 
-        //Can I remove this test case??
-        if (startHour.equals("OFF")) { //2 --->6a or 6A
-            return false;
-        }*/
+    //Added on 7 - 10 - 2019
+    public boolean getHour(Context context, int startMilitaryHour, int startMilitaryMinute, int endMilitaryHour, int endMilitaryMinute) {
 
-        return currentWorkHours.doIWorkToday(startHour, startMinute);
+        return currentWorkHours.doIWorkToday(context, startMilitaryHour, startMilitaryMinute, endMilitaryHour, endMilitaryMinute);
     }
 }
