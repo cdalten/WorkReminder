@@ -70,7 +70,7 @@ public class CurrentWorkHours extends AppCompatActivity {
     }
 
     //Added on 10 - 25 - 2018
-    private boolean doIStart(Context context, long startTime, long currentTime, long endTime) {
+    protected boolean doIStart(Context context, long startTime, long currentTime, long endTime) {
         long temp = startTime - currentTime;
         long end = 0;
         //Date start = new Date(temp);

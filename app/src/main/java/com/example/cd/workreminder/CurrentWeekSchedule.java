@@ -877,7 +877,7 @@ public class CurrentWeekSchedule extends ListActivity  {
             text_end_hour.setWidth(0);
 
             //text_day.setMinHeight(0); // Min Height
-            //text_day.setMinimumHeight(0); // Min Height
+            //text_day.setMinTimumHeight(0); // Min Height
             //text_day.setHeight(120); // Height in pixels. Not dip?
 
             //text_day.setText(days[position]);

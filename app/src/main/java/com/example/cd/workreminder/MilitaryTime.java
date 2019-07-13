@@ -26,6 +26,7 @@ public class MilitaryTime extends FragmentActivity {
         return instance;
     }
 
+
     //Added on 7 - 9 - 2019
     @TargetApi(24)
     public void convertEndCivilianTimeToMilitaryTime(String endHour, String endMinute, String endAmOrPm) {
