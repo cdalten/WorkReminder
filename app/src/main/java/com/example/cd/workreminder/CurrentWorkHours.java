@@ -69,10 +69,10 @@ public class CurrentWorkHours extends AppCompatActivity {
         return doIStart(context, startTimeInMilliseconds, currentTimeInMilliseconds, endTimeInMilliseconds);
     }
 
+
+
     //Added on 10 - 25 - 2018
     protected boolean doIStart(Context context, long startTime, long currentTime, long endTime) {
-        long temp = startTime - currentTime;
-        long end = 0;
         //Date start = new Date(temp);
         if (isstartHour(startTime, endTime)) { //1pm - 9pm              1pm < 9pm
             if (currentTime < startTime) {
@@ -82,10 +82,8 @@ public class CurrentWorkHours extends AppCompatActivity {
             }
 
             if (currentTime < endTime && currentTime < startTime) {
-                WorkNotification.notify(context, "YOU ARE SUPPOSED TO BE AT WORK.",
-                        0);
-                Log.i(PRODUCTION_TAG, "You're supposed to be at work(2)");
-                return true; //Supposed to be at work?
+
+                return false; //Supposed to be at work?
             }
 
             if (currentTime > endTime){
@@ -95,20 +93,19 @@ public class CurrentWorkHours extends AppCompatActivity {
         } else { // 9pm - 2am       9pm > 2am
             if (currentTime > endTime) { //currentTime > 2am
                 Log.i(PRODUCTION_TAG, "You're done for the day(2)");
-                return false;
+                return true;
             }
 
             if (currentTime < endTime && currentTime < startTime) {
-                WorkNotification.notify(context, "YOU ARE SUPPOSED TO BE AT WORK.",
-                        0);
                 Log.i(PRODUCTION_TAG, "You're supposed to be at work(2)");
-                return true; //Supposed to be at work?
+                return false; //Supposed to be at work?
             }
 
-            if (currentTime < endTime) { //currentTme < 9pm
+            /*if (currentTime < endTime) { //currentTme < 9pm
                 Log.i(PRODUCTION_TAG, "You have to be to slave camp today(2");
                 return true;
             }
+            */
         }
 
         return false; //else case??
@@ -135,7 +132,6 @@ public class CurrentWorkHours extends AppCompatActivity {
         return mycalendar.getTimeInMillis();
         //return mycalendar.get(Calendar.MILLISECOND);
     }
-
 
 
     @Override

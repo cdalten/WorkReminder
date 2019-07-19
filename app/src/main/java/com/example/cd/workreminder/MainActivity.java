@@ -385,7 +385,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                     pref.getString(getString(R.string.SATURDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
             //intent.putExtra("SaturdayHours", saturdayWorkHours);
 
-            doIWorkToday();
+            //doIWorkToday();
 
             editor.apply();
 
@@ -517,7 +517,12 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 militaryTime.convertStartCivilianTimeToMilitaryTime(pref.getString(getString(R.string.SUNDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
                         pref.getString(getString(R.string.SUNDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
                         pref.getString(getString(R.string.SUNDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-                doIWorkToday = militaryTime.getStartingHour(militaryTime.getStartMilitaryHour(),
+                militaryTime.convertEndCivilianTimeToMilitaryTime(pref.getString(getString(R.string.SUNDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT),
+                        pref.getString(getString(R.string.SUNDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
+                        pref.getString(getString(R.string.SUNDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
+                doIWorkToday = militaryTime.getHour(MainActivity.this, militaryTime.getStartMilitaryHour() ,
+                        militaryTime.getStartMilitaryMinute(),
+                        militaryTime.getEndMilitaryHour(),
                         militaryTime.getStartMilitaryMinute());
                 //cal.set(DAY_THURSDAY, Calendar.THURSDAY);
                 //AlarmTimer.setAlarmTime(this, thursdayWorkHours.getStartMilitaryHour(),

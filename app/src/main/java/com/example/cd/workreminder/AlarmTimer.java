@@ -58,14 +58,14 @@ public class AlarmTimer extends AppCompatActivity {
 
         cal = Calendar.getInstance();
         cal.setTimeInMillis(System.currentTimeMillis());
-        cal.set(Calendar.HOUR_OF_DAY, newMilitaryHour);
+        cal.set(Calendar.HOUR, newMilitaryHour);
         //cal.set(Calendar.HOUR_OF_DAY, newMilitaryHour); //24 hour
         cal.set(Calendar.MINUTE, newMilitaryMinute);
 
         Log.e("LG_WORK_PHONE", "ALARM GOT CALLED");
         SharedPreferences.Editor editor = pref.edit();
-        editor.putInt("ALARM_HOUR", cal.get(Calendar.HOUR_OF_DAY)); //military
-       // editor.putInt("HOUR", cal.get(Calendar.HOUR_OF_DAY)); //military
+        editor.putInt("ALARM_HOUR", cal.get(Calendar.HOUR)); //military
+        editor.putInt("HOUR", cal.get(Calendar.HOUR_OF_DAY)); // gets passed to alarm receiver
         editor.putInt("MINUTES", cal.get(Calendar.MINUTE));
         editor.apply();
 

@@ -1,7 +1,9 @@
 package com.example.cd.workreminder;
 
 import android.app.Application;
-import android.content.Context;
+
+import android.icu.util.Calendar;
+
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,9 +48,20 @@ public class ExampleUnitTest {
 
     @Test
     public void doIStart_isCorrect() {
-        CurrentWorkHours currentWorkHours = new CurrentWorkHours();
-        //boolean result = currentWorkHours.doIStart(MainActivity.this, 1, 4, 5);
-        //boolean expected = true;
-        //assertEquals(expected, result)
+        Calendar cal = Calendar.getInstance();
+        int currentHour = cal.get(Calendar.HOUR);
+        int currentMinute = cal.get(Calendar.MINUTE);
+        int startHour = 12;
+        int startMinute = 0;
+        int endHour = 7;
+        int endMinute = 0;
+        if (cal.get(Calendar.AM_PM) == 0) {
+            assertTrue(startHour >= currentHour && currentHour < endHour);
+                //Log.e(PRODUCTION_TAG, "YOU'RE SUPPOSED TO BE AT WORK");
+            //} else if ((currentHour == endHour) && (currentMinute > startMinute)) {
+                //Log.e(PRODUCTION_TAG, "YOU'RE DONE FOR THE DAY");
+            //}
+
+        }
     }
 }
