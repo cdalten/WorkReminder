@@ -109,6 +109,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     private BroadcastReceiver WorkAlarmReceiver;
     private Handler handler = new Handler();
     private int progressStatus = 0;
+
+
     @SuppressLint("ClickableViewAccessibility")
     @TargetApi(19)
     @Override
@@ -155,11 +157,15 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         }).start();
 
 
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("android.intent.action.TIME_TICK");
+        //IntentFilter filter = new IntentFilter();
+        //filter.addAction("android.intent.action.TIME_TICK");
 
-        WorkAlarmReceiver = new WorkAlarmReceiver();
-        registerReceiver( WorkAlarmReceiver, filter);
+        //WorkAlarmReceiver = new WorkAlarmReceiver();
+        //registerReceiver( WorkAlarmReceiver, filter);
+
+
+        //setCurrentAlarm();
+
 
         //offline = (TextView)findViewById(R.id.offline);
         //offlineUpdate = (Button) findViewById(R.id.offlineUpdate);
@@ -456,6 +462,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         */
 
     }
+
+
 
 
     @Override

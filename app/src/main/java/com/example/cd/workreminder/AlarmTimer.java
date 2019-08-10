@@ -69,36 +69,7 @@ public class AlarmTimer extends AppCompatActivity {
         editor.putInt("MINUTES", cal.get(Calendar.MINUTE));
         editor.apply();
 
-        /*cal = Calendar.getInstance();
-        cal.setTimeInMillis(System.currentTimeMillis());
-        cal.set(Calendar.HOUR_OF_DAY, newMilitaryHour);
-        cal.set(Calendar.MINUTE, newMilitaryMinute);
-        */
 
-        //This part doesn't quite work. I *think* I need to get the URI??
-        //Log.e("LG_WORK PHONE: ", "CAL MILLSECONDS ARE: " + cal.getTimeInMillis());
-        //Log.e("LG_WORK PHONE: ", "SYSTEM MILLSECONDS ARE: " + System.currentTimeMillis());
-        //if (cal.getTimeInMillis() == System.currentTimeMillis()) {
-        /*Log.e("LG_WORK_PHONE", "ALARM GOT CALLED");
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(AlarmTimer.this, WorkAlarmReceiver.class);
-        intent.putExtra("HOUR_OF_DAY", cal.get(Calendar.HOUR_OF_DAY));
-        //intent.putExtra("MINUTE", (cal.get(Calendar.MINUTE) - timeBeforeShift));
-        intent.putExtra("MINUTE", newMilitaryMinute);
-        intent.putExtra("MILLISECONDS", cal.getTimeInMillis());
-
-
-        startActivity(intent);
-        //context.sendBroadcast(intent);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-        //alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
-        //        AlarmManager.INTERVAL_DAY, pendingIntent);
-        //if (true) {
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
-                1000 * 60 * 20, pendingIntent);
-        //}
-        //}
-        */
     }//setAlarmTime
 
     public int getMilitaryMinute() {

@@ -1,10 +1,15 @@
 package com.example.cd.workreminder;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.ListActivity;
 import android.content.Context;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 //Because I don't have the time nor patience to install the new fangled library the device emulator.
 //Maybe they shouldn't fucking dep. shit?
@@ -30,8 +35,25 @@ public class MilitaryTime extends FragmentActivity {
     //Added on 7 - 9 - 2019
     @TargetApi(24)
     public void convertEndCivilianTimeToMilitaryTime(String endHour, String endMinute, String endAmOrPm) {
-        if (endAmOrPm.equals("PM")) {
-            endMilitaryHour = Integer.parseInt(endHour);
+        String timeFormat = endHour + " " + endMinute  + " " + endAmOrPm;
+        DateFormat df = new SimpleDateFormat("hh mm aa");
+        //String militaryTime = null;
+        Date date = null;
+        try {
+            date = df.parse(timeFormat);
+        } catch (Exception e) {
+            //pass
+
+        }
+
+        String time[] = date.toString().split(" ");
+        String newTime[] = time[3].split(":");
+        endMilitaryHour = Integer.parseInt(newTime[0]);
+        endMilitaryMinute = Integer.parseInt(newTime[1]);
+
+
+        /*if (endAmOrPm.equals("PM") && !endHour.equals("12")) {
+            endMilitaryHour = Integer.parseInt(endHour) + 12;
             endMilitaryMinute = Integer.parseInt(endMinute);
             //setStartMilitaryHour(startMilitaryHour);
             //setStartMilitaryMinute(Integer.parseInt(startMinute));
@@ -48,12 +70,29 @@ public class MilitaryTime extends FragmentActivity {
             }
 
         }
+        */
     }
 
     @TargetApi(24)
     public void convertStartCivilianTimeToMilitaryTime(String startHour, String startMinute, String startAmOrPm) {
-        if (startAmOrPm.equals("PM")) {
-            startMilitaryHour = Integer.parseInt(startHour);
+        String timeFormat = startHour + " " + startMinute  + " " + startAmOrPm;
+        DateFormat df = new SimpleDateFormat("hh mm aa");
+        //String militaryTime = null;
+        Date date = null;
+        try {
+            date = df.parse(timeFormat);
+        } catch (Exception e) {
+            //pass
+
+        }
+
+        String time[] = date.toString().split(" ");
+        String newTime[] = time[3].split(":");
+        startMilitaryHour = Integer.parseInt(newTime[0]);
+        startMilitaryMinute = Integer.parseInt(newTime[1]);
+
+        /*if (startAmOrPm.equals("PM") && !startHour.equals("12")) {
+            startMilitaryHour = Integer.parseInt(startHour) + 12;
             startMilitaryMinute = Integer.parseInt(startMinute);
             //setStartMilitaryHour(startMilitaryHour);
             //setStartMilitaryMinute(Integer.parseInt(startMinute));
@@ -70,6 +109,7 @@ public class MilitaryTime extends FragmentActivity {
             }
 
         }
+        */
     }
 
     public int getStartMilitaryHour() {

@@ -45,8 +45,8 @@ public class WorkAlarmReceiver extends BroadcastReceiver {
         Log.e(PRODUCTION_TAG, "THE ALARM HOUR is: " + pref.getInt("HOUR", 0));
         Log.e(PRODUCTION_TAG, "THE ALARM MINUTES ARE: " + pref.getInt("MINUTES", 0));
         //if (intent.getIntExtra("MINUTE", 0) == cal.get(Calendar.MINUTE)) {
-        if ( pref.getInt("MINUTES", 0) == c.get(Calendar.MINUTE)
-                && pref.getInt("HOUR", 0) == c.get(Calendar.HOUR)) {
+        //if ( pref.getInt("MINUTES", 0) == c.get(Calendar.MINUTE)
+        //        && pref.getInt("HOUR", 0) == c.get(Calendar.HOUR)) {
             Log.e(PRODUCTION_TAG, "ALARM RINGER GOT CALLED");
             Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
             if (alarmUri == null) {
@@ -66,5 +66,5 @@ public class WorkAlarmReceiver extends BroadcastReceiver {
 
             ringtone.play();
         }
-    }
+    //}
 }

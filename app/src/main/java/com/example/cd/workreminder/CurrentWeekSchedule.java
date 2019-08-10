@@ -1,7 +1,9 @@
 package com.example.cd.workreminder;
 
 import android.annotation.TargetApi;
+import android.app.AlarmManager;
 import android.app.ListActivity;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -21,6 +23,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -67,6 +70,8 @@ public class CurrentWeekSchedule extends ListActivity  {
     private WorkAlarmReceiver workAlarmReceiver; //Added on 5 - 22 - 2019
     SharedPreferences pref;
 
+    private AlarmManager alarmMgr; //Added on 8 - 4 - 2019
+    private PendingIntent alarmIntent; //Added on 8 - 4 - 2019
 
     //Need to eventually remove
     private String[] days = {"SATURDAY", "SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"}; //Added on 2 - 10 - 2019
@@ -90,9 +95,9 @@ public class CurrentWeekSchedule extends ListActivity  {
         list = getListView();
         i = new Intent(CurrentWeekSchedule.this, HourFormat.class);
 
-        IntentFilter intentFilter = new IntentFilter();
-        workAlarmReceiver = new WorkAlarmReceiver();
-        registerReceiver(workAlarmReceiver, intentFilter);
+        //IntentFilter intentFilter = new IntentFilter();
+        //workAlarmReceiver = new WorkAlarmReceiver();
+        //registerReceiver(workAlarmReceiver, intentFilter);
         workSettings = (Button) findViewById(R.id.workSettings);
         logout = (Button) findViewById(R.id.logout);
 
@@ -987,7 +992,6 @@ public class CurrentWeekSchedule extends ListActivity  {
         Calendar cal = Calendar.getInstance();
         MilitaryTime militaryTime = MilitaryTime.getInstance();
         AlarmTimer alarmTimer = AlarmTimer.getInstance();
-        boolean amIdone = false;
 
         CurrentWorkHours currentWorkHours = new CurrentWorkHours();
         if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.SUNDAY) {
@@ -996,51 +1000,32 @@ public class CurrentWeekSchedule extends ListActivity  {
                 int currentHour = cal.get(Calendar.HOUR);
                 int currentMinute = cal.get(Calendar.MINUTE);
 
-                int startHour = Integer.parseInt(pref.getString(getString(R.string.SUNDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
-                int startMinute = Integer.parseInt(pref.getString(getString(R.string.SUNDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
-                int endHour = Integer.parseInt(pref.getString(getString(R.string.SUNDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
-                int endMinute  = Integer.parseInt(pref.getString(getString(R.string.SUNDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
-
                 militaryTime.convertStartCivilianTimeToMilitaryTime(pref.getString(getString(R.string.SUNDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
                         pref.getString(getString(R.string.SUNDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
                         pref.getString(getString(R.string.SUNDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
+                militaryTime.convertEndCivilianTimeToMilitaryTime(pref.getString(getString(R.string.SUNDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT),
+                        pref.getString(getString(R.string.SUNDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
+                        pref.getString(getString(R.string.SUNDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
                 alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
                         pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
-                //handle something like 12am to 9am
-                //am to am
-                if (cal.get(Calendar.AM_PM) == 0) {
-                    //previous day
-                    if (startHour == 12) {
-                        WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
-                                0);
-                    }
 
-                    //7am is greater than 6am
-                    if (currentHour > startHour) {
+                if (currentHour > militaryTime.getStartMilitaryHour() && currentHour < militaryTime.getEndMilitaryHour()) {
+                    WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
+                            0);
+                } else if (currentHour == militaryTime.getStartMilitaryHour()) {
+                    setCurrentAlarm(militaryTime.getStartMilitaryHour(), militaryTime.getEndMilitaryMinute());
+                    if (currentMinute > militaryTime.getStartMilitaryMinute()) {
                         WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
                                 0);
-                        Log.e(PRODUCTION_TAG, "YOU'RE SUPPOSED TO BE AT WORK");
-                    } else if ((currentHour == endHour) && (currentMinute > startMinute)) {
-                        Log.e(PRODUCTION_TAG, "YOU'RE DONE FOR THE DAY");
                     }
-                    //pm to pm
-                } else { //handle something like 6am to 2pm
-                    //1pm is less than 2pm
-                    if (currentHour < endHour) {
+                } else if (currentHour == militaryTime.getEndMilitaryHour()) {
+                    if (currentMinute < militaryTime.getEndMilitaryMinute()) {
                         WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
                                 0);
                     }
                 }
 
-
-            }
-
-            //next day?
-            /*if (week.get(WorkReaderContract.WorkEntry.WEDNESDAY).get(1).equals("12")
-                    && week.get(WorkReaderContract.WorkEntry.WEDNESDAY).get(3).equals("AM"))
-            {
-            */
-            else if (pref.getString(getString(R.string.MONDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT).equals("12")
+            } else if (pref.getString(getString(R.string.MONDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT).equals("12")
                     && pref.getString(getString(R.string.MONDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT).equals("AM")) {
 
                 militaryTime.convertStartCivilianTimeToMilitaryTime(pref.getString(getString(R.string.MONDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
@@ -1063,51 +1048,33 @@ public class CurrentWeekSchedule extends ListActivity  {
                 int currentHour = cal.get(Calendar.HOUR);
                 int currentMinute = cal.get(Calendar.MINUTE);
 
-                int startHour = Integer.parseInt(pref.getString(getString(R.string.MONDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
-                int startMinute = Integer.parseInt(pref.getString(getString(R.string.MONDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
-                int endHour = Integer.parseInt(pref.getString(getString(R.string.MONDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
-                int endMinute  = Integer.parseInt(pref.getString(getString(R.string.MONDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
-
                 militaryTime.convertStartCivilianTimeToMilitaryTime(pref.getString(getString(R.string.MONDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
                         pref.getString(getString(R.string.MONDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
                         pref.getString(getString(R.string.MONDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
+                militaryTime.convertEndCivilianTimeToMilitaryTime(pref.getString(getString(R.string.MONDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT),
+                        pref.getString(getString(R.string.MONDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
+                        pref.getString(getString(R.string.MONDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
                 alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
                         pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
-                //handle something like 12am to 9am
-                //am to am
-                if (cal.get(Calendar.AM_PM) == 0) {
-                    //previous day
-                    if (startHour == 12) {
-                        WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
-                                0);
-                    }
 
-                    //7am is greater than 6am
-                    if (currentHour > startHour) {
+
+                if (currentHour > militaryTime.getStartMilitaryHour() && currentHour < militaryTime.getEndMilitaryHour()) {
+                    WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
+                            0);
+                } else if (currentHour == militaryTime.getStartMilitaryHour()) {
+                    setCurrentAlarm(militaryTime.getStartMilitaryHour(), militaryTime.getEndMilitaryMinute());
+                    if (currentMinute > militaryTime.getStartMilitaryMinute()) {
                         WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
                                 0);
-                        Log.e(PRODUCTION_TAG, "YOU'RE SUPPOSED TO BE AT WORK");
-                    } else if ((currentHour == endHour) && (currentMinute > startMinute)) {
-                        Log.e(PRODUCTION_TAG, "YOU'RE DONE FOR THE DAY");
                     }
-                    //pm to pm
-                } else { //handle something like 6am to 2pm
-                    //1pm is less than 2pm
-                    if (currentHour < endHour) {
+                } else if (currentHour == militaryTime.getEndMilitaryHour()) {
+                    if (currentMinute < militaryTime.getEndMilitaryMinute()) {
                         WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
                                 0);
                     }
                 }
 
-
-            }
-
-            //next day?
-            /*if (week.get(WorkReaderContract.WorkEntry.WEDNESDAY).get(1).equals("12")
-                    && week.get(WorkReaderContract.WorkEntry.WEDNESDAY).get(3).equals("AM"))
-            {
-            */
-            else if (pref.getString(getString(R.string.TUESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT).equals("12")
+            } else if (pref.getString(getString(R.string.TUESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT).equals("12")
                     && pref.getString(getString(R.string.TUESDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT).equals("AM")) {
 
                 militaryTime.convertStartCivilianTimeToMilitaryTime(pref.getString(getString(R.string.TUESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
@@ -1128,54 +1095,37 @@ public class CurrentWeekSchedule extends ListActivity  {
 
             //if(!week.get(position).get(0).equals("OFF")) {
             if (!(pref.getString(getString(R.string.TUESDAY), "OFF").equals("OFF"))) {
-                int currentHour = cal.get(Calendar.HOUR);
+                //int currentHour = cal.get(Calendar.HOUR);
+                int currentHour = cal.get(Calendar.HOUR_OF_DAY);
                 int currentMinute = cal.get(Calendar.MINUTE);
-
-                int startHour = Integer.parseInt(pref.getString(getString(R.string.TUESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
-                int startMinute = Integer.parseInt(pref.getString(getString(R.string.TUESDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
-                int endHour = Integer.parseInt(pref.getString(getString(R.string.TUESDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
-                int endMinute  = Integer.parseInt(pref.getString(getString(R.string.TUESDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
 
                 militaryTime.convertStartCivilianTimeToMilitaryTime(pref.getString(getString(R.string.TUESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
                         pref.getString(getString(R.string.TUESDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
                         pref.getString(getString(R.string.TUESDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
+                militaryTime.convertEndCivilianTimeToMilitaryTime(pref.getString(getString(R.string.TUESDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT),
+                        pref.getString(getString(R.string.TUESDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
+                        pref.getString(getString(R.string.TUESDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
                 alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
                         pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
-                //handle something like 12am to 9am
-                //am to am
-                if (cal.get(Calendar.AM_PM) == 0) {
-                    //previous day
-                    if (startHour == 12) {
-                        WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
-                                0);
-                    }
 
-                    //7am is greater than 6am
-                    if (currentHour > startHour) {
+                if (currentHour > militaryTime.getStartMilitaryHour() && currentHour < militaryTime.getEndMilitaryHour()) {
+                    WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
+                            0);
+                } else if (currentHour == militaryTime.getStartMilitaryHour()) {
+                    setCurrentAlarm(militaryTime.getStartMilitaryHour(), militaryTime.getEndMilitaryMinute());
+                    if (currentMinute > militaryTime.getStartMilitaryMinute()) {
                         WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
                                 0);
-                        Log.e(PRODUCTION_TAG, "YOU'RE SUPPOSED TO BE AT WORK");
-                    } else if ((currentHour == endHour) && (currentMinute > startMinute)) {
-                        Log.e(PRODUCTION_TAG, "YOU'RE DONE FOR THE DAY");
                     }
-                //pm to pm
-                } else { //handle something like 6am to 2pm
-                    //1pm is less than 2pm
-                    if (currentHour < endHour) {
+                } else if (currentHour == militaryTime.getEndMilitaryHour()) {
+                    if (currentMinute < militaryTime.getEndMilitaryMinute()) {
                         WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
                                 0);
                     }
                 }
 
 
-            }
-
-            //next day?
-            /*if (week.get(WorkReaderContract.WorkEntry.WEDNESDAY).get(1).equals("12")
-                    && week.get(WorkReaderContract.WorkEntry.WEDNESDAY).get(3).equals("AM"))
-            {
-            */
-            else if (pref.getString(getString(R.string.WEDNESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT).equals("12")
+            } else if (pref.getString(getString(R.string.WEDNESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT).equals("12")
                     && pref.getString(getString(R.string.WEDNESDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT).equals("AM")) {
 
                 militaryTime.convertStartCivilianTimeToMilitaryTime(pref.getString(getString(R.string.WEDNESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
@@ -1197,54 +1147,32 @@ public class CurrentWeekSchedule extends ListActivity  {
                 int currentHour = cal.get(Calendar.HOUR);
                 int currentMinute = cal.get(Calendar.MINUTE);
 
-                int startHour = Integer.parseInt(pref.getString(getString(R.string.WEDNESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
-                int startMinute = Integer.parseInt(pref.getString(getString(R.string.WEDNESDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
-                int endHour = Integer.parseInt(pref.getString(getString(R.string.WEDNESDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
-                int endMinute  = Integer.parseInt(pref.getString(getString(R.string.WEDNESDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
-
                 militaryTime.convertStartCivilianTimeToMilitaryTime(pref.getString(getString(R.string.WEDNESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
                         pref.getString(getString(R.string.WEDNESDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
                         pref.getString(getString(R.string.WEDNESDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
+                militaryTime.convertEndCivilianTimeToMilitaryTime(pref.getString(getString(R.string.WEDNESDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT),
+                        pref.getString(getString(R.string.WEDNESDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
+                        pref.getString(getString(R.string.WEDNESDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
                 alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
                         pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
-                //handle something like 12am to 9am
-                //am to am
-                if (cal.get(Calendar.AM_PM) == 0) {
 
-                    //previous day
-                    if (startHour == 12) {
+                if (currentHour > militaryTime.getStartMilitaryHour() && currentHour < militaryTime.getEndMilitaryHour()) {
+                    WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
+                            0);
+                } else if (currentHour == militaryTime.getStartMilitaryHour()) {
+                    setCurrentAlarm(militaryTime.getStartMilitaryHour(), militaryTime.getEndMilitaryMinute());
+                    if (currentMinute > militaryTime.getStartMilitaryMinute()) {
                         WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
                                 0);
                     }
-
-                    //7am is greater than 6am
-                    if (currentHour > startHour) {
-                        WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
-                                0);
-                        Log.e(PRODUCTION_TAG, "YOU'RE SUPPOSED TO BE AT WORK");
-                    } else if ((currentHour == endHour) && (currentMinute > startMinute)) {
-                        Log.e(PRODUCTION_TAG, "YOU'RE DONE FOR THE DAY");
-                    }
-
-
-                    //pm to pm
-                } else { //handle something like 6am to 2pm
-                    //1pm is less than 2pm
-                    if (currentHour < endHour) {
+                } else if (currentHour == militaryTime.getEndMilitaryHour()) {
+                    if (currentMinute < militaryTime.getEndMilitaryMinute()) {
                         WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
                                 0);
                     }
                 }
 
-
-            }
-
-            //next day?
-            /*if (week.get(WorkReaderContract.WorkEntry.WEDNESDAY).get(1).equals("12")
-                    && week.get(WorkReaderContract.WorkEntry.WEDNESDAY).get(3).equals("AM"))
-            {
-            */
-            else if (pref.getString(getString(R.string.THURSDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT).equals("12")
+            } else if (pref.getString(getString(R.string.THURSDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT).equals("12")
                     && pref.getString(getString(R.string.THURSDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT).equals("AM")) {
 
                 militaryTime.convertStartCivilianTimeToMilitaryTime(pref.getString(getString(R.string.THURSDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
@@ -1267,51 +1195,19 @@ public class CurrentWeekSchedule extends ListActivity  {
                 int currentHour = cal.get(Calendar.HOUR);
                 int currentMinute = cal.get(Calendar.MINUTE);
 
-                int startHour = Integer.parseInt(pref.getString(getString(R.string.THURSDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
-                int startMinute = Integer.parseInt(pref.getString(getString(R.string.THURSDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
-                int endHour = Integer.parseInt(pref.getString(getString(R.string.THURSDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
-                int endMinute  = Integer.parseInt(pref.getString(getString(R.string.THURSDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
 
                 militaryTime.convertStartCivilianTimeToMilitaryTime(pref.getString(getString(R.string.THURSDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
                         pref.getString(getString(R.string.THURSDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
                         pref.getString(getString(R.string.THURSDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
+                militaryTime.convertEndCivilianTimeToMilitaryTime(pref.getString(getString(R.string.THURSDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT),
+                        pref.getString(getString(R.string.THURSDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
+                        pref.getString(getString(R.string.THURSDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
                 alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
                         pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
                 //handle something like 12am to 9am
                 //am to am
-                if (cal.get(Calendar.AM_PM) == 0) {
-                    //previous day
-                    if (startHour == 12) {
-                        WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
-                                0);
-                    }
 
-                    //7am is greater than 6am
-                    if (currentHour > startHour) {
-                        WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
-                                0);
-                        Log.e(PRODUCTION_TAG, "YOU'RE SUPPOSED TO BE AT WORK");
-                    } else if ((currentHour == endHour) && (currentMinute > startMinute)) {
-                        Log.e(PRODUCTION_TAG, "YOU'RE DONE FOR THE DAY");
-                    }
-                    //pm to pm
-                } else { //handle something like 6am to 2pm
-                    //1pm is less than 2pm
-                    if (currentHour < endHour) {
-                        WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
-                                0);
-                    }
-                }
-
-
-            }
-
-            //next day?
-            /*if (week.get(WorkReaderContract.WorkEntry.WEDNESDAY).get(1).equals("12")
-                    && week.get(WorkReaderContract.WorkEntry.WEDNESDAY).get(3).equals("AM"))
-            {
-            */
-            else if (pref.getString(getString(R.string.FRIDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT).equals("12")
+            } else if (pref.getString(getString(R.string.FRIDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT).equals("12")
                     && pref.getString(getString(R.string.FRIDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT).equals("AM")) {
 
                 militaryTime.convertStartCivilianTimeToMilitaryTime(pref.getString(getString(R.string.FRIDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
@@ -1334,50 +1230,35 @@ public class CurrentWeekSchedule extends ListActivity  {
                 int currentHour = cal.get(Calendar.HOUR);
                 int currentMinute = cal.get(Calendar.MINUTE);
 
-                int startHour = Integer.parseInt(pref.getString(getString(R.string.FRIDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
-                int startMinute = Integer.parseInt(pref.getString(getString(R.string.FRIDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
-                int endHour = Integer.parseInt(pref.getString(getString(R.string.FRIDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
-                int endMinute  = Integer.parseInt(pref.getString(getString(R.string.FRIDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
 
                 militaryTime.convertStartCivilianTimeToMilitaryTime(pref.getString(getString(R.string.FRIDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
                         pref.getString(getString(R.string.FRIDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
                         pref.getString(getString(R.string.FRIDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
+                militaryTime.convertEndCivilianTimeToMilitaryTime(pref.getString(getString(R.string.FRIDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT),
+                        pref.getString(getString(R.string.FRIDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
+                        pref.getString(getString(R.string.FRIDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
                 alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
                         pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
-                //handle something like 12am to 9am
-                //am to am
-                if (cal.get(Calendar.AM_PM) == 0) {
-                    //previous day
-                    if (startHour == 12) {
-                        WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
-                                0);
-                    }
 
-                    //7am is greater than 6am
-                    if (currentHour > startHour) {
+
+                if (currentHour > militaryTime.getStartMilitaryHour() && currentHour < militaryTime.getEndMilitaryHour()) {
+                    WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
+                            0);
+                } else if (currentHour == militaryTime.getStartMilitaryHour()) {
+                    setCurrentAlarm(militaryTime.getStartMilitaryHour(), militaryTime.getEndMilitaryMinute());
+                    if (currentMinute > militaryTime.getStartMilitaryMinute()) {
                         WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
                                 0);
-                        Log.e(PRODUCTION_TAG, "YOU'RE SUPPOSED TO BE AT WORK");
-                    } else if ((currentHour == endHour) && (currentMinute > startMinute)) {
-                        Log.e(PRODUCTION_TAG, "YOU'RE DONE FOR THE DAY");
                     }
-                    //pm to pm
-                } else { //handle something like 6am to 2pm
-                    //1pm is less than 2pm
-                    if (currentHour < endHour) {
+                } else if (currentHour == militaryTime.getEndMilitaryHour()) {
+                    if (currentMinute < militaryTime.getEndMilitaryMinute()) {
                         WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
                                 0);
                     }
                 }
 
-
             }
 
-            //next day?
-            /*if (week.get(WorkReaderContract.WorkEntry.WEDNESDAY).get(1).equals("12")
-                    && week.get(WorkReaderContract.WorkEntry.WEDNESDAY).get(3).equals("AM"))
-            {
-            */
             else if (pref.getString(getString(R.string.SATURDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT).equals("12")
                     && pref.getString(getString(R.string.SATURDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT).equals("AM")) {
 
@@ -1402,37 +1283,33 @@ public class CurrentWeekSchedule extends ListActivity  {
                 int currentHour = cal.get(Calendar.HOUR);
                 int currentMinute = cal.get(Calendar.MINUTE);
 
-                int startHour = Integer.parseInt(pref.getString(getString(R.string.SATURDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
+                /*int startHour = Integer.parseInt(pref.getString(getString(R.string.SATURDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
                 int startMinute = Integer.parseInt(pref.getString(getString(R.string.SATURDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
                 int endHour = Integer.parseInt(pref.getString(getString(R.string.SATURDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
                 int endMinute  = Integer.parseInt(pref.getString(getString(R.string.SATURDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
+                */
 
                 militaryTime.convertStartCivilianTimeToMilitaryTime(pref.getString(getString(R.string.SATURDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
                         pref.getString(getString(R.string.SATURDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
                         pref.getString(getString(R.string.SATURDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
+                militaryTime.convertEndCivilianTimeToMilitaryTime(pref.getString(getString(R.string.SATURDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT),
+                        pref.getString(getString(R.string.SATURDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
+                        pref.getString(getString(R.string.SATURDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
                 alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
                         pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
                 //handle something like 12am to 9am
                 //am to am
-                if (cal.get(Calendar.AM_PM) == 0) {
-                    //previous day
-                    if (startHour == 12) {
+                if (currentHour > militaryTime.getStartMilitaryHour() && currentHour < militaryTime.getEndMilitaryHour()) {
+                    WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
+                            0);
+                } else if (currentHour == militaryTime.getStartMilitaryHour()) {
+                    setCurrentAlarm(militaryTime.getStartMilitaryHour(), militaryTime.getEndMilitaryMinute());
+                    if (currentMinute > militaryTime.getStartMilitaryMinute()) {
                         WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
                                 0);
                     }
-
-                    //7am is greater than 6am
-                    if (currentHour > startHour) {
-                        WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
-                                0);
-                        Log.e(PRODUCTION_TAG, "YOU'RE SUPPOSED TO BE AT WORK");
-                    } else if ((currentHour == endHour) && (currentMinute > startMinute)) {
-                        Log.e(PRODUCTION_TAG, "YOU'RE DONE FOR THE DAY");
-                    }
-                    //pm to pm
-                } else { //handle something like 6am to 2pm
-                    //1pm is less than 2pm
-                    if (currentHour < endHour) {
+                } else if (currentHour == militaryTime.getEndMilitaryHour()) {
+                    if (currentMinute < militaryTime.getEndMilitaryMinute()) {
                         WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
                                 0);
                     }
@@ -1441,11 +1318,6 @@ public class CurrentWeekSchedule extends ListActivity  {
 
             }
 
-            //next day?
-            /*if (week.get(WorkReaderContract.WorkEntry.WEDNESDAY).get(1).equals("12")
-                    && week.get(WorkReaderContract.WorkEntry.WEDNESDAY).get(3).equals("AM"))
-            {
-            */
             else if (pref.getString(getString(R.string.SUNDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT).equals("12")
                     && pref.getString(getString(R.string.SUNDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT).equals("AM")) {
 
@@ -1464,49 +1336,26 @@ public class CurrentWeekSchedule extends ListActivity  {
 
         }
     }
-    @TargetApi(24)
-    //Added on 6 - 26 - 2019
-    private void getNewSundayHours() {
-        if (WorkReaderContract.WorkEntry.updateSchesdule == true) {
-            /*(week.get(WorkReaderContract.WorkEntry.SUNDAY).add(0,
-                    pref.getString(getString(R.string.SUNDAY), getString(R.string.SUNDAY)));
-            week.get(WorkReaderContract.WorkEntry.SUNDAY)
-                    .add(WorkReaderContract.WorkEntry.START_HOUR,
-                            pref.getString(getString(R.string.SUNDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
-            week.get(WorkReaderContract.WorkEntry.SUNDAY)
-                    .add(WorkReaderContract.WorkEntry.START_MINUTE,
-                            pref.getString(getString(R.string.SUNDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
-            week.get(WorkReaderContract.WorkEntry.SUNDAY)
-                    .add(WorkReaderContract.WorkEntry.START_AM_OR_PM,
-                            pref.getString(getString(R.string.SUNDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-            week.get(WorkReaderContract.WorkEntry.SUNDAY)
-                    .add(WorkReaderContract.WorkEntry.END_HOUR,
-                            pref.getString(getString(R.string.SUNDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
-            week.get(WorkReaderContract.WorkEntry.SUNDAY)
-                    .add(WorkReaderContract.WorkEntry.END_MINUTE,
-                            pref.getString(getString(R.string.SUNDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
-            week.get(WorkReaderContract.WorkEntry.SUNDAY)
-                    .add(WorkReaderContract.WorkEntry.END_AM_OR_PM,
-                            pref.getString(getString(R.string.SUNDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
-            */
 
-            week.get(WorkReaderContract.WorkEntry.SUNDAY).add(0,
-                    pref.getString(getString(R.string.SUNDAY), getString(R.string.SUNDAY)));
-            week.get(WorkReaderContract.WorkEntry.SUNDAY)
-                    .add(WorkReaderContract.WorkEntry.START_HOUR, "5");
-            week.get(WorkReaderContract.WorkEntry.SUNDAY)
-                    .add(WorkReaderContract.WorkEntry.START_MINUTE, "0");
-            week.get(WorkReaderContract.WorkEntry.SUNDAY)
-                    .add(WorkReaderContract.WorkEntry.START_AM_OR_PM, "AM");
-            week.get(WorkReaderContract.WorkEntry.SUNDAY)
-                    .add(WorkReaderContract.WorkEntry.END_HOUR, "9");
-            week.get(WorkReaderContract.WorkEntry.SUNDAY)
-                    .add(WorkReaderContract.WorkEntry.END_MINUTE, "0");
-            week.get(WorkReaderContract.WorkEntry.SUNDAY)
-                    .add(WorkReaderContract.WorkEntry.END_AM_OR_PM, "AM");
-        }
-        //update old Sunday hours with new Sunday Hours
+    //Added on 8 - 4 - 2019
+    @TargetApi(24)
+    private void setCurrentAlarm(int startMilitaryHour, int startMilitaryMinute) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, startMilitaryHour);
+        calendar.set(Calendar.MINUTE, startMilitaryMinute);
+        Log.e(PRODUCTION_TAG, "CURRENT MILITARY HOUR IS: " + startMilitaryHour);
+        Log.e(PRODUCTION_TAG,"SET CURRENT ALARM GOT CALLED");
+        alarmMgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(CurrentWeekSchedule.this, WorkAlarmReceiver.class);
+        alarmIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+// With setInexactRepeating(), you have to use one of the AlarmManager interval
+// constants--in this case, AlarmManager.INTERVAL_DAY.
+        //alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+        //        AlarmManager.INTERVAL_DAY, alarmIntent);
+        alarmMgr.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
     }
+
     //Added on 6 - 23 - 2019
     //Get the previous Saturday.
 
@@ -1516,16 +1365,6 @@ public class CurrentWeekSchedule extends ListActivity  {
         editor.putString("PREVIOUS_SATURDAY_START_HOUR", pref.getString(getString(R.string.SATURDAY_START_HOUR), ""));
         editor.putString("PREVIOUS_SATURDAY_START_MINUTE", pref.getString(getString(R.string.SATURDAY_START_MINUTE), ""));
         editor.putString("PREVIOUS_SATURDAY_START_AM_OR_PM", pref.getString(getString(R.string.SATURDAY_START_AM_OR_PM), ""));
-
-        /*editor.putString("PREVIOUS_SATURDAY_END_HOUR", pref.getString(getString(R.string.SATURDAY_END_HOUR), ""));
-        editor.putString("PREVIOUS_SATURDAY_END_MINUTE", pref.getString(getString(R.string.SATURDAY_END_MINUTE), ""));
-        editor.putString("PREVIOUS_SATURDAY_END_AM_OR_PM", pref.getString(getString(R.string.SATURDAY_END_AM_OR_PM), ""));
-        */
-
-        /*editor.putString("PREVIOUS_SATURDAY_START_HOUR", "10");
-        editor.putString("PREVIOUS_SATURDAY_START_MINUTE", "10");
-        editor.putString("PREVIOUS_SATURDAY_START_AM_OR_PM", "PM");
-        */
 
         editor.apply();
     }
