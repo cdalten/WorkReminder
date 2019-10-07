@@ -56,17 +56,23 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.net.URLConnection;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
 public class MainActivity extends AppCompatActivity implements ConnectionCallback{
     private WebView getSchedule;
     public String LANDINGPAGE_URL = "myschedule.safeway.com";
-    public static String LOGIN_URL = "https://myschedule.safeway.com/ESS/AuthN/SwyLogin.aspx?ReturnUrl=%2fESS";
+    //public static String LOGIN_URL = "https://myschedule.safeway.com/ESS/AuthN/SwyLogin.aspx?ReturnUrl=%2fESS";
+    //public static String LOGIN_URL = "http://localhost";
+    public static String LOGIN_URL = "http://172.31.99.60/index.html";
     protected static final String UA = "Pak N Slave Mobile App; Written by cda@stanford.edu; Uhh...Hi Mom!";
 
     ConnectionCallback connectionCallback; //added on 10 - 7 - 2018
@@ -118,6 +124,10 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         super.onCreate(savedInstanceState);
         this.getSupportActionBar().hide();
         setContentView(R.layout.activity_update_job_schedule);
+
+        String[] arr = {"ax", "bx", "cx", "cy", "by", "ay", "aaa", "azz"};
+        allSwap(arr);
+
         Log.e(PRODUCTION_TAG, "ONCREATE() BEFORE SAVEDINSTANCE()");
         final ProgressBar progressBar = findViewById(R.id.progressBar);
         //progressBar.setLayoutParams(new ViewGroup.LayoutParams(150, 10));
@@ -224,9 +234,13 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             CookieManager.getInstance().setAcceptCookie(true);
 
             //double render????
+            //mNetworkFragment = WorkNetworkFragment.getInstance(
+            //        getSupportFragmentManager(),
+            //        "https://" + LANDINGPAGE_URL);
+
             mNetworkFragment = WorkNetworkFragment.getInstance(
                     getSupportFragmentManager(),
-                    "https://" + LANDINGPAGE_URL);
+                    LOGIN_URL);
 
             //force load???
             getSchedule.loadUrl(LOGIN_URL);
@@ -465,6 +479,31 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
 
 
+    //Need to remove from production
+    public String[] allSwap(String[] strings) {
+        String[] newArray = new String[strings.length];
+        int currentHour = 9;
+
+        if (currentHour >= 9 && currentHour <= 21) {
+            Log.e(PRODUCTION_TAG, "FOO");
+            //WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
+            //        0);
+        } else if (currentHour == 9) {
+            Log.e(PRODUCTION_TAG, "FOO");
+            //if (currentMinute > militaryTime.getStartMilitaryMinute()) {
+            //    WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
+            //            0);
+            //}
+        } else if (currentHour == 21) {
+            Log.e(PRODUCTION_TAG, "FOO");
+            //if (currentMinute < militaryTime.getEndMilitaryMinute()) {
+            //    WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
+            //            0);
+            //}
+        }
+
+        return newArray;
+    }
 
     @Override
     public void updateFromDownload(String result) {
@@ -771,7 +810,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         //    if (connectionStatus != null) {
         //        this.unregisterReceiver(connectionStatus);
         //    }
-        unregisterReceiver(WorkAlarmReceiver);
+        //unregisterReceiver(WorkAlarmReceiver);
         super.onDestroy(); //why?
     }
 
@@ -783,17 +822,19 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
      */
     private String downloadLoginPage(URL url) throws IOException {
         InputStream inputStream = null;
-        HttpsURLConnection connection = null;
+        //HttpsURLConnection connection = null;
+        URLConnection connection = null;
         String result = null;
         boolean redirect = false; //added on 9 - 25 - 2018
         int code = 0; //added on 12 - 8 - 2018
         try {
-            connection = (HttpsURLConnection) url.openConnection();
+            //connection = (HttpsURLConnection) url.openConnection();
+            connection = url.openConnection();
             //HttpsURLConnection.setFollowRedirects(false);
             //connection.setInstanceFollowRedirects(true);
             //connection.setReadTimeout(9000); //3000ms
             //connection.setConnectTimeout(9000); //3000ms
-            connection.setRequestMethod("GET");
+            //connection.setRequestMethod("GET");
 
             if (CookieManager.getInstance().getCookie(connection.getURL().toString()) != null) {
                 //String arr[] = CookieManager.getInstance().getCookie(connection.getURL().toString()).split(";");
@@ -803,9 +844,12 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
             connection.setDoInput(true);
 
-            connection.setChunkedStreamingMode(0); //added on 9 - 12 - 2018
+            //connection.setChunkedStreamingMode(0); //added on 9 - 12 - 2018
             connection.connect();
-            int responsecode = connection.getResponseCode();
+            //int responsecode = connection.getResponseCode();
+            int responsecode = ((HttpURLConnection) connection).getResponseCode();
+            Log.e(PRODUCTION_TAG, "THE RESPONSE CODE IS: " + responsecode);
+            //int responsecode = 200;
             if (responsecode != HttpsURLConnection.HTTP_OK) {
                 Log.e(PRODUCTION_TAG, "POSSIBLE 404? in downloadLogin()");
 
@@ -849,7 +893,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 inputStream.close();
             }
             if (connection != null) {
-                connection.disconnect(); //why no else if??
+                //connection.disconnect(); //why no else if??
             }
         }
 
@@ -1018,7 +1062,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
             //Need to manually set scheduleGotUpdated flag to false on every other day.
             //Check for bad connection before resetting flag?
-            if (host.equals("myschedule.safeway.com")) {
+            //if (host.equals("myschedule.safeway.com")) {
+            if (host.equals("10.105.193.163")) {
                 Log.i(PRODUCTION_TAG, "DID THE LINK GET CLICKED? " + onClick);
                 Log.i(PRODUCTION_TAG, "CLICKED VIEW URL IS: " + view.getUrl());
                 Log.i(PRODUCTION_TAG, "REQUESTED URL IS: " + request.getUrl());
@@ -1041,6 +1086,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
             startActivity(intent);
             return true;
+            //return false;
         }
 
         //I use JavaScript to automate the login sequence.

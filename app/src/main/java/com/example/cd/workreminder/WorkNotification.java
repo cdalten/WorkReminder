@@ -57,6 +57,7 @@ public class WorkNotification {
         //        R.string.work_notification_placeholder_text_template, exampleString);
 
         final String text = exampleString;
+        //Intent snoozeIntent = new Intent(WorkNotification.this, WorkAlarmReceiver.class);
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
 
                 // Set appropriate defaults for the notification light, sound,

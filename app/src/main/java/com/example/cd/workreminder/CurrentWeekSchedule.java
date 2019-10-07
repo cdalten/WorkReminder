@@ -3,6 +3,7 @@ package com.example.cd.workreminder;
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.ListActivity;
+import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +14,11 @@ import android.icu.util.Calendar;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
+
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
+//import android.app.NotificationManager;
+//import android.app.Notification;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +38,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import static android.app.Notification.EXTRA_NOTIFICATION_ID;
+
 public class CurrentWeekSchedule extends ListActivity  {
 
     private static final String PRODUCTION_TAG = "LG_WORK_PHONE";
@@ -45,7 +53,6 @@ public class CurrentWeekSchedule extends ListActivity  {
     Button Update; //Added on 12 - 2 - 2018
     Button Finish; //Added on 12 - 2 - 2018
     Button WorkPrefences; //Added on 4 - 3 - 2019
-
 
     private int currentPosition = 0; //Added on 1 - 20 - 2019
     static List<String> values; //Modified on 1 - 18 - 2019
@@ -990,351 +997,213 @@ public class CurrentWeekSchedule extends ListActivity  {
     @TargetApi(24)
     private void handleThirdShift(int position) {
         Calendar cal = Calendar.getInstance();
-        MilitaryTime militaryTime = MilitaryTime.getInstance();
-        AlarmTimer alarmTimer = AlarmTimer.getInstance();
-
-        CurrentWorkHours currentWorkHours = new CurrentWorkHours();
+        //CurrentWorkHours currentWorkHours = new CurrentWorkHours();
         if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.SUNDAY) {
-            //if(!week.get(position).get(0).equals("OFF")) {
-            if (!(pref.getString(getString(R.string.SUNDAY), "OFF").equals("OFF"))) {
-                int currentHour = cal.get(Calendar.HOUR);
-                int currentMinute = cal.get(Calendar.MINUTE);
+            setNotification(
+                    getString(R.string.SUNDAY),
+                    getString(R.string.SUNDAY_START_HOUR),
+                    getString(R.string.SUNDAY_START_MINUTE),
+                    getString(R.string.SUNDAY_START_AM_OR_PM),
+                    getString(R.string.SUNDAY_END_HOUR),
+                    getString(R.string.SUNDAY_END_MINUTE),
+                    getString(R.string.SUNDAY_END_AM_OR_PM),
 
-                militaryTime.convertStartCivilianTimeToMilitaryTime(pref.getString(getString(R.string.SUNDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
-                        pref.getString(getString(R.string.SUNDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
-                        pref.getString(getString(R.string.SUNDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-                militaryTime.convertEndCivilianTimeToMilitaryTime(pref.getString(getString(R.string.SUNDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT),
-                        pref.getString(getString(R.string.SUNDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
-                        pref.getString(getString(R.string.SUNDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
-                alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
-                        pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
-
-                if (currentHour > militaryTime.getStartMilitaryHour() && currentHour < militaryTime.getEndMilitaryHour()) {
-                    WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
-                            0);
-                } else if (currentHour == militaryTime.getStartMilitaryHour()) {
-                    setCurrentAlarm(militaryTime.getStartMilitaryHour(), militaryTime.getEndMilitaryMinute());
-                    if (currentMinute > militaryTime.getStartMilitaryMinute()) {
-                        WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
-                                0);
-                    }
-                } else if (currentHour == militaryTime.getEndMilitaryHour()) {
-                    if (currentMinute < militaryTime.getEndMilitaryMinute()) {
-                        WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
-                                0);
-                    }
-                }
-
-            } else if (pref.getString(getString(R.string.MONDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT).equals("12")
-                    && pref.getString(getString(R.string.MONDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT).equals("AM")) {
-
-                militaryTime.convertStartCivilianTimeToMilitaryTime(pref.getString(getString(R.string.MONDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
-                        pref.getString(getString(R.string.MONDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
-                        pref.getString(getString(R.string.MONDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-                alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
-                        pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
-                WorkNotification.notify(this, "" +
-                                getString(R.string.SUNDAY) + " " +
-                                pref.getInt("ALARM_HOUR", 0) + ":" +
-                                pref.getInt("MINUTES", 0) + " "
-                                +alarmTimer.getAMorPM(),
-                        0);
-            }
+                    getString(R.string.MONDAY_START_HOUR),
+                    getString(R.string.MONDAY_START_MINUTE),
+                    getString(R.string.MONDAY_START_AM_OR_PM)
+            );
 
 
         } else if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.MONDAY) {
             //if(!week.get(position).get(0).equals("OFF")) {
-            if (!(pref.getString(getString(R.string.MONDAY), "OFF").equals("OFF"))) {
-                int currentHour = cal.get(Calendar.HOUR);
-                int currentMinute = cal.get(Calendar.MINUTE);
+            setNotification(
+                    getString(R.string.MONDAY),
+                    getString(R.string.MONDAY_START_HOUR),
+                    getString(R.string.MONDAY_START_MINUTE),
+                    getString(R.string.MONDAY_START_AM_OR_PM),
+                    getString(R.string.MONDAY_END_HOUR),
+                    getString(R.string.MONDAY_END_MINUTE),
+                    getString(R.string.MONDAY_END_AM_OR_PM),
 
-                militaryTime.convertStartCivilianTimeToMilitaryTime(pref.getString(getString(R.string.MONDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
-                        pref.getString(getString(R.string.MONDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
-                        pref.getString(getString(R.string.MONDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-                militaryTime.convertEndCivilianTimeToMilitaryTime(pref.getString(getString(R.string.MONDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT),
-                        pref.getString(getString(R.string.MONDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
-                        pref.getString(getString(R.string.MONDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
-                alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
-                        pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
-
-
-                if (currentHour > militaryTime.getStartMilitaryHour() && currentHour < militaryTime.getEndMilitaryHour()) {
-                    WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
-                            0);
-                } else if (currentHour == militaryTime.getStartMilitaryHour()) {
-                    setCurrentAlarm(militaryTime.getStartMilitaryHour(), militaryTime.getEndMilitaryMinute());
-                    if (currentMinute > militaryTime.getStartMilitaryMinute()) {
-                        WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
-                                0);
-                    }
-                } else if (currentHour == militaryTime.getEndMilitaryHour()) {
-                    if (currentMinute < militaryTime.getEndMilitaryMinute()) {
-                        WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
-                                0);
-                    }
-                }
-
-            } else if (pref.getString(getString(R.string.TUESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT).equals("12")
-                    && pref.getString(getString(R.string.TUESDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT).equals("AM")) {
-
-                militaryTime.convertStartCivilianTimeToMilitaryTime(pref.getString(getString(R.string.TUESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
-                        pref.getString(getString(R.string.TUESDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
-                        pref.getString(getString(R.string.TUESDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-                alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
-                        pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
-                WorkNotification.notify(this, "" +
-                                getString(R.string.MONDAY) + " " +
-                                pref.getInt("ALARM_HOUR", 0) + ":" +
-                                pref.getInt("MINUTES", 0) + " "
-                                +alarmTimer.getAMorPM(),
-                        0);
-            }
-
+                    getString(R.string.TUESDAY_START_HOUR),
+                    getString(R.string.TUESDAY_START_MINUTE),
+                    getString(R.string.TUESDAY_START_AM_OR_PM)
+            );
 
         }else if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.TUESDAY) {
+            setNotification(
+                    getString(R.string.TUESDAY),
+                    getString(R.string.TUESDAY_START_HOUR),
+                    getString(R.string.TUESDAY_START_MINUTE),
+                    getString(R.string.TUESDAY_START_AM_OR_PM),
+                    getString(R.string.TUESDAY_END_HOUR),
+                    getString(R.string.TUESDAY_END_MINUTE),
+                    getString(R.string.TUESDAY_END_AM_OR_PM),
 
-            //if(!week.get(position).get(0).equals("OFF")) {
-            if (!(pref.getString(getString(R.string.TUESDAY), "OFF").equals("OFF"))) {
-                //int currentHour = cal.get(Calendar.HOUR);
-                int currentHour = cal.get(Calendar.HOUR_OF_DAY);
-                int currentMinute = cal.get(Calendar.MINUTE);
-
-                militaryTime.convertStartCivilianTimeToMilitaryTime(pref.getString(getString(R.string.TUESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
-                        pref.getString(getString(R.string.TUESDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
-                        pref.getString(getString(R.string.TUESDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-                militaryTime.convertEndCivilianTimeToMilitaryTime(pref.getString(getString(R.string.TUESDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT),
-                        pref.getString(getString(R.string.TUESDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
-                        pref.getString(getString(R.string.TUESDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
-                alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
-                        pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
-
-                if (currentHour > militaryTime.getStartMilitaryHour() && currentHour < militaryTime.getEndMilitaryHour()) {
-                    WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
-                            0);
-                } else if (currentHour == militaryTime.getStartMilitaryHour()) {
-                    setCurrentAlarm(militaryTime.getStartMilitaryHour(), militaryTime.getEndMilitaryMinute());
-                    if (currentMinute > militaryTime.getStartMilitaryMinute()) {
-                        WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
-                                0);
-                    }
-                } else if (currentHour == militaryTime.getEndMilitaryHour()) {
-                    if (currentMinute < militaryTime.getEndMilitaryMinute()) {
-                        WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
-                                0);
-                    }
-                }
-
-
-            } else if (pref.getString(getString(R.string.WEDNESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT).equals("12")
-                    && pref.getString(getString(R.string.WEDNESDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT).equals("AM")) {
-
-                militaryTime.convertStartCivilianTimeToMilitaryTime(pref.getString(getString(R.string.WEDNESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
-                        pref.getString(getString(R.string.WEDNESDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
-                        pref.getString(getString(R.string.WEDNESDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-                alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
-                        pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
-                WorkNotification.notify(this, "" +
-                                getString(R.string.TUESDAY) + " " +
-                                pref.getInt("ALARM_HOUR", 0) + ":" +
-                                pref.getInt("MINUTES", 0) + " "
-                                +alarmTimer.getAMorPM(),
-                        0);
-            }
+                    getString(R.string.WEDNESDAY_START_HOUR),
+                    getString(R.string.WEDNESDAY_START_MINUTE),
+                    getString(R.string.WEDNESDAY_START_AM_OR_PM)
+            );
 
         } else if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.WEDNESDAY) {
-            //if(!week.get(position).get(0).equals("OFF")) {
-            if (!(pref.getString(getString(R.string.WEDNESDAY), "OFF").equals("OFF"))) {
-                int currentHour = cal.get(Calendar.HOUR);
-                int currentMinute = cal.get(Calendar.MINUTE);
+            setNotification(
+                    getString(R.string.WEDNESDAY),
+                    getString(R.string.WEDNESDAY_START_HOUR),
+                    getString(R.string.WEDNESDAY_START_MINUTE),
+                    getString(R.string.WEDNESDAY_START_AM_OR_PM),
+                    getString(R.string.WEDNESDAY_END_HOUR),
+                    getString(R.string.WEDNESDAY_END_MINUTE),
+                    getString(R.string.WEDNESDAY_END_AM_OR_PM),
 
-                militaryTime.convertStartCivilianTimeToMilitaryTime(pref.getString(getString(R.string.WEDNESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
-                        pref.getString(getString(R.string.WEDNESDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
-                        pref.getString(getString(R.string.WEDNESDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-                militaryTime.convertEndCivilianTimeToMilitaryTime(pref.getString(getString(R.string.WEDNESDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT),
-                        pref.getString(getString(R.string.WEDNESDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
-                        pref.getString(getString(R.string.WEDNESDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
-                alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
-                        pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
-
-                if (currentHour > militaryTime.getStartMilitaryHour() && currentHour < militaryTime.getEndMilitaryHour()) {
-                    WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
-                            0);
-                } else if (currentHour == militaryTime.getStartMilitaryHour()) {
-                    setCurrentAlarm(militaryTime.getStartMilitaryHour(), militaryTime.getEndMilitaryMinute());
-                    if (currentMinute > militaryTime.getStartMilitaryMinute()) {
-                        WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
-                                0);
-                    }
-                } else if (currentHour == militaryTime.getEndMilitaryHour()) {
-                    if (currentMinute < militaryTime.getEndMilitaryMinute()) {
-                        WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
-                                0);
-                    }
-                }
-
-            } else if (pref.getString(getString(R.string.THURSDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT).equals("12")
-                    && pref.getString(getString(R.string.THURSDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT).equals("AM")) {
-
-                militaryTime.convertStartCivilianTimeToMilitaryTime(pref.getString(getString(R.string.THURSDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
-                        pref.getString(getString(R.string.THURSDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
-                        pref.getString(getString(R.string.THURSDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-                alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
-                        pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
-                WorkNotification.notify(this, "" +
-                                getString(R.string.WEDNESDAY) + " " +
-                                pref.getInt("ALARM_HOUR", 0) + ":" +
-                                pref.getInt("MINUTES", 0) + " "
-                                +alarmTimer.getAMorPM(),
-                        0);
-            }
+                    getString(R.string.THURSDAY_START_HOUR),
+                    getString(R.string.THURSDAY_START_MINUTE),
+                    getString(R.string.THURSDAY_START_AM_OR_PM)
+            );
 
 
         }else if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.THURSDAY) {
-            //if(!week.get(position).get(0).equals("OFF")) {
-            if (!(pref.getString(getString(R.string.THURSDAY), "OFF").equals("OFF"))) {
-                int currentHour = cal.get(Calendar.HOUR);
-                int currentMinute = cal.get(Calendar.MINUTE);
+            setNotification(
+                    getString(R.string.THURSDAY),
+                    getString(R.string.THURSDAY_START_HOUR),
+                    getString(R.string.THURSDAY_START_MINUTE),
+                    getString(R.string.THURSDAY_START_AM_OR_PM),
+                    getString(R.string.THURSDAY_END_HOUR),
+                    getString(R.string.THURSDAY_END_MINUTE),
+                    getString(R.string.THURSDAY_END_AM_OR_PM),
 
-
-                militaryTime.convertStartCivilianTimeToMilitaryTime(pref.getString(getString(R.string.THURSDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
-                        pref.getString(getString(R.string.THURSDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
-                        pref.getString(getString(R.string.THURSDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-                militaryTime.convertEndCivilianTimeToMilitaryTime(pref.getString(getString(R.string.THURSDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT),
-                        pref.getString(getString(R.string.THURSDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
-                        pref.getString(getString(R.string.THURSDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
-                alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
-                        pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
-                //handle something like 12am to 9am
-                //am to am
-
-            } else if (pref.getString(getString(R.string.FRIDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT).equals("12")
-                    && pref.getString(getString(R.string.FRIDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT).equals("AM")) {
-
-                militaryTime.convertStartCivilianTimeToMilitaryTime(pref.getString(getString(R.string.FRIDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
-                        pref.getString(getString(R.string.FRIDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
-                        pref.getString(getString(R.string.FRIDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-                alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
-                        pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
-                WorkNotification.notify(this, "" +
-                                getString(R.string.THURSDAY) + " " +
-                                pref.getInt("ALARM_HOUR", 0) + ":" +
-                                pref.getInt("MINUTES", 0) + " "
-                                +alarmTimer.getAMorPM(),
-                        0);
-            }
-
+                    getString(R.string.FRIDAY_START_HOUR),
+                    getString(R.string.FRIDAY_START_MINUTE),
+                    getString(R.string.FRIDAY_START_AM_OR_PM)
+            );
 
         } else if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.FRIDAY) {
             //if(!week.get(position).get(0).equals("OFF")) {
-            if (!(pref.getString(getString(R.string.FRIDAY), "OFF").equals("OFF"))) {
-                int currentHour = cal.get(Calendar.HOUR);
-                int currentMinute = cal.get(Calendar.MINUTE);
+            setNotification(
+                    getString(R.string.FRIDAY),
+                    getString(R.string.FRIDAY_START_HOUR),
+                    getString(R.string.FRIDAY_START_MINUTE),
+                    getString(R.string.FRIDAY_START_AM_OR_PM),
+                    getString(R.string.FRIDAY_END_HOUR),
+                    getString(R.string.FRIDAY_END_MINUTE),
+                    getString(R.string.FRIDAY_END_AM_OR_PM),
 
-
-                militaryTime.convertStartCivilianTimeToMilitaryTime(pref.getString(getString(R.string.FRIDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
-                        pref.getString(getString(R.string.FRIDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
-                        pref.getString(getString(R.string.FRIDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-                militaryTime.convertEndCivilianTimeToMilitaryTime(pref.getString(getString(R.string.FRIDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT),
-                        pref.getString(getString(R.string.FRIDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
-                        pref.getString(getString(R.string.FRIDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
-                alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
-                        pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
-
-
-                if (currentHour > militaryTime.getStartMilitaryHour() && currentHour < militaryTime.getEndMilitaryHour()) {
-                    WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
-                            0);
-                } else if (currentHour == militaryTime.getStartMilitaryHour()) {
-                    setCurrentAlarm(militaryTime.getStartMilitaryHour(), militaryTime.getEndMilitaryMinute());
-                    if (currentMinute > militaryTime.getStartMilitaryMinute()) {
-                        WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
-                                0);
-                    }
-                } else if (currentHour == militaryTime.getEndMilitaryHour()) {
-                    if (currentMinute < militaryTime.getEndMilitaryMinute()) {
-                        WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
-                                0);
-                    }
-                }
-
-            }
-
-            else if (pref.getString(getString(R.string.SATURDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT).equals("12")
-                    && pref.getString(getString(R.string.SATURDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT).equals("AM")) {
-
-                militaryTime.convertStartCivilianTimeToMilitaryTime(pref.getString(getString(R.string.SATURDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
-                        pref.getString(getString(R.string.SATURDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
-                        pref.getString(getString(R.string.SATURDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-                alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
-                        pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
-                WorkNotification.notify(this, "" +
-                                getString(R.string.FRIDAY) + " " +
-                                pref.getInt("ALARM_HOUR", 0) + ":" +
-                                pref.getInt("MINUTES", 0) + " "
-                                +alarmTimer.getAMorPM(),
-                        0);
-            }
-
+                    getString(R.string.SATURDAY_START_HOUR),
+                    getString(R.string.SATURDAY_START_MINUTE),
+                    getString(R.string.SATURDAY_START_AM_OR_PM)
+            );
 
         }
         else if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.SATURDAY) {
-            //if(!week.get(position).get(0).equals("OFF")) {
-            if (!(pref.getString(getString(R.string.SATURDAY), "OFF").equals("OFF"))) {
-                int currentHour = cal.get(Calendar.HOUR);
-                int currentMinute = cal.get(Calendar.MINUTE);
+            setNotification(
+                    getString(R.string.SATURDAY),
+                    getString(R.string.SATURDAY_START_HOUR),
+                    getString(R.string.SATURDAY_START_MINUTE),
+                    getString(R.string.SATURDAY_START_AM_OR_PM),
+                    getString(R.string.SATURDAY_END_HOUR),
+                    getString(R.string.SATURDAY_END_MINUTE),
+                    getString(R.string.SATURDAY_END_AM_OR_PM),
 
-                /*int startHour = Integer.parseInt(pref.getString(getString(R.string.SATURDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
-                int startMinute = Integer.parseInt(pref.getString(getString(R.string.SATURDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
-                int endHour = Integer.parseInt(pref.getString(getString(R.string.SATURDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
-                int endMinute  = Integer.parseInt(pref.getString(getString(R.string.SATURDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
-                */
-
-                militaryTime.convertStartCivilianTimeToMilitaryTime(pref.getString(getString(R.string.SATURDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
-                        pref.getString(getString(R.string.SATURDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
-                        pref.getString(getString(R.string.SATURDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-                militaryTime.convertEndCivilianTimeToMilitaryTime(pref.getString(getString(R.string.SATURDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT),
-                        pref.getString(getString(R.string.SATURDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
-                        pref.getString(getString(R.string.SATURDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
-                alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
-                        pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
-                //handle something like 12am to 9am
-                //am to am
-                if (currentHour > militaryTime.getStartMilitaryHour() && currentHour < militaryTime.getEndMilitaryHour()) {
-                    WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
-                            0);
-                } else if (currentHour == militaryTime.getStartMilitaryHour()) {
-                    setCurrentAlarm(militaryTime.getStartMilitaryHour(), militaryTime.getEndMilitaryMinute());
-                    if (currentMinute > militaryTime.getStartMilitaryMinute()) {
-                        WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
-                                0);
-                    }
-                } else if (currentHour == militaryTime.getEndMilitaryHour()) {
-                    if (currentMinute < militaryTime.getEndMilitaryMinute()) {
-                        WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
-                                0);
-                    }
-                }
-
-
-            }
-
-            else if (pref.getString(getString(R.string.SUNDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT).equals("12")
-                    && pref.getString(getString(R.string.SUNDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT).equals("AM")) {
-
-                militaryTime.convertStartCivilianTimeToMilitaryTime(pref.getString(getString(R.string.SUNDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
-                        pref.getString(getString(R.string.SUNDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
-                        pref.getString(getString(R.string.SUNDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-                alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
-                        pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
-                WorkNotification.notify(this, "" +
-                                getString(R.string.SATURDAY) + " " +
-                                pref.getInt("ALARM_HOUR", 0) + ":" +
-                                pref.getInt("MINUTES", 0) + " "
-                                +alarmTimer.getAMorPM(),
-                        0);
-            }
+                    getString(R.string.SUNDAY_START_HOUR),
+                    getString(R.string.SUNDAY_START_MINUTE),
+                    getString(R.string.SUNDAY_START_AM_OR_PM)
+            );
 
         }
+    }
+
+    //Added on 10 - 7 - 2019
+    //Do I need the last three args in the function??
+    @TargetApi(24)
+    private void setNotification(
+            String dayOfWeek,
+            String dayOfWeekStartHour, String dayOfWeekStartMinute, String dayOfWeekStartAmOrPm,
+            String dayOfWeekEndHour, String dayOfWeekEndMinute, String dayOfWeekEndAmOrPm,
+
+            String endDayOfWeekStartHour, String endDayOfWeekStartMinute, String endDayOfWeekStartAmOrPm
+    ) {
+        Calendar cal = Calendar.getInstance();
+        MilitaryTime militaryTime = MilitaryTime.getInstance();
+        AlarmTimer alarmTimer = AlarmTimer.getInstance();
+
+        if (!(pref.getString(dayOfWeek, "OFF").equals("OFF"))) {
+            int currentHour = cal.get(Calendar.HOUR);
+            int currentMinute = cal.get(Calendar.MINUTE);
+
+            //pref.getString( getString(R.string.FRIDAY_START_HOUR), "" );
+            militaryTime.convertStartCivilianTimeToMilitaryTime(
+                    pref.getString(dayOfWeekStartHour, WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
+                    pref.getString(dayOfWeekStartMinute, WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
+                    pref.getString(dayOfWeekStartAmOrPm, WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
+
+            militaryTime.convertEndCivilianTimeToMilitaryTime(pref.getString(dayOfWeekEndHour, WorkReaderContract.WorkEntry.END_HOUR_DEFAULT),
+                    pref.getString(dayOfWeekEndMinute, WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
+                    pref.getString(dayOfWeekEndAmOrPm, WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
+
+            alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
+                    pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
+            if (currentHour > militaryTime.getStartMilitaryHour() && currentHour < militaryTime.getEndMilitaryHour()) {
+                displayNotification("YOU'RE SUPPOSED TO BE AT WORK", "");
+            } else if (currentHour == militaryTime.getStartMilitaryHour()) {
+                //setCurrentAlarm(militaryTime.getStartMilitaryHour(), militaryTime.getEndMilitaryMinute());
+                if (currentMinute > militaryTime.getStartMilitaryMinute()) {
+                    displayNotification("YOU'RE SUPPOSED TO BE AT WORK", "");
+                }
+            } else if (currentHour == militaryTime.getEndMilitaryHour()) {
+                if (currentMinute < militaryTime.getEndMilitaryMinute()) {
+                    displayNotification("YOU'RE SUPPOSED TO BE AT WORK", "");
+                }
+            } else if (  pref.getInt("ALARM_HOUR", 0) == 0) {
+                displayNotification(dayOfWeek + " " +
+                        "12:" + pref.getInt("MINUTES", 0) + " ", "ALARM");
+
+            } else {
+                displayNotification( dayOfWeek + " " +
+                        pref.getInt("ALARM_HOUR", 0) + ":" +
+                        pref.getInt("MINUTES", 0) + " ", "ALARM");
+            }
+
+        } else if (pref.getString(getString(R.string.SATURDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT).equals("12")
+                && pref.getString(getString(R.string.SATURDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT).equals("AM")) {
+
+            militaryTime.convertStartCivilianTimeToMilitaryTime(pref.getString(endDayOfWeekStartHour, WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
+                    pref.getString(endDayOfWeekStartMinute, WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
+                    pref.getString(endDayOfWeekStartAmOrPm, WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
+            alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
+                    pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
+            WorkNotification.notify(this, "" +
+                            dayOfWeek + " " +
+                            pref.getInt("ALARM_HOUR", 0) + ":" +
+                            pref.getInt("MINUTES", 0) + " "
+                            +alarmTimer.getAMorPM(),
+                    0);
+        }
+    }
+
+    //Added on 10 - 7 - 2019
+    private void displayNotification(String notificationText, String notificationTitle) {
+        Intent snoozeIntent = new Intent(this, WorkAlarmReceiver.class);
+        //snoozeIntent.setAction(ACTION_SNOOZE);
+        snoozeIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
+        PendingIntent snoozePendingIntent =
+                PendingIntent.getBroadcast(this, 0, snoozeIntent, 0);
+
+        //NotificationCompat.Builder
+        NotificationCompat.Builder notificationCompatBuilder = new NotificationCompat.Builder(getApplicationContext(), "0");
+
+        GlobalNotificationBuilder.setNotificationCompatBuilderInstance(notificationCompatBuilder);
+        notificationCompatBuilder.setSmallIcon(R.drawable.ic_stat_work)
+                //.setContentTitle("My notification")
+                //.setContentText("Hello World!")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(snoozePendingIntent)
+                .addAction(R.drawable.ic_action_stat_share,
+                        getResources().getString(R.string.action_share), snoozePendingIntent);
+        notificationCompatBuilder.setContentTitle(notificationTitle);
+        notificationCompatBuilder.setContentText(notificationText);
+        NotificationManagerCompat mNotificationManagerCompat;
+        mNotificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
+        Notification notification = notificationCompatBuilder.build();
+        mNotificationManagerCompat.notify(0, notification);
     }
 
     //Added on 8 - 4 - 2019

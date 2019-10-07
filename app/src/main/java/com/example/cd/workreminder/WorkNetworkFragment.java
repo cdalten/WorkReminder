@@ -22,6 +22,7 @@ import android.webkit.WebView;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -221,12 +222,12 @@ public class WorkNetworkFragment extends Fragment {
 
     private String downloadLoginPage(URL url) throws IOException {
         InputStream inputStream = null;
-        HttpsURLConnection connection = null;
+        HttpURLConnection connection = null;
         String result = null;
         boolean redirect = false; //added on 9 - 25 - 2018
         int code = 0; //added on 12 - 8 - 2018
         try {
-            connection = (HttpsURLConnection) url.openConnection();
+            connection = (HttpURLConnection) url.openConnection();
 
             //Bug. Shows already connected. Why 9 - 26 - 2018
             //String serverCookie = connection.getHeaderField("Set-Cookie");
