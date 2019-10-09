@@ -88,8 +88,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     public static String CurrentSchedule = "CurrentSchedule"; //added on 9 - 19 - 2018
     public String fileContents = ""; //default is ""
     private SharedPreferences pref; //added on 9 - 21 - 2018
-    private boolean doIWorkToday = false; //added on 10 - 17 - 2018
-    CurrentWorkHours date; //added on 10 - 22 - 2018
+    private boolean doIWorkToday = true; //added on 10 - 17 - 2018
+    //CurrentWorkHours date; //added on 10 - 22 - 2018
 
     private boolean pageEnded = false; //Added on 11 - 12 - 2018
     private boolean onClick = false; //Added on 11 - 13 - 2018
@@ -347,8 +347,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                     pref.getString(getString(R.string.WEDNESDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT) );
             editor.putString(getString(R.string.WEDNESDAY_END_HOUR),
                     pref.getString(getString(R.string.WEDNESDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
-            //editor.putString(getString(R.string.WEDNESDAY_END_MINUTE), "10");
-            //editor.putString(getString(R.string.WEDNESDAY_END_AM_OR_PM), "AM");
             editor.putString(getString(R.string.WEDNESDAY_END_MINUTE),
                     pref.getString(getString(R.string.WEDNESDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
 
@@ -405,11 +403,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                     pref.getString(getString(R.string.SATURDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
             //intent.putExtra("SaturdayHours", saturdayWorkHours);
 
-            //doIWorkToday();
-
             editor.apply();
-
-
 
         } else {
             Log.e(PRODUCTION_TAG, "ONCREATE() WHEN SAVEDINSTANCE() IS NOT NULL");
@@ -419,11 +413,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
             pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE); //redudant??
             //readFromInternalDirectory(new File(CurrentSchedule + ThisWeek));
-
-            //registerReceiver(
-            //        new ConnectionStatus(),
-            //        new IntentFilter(
-            //                ConnectivityManager.CONNECTIVITY_ACTION));
 
             getSchedule = (WebView) this.findViewById(R.id.CurrentSchedule);
             getSchedule.setWebViewClient(new WWebViewClient());
@@ -550,179 +539,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     }
 
 
-    //Added on 10 - 15 - 2018
-    //Find the current day in the week and based on the day, determine if I have to work.
-    private void doIWorkToday() {
-
-        //Create the object only one time
-        MilitaryTime militaryTime = MilitaryTime.getInstance();
-        AlarmTimer alarmTimer = AlarmTimer.getInstance();
-        if (Build.VERSION.SDK_INT >= 24) {
-            Calendar cal = Calendar.getInstance();
-            if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
-                //intent.putExtra(Days.CURRENT_DAY, Days.DAY_SUNDAY);
-                militaryTime.convertStartCivilianTimeToMilitaryTime(pref.getString(getString(R.string.SUNDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
-                        pref.getString(getString(R.string.SUNDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
-                        pref.getString(getString(R.string.SUNDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-                militaryTime.convertEndCivilianTimeToMilitaryTime(pref.getString(getString(R.string.SUNDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT),
-                        pref.getString(getString(R.string.SUNDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
-                        pref.getString(getString(R.string.SUNDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
-                doIWorkToday = militaryTime.getHour(MainActivity.this, militaryTime.getStartMilitaryHour() ,
-                        militaryTime.getStartMilitaryMinute(),
-                        militaryTime.getEndMilitaryHour(),
-                        militaryTime.getStartMilitaryMinute());
-                //cal.set(DAY_THURSDAY, Calendar.THURSDAY);
-                //AlarmTimer.setAlarmTime(this, thursdayWorkHours.getStartMilitaryHour(),
-                //        thursdayWorkHours.getStartMilitaryMinute(),
-                //        Integer.parseInt(pref.getString("ALARM_MINUTES", "")));
-                if (doIWorkToday == true) {
-                    alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
-                            pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
-                    //intent.putExtra(getString(R.string.com_example_cd_shiftreminder_I_WORK_TODAY), thursdayWorkHours.toString());
-                    intent.putExtra(getString(R.string.I_WORK_TODAY),
-                            pref.getString(getString(R.string.SUNDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT) + ":" +
-                                    pref.getString(getString(R.string.SUNDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT
-                                            + pref.getString(getString(R.string.SUNDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT)));
-                }
-            }
-
-            else if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY) {
-                militaryTime.convertStartCivilianTimeToMilitaryTime(pref.getString(getString(R.string.MONDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
-                        pref.getString(getString(R.string.MONDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
-                        pref.getString(getString(R.string.MONDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-                doIWorkToday = militaryTime.getStartingHour(militaryTime.getStartMilitaryHour(),
-                        militaryTime.getStartMilitaryMinute());
-                /*if (pref.getString(getString(R.string.TUESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT).equals("12") &&
-                pref.getString(getString(R.string.TUESDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT).equals("AM")) {
-                    WorkNotification.notify(this, "" +
-                                    "TUESDAY" + " " +
-                                    pref.getInt("ALARM_HOUR", 0) + ":" +
-                                    pref.getInt("MINUTES", 0) + " "
-                                    +alarmTimer.getAMorPM(),
-                            0);
-                }
-                */
-                //cal.set(DAY_THURSDAY, Calendar.THURSDAY);
-                if (doIWorkToday == true) {
-                    alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
-                            pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
-                    //intent.putExtra(getString(R.string.com_example_cd_shiftreminder_I_WORK_TODAY), thursdayWorkHours.toString());
-                    intent.putExtra(getString(R.string.I_WORK_TODAY),
-                            pref.getString(getString(R.string.MONDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT) + ":" +
-                                    pref.getString(getString(R.string.MONDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT
-                                    + pref.getString(getString(R.string.MONDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT)));
-                }
-            }
-
-            else if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.TUESDAY) {
-                militaryTime.convertStartCivilianTimeToMilitaryTime(pref.getString(getString(R.string.TUESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
-                        pref.getString(getString(R.string.TUESDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
-                        pref.getString(getString(R.string.TUESDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-                if (militaryTime.getStartingHour(militaryTime.getStartMilitaryHour(),
-                        militaryTime.getStartMilitaryMinute()))
-                if (doIWorkToday == true) {
-                    alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
-                            pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
-                    intent.putExtra(getString(R.string.I_WORK_TODAY),
-                            pref.getString(getString(R.string.TUESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT) + ":" +
-                                    pref.getString(getString(R.string.TUESDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT
-                                            + pref.getString(getString(R.string.TUESDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT)));
-                }
-            }
-
-            else if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.WEDNESDAY) {
-                militaryTime.convertStartCivilianTimeToMilitaryTime(pref.getString(getString(R.string.WEDNESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
-                        pref.getString(getString(R.string.WEDNESDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
-                        pref.getString(getString(R.string.WEDNESDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-                militaryTime.convertEndCivilianTimeToMilitaryTime(pref.getString(getString(R.string.WEDNESDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT),
-                        pref.getString(getString(R.string.WEDNESDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
-                        pref.getString(getString(R.string.WEDNESDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
-                doIWorkToday = militaryTime.getHour(MainActivity.this,
-                        militaryTime.getStartMilitaryHour() ,
-                        militaryTime.getStartMilitaryMinute(),
-                        militaryTime.getEndMilitaryHour(),
-                        militaryTime.getStartMilitaryMinute());
-                //cal.set(DAY_THURSDAY, Calendar.THURSDAY);
-                //AlarmTimer.setAlarmTime(this, thursdayWorkHours.getStartMilitaryHour(),
-                //        thursdayWorkHours.getStartMilitaryMinute(),
-                //        Integer.parseInt(pref.getString("ALARM_MINUTES", "")));
-                if (doIWorkToday == true) {
-                    alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
-                            pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
-                    intent.putExtra(getString(R.string.I_WORK_TODAY),
-                            pref.getString(getString(R.string.WEDNESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT) + ":" +
-                                    pref.getString(getString(R.string.WEDNESDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT
-                                            + pref.getString(getString(R.string.WEDNESDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT)));
-                }
-            }
-
-
-            else if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.THURSDAY) {
-                militaryTime.convertStartCivilianTimeToMilitaryTime(pref.getString(getString(R.string.THURSDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
-                        pref.getString(getString(R.string.THURSDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
-                        pref.getString(getString(R.string.THURSDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-                militaryTime.convertEndCivilianTimeToMilitaryTime(pref.getString(getString(R.string.THURSDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT),
-                        pref.getString(getString(R.string.THURSDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
-                        pref.getString(getString(R.string.THURSDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
-                doIWorkToday = militaryTime.getHour(MainActivity.this, militaryTime.getStartMilitaryHour() ,
-                        militaryTime.getStartMilitaryMinute(),
-                        militaryTime.getEndMilitaryHour(),
-                        militaryTime.getStartMilitaryMinute());
-                if (doIWorkToday == true) {
-                    alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
-                            pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
-                    intent.putExtra(getString(R.string.I_WORK_TODAY),
-                            pref.getString(getString(R.string.THURSDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT) + ":" +
-                                    pref.getString(getString(R.string.THURSDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT
-                                            + pref.getString(getString(R.string.THURSDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT)));
-                }
-            }
-
-
-            else if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY) {
-                militaryTime.convertStartCivilianTimeToMilitaryTime(pref.getString(getString(R.string.FRIDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
-                        pref.getString(getString(R.string.FRIDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
-                        pref.getString(getString(R.string.FRIDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-                militaryTime.convertEndCivilianTimeToMilitaryTime(pref.getString(getString(R.string.FRIDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT),
-                        pref.getString(getString(R.string.FRIDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
-                        pref.getString(getString(R.string.FRIDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
-                doIWorkToday = militaryTime.getHour(MainActivity.this, militaryTime.getStartMilitaryHour() ,
-                        militaryTime.getStartMilitaryMinute(),
-                        militaryTime.getEndMilitaryHour(),
-                        militaryTime.getStartMilitaryMinute());
-                alarmTimer.setAlarmTime(this,militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
-                        pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
-                //AlarmTimer.setAlarmTime(this, thursdayWorkHours.getStartMilitaryHour(),
-                //        thursdayWorkHours.getStartMilitaryMinute(),
-                //        Integer.parseInt(pref.getString("ALARM_MINUTES", "")));
-                if (doIWorkToday == true) {
-                    intent.putExtra(getString(R.string.I_WORK_TODAY),
-                            pref.getString(getString(R.string.FRIDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT) + ":" +
-                                    pref.getString(getString(R.string.FRIDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT
-                                            + pref.getString(getString(R.string.FRIDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT)));
-                }
-            }
-
-            else if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
-                militaryTime.convertStartCivilianTimeToMilitaryTime(pref.getString(getString(R.string.SATURDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
-                        pref.getString(getString(R.string.SATURDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
-                        pref.getString(getString(R.string.SATURDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-                doIWorkToday = militaryTime.getStartingHour(militaryTime.getStartMilitaryHour() ,
-                        militaryTime.getStartMilitaryMinute());
-                if (doIWorkToday == true) {
-                    alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
-                            pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
-                    //intent.putExtra(getString(R.string.com_example_cd_shiftreminder_I_WORK_TODAY), thursdayWorkHours.toString());
-                    intent.putExtra(getString(R.string.I_WORK_TODAY),
-                            pref.getString(getString(R.string.SATURDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT) + ":" +
-                                    pref.getString(getString(R.string.SATURDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT
-                                            + pref.getString(getString(R.string.SATURDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT)));
-                }
-            }
-        }//end untested if
-
-    }
-
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -734,15 +550,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
             Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
         }
-
-        /*if(newConfig.orientation== Configuration.ORIENTATION_LANDSCAPE){
-            Log.e(PRODUCTION_TAG,"LANDSCAPE");
-        }
-        else{
-            Log.e(PRODUCTION_TAG,"PORTRAIT");
-        }
-        */
-
 
     }
 
@@ -776,11 +583,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
         if (cache != null) {
             cache.flush();
-        }//end if
-        //    Log.i(PRODUCTION_TAG, "ON STOP");
-        //    Log.i(PRODUCTION_TAG, "                           ");
-        //    Log.i(PRODUCTION_TAG, "                           ");
-        //super.onStop(); //keep commented out
+        }
     }
 
     @Override
@@ -793,13 +596,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         Log.i(PRODUCTION_TAG, "ON RESUME ");
     }
 
-
-    /*@Override
-    protected void onRestart() {
-        super.onRestart();
-        Log.i(PRODUCTION_TAG, "ON RESTART");
-    }
-    */
 
     //Kill the http connection and flush the cache.
     @Override
@@ -877,17 +673,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             }
         }
 
-        /*catch (MalformedURLException e) {
-            e.printStackTrace();
-            Log.e(PRODUCTION_TAG, "ERROR "+ e);
-        } catch (ProtocolException e) {
-            e.printStackTrace();
-            Log.e(PRODUCTION_TAG, "PROTOCOL ERROR " + e);
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e(PRODUCTION_TAG, "IO ERROR " + e);
-        }
-        */
         finally {
             if (inputStream != null) {
                 inputStream.close();
@@ -912,19 +697,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         int readSize = 0;
 
         //START REVISED CODE
-        /*int c;
-        String output = null;
-        InputStreamReader unbufferedStream = new InputStreamReader(stream, "UTF-8");
-
-        while ((c = unbufferedStream.read()) != - 1) {
-            char character = (char) c;
-            output = output + character ;
-        }
-        Log.i(PRODUCTION_TAG, "UNBUFFERED STREADM IS: " + output); //copy output to new String
-        */
-        //END REVISED CODE
-
-
         //Possibly reading too large data stream. Hence why the insufficient resource error?
         //Log.d(PRODUCTION_TAG, "STARTED TO READ STREAM"); //added on 10 - 4- 2018
         while (numChars < maxLength && readSize != -1) {
@@ -1112,17 +884,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 */
 
                 //Default on initial installation
-                /*if (pref.getBoolean("SAVE_PASSWORD", false) == false){
-                    startActivity(new Intent(MainActivity.this, RememberMe.class));
-                    getSchedule.loadUrl(
-                            "javascript:var bld = document.getElementById('EmpID').style.color = 'red' " + ";"
-                                    + "javascript:var x = document.getElementById('EmpID').value = " + pref.getString("NAME", "0")+ ";"
-                                    + "javascript:var y = document.getElementById('Password').value = " + pref.getString("PASSWORD", "\'\'") + ";"
-                            //+ "javascript:var z = document.getElementById('Password').style.display = 'none' " + ";"
-
-                    );
-                }
-                */
                 if (pref.getBoolean("SAVE_PASSWORD", false) == true) {
                     String defaultName =  pref.getString("NAME", "0");
                     String defaultPassword = pref.getString("PASSWORD", "\'\'");

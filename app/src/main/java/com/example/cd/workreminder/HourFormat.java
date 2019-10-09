@@ -204,6 +204,9 @@ public class HourFormat extends FragmentActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         startHour.setAdapter(adapter);
         startHour.setSelection(intent.getIntExtra("START_HOUR", 0));
+        //Need to check fo "OFF"
+        //startHour.setSelection(Integer.parseInt( pref.getString(getString(R.string.SUNDAY_START_HOUR),
+        //        WorkReaderContract.WorkEntry.START_HOUR_DEFAULT)));
         startHour.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -219,10 +222,12 @@ public class HourFormat extends FragmentActivity {
                         break;
                     case WorkReaderContract.WorkEntry.MONDAY:
                         editor.putString(getString(R.string.MONDAY_START_HOUR),
+                                //pref.getString(getString(R.string.MONDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
                                 parent.getItemAtPosition(position).toString());
                         break;
                     case WorkReaderContract.WorkEntry.TUESDAY:
                         editor.putString(getString(R.string.TUESDAY_START_HOUR),
+                                //pref.getString(getString(R.string.TUESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
                                 parent.getItemAtPosition(position).toString());
                         break;
                     case WorkReaderContract.WorkEntry.WEDNESDAY:

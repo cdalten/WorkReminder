@@ -22,10 +22,10 @@ public class MilitaryTime extends FragmentActivity {
 
     private static MilitaryTime instance = new MilitaryTime();
 
-    CurrentWorkHours currentWorkHours;
-    private MilitaryTime () {
-        currentWorkHours = new CurrentWorkHours();
-    }
+    //CurrentWorkHours currentWorkHours;
+    //private MilitaryTime () {
+    //    currentWorkHours = new CurrentWorkHours();
+    //}
 
     public static MilitaryTime getInstance(){
         return instance;
@@ -130,14 +130,14 @@ public class MilitaryTime extends FragmentActivity {
     }
 
     //Added on 10 - 18 - 2018. True if I work. False if I'm either done working or have the day off.
-    public boolean getStartingHour(int startHour, int startMinute) {
+    /*public boolean getStartingHour(int startHour, int startMinute) {
 
         return currentWorkHours.doIWorkToday(context, startHour, startMinute, endMilitaryHour, endMilitaryMinute);
     }
-
+    */
     //Added on 7 - 10 - 2019
-    public boolean getHour(Context context, int startMilitaryHour, int startMilitaryMinute, int endMilitaryHour, int endMilitaryMinute) {
+    /*public boolean getHour(Context context, int startMilitaryHour, int startMilitaryMinute, int endMilitaryHour, int endMilitaryMinute) {
 
         return currentWorkHours.doIWorkToday(context, startMilitaryHour, startMilitaryMinute, endMilitaryHour, endMilitaryMinute);
-    }
+    }*/
 }
