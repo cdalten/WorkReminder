@@ -125,9 +125,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         this.getSupportActionBar().hide();
         setContentView(R.layout.activity_update_job_schedule);
 
-        String[] arr = {"ax", "bx", "cx", "cy", "by", "ay", "aaa", "azz"};
-        allSwap(arr);
-
         Log.e(PRODUCTION_TAG, "ONCREATE() BEFORE SAVEDINSTANCE()");
         final ProgressBar progressBar = findViewById(R.id.progressBar);
         //progressBar.setLayoutParams(new ViewGroup.LayoutParams(150, 10));
@@ -466,33 +463,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
     }
 
-
-
-    //Need to remove from production
-    public String[] allSwap(String[] strings) {
-        String[] newArray = new String[strings.length];
-        int currentHour = 9;
-
-        if (currentHour >= 9 && currentHour <= 21) {
-            Log.e(PRODUCTION_TAG, "FOO");
-            //WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
-            //        0);
-        } else if (currentHour == 9) {
-            Log.e(PRODUCTION_TAG, "FOO");
-            //if (currentMinute > militaryTime.getStartMilitaryMinute()) {
-            //    WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
-            //            0);
-            //}
-        } else if (currentHour == 21) {
-            Log.e(PRODUCTION_TAG, "FOO");
-            //if (currentMinute < militaryTime.getEndMilitaryMinute()) {
-            //    WorkNotification.notify(this, "YOU ARE SUPPOSED TO BE AT WORK.",
-            //            0);
-            //}
-        }
-
-        return newArray;
-    }
 
     @Override
     public void updateFromDownload(String result) {

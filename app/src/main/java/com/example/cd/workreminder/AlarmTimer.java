@@ -19,6 +19,12 @@ public class AlarmTimer extends AppCompatActivity {
     private SharedPreferences pref; //Added on 5 - 14 - 2019
     private int startMilitaryMinute; //Added on 6 - 27 -2019
     private int startMilitaryHour; //Added on 6 - 27 -2017
+
+    int endMilitaryHour = 0;
+    int endMilitaryMinute = 0;
+    int newMilitaryHour = 0;
+    int newMilitaryMinute = 0;
+
     private static AlarmTimer instance = new AlarmTimer();
 
     private AlarmTimer() {
@@ -36,10 +42,6 @@ public class AlarmTimer extends AppCompatActivity {
         this.startMilitaryMinute = startMilitaryMinute;
         this.startMilitaryHour = startMilitaryHour;
 
-        int endMilitaryHour = 0;
-        int endMilitaryMinute = 0;
-        int newMilitaryHour = 0;
-        int newMilitaryMinute = 0;
 
         if (timeBeforeShift < 60) {
             newMilitaryHour = startMilitaryHour;
@@ -68,8 +70,6 @@ public class AlarmTimer extends AppCompatActivity {
         editor.putInt("HOUR", cal.get(Calendar.HOUR_OF_DAY)); // gets passed to alarm receiver
         editor.putInt("MINUTES", cal.get(Calendar.MINUTE));
         editor.apply();
-
-
     }//setAlarmTime
 
     public int getMilitaryMinute() {
@@ -78,6 +78,16 @@ public class AlarmTimer extends AppCompatActivity {
 
     public int getStartMilitaryHour() {
         return this.startMilitaryHour;
+    }
+
+    @TargetApi(24)
+    public int getUpdatedMinute() {
+        return cal.get(Calendar.MINUTE);
+    }
+
+    @TargetApi(24)
+    public int getUpdatedHour() {
+        return cal.get(Calendar.HOUR_OF_DAY);
     }
 
     //Added on 6 - 28 - 2019

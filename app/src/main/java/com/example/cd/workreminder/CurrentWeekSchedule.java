@@ -584,14 +584,6 @@ public class CurrentWeekSchedule extends ListActivity  {
         super.onSaveInstanceState(outState);
     }
 
-    //Added on 3 - 26 - 2019
-    private class myArrayList extends ArrayList {
-        @Override
-        public String toString() {
-            return "MIT MAGIC-COOKIE";
-        }
-    }
-
     //I use list view because HTML fonts don't get preserved when the device changes orientation.
     private class WS<String> extends ArrayAdapter<java.lang.String> {
         private int visibleMenuOptions = 3; //3 is for debugging only
@@ -618,8 +610,7 @@ public class CurrentWeekSchedule extends ListActivity  {
             return week.get(position).toString();
         }
 
-        //Added on 6 - 24 - 2019
-
+        //Added on 6 - 24 - 201
         @Override
         public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             //return super.getDropDownView(position, convertView, parent);
@@ -641,9 +632,6 @@ public class CurrentWeekSchedule extends ListActivity  {
         @Override
         public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             //super.getView(position, convertView, parent);
-            View view;
-            //Log.e(PRODUCTION_TAG, "THE CURRENT POSITION IS: " + position);
-
             if (convertView == null) {
                 //Log.e(PRODUCTION_TAG, "CONVERT VIEW IS NULL");
 
@@ -680,8 +668,7 @@ public class CurrentWeekSchedule extends ListActivity  {
             } else {
                 //week.remove(position);
                 //week.get(0).add(dayPair.get(position));
-                ((TextView) convertView.findViewById(R.id.dayOfWeek)).setText(week.get(position).get(0)
-                );
+                ((TextView) convertView.findViewById(R.id.dayOfWeek)).setText(week.get(position).get(0));
                 ((TextView) convertView.findViewById(R.id.startTime))
                         .setText(week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
                                 + ":" + week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE) + " "
@@ -740,11 +727,16 @@ public class CurrentWeekSchedule extends ListActivity  {
 
     }//end inner class
 
+    //Added on 10 - 10 - 2019
+    private void displaySchedule() {
+
+    }
+
     //Added on 7 - 1 - 2019
     @TargetApi(24)
     private int handleThirdShift() {
         Calendar cal = Calendar.getInstance();
-        int currentDay = currentDay = cal.get(Calendar.DAY_OF_WEEK); //vs inside if??
+        int currentDay = cal.get(Calendar.DAY_OF_WEEK); //vs inside if??
         //CurrentWorkHours currentWorkHours = new CurrentWorkHours();
         if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.SUNDAY) {
             setNotification(
@@ -906,31 +898,18 @@ public class CurrentWeekSchedule extends ListActivity  {
                 displayNotification(dayOfWeek + " " +
                         "12:" + pref.getInt("MINUTES", 0) + " ", "ALARM");
 
-            } else {
+            }else {
                 displayNotification( dayOfWeek + " " +
                         pref.getInt("ALARM_HOUR", 0) + ":" +
                         pref.getInt("MINUTES", 0) + " ", "ALARM");
             }
 
-        } else if (pref.getString(getString(R.string.SATURDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT).equals("12")
-                && pref.getString(getString(R.string.SATURDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT).equals("AM")) {
 
-            militaryTime.convertStartCivilianTimeToMilitaryTime(pref.getString(endDayOfWeekStartHour, WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
-                    pref.getString(endDayOfWeekStartMinute, WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
-                    pref.getString(endDayOfWeekStartAmOrPm, WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-            alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
-                    pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
-            WorkNotification.notify(this, "" +
-                            dayOfWeek + " " +
-                            pref.getInt("ALARM_HOUR", 0) + ":" +
-                            pref.getInt("MINUTES", 0) + " "
-                            +alarmTimer.getAMorPM(),
-                    0);
         }
     }
 
     //Added on 10 - 7 - 2019
-    private void displayNotification(String notificationText, String notificationTitle) {
+    public void displayNotification(String notificationText, String notificationTitle) {
         Intent snoozeIntent = new Intent(this, WorkAlarmReceiver.class);
         //snoozeIntent.setAction(ACTION_SNOOZE);
         snoozeIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
@@ -1130,6 +1109,16 @@ public class CurrentWeekSchedule extends ListActivity  {
         int newPosition = -1; // don't enter switch
         String day = "";
         if (data != null) {
+            AlarmTimer alarmTimer = AlarmTimer.getInstance();
+            //alarmTimer.setAlarmTime(getBaseContext(), alarmTimer.getStartMilitaryHour(),alarmTimer.getMilitaryMinute(), Integer.parseInt(updateTime) );
+            displayNotification(//pref.getInt("ALARM_HOUR", 0)
+                    alarmTimer.getUpdatedHour()
+                            + ":" +
+                            //week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE)
+                            alarmTimer.getUpdatedMinute()
+                            //pref.getInt("MINUTES", 0)
+                            + " "
+                            + alarmTimer.getAMorPM(), "ALARM");
             newPosition = data.getIntExtra("CURRENT_DAY", -99);  //position in listview
             if (newPosition != -99) {
                 newStartHour = data.getStringExtra(getString(R.string.START_HOUR)); //hardware bug??
@@ -1142,7 +1131,7 @@ public class CurrentWeekSchedule extends ListActivity  {
 
                 MilitaryTime militaryTime = MilitaryTime.getInstance();
                 militaryTime.convertStartCivilianTimeToMilitaryTime(newStartHour, newStartMinute, newStartAmOrPm);
-                AlarmTimer alarmTimer = AlarmTimer.getInstance();
+                alarmTimer = AlarmTimer.getInstance();
                 alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(),
                         militaryTime.getStartMilitaryMinute(),
                         pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
@@ -1153,55 +1142,7 @@ public class CurrentWeekSchedule extends ListActivity  {
         //newStartDay = week.get(newPosition).get(0);
         //data.getStringExtra(getString(R.string.DAY_OF_WEEK)); //CORRECTED VERSION
 
-
-        //Update hours but NOT alarm time
-        //try {
-        if (resultCode == 1 && newPosition != -99) {
-            if (day != null){
-                if (!day.equals("OFF")) {
-                    //WorkNotification.notify(this, "",
-                    //        0);
-
-                    WorkNotification.notify(this, day + "" + newStartHour + ":" + newStartMinute + " " +
-                                    newStartAmOrPm + "(GOT UPDATED)",
-                            0);
-                }
-            }
-        }
-            //get day when I already have it??
-
-        //} catch (Exception e) {
-        //    e.printStackTrace();
-        //}
-        if (resultCode == 1) {
-            /*WorkNotification.notify(this, //week.get(position).get(0) + " " +
-                    //week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
-                    pref.getInt("ALARM_HOUR", 0)
-                            + ":" +
-                            //week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE)
-                            (pref.getInt("MINUTES", 0) - 5),
-                    //+ " "
-                    //+ week.get(position).get(WorkReaderContract.WorkEntry.START_AM_OR_PM), //bug when reaches 12
-                    0);
-                    */
-        }
-
-        else {
-            //Create the object only one time.
-            /*MilitaryTime militaryTime = MilitaryTime.getInstance();
-            militaryTime.convertCivilanTimeToMilitaryTime(newStartHour, newStartMinute, newStartAmOrPm);
-            AlarmTimer alarmTimer = AlarmTimer.getInstance();
-            alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(),
-                    militaryTime.getStartMilitaryMinute(),
-                    pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
-           */
-
-            //newWorkHours.setCurrentPosition(currentPosition);
-            //if (cal.get(Calendar.DAY_OF_WEEK) == getCurrentDay(weekPosition)) {
-            //    intent.putExtra(getString(R.string.I_WORK_TODAY), newWorkHours.toString());
-
-
-            //Yes I know this sucks.
+        //Yes I know this sucks.
             switch (newPosition) {
                 case WorkReaderContract.WorkEntry.SUNDAY:
                     updateHours(
@@ -1339,11 +1280,10 @@ public class CurrentWeekSchedule extends ListActivity  {
             }
         }
 
-    }
+
 
     @Override
     protected void onDestroy() {
-        //unregisterReceiver(workAlarmReceiver);
         super.onDestroy();
     }
 

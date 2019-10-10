@@ -25,6 +25,7 @@ public class WorkPreferences extends AppCompatActivity {
     private Button save; //Added on 6 - 24 - 2019
     private EditText getAlarmMinutesPreference; //Added on 6 - 24 - 2019
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,15 +36,13 @@ public class WorkPreferences extends AppCompatActivity {
         rememberPassword = (Button) findViewById(R.id.RememberPassword);
         //alarmMinutesPreference.setText(pref.getString("NEW_ALARM_TIME", ""));
         //newAlarmTime = alarmMinutesPreference.getText().toString();
-        //Need to set *BEFORE* getting the pref string.
+
         String minutes = pref.getString("NEW_ALARM_TIME", "20");
         alarmMinutesPreference.setText(minutes);
 
         //alarmMinutesPreference.setText(newAlarmTime);
         //currentPassword = (EditText) findViewById(R.id.currentPassword);
         save = (Button) findViewById(R.id.save);
-
-
         i = getIntent();
 
         //editPref = pref.edit();
@@ -52,8 +51,11 @@ public class WorkPreferences extends AppCompatActivity {
         //editPref.putString("NEW_ALARM_MINUTES", "15");
         //alarmMinutesPreference.setText(pref.getString("UPDATED_ALARM_TIME", ""));
         //newAlarmTime = alarmMinutesPreference.getText().toString();
+
+
         //editPref.putString("UPDATED_ALARM_TIME", newAlarmTime);
         i.putExtra("NEW_ALARM_TIME", newAlarmTime);
+
         //editPref.putString("UPDATED_ALARM_TIME", alarmMinutesPreference.getText().toString()); //don't check for length
 
         //editPref = pref.edit();
@@ -76,36 +78,26 @@ public class WorkPreferences extends AppCompatActivity {
 
                 }
                 //alarmMinutesPreference.setText(updateTime);
-                Log.e("LG_WORK_PHONE", "NEW ALARM TIME IS: " + newAlarmTime );
+                //Log.e("LG_WORK_PHONE", "NEW ALARM TIME IS: " + newAlarmTime );
                 Log.e("LG_WORK_PHONE", "NEW ALARM TIME AGAIN IS: " + updateTime);
                 editPref = pref.edit();
                 //newAlarmTime = alarmMinutesPreference.getText().toString();
                 //alarmMinutesPreference.setText(newAlarmTime);
                 //alarmMinutesPreference.app;
-                i.putExtra("NEW_ALARM_TIME", newAlarmTime);
+                //i.putExtra("NEW_ALARM_TIME", newAlarmTime);
                 //editPref.putString("NEW_ALARM_TIME", newAlarmTime);
-                editPref.putString("NEW_ALARM_TIME", updateTime);
-                editPref.putInt(getString(R.string.ALARM_MINUTES), Integer.parseInt(updateTime));
-                //editPref.putInt("NEW_DOWNLOAD_DATE", 3);
-                editPref.apply();
 
                 //alarmMinutesPreference.setText(updateTime);
 
                 AlarmTimer alarmTimer = AlarmTimer.getInstance();
-
                 alarmTimer.setAlarmTime(getBaseContext(), alarmTimer.getStartMilitaryHour(),alarmTimer.getMilitaryMinute(), Integer.parseInt(updateTime) );
-                WorkNotification.notify(getBaseContext(), //week.get(position).get(0) + " " +
-                        //week.get(position).get(WorkReaderContract.WorkEntry.START_HOUR)
-                        pref.getInt("ALARM_HOUR", 0)
-                                + ":" +
-                                //week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE)
-                                pref.getInt("MINUTES", 0)
-                                + " "
-                                + alarmTimer.getAMorPM(),
-                        //+ week.get(position).get(WorkReaderContract.WorkEntry.START_AM_OR_PM), //bug when reaches 12
-                        0);
 
-                //setResult(1, getIntent());
+                editPref.putInt("ALARM_HOUR", alarmTimer.getUpdatedHour());
+                editPref.putInt("MINUTES", alarmTimer.getUpdatedMinute());
+                //editPref.putInt("NEW_DOWNLOAD_DATE", 3);
+                editPref.apply();
+
+
                 setResult(1, i);
                 finish();
             }
