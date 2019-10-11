@@ -847,7 +847,6 @@ public class CurrentWeekSchedule extends ListActivity  {
                     getString(R.string.SUNDAY_START_MINUTE),
                     getString(R.string.SUNDAY_START_AM_OR_PM)
             );
-
         }
 
         return currentDay;
@@ -895,17 +894,33 @@ public class CurrentWeekSchedule extends ListActivity  {
                     displayNotification("YOU'RE SUPPOSED TO BE AT WORK", "");
                 }
             } else if (  pref.getInt("ALARM_HOUR", 0) == 0) {
-                displayNotification(dayOfWeek + " " +
-                        "12:" + pref.getInt("MINUTES", 0) + " ", "ALARM");
-
+                displayNotification( buildAlarmTimeFormatDisplay(dayOfWeek,
+                        alarmTimer.getUpdatedHour(),
+                        alarmTimer.getUpdatedMinute(),
+                        alarmTimer.getAMorPM()),
+                        "ALARM");
             }else {
-                displayNotification( dayOfWeek + " " +
-                        pref.getInt("ALARM_HOUR", 0) + ":" +
-                        pref.getInt("MINUTES", 0) + " ", "ALARM");
+                displayNotification( buildAlarmTimeFormatDisplay(dayOfWeek,
+                        alarmTimer.getUpdatedHour(),
+                        alarmTimer.getUpdatedMinute(),
+                        alarmTimer.getAMorPM()),
+                        "ALARM");
             }
 
-
         }
+    }
+
+    //Added on 10 - 11 - 2019
+    private String buildAlarmTimeFormatDisplay(String dayOfWeek, int hour, int minute, String amOrPm) {
+        String timeFormat = "";
+
+        //Something like 1:5 becomes while 1:05 while something like 1:10 stays 1:10
+        if (minute < 10) {
+            timeFormat = dayOfWeek + " " + hour + ":0" + minute + " " + amOrPm;
+        } else {
+            timeFormat = dayOfWeek + " " + hour + ":" + minute + " " + amOrPm;
+        }
+        return timeFormat;
     }
 
     //Added on 10 - 7 - 2019
@@ -934,6 +949,8 @@ public class CurrentWeekSchedule extends ListActivity  {
         Notification notification = notificationCompatBuilder.build();
         mNotificationManagerCompat.notify(0, notification);
     }
+
+
 
     //Added on 8 - 4 - 2019
     @TargetApi(24)
@@ -1107,18 +1124,24 @@ public class CurrentWeekSchedule extends ListActivity  {
         super.onActivityResult(requestCode, resultCode, data);
 
         int newPosition = -1; // don't enter switch
+        int minutes = 0;
         String day = "";
         if (data != null) {
             AlarmTimer alarmTimer = AlarmTimer.getInstance();
             //alarmTimer.setAlarmTime(getBaseContext(), alarmTimer.getStartMilitaryHour(),alarmTimer.getMilitaryMinute(), Integer.parseInt(updateTime) );
+            minutes = alarmTimer.getUpdatedMinute();
+
+            //if less than 10, then something like 1:5 becomes 1:05
+
             displayNotification(//pref.getInt("ALARM_HOUR", 0)
                     alarmTimer.getUpdatedHour()
                             + ":" +
-                            //week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE)
+                                    //week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE)
                             alarmTimer.getUpdatedMinute()
-                            //pref.getInt("MINUTES", 0)
+                                    //pref.getInt("MINUTES", 0)
                             + " "
                             + alarmTimer.getAMorPM(), "ALARM");
+
             newPosition = data.getIntExtra("CURRENT_DAY", -99);  //position in listview
             if (newPosition != -99) {
                 newStartHour = data.getStringExtra(getString(R.string.START_HOUR)); //hardware bug??

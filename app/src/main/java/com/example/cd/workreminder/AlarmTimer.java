@@ -87,7 +87,7 @@ public class AlarmTimer extends AppCompatActivity {
 
     @TargetApi(24)
     public int getUpdatedHour() {
-        return cal.get(Calendar.HOUR_OF_DAY);
+        return cal.get(Calendar.HOUR);
     }
 
     //Added on 6 - 28 - 2019
