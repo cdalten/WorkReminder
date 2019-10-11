@@ -3,11 +3,9 @@ package com.example.cd.workreminder;
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.ListActivity;
-import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.icu.util.Calendar;
@@ -15,10 +13,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
 
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
-//import android.app.NotificationManager;
-//import android.app.Notification;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,31 +22,17 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-
-import static android.app.Notification.EXTRA_NOTIFICATION_ID;
 
 public class CurrentWeekSchedule extends ListActivity  {
 
     private static final String PRODUCTION_TAG = "LG_WORK_PHONE";
-    Intent intent; //??
 
     TextView text_day; //Added on 2 - 10 - 2019
     TextView text_start_hour; //Added on 2 - 10 -2019
     TextView text_separator; //Added on 3 - 19 - 2019
     TextView text_end_hour; //Added on 3 - 19 -2019
-
-    Button Update; //Added on 12 - 2 - 2018
-    Button Finish; //Added on 12 - 2 - 2018
-    Button WorkPrefences; //Added on 4 - 3 - 2019
 
     private int currentPosition = 0; //Added on 1 - 20 - 2019
     static List<String> values; //Modified on 1 - 18 - 2019
@@ -74,22 +54,16 @@ public class CurrentWeekSchedule extends ListActivity  {
 
     private Button workSettings; //Added on 6 - 24 - 2019
     private Button logout; //Added on 7 - 2- 2019
-    private WorkAlarmReceiver workAlarmReceiver; //Added on 5 - 22 - 2019
+
     SharedPreferences pref;
 
     private AlarmManager alarmMgr; //Added on 8 - 4 - 2019
     private PendingIntent alarmIntent; //Added on 8 - 4 - 2019
 
-    //Need to eventually remove
-    private String[] days = {"SATURDAY", "SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"}; //Added on 2 - 10 - 2019
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-
-        //dayOfWeek = new CircularArray<>(7);
 
         pref = this.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
 
@@ -101,9 +75,6 @@ public class CurrentWeekSchedule extends ListActivity  {
 
         list = getListView();
 
-        //IntentFilter intentFilter = new IntentFilter();
-        //workAlarmReceiver = new WorkAlarmReceiver();
-        //registerReceiver(workAlarmReceiver, intentFilter);
         workSettings = (Button) findViewById(R.id.workSettings);
         logout = (Button) findViewById(R.id.logout);
 
@@ -431,36 +402,12 @@ public class CurrentWeekSchedule extends ListActivity  {
             }
         });
 
-        //Save changes
-        /*Update.setOnClickListener(new View.OnClickListener() {
-            //String saveUpdatedHours;
-            @Override
-            public void onClick(View v) {
-                com.example.cd.shiftreminder.WorkReaderDbHelper workReaderDbHelper = new com.example.cd.shiftreminder.WorkReaderDbHelper(getBaseContext());
-
-                // Gets the data repository in write mode
-                SQLiteDatabase db = workReaderDbHelper.getWritableDatabase();
-
-                // Create a new map of values, where column names are the keys
-                ContentValues values = new ContentValues();
-                values.put(WorkReaderContract.WorkEntry.COLUMN_NAME_START_HOUR, "");
-                values.put(WorkReaderContract.WorkEntry.COLUMN_NAME_START_MINUTE, "");
-                values.put(WorkReaderContract.WorkEntry.COLUMN_NAME_START_AM_OR_PM, "");
-                values.put(WorkReaderContract.WorkEntry.COLUMN_NAME_END_HOUR, "");
-                values.put(WorkReaderContract.WorkEntry.COLUMN_NAME_END_MINUTE, "");
-                values.put(WorkReaderContract.WorkEntry.COLUMN_NAME_END_AM_OR_PM, "");
-
-                long newRowId = db.insert(FeedEntry.TABLE_NAME, null, values);
-            }
-        });
-        */
-
-
         storeHoursInGUI currentWeek = new storeHoursInGUI(this);
         if (savedInstanceState == null) {
             week = currentWeek.addHours();
             adapter = new WS(this,
                     R.layout.schedule_list, week);
+
             setListAdapter(adapter);
             //addHours();
         } else {
@@ -634,7 +581,6 @@ public class CurrentWeekSchedule extends ListActivity  {
             //super.getView(position, convertView, parent);
             if (convertView == null) {
                 //Log.e(PRODUCTION_TAG, "CONVERT VIEW IS NULL");
-
                 convertView = getLayoutInflater().inflate(R.layout.schedule_list, parent, false);
                 //convertView = getLayoutInflater().inflate(android.R.layout.simple_expandable_list_item_2, parent, false);
             }
@@ -708,11 +654,8 @@ public class CurrentWeekSchedule extends ListActivity  {
             //text_day.setMinTimumHeight(0); // Min Height
             //text_day.setHeight(120); // Height in pixels. Not dip?
 
-            //text_day.setText(days[position]);
-
-            Calendar cal = Calendar.getInstance();
-            //if (cal.get(Calendar.DAY_OF_WEEK) == getCurrentDay(position)) {
-            if (handleThirdShift() == position + 1) {
+            dayNotification dayNotification = new dayNotification();
+            if (dayNotification.handleThirdShift() == position + 1) {
                 text_start_hour.setTypeface(text_start_hour.getTypeface(), Typeface.BOLD);  //vs null??
                 text_separator.setTypeface(text_separator.getTypeface(), Typeface.BOLD);  //vs null??
                 text_end_hour.setTypeface(text_end_hour.getTypeface(), Typeface.BOLD);  //vs null??
@@ -726,230 +669,6 @@ public class CurrentWeekSchedule extends ListActivity  {
         }//end method
 
     }//end inner class
-
-    //Added on 10 - 10 - 2019
-    private void displaySchedule() {
-
-    }
-
-    //Added on 7 - 1 - 2019
-    @TargetApi(24)
-    private int handleThirdShift() {
-        Calendar cal = Calendar.getInstance();
-        int currentDay = cal.get(Calendar.DAY_OF_WEEK); //vs inside if??
-        //CurrentWorkHours currentWorkHours = new CurrentWorkHours();
-        if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.SUNDAY) {
-            setNotification(
-                    getString(R.string.SUNDAY),
-                    getString(R.string.SUNDAY_START_HOUR),
-                    getString(R.string.SUNDAY_START_MINUTE),
-                    getString(R.string.SUNDAY_START_AM_OR_PM),
-                    getString(R.string.SUNDAY_END_HOUR),
-                    getString(R.string.SUNDAY_END_MINUTE),
-                    getString(R.string.SUNDAY_END_AM_OR_PM),
-
-                    getString(R.string.MONDAY_START_HOUR),
-                    getString(R.string.MONDAY_START_MINUTE),
-                    getString(R.string.MONDAY_START_AM_OR_PM)
-            );
-
-
-        } else if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.MONDAY) {
-            //if(!week.get(position).get(0).equals("OFF")) {
-            setNotification(
-                    getString(R.string.MONDAY),
-                    getString(R.string.MONDAY_START_HOUR),
-                    getString(R.string.MONDAY_START_MINUTE),
-                    getString(R.string.MONDAY_START_AM_OR_PM),
-                    getString(R.string.MONDAY_END_HOUR),
-                    getString(R.string.MONDAY_END_MINUTE),
-                    getString(R.string.MONDAY_END_AM_OR_PM),
-
-                    getString(R.string.TUESDAY_START_HOUR),
-                    getString(R.string.TUESDAY_START_MINUTE),
-                    getString(R.string.TUESDAY_START_AM_OR_PM)
-            );
-
-        }else if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.TUESDAY) {
-            setNotification(
-                    getString(R.string.TUESDAY),
-                    getString(R.string.TUESDAY_START_HOUR),
-                    getString(R.string.TUESDAY_START_MINUTE),
-                    getString(R.string.TUESDAY_START_AM_OR_PM),
-                    getString(R.string.TUESDAY_END_HOUR),
-                    getString(R.string.TUESDAY_END_MINUTE),
-                    getString(R.string.TUESDAY_END_AM_OR_PM),
-
-                    getString(R.string.WEDNESDAY_START_HOUR),
-                    getString(R.string.WEDNESDAY_START_MINUTE),
-                    getString(R.string.WEDNESDAY_START_AM_OR_PM)
-            );
-
-        } else if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.WEDNESDAY) {
-            setNotification(
-                    getString(R.string.WEDNESDAY),
-                    getString(R.string.WEDNESDAY_START_HOUR),
-                    getString(R.string.WEDNESDAY_START_MINUTE),
-                    getString(R.string.WEDNESDAY_START_AM_OR_PM),
-                    getString(R.string.WEDNESDAY_END_HOUR),
-                    getString(R.string.WEDNESDAY_END_MINUTE),
-                    getString(R.string.WEDNESDAY_END_AM_OR_PM),
-
-                    getString(R.string.THURSDAY_START_HOUR),
-                    getString(R.string.THURSDAY_START_MINUTE),
-                    getString(R.string.THURSDAY_START_AM_OR_PM)
-            );
-
-
-        }else if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.THURSDAY) {
-            setNotification(
-                    getString(R.string.THURSDAY),
-                    getString(R.string.THURSDAY_START_HOUR),
-                    getString(R.string.THURSDAY_START_MINUTE),
-                    getString(R.string.THURSDAY_START_AM_OR_PM),
-                    getString(R.string.THURSDAY_END_HOUR),
-                    getString(R.string.THURSDAY_END_MINUTE),
-                    getString(R.string.THURSDAY_END_AM_OR_PM),
-
-                    getString(R.string.FRIDAY_START_HOUR),
-                    getString(R.string.FRIDAY_START_MINUTE),
-                    getString(R.string.FRIDAY_START_AM_OR_PM)
-            );
-
-        } else if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.FRIDAY) {
-            //if(!week.get(position).get(0).equals("OFF")) {
-            setNotification(
-                    getString(R.string.FRIDAY),
-                    getString(R.string.FRIDAY_START_HOUR),
-                    getString(R.string.FRIDAY_START_MINUTE),
-                    getString(R.string.FRIDAY_START_AM_OR_PM),
-                    getString(R.string.FRIDAY_END_HOUR),
-                    getString(R.string.FRIDAY_END_MINUTE),
-                    getString(R.string.FRIDAY_END_AM_OR_PM),
-
-                    getString(R.string.SATURDAY_START_HOUR),
-                    getString(R.string.SATURDAY_START_MINUTE),
-                    getString(R.string.SATURDAY_START_AM_OR_PM)
-            );
-
-        }
-        else if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.SATURDAY) {
-            setNotification(
-                    getString(R.string.SATURDAY),
-                    getString(R.string.SATURDAY_START_HOUR),
-                    getString(R.string.SATURDAY_START_MINUTE),
-                    getString(R.string.SATURDAY_START_AM_OR_PM),
-                    getString(R.string.SATURDAY_END_HOUR),
-                    getString(R.string.SATURDAY_END_MINUTE),
-                    getString(R.string.SATURDAY_END_AM_OR_PM),
-
-                    getString(R.string.SUNDAY_START_HOUR),
-                    getString(R.string.SUNDAY_START_MINUTE),
-                    getString(R.string.SUNDAY_START_AM_OR_PM)
-            );
-        }
-
-        return currentDay;
-    }
-
-    //Added on 10 - 7 - 2019
-    //Do I need the last three args in the function??
-    @TargetApi(24)
-    private void setNotification(
-            String dayOfWeek,
-            String dayOfWeekStartHour, String dayOfWeekStartMinute, String dayOfWeekStartAmOrPm,
-            String dayOfWeekEndHour, String dayOfWeekEndMinute, String dayOfWeekEndAmOrPm,
-
-            String endDayOfWeekStartHour, String endDayOfWeekStartMinute, String endDayOfWeekStartAmOrPm
-    ) {
-        Calendar cal = Calendar.getInstance();
-        MilitaryTime militaryTime = MilitaryTime.getInstance();
-        AlarmTimer alarmTimer = AlarmTimer.getInstance();
-
-        if (!(pref.getString(dayOfWeek, "OFF").equals("OFF"))) {
-            int currentHour = cal.get(Calendar.HOUR);
-            int currentMinute = cal.get(Calendar.MINUTE);
-
-            //pref.getString( getString(R.string.FRIDAY_START_HOUR), "" );
-            militaryTime.convertStartCivilianTimeToMilitaryTime(
-                    pref.getString(dayOfWeekStartHour, WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
-                    pref.getString(dayOfWeekStartMinute, WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
-                    pref.getString(dayOfWeekStartAmOrPm, WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-
-            militaryTime.convertEndCivilianTimeToMilitaryTime(pref.getString(dayOfWeekEndHour, WorkReaderContract.WorkEntry.END_HOUR_DEFAULT),
-                    pref.getString(dayOfWeekEndMinute, WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
-                    pref.getString(dayOfWeekEndAmOrPm, WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
-
-            alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
-                    pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
-            if (currentHour > militaryTime.getStartMilitaryHour() && currentHour < militaryTime.getEndMilitaryHour()) {
-                displayNotification("YOU'RE SUPPOSED TO BE AT WORK", "");
-            } else if (currentHour == militaryTime.getStartMilitaryHour()) {
-                //setCurrentAlarm(militaryTime.getStartMilitaryHour(), militaryTime.getEndMilitaryMinute());
-                if (currentMinute > militaryTime.getStartMilitaryMinute()) {
-                    displayNotification("YOU'RE SUPPOSED TO BE AT WORK", "");
-                }
-            } else if (currentHour == militaryTime.getEndMilitaryHour()) {
-                if (currentMinute < militaryTime.getEndMilitaryMinute()) {
-                    displayNotification("YOU'RE SUPPOSED TO BE AT WORK", "");
-                }
-            } else if (  pref.getInt("ALARM_HOUR", 0) == 0) {
-                displayNotification( buildAlarmTimeFormatDisplay(dayOfWeek,
-                        alarmTimer.getUpdatedHour(),
-                        alarmTimer.getUpdatedMinute(),
-                        alarmTimer.getAMorPM()),
-                        "ALARM");
-            }else {
-                displayNotification( buildAlarmTimeFormatDisplay(dayOfWeek,
-                        alarmTimer.getUpdatedHour(),
-                        alarmTimer.getUpdatedMinute(),
-                        alarmTimer.getAMorPM()),
-                        "ALARM");
-            }
-
-        }
-    }
-
-    //Added on 10 - 11 - 2019
-    private String buildAlarmTimeFormatDisplay(String dayOfWeek, int hour, int minute, String amOrPm) {
-        String timeFormat = "";
-
-        //Something like 1:5 becomes while 1:05 while something like 1:10 stays 1:10
-        if (minute < 10) {
-            timeFormat = dayOfWeek + " " + hour + ":0" + minute + " " + amOrPm;
-        } else {
-            timeFormat = dayOfWeek + " " + hour + ":" + minute + " " + amOrPm;
-        }
-        return timeFormat;
-    }
-
-    //Added on 10 - 7 - 2019
-    public void displayNotification(String notificationText, String notificationTitle) {
-        Intent snoozeIntent = new Intent(this, WorkAlarmReceiver.class);
-        //snoozeIntent.setAction(ACTION_SNOOZE);
-        snoozeIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
-        PendingIntent snoozePendingIntent =
-                PendingIntent.getBroadcast(this, 0, snoozeIntent, 0);
-
-        //NotificationCompat.Builder
-        NotificationCompat.Builder notificationCompatBuilder = new NotificationCompat.Builder(getApplicationContext(), "0");
-
-        GlobalNotificationBuilder.setNotificationCompatBuilderInstance(notificationCompatBuilder);
-        notificationCompatBuilder.setSmallIcon(R.drawable.ic_stat_work)
-                //.setContentTitle("My notification")
-                //.setContentText("Hello World!")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(snoozePendingIntent)
-                .addAction(R.drawable.ic_action_stat_share,
-                        getResources().getString(R.string.action_share), snoozePendingIntent);
-        notificationCompatBuilder.setContentTitle(notificationTitle);
-        notificationCompatBuilder.setContentText(notificationText);
-        NotificationManagerCompat mNotificationManagerCompat;
-        mNotificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
-        Notification notification = notificationCompatBuilder.build();
-        mNotificationManagerCompat.notify(0, notification);
-    }
-
 
 
     //Added on 8 - 4 - 2019
@@ -1128,12 +847,8 @@ public class CurrentWeekSchedule extends ListActivity  {
         String day = "";
         if (data != null) {
             AlarmTimer alarmTimer = AlarmTimer.getInstance();
-            //alarmTimer.setAlarmTime(getBaseContext(), alarmTimer.getStartMilitaryHour(),alarmTimer.getMilitaryMinute(), Integer.parseInt(updateTime) );
-            minutes = alarmTimer.getUpdatedMinute();
-
-            //if less than 10, then something like 1:5 becomes 1:05
-
-            displayNotification(//pref.getInt("ALARM_HOUR", 0)
+            dayNotification dayNotification = new dayNotification();
+            dayNotification.displayNotification(//pref.getInt("ALARM_HOUR", 0)
                     alarmTimer.getUpdatedHour()
                             + ":" +
                                     //week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE)
@@ -1163,7 +878,7 @@ public class CurrentWeekSchedule extends ListActivity  {
         //editor.apply();
         //newStartDay = week.get(weekPosition).get(0); //BUG  -- DEFAULTS TO SUNDAY
         //newStartDay = week.get(newPosition).get(0);
-        //data.getStringExtra(getString(R.string.DAY_OF_WEEK)); //CORRECTED VERSION
+        //data.getStringExtra(getString(R.string.DAY_OF_WEEK)); //CORRECTED VERSION/
 
         //Yes I know this sucks.
             switch (newPosition) {
