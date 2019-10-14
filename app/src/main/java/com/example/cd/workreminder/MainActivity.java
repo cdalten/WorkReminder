@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     //public static String LOGIN_URL = "http://localhost";
     public static String LOGIN_URL = "http://172.31.99.60/index.html";
     protected static final String UA = "Pak N Slave Mobile App; Written by cda@stanford.edu; Uhh...Hi Mom!";
+    public static final int NOTIFICATION_ID = 0; //Added on 10 - 14 - 2019
 
     ConnectionCallback connectionCallback; //added on 10 - 7 - 2018
 

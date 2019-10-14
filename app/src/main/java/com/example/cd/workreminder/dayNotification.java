@@ -3,9 +3,11 @@ package com.example.cd.workreminder;
 import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.icu.util.Calendar;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +16,10 @@ import static android.app.Notification.EXTRA_NOTIFICATION_ID;
 
 public class dayNotification extends AppCompatActivity {
     SharedPreferences pref;
+    Context context; //Added on 10 - 14 - 2019
+    public dayNotification(Context context) {
+        this.context = context;
+    }
     //Added on 7 - 1 - 2019
     @TargetApi(24)
     public int handleThirdShift() {
@@ -22,7 +28,7 @@ public class dayNotification extends AppCompatActivity {
         //CurrentWorkHours currentWorkHours = new CurrentWorkHours();
         if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.SUNDAY) {
             setNotification(
-                    getString(R.string.SUNDAY),
+                    context.getString(R.string.SUNDAY),
                     getString(R.string.SUNDAY_START_HOUR),
                     getString(R.string.SUNDAY_START_MINUTE),
                     getString(R.string.SUNDAY_START_AM_OR_PM),
@@ -37,7 +43,7 @@ public class dayNotification extends AppCompatActivity {
         } else if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.MONDAY) {
             //if(!week.get(position).get(0).equals("OFF")) {
             setNotification(
-                    getString(R.string.MONDAY),
+                    context.getString(R.string.MONDAY),
                     getString(R.string.MONDAY_START_HOUR),
                     getString(R.string.MONDAY_START_MINUTE),
                     getString(R.string.MONDAY_START_AM_OR_PM),
@@ -51,7 +57,7 @@ public class dayNotification extends AppCompatActivity {
             );
         } else if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.TUESDAY) {
             setNotification(
-                    getString(R.string.TUESDAY),
+                    context.getString(R.string.TUESDAY),
                     getString(R.string.TUESDAY_START_HOUR),
                     getString(R.string.TUESDAY_START_MINUTE),
                     getString(R.string.TUESDAY_START_AM_OR_PM),
@@ -65,7 +71,7 @@ public class dayNotification extends AppCompatActivity {
             );
         } else if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.WEDNESDAY) {
             setNotification(
-                    getString(R.string.WEDNESDAY),
+                    context.getString(R.string.WEDNESDAY),
                     getString(R.string.WEDNESDAY_START_HOUR),
                     getString(R.string.WEDNESDAY_START_MINUTE),
                     getString(R.string.WEDNESDAY_START_AM_OR_PM),
@@ -79,7 +85,7 @@ public class dayNotification extends AppCompatActivity {
             );
         }else if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.THURSDAY) {
             setNotification(
-                    getString(R.string.THURSDAY),
+                    context.getString(R.string.THURSDAY),
                     getString(R.string.THURSDAY_START_HOUR),
                     getString(R.string.THURSDAY_START_MINUTE),
                     getString(R.string.THURSDAY_START_AM_OR_PM),
@@ -94,7 +100,7 @@ public class dayNotification extends AppCompatActivity {
         } else if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.FRIDAY) {
             //if(!week.get(position).get(0).equals("OFF")) {
             setNotification(
-                    getString(R.string.FRIDAY),
+                    context.getString(R.string.FRIDAY),
                     getString(R.string.FRIDAY_START_HOUR),
                     getString(R.string.FRIDAY_START_MINUTE),
                     getString(R.string.FRIDAY_START_AM_OR_PM),
@@ -109,7 +115,7 @@ public class dayNotification extends AppCompatActivity {
         }
         else if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.SATURDAY) {
             setNotification(
-                    getString(R.string.SATURDAY),
+                    context.getString(R.string.SATURDAY),
                     getString(R.string.SATURDAY_START_HOUR),
                     getString(R.string.SATURDAY_START_MINUTE),
                     getString(R.string.SATURDAY_START_AM_OR_PM),

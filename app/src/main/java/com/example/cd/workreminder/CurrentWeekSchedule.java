@@ -352,44 +352,20 @@ public class CurrentWeekSchedule extends ListActivity  {
                         break;
 
                     case WorkReaderContract.WorkEntry.SATURDAY:
-                        //if (week.get(WorkReaderContract.WorkEntry.SATURDAY).get(0).equals("OFF")) {
-                        if ((pref.getString(getString(R.string.SATURDAY), "OFF").equals("OFF"))) {
-                            i.putExtra("DAY_WEEK", position);
-                            i.putExtra("START_HOUR",  Integer.parseInt(WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
-                            i.putExtra("START_MINUTE",  Integer.parseInt(WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
-                            i.putExtra("START_AM_OR_PM",  WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT);
-
-                            i.putExtra("END_HOUR",  Integer.parseInt(WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
-                            i.putExtra("END_MINUTE",  Integer.parseInt(WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
-                            i.putExtra("END_AM_OR_PM",  WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT);
-                        } else {
-                            i.putExtra("DAY_WEEK", position);
-                            i.putExtra("START_HOUR",
-                                    Integer.parseInt( pref.getString(getString(R.string.SATURDAY_START_HOUR),
-                                            WorkReaderContract.WorkEntry.START_HOUR_DEFAULT)));
-                            i.putExtra("START_MINUTE",
-                                    Integer.parseInt( pref.getString(getString(R.string.SATURDAY_START_MINUTE),
-                                            WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT)) / 15);
-                            if ( pref.getString(getString(R.string.SATURDAY_START_AM_OR_PM),
-                                    WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT).equals("AM")) {
-                                i.putExtra("START_AM_OR_PM", 0);
-                            } else {
-                                i.putExtra("START_AM_OR_PM", 1);
-                            }
-
-                            i.putExtra("END_HOUR",
-                                    Integer.parseInt(pref.getString(getString(R.string.SATURDAY_END_HOUR),
-                                            WorkReaderContract.WorkEntry.END_HOUR_DEFAULT)));
-                            i.putExtra("END_MINUTE",
-                                    Integer.parseInt(pref.getString(getString(R.string.SATURDAY_END_MINUTE),
-                                            WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT)) / 15);
-                            if (pref.getString(getString(R.string.SATURDAY_END_AM_OR_PM),
-                                    WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT).equals("AM")) {
-                                i.putExtra("END_AM_OR_PM", 0);
-                            } else {
-                                i.putExtra("END_AM_OR_PM", 1);
-                            }
-                        }
+                        fillListview(position,
+                                pref.getString(getString(R.string.SATURDAY_START_HOUR),
+                                        WorkReaderContract.WorkEntry.START_HOUR_DEFAULT) ,
+                                pref.getString(getString(R.string.SATURDAY_START_MINUTE),
+                                        WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
+                                pref.getString(getString(R.string.SATURDAY_START_AM_OR_PM),
+                                        WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT),
+                                pref.getString(getString(R.string.SATURDAY_END_HOUR),
+                                        WorkReaderContract.WorkEntry.END_HOUR_DEFAULT),
+                                pref.getString(getString(R.string.SATURDAY_END_MINUTE),
+                                        WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
+                                pref.getString(getString(R.string.SATURDAY_END_AM_OR_PM),
+                                        WorkReaderContract.WorkEntry.END_HOUR_DEFAULT)
+                        );
                         break;
                 }//end
 
@@ -402,6 +378,7 @@ public class CurrentWeekSchedule extends ListActivity  {
             }
         });
 
+
         storeHoursInGUI currentWeek = new storeHoursInGUI(this);
         if (savedInstanceState == null) {
             week = currentWeek.addHours();
@@ -409,21 +386,54 @@ public class CurrentWeekSchedule extends ListActivity  {
                     R.layout.schedule_list, week);
 
             setListAdapter(adapter);
-            //addHours();
         } else {
             week = currentWeek.addHours();
             adapter = new WS(this,
                     R.layout.schedule_list, week);
             setListAdapter(adapter);
-            //addHours();
-
-            //mondayHours.setDayofWeek("OFF");
-            //week.get(1).remove(0);
-            //week.get(1).add(0, mondayHours.getDayOfWeek());
-
         }
+
     } //end onCreate()
 
+    //Added on 10 - 14 - 2019
+    private void fillListview(int position,
+                              String startHour,
+                              String startMinute,
+                              String startAmOrPm,
+                              String endHour,
+                              String endMinute,
+                              String endAmOrPm)
+    {
+        if ((pref.getString(getString(R.string.SATURDAY), "OFF").equals("OFF"))) {
+            i.putExtra("DAY_WEEK", position);
+            i.putExtra("START_HOUR",  Integer.parseInt(WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
+            i.putExtra("START_MINUTE",  Integer.parseInt(WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
+            i.putExtra("START_AM_OR_PM",  WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT);
+
+            i.putExtra("END_HOUR",  Integer.parseInt(WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
+            i.putExtra("END_MINUTE",  Integer.parseInt(WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
+            i.putExtra("END_AM_OR_PM",  WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT);
+        } else {
+            i.putExtra("DAY_WEEK", position);
+            i.putExtra("START_HOUR", Integer.parseInt(startHour));
+            i.putExtra("START_MINUTE",
+                    Integer.parseInt(startMinute) / 15);
+            if (startAmOrPm.equals("AM")) {
+                i.putExtra("START_AM_OR_PM", 0);
+            } else {
+                i.putExtra("START_AM_OR_PM", 1);
+            }
+            i.putExtra("END_HOUR",
+                    Integer.parseInt(endHour));
+            i.putExtra("END_MINUTE",
+                    Integer.parseInt(endMinute) / 15);
+            if (endAmOrPm.equals("AM")) {
+                i.putExtra("END_AM_OR_PM", 0);
+            } else {
+                i.putExtra("END_AM_OR_PM", 1);
+            }
+        }
+    }
 
     //Added on 3 - 28 - 2019
     //Save data when screen changes from portrait to landscape
@@ -654,7 +664,7 @@ public class CurrentWeekSchedule extends ListActivity  {
             //text_day.setMinTimumHeight(0); // Min Height
             //text_day.setHeight(120); // Height in pixels. Not dip?
 
-            dayNotification dayNotification = new dayNotification();
+            dayNotification dayNotification = new dayNotification(getContext());
             if (dayNotification.handleThirdShift() == position + 1) {
                 text_start_hour.setTypeface(text_start_hour.getTypeface(), Typeface.BOLD);  //vs null??
                 text_separator.setTypeface(text_separator.getTypeface(), Typeface.BOLD);  //vs null??
@@ -847,7 +857,7 @@ public class CurrentWeekSchedule extends ListActivity  {
         String day = "";
         if (data != null) {
             AlarmTimer alarmTimer = AlarmTimer.getInstance();
-            dayNotification dayNotification = new dayNotification();
+            dayNotification dayNotification = new dayNotification(this);
             dayNotification.displayNotification(//pref.getInt("ALARM_HOUR", 0)
                     alarmTimer.getUpdatedHour()
                             + ":" +
