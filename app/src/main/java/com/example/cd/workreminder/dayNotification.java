@@ -135,11 +135,6 @@ public class dayNotification extends AppCompatActivity {
         return currentDay;
     }
 
-    //Added on 10 - 15 - 2019
-    private String formatTime(String timeToken) {
-
-        return timeToken;
-    }
 
     //Added on 10 - 7 - 2019
     //Do I need the last three args in the function??
@@ -228,8 +223,6 @@ public class dayNotification extends AppCompatActivity {
 
         GlobalNotificationBuilder.setNotificationCompatBuilderInstance(notificationCompatBuilder);
         notificationCompatBuilder.setSmallIcon(R.drawable.ic_stat_work)
-                //.setContentTitle("My notification")
-                //.setContentText("Hello World!")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(snoozePendingIntent)
                 .addAction(R.drawable.ic_action_stat_share,

@@ -65,7 +65,7 @@ public class CurrentWeekSchedule extends ListActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
-        pref = this.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        pref =  this.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
 
         //Update = (Button) findViewById(R.id.Update);
         //WorkPrefences = (Button) findViewById(R.id.ferences);
@@ -104,161 +104,123 @@ public class CurrentWeekSchedule extends ListActivity  {
                 i = new Intent(CurrentWeekSchedule.this, HourFormat.class);
                 currentDay = position; //Stupid hack
                 currentPosition = position; //position on clicked list
-                //i = new Intent(CurrentWeekSchedule.this, HourFormat.class);
                 switch (position) {
                     case WorkReaderContract.WorkEntry.SUNDAY:
                         //currentPosition = 6; //handle integer wrap around case
                         //if (week.get(WorkReaderContract.WorkEntry.SUNDAY).get(0).equals("OFF")) {
                         fillListviewDropdown(position,
-                                pref.getString(getString(R.string.SUNDAY_START_HOUR),
-                                        WorkReaderContract.WorkEntry.START_HOUR_DEFAULT) ,
-                                pref.getString(getString(R.string.SUNDAY_START_MINUTE),
-                                        WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
-                                pref.getString(getString(R.string.SUNDAY_START_AM_OR_PM),
-                                        WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT),
-                                pref.getString(getString(R.string.SUNDAY_END_HOUR),
-                                        WorkReaderContract.WorkEntry.END_HOUR_DEFAULT),
-                                pref.getString(getString(R.string.SUNDAY_END_MINUTE),
-                                        WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
-                                pref.getString(getString(R.string.SUNDAY_END_AM_OR_PM),
-                                        WorkReaderContract.WorkEntry.END_HOUR_DEFAULT)
+                                R.string.SUNDAY,
+                                R.string.SUNDAY_START_HOUR,
+                                R.string.SUNDAY_START_MINUTE,
+                                R.string.SUNDAY_START_AM_OR_PM,
+                                R.string.SUNDAY_END_HOUR,
+                                R.string.SUNDAY_END_MINUTE,
+                                R.string.SUNDAY_END_AM_OR_PM
                         );
                         break;
                     case WorkReaderContract.WorkEntry.MONDAY:
                         fillListviewDropdown(position,
-                                pref.getString(getString(R.string.MONDAY_START_HOUR),
-                                        WorkReaderContract.WorkEntry.START_HOUR_DEFAULT) ,
-                                pref.getString(getString(R.string.MONDAY_START_MINUTE),
-                                        WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
-                                pref.getString(getString(R.string.MONDAY_START_AM_OR_PM),
-                                        WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT),
-                                pref.getString(getString(R.string.MONDAY_END_HOUR),
-                                        WorkReaderContract.WorkEntry.END_HOUR_DEFAULT),
-                                pref.getString(getString(R.string.MONDAY_END_MINUTE),
-                                        WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
-                                pref.getString(getString(R.string.MONDAY_END_AM_OR_PM),
-                                        WorkReaderContract.WorkEntry.END_HOUR_DEFAULT)
+                                R.string.MONDAY,
+                                R.string.MONDAY_START_HOUR,
+                                R.string.MONDAY_START_MINUTE,
+                                R.string.MONDAY_START_AM_OR_PM,
+                                R.string.MONDAY_END_HOUR,
+                                R.string.MONDAY_END_MINUTE,
+                                R.string.MONDAY_END_AM_OR_PM
                         );
                         break;
                     case WorkReaderContract.WorkEntry.TUESDAY:
                         fillListviewDropdown(position,
-                                pref.getString(getString(R.string.TUESDAY_START_HOUR),
-                                        WorkReaderContract.WorkEntry.START_HOUR_DEFAULT) ,
-                                pref.getString(getString(R.string.TUESDAY_START_MINUTE),
-                                        WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
-                                pref.getString(getString(R.string.TUESDAY_START_AM_OR_PM),
-                                        WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT),
-                                pref.getString(getString(R.string.TUESDAY_END_HOUR),
-                                        WorkReaderContract.WorkEntry.END_HOUR_DEFAULT),
-                                pref.getString(getString(R.string.TUESDAY_END_MINUTE),
-                                        WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
-                                pref.getString(getString(R.string.TUESDAY_END_AM_OR_PM),
-                                        WorkReaderContract.WorkEntry.END_HOUR_DEFAULT)
+                                R.string.TUESDAY,
+                                R.string.TUESDAY_START_HOUR,
+                                R.string.TUESDAY_START_MINUTE,
+                                R.string.TUESDAY_START_AM_OR_PM,
+                                R.string.TUESDAY_END_HOUR,
+                                R.string.TUESDAY_END_MINUTE,
+                                R.string.TUESDAY_END_AM_OR_PM
                         );
                         break;
                     case WorkReaderContract.WorkEntry.WEDNESDAY:
                         fillListviewDropdown(position,
-                                pref.getString(getString(R.string.WEDNESDAY_START_HOUR),
-                                        WorkReaderContract.WorkEntry.START_HOUR_DEFAULT) ,
-                                pref.getString(getString(R.string.WEDNESDAY_START_MINUTE),
-                                        WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
-                                pref.getString(getString(R.string.WEDNESDAY_START_AM_OR_PM),
-                                        WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT),
-                                pref.getString(getString(R.string.WEDNESDAY_END_HOUR),
-                                        WorkReaderContract.WorkEntry.END_HOUR_DEFAULT),
-                                pref.getString(getString(R.string.WEDNESDAY_END_MINUTE),
-                                        WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
-                                pref.getString(getString(R.string.WEDNESDAY_END_AM_OR_PM),
-                                        WorkReaderContract.WorkEntry.END_HOUR_DEFAULT)
+                                R.string.WEDNESDAY,
+                                R.string.WEDNESDAY_START_HOUR,
+                                R.string.WEDNESDAY_START_MINUTE,
+                                R.string.WEDNESDAY_START_AM_OR_PM,
+                                R.string.WEDNESDAY_END_HOUR,
+                                R.string.WEDNESDAY_END_MINUTE,
+                                R.string.WEDNESDAY_END_AM_OR_PM
                         );
                         break;
                     case WorkReaderContract.WorkEntry.THURSDAY:
                         fillListviewDropdown(position,
-                                pref.getString(getString(R.string.THURSDAY_START_HOUR),
-                                        WorkReaderContract.WorkEntry.START_HOUR_DEFAULT) ,
-                                pref.getString(getString(R.string.THURSDAY_START_MINUTE),
-                                        WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
-                                pref.getString(getString(R.string.THURSDAY_START_AM_OR_PM),
-                                        WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT),
-                                pref.getString(getString(R.string.THURSDAY_END_HOUR),
-                                        WorkReaderContract.WorkEntry.END_HOUR_DEFAULT),
-                                pref.getString(getString(R.string.THURSDAY_END_MINUTE),
-                                        WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
-                                pref.getString(getString(R.string.THURSDAY_END_AM_OR_PM),
-                                        WorkReaderContract.WorkEntry.END_HOUR_DEFAULT)
+                                R.string.THURSDAY,
+                                R.string.THURSDAY_START_HOUR,
+                                R.string.THURSDAY_START_MINUTE,
+                                R.string.THURSDAY_START_AM_OR_PM,
+                                R.string.THURSDAY_END_HOUR,
+                                R.string.THURSDAY_END_MINUTE,
+                                R.string.THURSDAY_END_AM_OR_PM
                         );
                         break;
                     case WorkReaderContract.WorkEntry.FRIDAY:
                         fillListviewDropdown(position,
-                                pref.getString(getString(R.string.FRIDAY_START_HOUR),
-                                        WorkReaderContract.WorkEntry.START_HOUR_DEFAULT) ,
-                                pref.getString(getString(R.string.FRIDAY_START_MINUTE),
-                                        WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
-                                pref.getString(getString(R.string.FRIDAY_START_AM_OR_PM),
-                                        WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT),
-                                pref.getString(getString(R.string.FRIDAY_END_HOUR),
-                                        WorkReaderContract.WorkEntry.END_HOUR_DEFAULT),
-                                pref.getString(getString(R.string.FRIDAY_END_MINUTE),
-                                        WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
-                                pref.getString(getString(R.string.FRIDAY_END_AM_OR_PM),
-                                        WorkReaderContract.WorkEntry.END_HOUR_DEFAULT)
+                                R.string.FRIDAY,
+                                R.string.FRIDAY_START_HOUR,
+                                R.string.FRIDAY_START_MINUTE,
+                                R.string.FRIDAY_START_AM_OR_PM,
+                                R.string.FRIDAY_END_HOUR,
+                                R.string.FRIDAY_END_MINUTE,
+                                R.string.FRIDAY_END_AM_OR_PM
                         );
                         break;
 
                     case WorkReaderContract.WorkEntry.SATURDAY:
                         fillListviewDropdown(position,
-                                pref.getString(getString(R.string.SATURDAY_START_HOUR),
-                                        WorkReaderContract.WorkEntry.START_HOUR_DEFAULT) ,
-                                pref.getString(getString(R.string.SATURDAY_START_MINUTE),
-                                        WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
-                                pref.getString(getString(R.string.SATURDAY_START_AM_OR_PM),
-                                        WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT),
-                                pref.getString(getString(R.string.SATURDAY_END_HOUR),
-                                        WorkReaderContract.WorkEntry.END_HOUR_DEFAULT),
-                                pref.getString(getString(R.string.SATURDAY_END_MINUTE),
-                                        WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
-                                pref.getString(getString(R.string.SATURDAY_END_AM_OR_PM),
-                                        WorkReaderContract.WorkEntry.END_HOUR_DEFAULT)
+                                R.string.SATURDAY,
+                                R.string.SATURDAY_START_HOUR,
+                                R.string.SATURDAY_START_MINUTE,
+                                R.string.SATURDAY_START_AM_OR_PM,
+                                R.string.SATURDAY_END_HOUR,
+                                R.string.SATURDAY_END_MINUTE,
+                                R.string.SATURDAY_END_AM_OR_PM
                         );
                         break;
                 }//end
 
-
-                //pipe shit forward
-
-                Log.e(PRODUCTION_TAG, "TEXT AT: " + position + " IS: " + value);
-                //startActivity(i);
                 startActivityForResult(i, 0); //does writepar save the data??? Need to test for Thursday case.
             }
         });
 
 
         storeHoursInGUI currentWeek = new storeHoursInGUI(this);
-        if (savedInstanceState == null) {
+        //if (savedInstanceState == null) {
             week = currentWeek.addHours();
             adapter = new WS(this,
                     R.layout.schedule_list, week);
 
             setListAdapter(adapter);
-        } else {
-            week = currentWeek.addHours();
-            adapter = new WS(this,
-                    R.layout.schedule_list, week);
-            setListAdapter(adapter);
-        }
+        //} else {
+        //    week = currentWeek.addHours();
+        //    adapter = new WS(this,
+        //            R.layout.schedule_list, week);
+        //    setListAdapter(adapter);
+        //}
 
     } //end onCreate()
 
     //Added on 10 - 14 - 2019
     private void fillListviewDropdown(int position,
-                              String startHour,
-                              String startMinute,
-                              String startAmOrPm,
-                              String endHour,
-                              String endMinute,
-                              String endAmOrPm)
+                              int dayOfWeek,
+                              int startHour,
+                              int startMinute,
+                              int startAmOrPm,
+                              int endHour,
+                              int endMinute,
+                              int endAmOrPm)
     {
-        if ((pref.getString(getString(R.string.SATURDAY), "OFF").equals("OFF"))) {
+        //pref =  this.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+
+        if ((pref.getString(getString(dayOfWeek), "OFF").equals("OFF"))) {
             i.putExtra("DAY_WEEK", position);
             i.putExtra("START_HOUR",  Integer.parseInt(WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
             i.putExtra("START_MINUTE",  Integer.parseInt(WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
@@ -269,24 +231,60 @@ public class CurrentWeekSchedule extends ListActivity  {
             i.putExtra("END_AM_OR_PM",  WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT);
         } else {
             i.putExtra("DAY_WEEK", position);
-            i.putExtra("START_HOUR", Integer.parseInt(startHour));
+            i.putExtra("START_HOUR", Integer.parseInt(pref.getString(getString(startHour),
+                    WorkReaderContract.WorkEntry.START_HOUR_DEFAULT))
+            );
             i.putExtra("START_MINUTE",
-                    Integer.parseInt(startMinute) / 15);
-            if (startAmOrPm.equals("AM")) {
+                    Integer.parseInt(pref.getString(getString(startMinute),
+                            WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT)) / 15);
+            if (pref.getString(getString(startAmOrPm),
+                    WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT).equals("AM")) {
                 i.putExtra("START_AM_OR_PM", 0);
             } else {
                 i.putExtra("START_AM_OR_PM", 1);
             }
+
             i.putExtra("END_HOUR",
-                    Integer.parseInt(endHour));
+                    Integer.parseInt(pref.getString(getString(endHour),
+                            WorkReaderContract.WorkEntry.END_HOUR_DEFAULT)));
             i.putExtra("END_MINUTE",
-                    Integer.parseInt(endMinute) / 15);
-            if (endAmOrPm.equals("AM")) {
+                    Integer.parseInt(pref.getString(getString(endMinute),
+                            WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT)) / 15);
+            if (pref.getString(getString(endAmOrPm),
+                    WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT).equals("AM")) {
                 i.putExtra("END_AM_OR_PM", 0);
             } else {
                 i.putExtra("END_AM_OR_PM", 1);
             }
         }
+
+    }
+
+    //Added on 10 - 16 - 2019
+    private void saveData(Bundle outState,
+                          String key,
+                          int day,
+                          int startHour,
+                          int startMinute,
+                          int startAmOrPM,
+                          int endHour,
+                          int endMinute,
+                          int endAmOrPM)
+    {
+        outState.putString(key,  pref.getString(getString(day), getString(day)));
+        outState.putString(getString(startHour),
+                pref.getString(getString(startHour), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
+        outState.putString(getString(startMinute),
+                pref.getString(getString(startMinute), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
+        outState.putString(getString(startAmOrPM),
+                pref.getString(getString(startAmOrPM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
+        outState.putString(getString(endHour),
+                pref.getString(getString(endHour), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
+        outState.putString(getString(endMinute),
+                pref.getString(getString(endMinute), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
+        outState.putString(getString(endAmOrPM),
+                pref.getString(getString(endAmOrPM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
+
     }
 
     //Added on 3 - 28 - 2019
@@ -294,103 +292,91 @@ public class CurrentWeekSchedule extends ListActivity  {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         //super.onSaveInstanceState(outState);
-        outState.putString("DAY_SUNDAY",  pref.getString(getString(R.string.SUNDAY), getString(R.string.SUNDAY)));
-        outState.putString(getString(R.string.SUNDAY_START_HOUR),
-                pref.getString(getString(R.string.SUNDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
-        outState.putString(getString(R.string.SUNDAY_START_MINUTE),
-                pref.getString(getString(R.string.SUNDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
-        outState.putString(getString(R.string.SUNDAY_START_AM_OR_PM),
-                pref.getString(getString(R.string.SUNDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-        outState.putString(getString(R.string.SUNDAY_END_HOUR),
-                pref.getString(getString(R.string.SUNDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
-        outState.putString(getString(R.string.SUNDAY_END_MINUTE),
-                pref.getString(getString(R.string.SUNDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
-        outState.putString(getString(R.string.SUNDAY_END_AM_OR_PM),
-                pref.getString(getString(R.string.SUNDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
+        saveData(
+                outState,
+                "DAY_SUNDAY",
+                R.string.SUNDAY,
+                R.string.SUNDAY_START_HOUR,
+                R.string.SUNDAY_START_MINUTE,
+                R.string.SUNDAY_START_AM_OR_PM,
+                R.string.SUNDAY_END_HOUR,
+                R.string.SUNDAY_END_MINUTE,
+                R.string.SUNDAY_END_AM_OR_PM
+        );
 
-        outState.putString("DAY_MONDAY",  pref.getString(getString(R.string.MONDAY), getString(R.string.MONDAY)));
-        outState.putString(getString(R.string.MONDAY_START_HOUR),
-                pref.getString(getString(R.string.MONDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
-        outState.putString(getString(R.string.MONDAY_START_MINUTE),
-                pref.getString(getString(R.string.MONDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
-        outState.putString(getString(R.string.MONDAY_START_AM_OR_PM),
-                pref.getString(getString(R.string.MONDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-        outState.putString(getString(R.string.MONDAY_END_HOUR),
-                pref.getString(getString(R.string.MONDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
-        outState.putString(getString(R.string.MONDAY_END_MINUTE),
-                pref.getString(getString(R.string.MONDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
-        outState.putString(getString(R.string.MONDAY_END_AM_OR_PM),
-                pref.getString(getString(R.string.MONDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
 
-        outState.putString("DAY_TUESDAY",  pref.getString(getString(R.string.TUESDAY), getString(R.string.TUESDAY)));
-        outState.putString(getString(R.string.TUESDAY_START_HOUR),
-                pref.getString(getString(R.string.TUESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
-        outState.putString(getString(R.string.TUESDAY_START_MINUTE),
-                pref.getString(getString(R.string.TUESDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
-        outState.putString(getString(R.string.TUESDAY_START_AM_OR_PM),
-                pref.getString(getString(R.string.TUESDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-        outState.putString(getString(R.string.TUESDAY_END_HOUR),
-                pref.getString(getString(R.string.TUESDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
-        outState.putString(getString(R.string.TUESDAY_END_MINUTE),
-                pref.getString(getString(R.string.TUESDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
-        outState.putString(getString(R.string.TUESDAY_END_AM_OR_PM),
-                pref.getString(getString(R.string.TUESDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
+        saveData(
+                outState,
+                "DAY_MONDAY",
+                R.string.MONDAY,
+                R.string.MONDAY_START_HOUR,
+                R.string.MONDAY_START_MINUTE,
+                R.string.MONDAY_START_AM_OR_PM,
+                R.string.MONDAY_END_HOUR,
+                R.string.MONDAY_END_MINUTE,
+                R.string.MONDAY_END_AM_OR_PM
+        );
 
-        outState.putString("DAY_WEDNESDAY", pref.getString(getString(R.string.WEDNESDAY), getString(R.string.WEDNESDAY)));
-        outState.putString(getString(R.string.WEDNESDAY_START_HOUR),
-                pref.getString(getString(R.string.WEDNESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
-        outState.putString(getString(R.string.WEDNESDAY_START_MINUTE),
-                pref.getString(getString(R.string.WEDNESDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
-        outState.putString(getString(R.string.WEDNESDAY_START_AM_OR_PM),
-                pref.getString(getString(R.string.WEDNESDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-        outState.putString(getString(R.string.WEDNESDAY_END_HOUR),
-                pref.getString(getString(R.string.WEDNESDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
-        outState.putString(getString(R.string.WEDNESDAY_END_MINUTE),
-                pref.getString(getString(R.string.WEDNESDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
-        outState.putString(getString(R.string.WEDNESDAY_END_AM_OR_PM),
-                pref.getString(getString(R.string.WEDNESDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
+        saveData(
+                outState,
+                "DAY_TUESDAY",
+                R.string.TUESDAY,
+                R.string.TUESDAY_START_HOUR,
+                R.string.TUESDAY_START_MINUTE,
+                R.string.TUESDAY_START_AM_OR_PM,
+                R.string.TUESDAY_END_HOUR,
+                R.string.TUESDAY_END_MINUTE,
+                R.string.TUESDAY_END_AM_OR_PM
+        );
 
-        outState.putString("DAY_THURSDAY", pref.getString(getString(R.string.THURSDAY), getString(R.string.THURSDAY)));
-        outState.putString(getString(R.string.THURSDAY_START_HOUR),
-                pref.getString(getString(R.string.THURSDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
-        outState.putString(getString(R.string.THURSDAY_START_MINUTE),
-                pref.getString(getString(R.string.THURSDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
-        outState.putString(getString(R.string.THURSDAY_START_AM_OR_PM),
-                pref.getString(getString(R.string.THURSDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-        outState.putString(getString(R.string.THURSDAY_END_HOUR),
-                pref.getString(getString(R.string.THURSDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
-        outState.putString(getString(R.string.THURSDAY_END_MINUTE),
-                pref.getString(getString(R.string.THURSDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
-        outState.putString(getString(R.string.THURSDAY_END_AM_OR_PM),
-                pref.getString(getString(R.string.THURSDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
+        saveData(
+                outState,
+                "DAY_WEDNESDAY",
+                R.string.WEDNESDAY,
+                R.string.WEDNESDAY_START_HOUR,
+                R.string.WEDNESDAY_START_MINUTE,
+                R.string.WEDNESDAY_START_AM_OR_PM,
+                R.string.WEDNESDAY_END_HOUR,
+                R.string.WEDNESDAY_END_MINUTE,
+                R.string.WEDNESDAY_END_AM_OR_PM
+        );
 
-        outState.putString("DAY_FRIDAY", pref.getString(getString(R.string.FRIDAY), getString(R.string.FRIDAY)));
-        outState.putString(getString(R.string.FRIDAY_START_HOUR),
-                pref.getString(getString(R.string.FRIDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
-        outState.putString(getString(R.string.FRIDAY_START_MINUTE),
-                pref.getString(getString(R.string.FRIDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
-        outState.putString(getString(R.string.FRIDAY_START_AM_OR_PM),
-                pref.getString(getString(R.string.FRIDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-        outState.putString(getString(R.string.FRIDAY_END_HOUR),
-                pref.getString(getString(R.string.FRIDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
-        outState.putString(getString(R.string.FRIDAY_END_MINUTE),
-                pref.getString(getString(R.string.FRIDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
-        outState.putString(getString(R.string.FRIDAY_END_AM_OR_PM),
-                pref.getString(getString(R.string.FRIDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
+        saveData(
+                outState,
+                "DAY_THURSDAY",
+                R.string.THURSDAY,
+                R.string.THURSDAY_START_HOUR,
+                R.string.THURSDAY_START_MINUTE,
+                R.string.THURSDAY_START_AM_OR_PM,
+                R.string.THURSDAY_END_HOUR,
+                R.string.THURSDAY_END_MINUTE,
+                R.string.THURSDAY_END_AM_OR_PM
+        );
 
-        outState.putString("DAY_SATURDAY", pref.getString(getString(R.string.SATURDAY), getString(R.string.SATURDAY)));
-        outState.putString(getString(R.string.SATURDAY_START_HOUR),
-                pref.getString(getString(R.string.SATURDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
-        outState.putString(getString(R.string.SATURDAY_START_MINUTE),
-                pref.getString(getString(R.string.SATURDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
-        outState.putString(getString(R.string.SATURDAY_START_AM_OR_PM),
-                pref.getString(getString(R.string.SATURDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-        outState.putString(getString(R.string.SATURDAY_END_HOUR),
-                pref.getString(getString(R.string.SATURDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
-        outState.putString(getString(R.string.SATURDAY_END_MINUTE),
-                pref.getString(getString(R.string.SATURDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
-        outState.putString(getString(R.string.SATURDAY_END_AM_OR_PM),
-                pref.getString(getString(R.string.SATURDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
+        saveData(
+                outState,
+                "DAY_FRIDAY",
+                R.string.FRIDAY,
+                R.string.FRIDAY_START_HOUR,
+                R.string.FRIDAY_START_MINUTE,
+                R.string.FRIDAY_START_AM_OR_PM,
+                R.string.FRIDAY_END_HOUR,
+                R.string.FRIDAY_END_MINUTE,
+                R.string.FRIDAY_END_AM_OR_PM
+        );
+
+
+        saveData(
+                outState,
+                "DAY_SATURDAY",
+                R.string.SATURDAY,
+                R.string.SATURDAY_START_HOUR,
+                R.string.SATURDAY_START_MINUTE,
+                R.string.SATURDAY_START_AM_OR_PM,
+                R.string.SATURDAY_END_HOUR,
+                R.string.SATURDAY_END_MINUTE,
+                R.string.SATURDAY_END_AM_OR_PM
+        );
 
         super.onSaveInstanceState(outState);
     }
