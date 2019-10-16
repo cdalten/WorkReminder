@@ -71,12 +71,9 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     private WebView getSchedule;
     public String LANDINGPAGE_URL = "myschedule.safeway.com";
     //public static String LOGIN_URL = "https://myschedule.safeway.com/ESS/AuthN/SwyLogin.aspx?ReturnUrl=%2fESS";
-    //public static String LOGIN_URL = "http://localhost";
     public static String LOGIN_URL = "http://172.31.99.60/index.html";
     protected static final String UA = "Pak N Slave Mobile App; Written by cda@stanford.edu; Uhh...Hi Mom!";
     public static final int NOTIFICATION_ID = 0; //Added on 10 - 14 - 2019
-
-    ConnectionCallback connectionCallback; //added on 10 - 7 - 2018
 
     private final String name = "9857701"; //modified on 1 - 8 - 201
     public static boolean refreshDisplay = true; //added on 6 - 14 - 2018
@@ -89,20 +86,14 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     public static String CurrentSchedule = "CurrentSchedule"; //added on 9 - 19 - 2018
     public String fileContents = ""; //default is ""
     private SharedPreferences pref; //added on 9 - 21 - 2018
-    private boolean doIWorkToday = true; //added on 10 - 17 - 2018
-    //CurrentWorkHours date; //added on 10 - 22 - 2018
 
     private boolean pageEnded = false; //Added on 11 - 12 - 2018
     private boolean onClick = false; //Added on 11 - 13 - 2018
     private TableLayout update; //Added on 11 - 15 - 2018
-    private Button Update; //Added on 11 - 15 - 2018
-    private Button finish;
-
 
     private String OfflineMessage; //Added on 11 - 21 - 2018
     private Intent intent; //Added on 11 - 21 - 2018
 
-    private final String WORK_TAG = "WorkAlarm";
     private WorkNetworkFragment mNetworkFragment; //Added on 1 - 2 - 2019
 
     // Boolean telling us whether a download is in progress, so we don't trigger overlapping
@@ -110,10 +101,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     private boolean mDownloading = false;
     private static boolean scheduleGotUpdated = false; //Added on 1 - 22 - 2019
 
-    private SharedPreferences.Editor saveMe; //Added on 4 - 25 - 2019
-    private Button workPreferences; //Added on 5 - 9 - 2019
-
-    private BroadcastReceiver WorkAlarmReceiver;
     private Handler handler = new Handler();
     private int progressStatus = 0;
 
@@ -165,16 +152,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         }).start();
 
 
-        //IntentFilter filter = new IntentFilter();
-        //filter.addAction("android.intent.action.TIME_TICK");
-
-        //WorkAlarmReceiver = new WorkAlarmReceiver();
-        //registerReceiver( WorkAlarmReceiver, filter);
-
-
-        //setCurrentAlarm();
-
-
         //offline = (TextView)findViewById(R.id.offline);
         //offlineUpdate = (Button) findViewById(R.id.offlineUpdate);
         //offlineUpdate.setVisibility(View.GONE);
@@ -195,14 +172,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         //   }
         //}
 
-
-
-        //Disabled network broadcast on 8 -27 - 2018.
-        //IntentFilter filter = new IntentFilter(AlarmManager);
-        //IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        //ConnectionStatus connectionStatus = new ConnectionStatus();
-        //this.registerReceiver(connectionStatus, filter);
-
         try {
             File httpCacheDir = new File(this.getCacheDir(), "http");
             long httpCacheSize = 10 * 1024 * 1024; // 10 MiB
@@ -216,11 +185,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
             //Attempt to invoke interface method 'java.lang.String android.content.SharedPreferences.getString(java.lang.String, java.lang.String)'
             //on a null object reference
-            //Log.e(PRODUCTION_TAG, "THE SAVED DAY IS: "+
-            //pref.getString("SAVED_DOWNLOAD_DATE", "SUNDAY")
-            //);
-            //int defaultValue = getResources().getInteger("UPDATE_SCHEDULE");
-
             getSchedule = (WebView) this.findViewById(R.id.CurrentSchedule);
             getSchedule.setWebViewClient(new WWebViewClient());
             //getSchedule.addJavascriptInterface(new MainActivity.JavaScriptBridge(this), "OFFLINE");
@@ -261,27 +225,11 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             OfflineMessage = "<html>" +
                     "<font size =\"32\"><b>THIS PAGE CANNOT BE LOADED BECAUSE YOUR CELL PHONE CARRIER" +
             //readFromInternalDirectory(new File(CurrentSchedule + ThisWeek));
-            //setAlarmTime(9, 10, Integer.parseInt(pref.getString("ALARM_MINUTES", "")));
             intent.setAction(Intent.ACTION_SEND);
 
             pref = this.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
 
             SharedPreferences.Editor editor = pref.edit();
-
-
-
-            /*
-             * Need to merge second intent with the first one after I debug.
-             */
-            //sundayWorkHours =  new CurrentWorkWeek( pref,
-            //        this,
-                    //pref.getString(getString(R.string.SUNDAY),"SUNDAY"), //Default is "OFF"
-                    //pref.getString(getString(R.string.SUNDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
-                    //pref.getString(getString(R.string.SUNDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
-                    //pref.getString(getString(R.string.SUNDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT),
-                    //pref.getString(getString(R.string.SUNDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT),
-                    //pref.getString(getString(R.string.SUNDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
-                    //pref.getString(getString(R.string.SUNDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
 
             //Change "SUNDAY" to getString(R.String.SUNDAY)???
             editor.putString(getString(R.string.SUNDAY), pref.getString(getString(R.string.SUNDAY),"SUNDAY"));
@@ -297,14 +245,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                     pref.getString(getString(R.string.SUNDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
             editor.putString(getString(R.string.SUNDAY_END_AM_OR_PM),
                     pref.getString(getString(R.string.SUNDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
-            //intent.putExtra("SundayHours", sundayWorkHours);
-
-            //intent.getParcelableExtra("SundayHours");
-
-            //intent.putExtra(getString(R.string.com_example_cd_shiftreminder_SUNDAY),
-            //
-            //      sundayWorkHours.getWorkHours(this));
-            //intent.setType("text/plain");
 
             editor.putString(getString(R.string.MONDAY), pref.getString(getString(R.string.MONDAY), "MONDAY"));
             editor.putString(getString(R.string.MONDAY_START_HOUR), pref.getString(getString(R.string.MONDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
@@ -313,12 +253,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             editor.putString(getString(R.string.MONDAY_END_HOUR),  pref.getString(getString(R.string.MONDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
             editor.putString(getString(R.string.MONDAY_END_MINUTE), pref.getString(getString(R.string.MONDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
             editor.putString(getString(R.string.MONDAY_END_AM_OR_PM),pref.getString(getString(R.string.MONDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
-            //intent.putExtra("MondayHours", mondayWorkHours);
-            //} else {
-            //    mondayWorkHours = new CurrentWorkWeek();
-            //    intent.putExtra("MondayHours", mondayWorkHours);
-           // }
-
 
             editor.putString(getString(R.string.TUESDAY), pref.getString(getString(R.string.TUESDAY), "TUESDAY") );
             editor.putString("TUESDAY_START_HOUR",
@@ -347,10 +281,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                     pref.getString(getString(R.string.WEDNESDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
             editor.putString(getString(R.string.WEDNESDAY_END_MINUTE),
                     pref.getString(getString(R.string.WEDNESDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
-
             editor.putString(getString(R.string.WEDNESDAY_END_AM_OR_PM),
                     pref.getString(getString(R.string.WEDNESDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
-
 
 
             editor.putString(getString(R.string.THURSDAY),
@@ -525,13 +457,9 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     }
 
 
-
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        //Log.e(PRODUCTION_TAG, "ONRESTOREINSTANCE() GOT CALLED WITH " + savedInstanceState.getString(Days.SCHEDULE_GOT_UPDATED));
-        //savedInstanceState.get("URL");
-        //getSchedule.restoreState(savedInstanceState);
     }
 
     public void onStart() {
@@ -573,11 +501,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     protected void onDestroy() {
         //super.onDestroy();
 
-        //cancel()
-        //    if (connectionStatus != null) {
-        //        this.unregisterReceiver(connectionStatus);
-        //    }
-        //unregisterReceiver(WorkAlarmReceiver);
+        //cancel();
         super.onDestroy(); //why?
     }
 
@@ -957,7 +881,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
         }
 
-
         /*
          * Attempt to handle logout and SSL cert errors correctly. 1 - 23 - 2017
          * The Alternative is to uninstall the app.
@@ -971,9 +894,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             } else {
                 Log.i(PRODUCTION_TAG, "SSL ERROR");
             }
-
         }
     }
-
 
 }//end MainActivity

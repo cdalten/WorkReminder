@@ -2,16 +2,12 @@ package com.example.cd.workreminder;
 //package com.example.cd.shiftreminder;
 
 import android.annotation.TargetApi;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.icu.util.Calendar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import java.lang.annotation.Target;
 
 public class AlarmTimer extends AppCompatActivity {
     //private final String PRODUCTION_TAG = "LG_WORK_PHONE"; //Added on 4 - 17 - 2019
