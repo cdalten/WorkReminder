@@ -212,11 +212,12 @@ public class dayNotification extends AppCompatActivity {
 
     //Added on 10 - 7 - 2019
     public void displayNotification(String notificationText, String notificationTitle) {
-        Intent snoozeIntent = new Intent(context, WorkAlarmReceiver.class);
+        Intent dismissIntent = new Intent(context, WorkAlarmReceiver.class);
         //snoozeIntent.setAction(ACTION_SNOOZE);
-        snoozeIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
+        dismissIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
+        dismissIntent.setAction(WorkAlarmReceiver.ACTION_DISMISS);
         PendingIntent snoozePendingIntent =
-                PendingIntent.getBroadcast(context, 0, snoozeIntent, 0);
+                PendingIntent.getBroadcast(context, 0, dismissIntent, 0);
 
         //NotificationCompat.Builder
         NotificationCompat.Builder notificationCompatBuilder = new NotificationCompat.Builder(context.getApplicationContext(), "0");

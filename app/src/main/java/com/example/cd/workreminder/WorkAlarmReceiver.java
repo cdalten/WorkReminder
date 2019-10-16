@@ -28,10 +28,12 @@ import static android.content.Context.MODE_PRIVATE;
 public class WorkAlarmReceiver extends BroadcastReceiver {
 
     private static final String PRODUCTION_TAG = "LG_WORK_PHONE"; //Added on 4 - 16 - 2019
+    public static final String ACTION_DISMISS = "com.example.cd.workreminder.action.DISMISS";
     SharedPreferences pref;
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.e(PRODUCTION_TAG, "THE INTENT ACTION IS: " + intent.getAction());
 
         pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
         Calendar c=Calendar.getInstance();

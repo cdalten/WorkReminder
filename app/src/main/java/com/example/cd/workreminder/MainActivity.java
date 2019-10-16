@@ -185,40 +185,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
             //Attempt to invoke interface method 'java.lang.String android.content.SharedPreferences.getString(java.lang.String, java.lang.String)'
             //on a null object reference
-            getSchedule = (WebView) this.findViewById(R.id.CurrentSchedule);
-            getSchedule.setWebViewClient(new WWebViewClient());
-            //getSchedule.addJavascriptInterface(new MainActivity.JavaScriptBridge(this), "OFFLINE");
-            getSchedule.getSettings().setLoadWithOverviewMode(true);
-            getSchedule.getSettings().setUseWideViewPort(true);
-            getSchedule.getSettings().setJavaScriptEnabled(true);
-            getSchedule.getSettings().setDomStorageEnabled(true);
-            getSchedule.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT); //added on 9 - 23 - 2018
-            CookieManager.getInstance().setAcceptCookie(true);
-
-            //double render????
-            //mNetworkFragment = WorkNetworkFragment.getInstance(
-            //        getSupportFragmentManager(),
-            //        "https://" + LANDINGPAGE_URL);
-
-            mNetworkFragment = WorkNetworkFragment.getInstance(
-                    getSupportFragmentManager(),
-                    LOGIN_URL);
-
-            //force load???
-            getSchedule.loadUrl(LOGIN_URL);
-            getSchedule.setVisibility(View.VISIBLE); //disable for debugging.
-
-            getSchedule.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    startDownload();
-                    Log.e(PRODUCTION_TAG, "WEBVIEW BUTTON GOT CLICKED");
-                    return false;
-                }
-
-
-            });
-
 
             intent = new Intent(MainActivity.this, CurrentWeekSchedule.class);
 
@@ -231,6 +197,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
             SharedPreferences.Editor editor = pref.edit();
 
+            webViewSettings();
             //Change "SUNDAY" to getString(R.String.SUNDAY)???
             editor.putString(getString(R.string.SUNDAY), pref.getString(getString(R.string.SUNDAY),"SUNDAY"));
             editor.putString(getString(R.string.SUNDAY_START_HOUR),
@@ -344,38 +311,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE); //redudant??
             //readFromInternalDirectory(new File(CurrentSchedule + ThisWeek));
 
-            getSchedule = (WebView) this.findViewById(R.id.CurrentSchedule);
-            getSchedule.setWebViewClient(new WWebViewClient());
-            //getSchedule.addJavascriptInterface(new JavaScriptBridge(this), "OFFLINE");
-
-            getSchedule.setVerticalScrollBarEnabled(true);
-            getSchedule.setHorizontalScrollBarEnabled(true); //for landscape??
-            getSchedule.getSettings().setLoadWithOverviewMode(true);
-            getSchedule.getSettings().setUseWideViewPort(true);
-            getSchedule.getSettings().setJavaScriptEnabled(true);
-            getSchedule.getSettings().setDomStorageEnabled(true);
-            getSchedule.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT); //added on 9 - 23 - 2018
-            CookieManager.getInstance().setAcceptCookie(true);
-
-            //double render????
-            mNetworkFragment = WorkNetworkFragment.getInstance(
-                    getSupportFragmentManager(),
-                    "https://" + LANDINGPAGE_URL);
-
-            //force load???
-            getSchedule.loadUrl(LOGIN_URL);
-            getSchedule.setVisibility(View.VISIBLE);
-
-            getSchedule.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    startDownload();
-                    Log.e(PRODUCTION_TAG, "WEBVIEW BUTTON GOT CLICKED");
-                    return false;
-                }
-
-
-            });
+            webViewSettings();
 
         }
 
@@ -396,6 +332,44 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
     }
 
+
+    //Added on 10 - 16 - 2019
+    private void webViewSettings() {
+        getSchedule = (WebView) this.findViewById(R.id.CurrentSchedule);
+        getSchedule.setWebViewClient(new WWebViewClient());
+        //getSchedule.addJavascriptInterface(new MainActivity.JavaScriptBridge(this), "OFFLINE");
+        getSchedule.getSettings().setLoadWithOverviewMode(true);
+        getSchedule.getSettings().setUseWideViewPort(true);
+        getSchedule.getSettings().setJavaScriptEnabled(true);
+        getSchedule.getSettings().setDomStorageEnabled(true);
+        getSchedule.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT); //added on 9 - 23 - 2018
+        CookieManager.getInstance().setAcceptCookie(true);
+
+        //double render????
+        //mNetworkFragment = WorkNetworkFragment.getInstance(
+        //        getSupportFragmentManager(),
+        //        "https://" + LANDINGPAGE_URL);
+
+        mNetworkFragment = WorkNetworkFragment.getInstance(
+                getSupportFragmentManager(),
+                LOGIN_URL);
+
+        getSchedule.loadUrl(LOGIN_URL);
+        getSchedule.setVisibility(View.VISIBLE); //disable for debugging.
+
+        /*getSchedule.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                startDownload();
+                Log.e(PRODUCTION_TAG, "WEBVIEW BUTTON GOT CLICKED");
+                return false;
+            }
+
+
+        });
+        */
+
+    }
 
     @Override
     public void updateFromDownload(String result) {
@@ -442,21 +416,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     }
 
 
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        Log.e(PRODUCTION_TAG, "ONCONFIGURATIONCHAGE() GOT CALLED");
-
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
-        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
-            Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
-        }
-
-    }
-
-
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
@@ -492,7 +451,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     protected void onResume() {
         super.onResume(); //stupid hack;
 
-        Log.i(PRODUCTION_TAG, "ON RESUME ");
+        Log.i(PRODUCTION_TAG, "MAIN ACTIVITY ON RESUME ");
     }
 
 
@@ -504,7 +463,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         //cancel();
         super.onDestroy(); //why?
     }
-
 
 
     /*
@@ -599,8 +557,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             inputStreamReader.read();
             readSize = inputStreamReader.read(buffer, numChars, buffer.length - numChars);
         }
-        //Log.d(PRODUCTION_TAG, "FINISHED READING STREAM"); //added on 10 - 4- 2018
-
 
         if (numChars != -1 ) {
             //Log.e(PRODUCTION_TAG, "INITIAL HTTP CONNECTION? " + numChars);
@@ -608,7 +564,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             result = new String(buffer, 0, numChars);
         }
 
-        //result = new String(output);
         return result;
         //return output; //close stream??
     }
@@ -832,11 +787,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             Log.e(PRODUCTION_TAG, "----------------------------------");
             Log.e(PRODUCTION_TAG, "GETSCHEDULE PAGE FINISHED " + getSchedule.getUrl());
             Log.e(PRODUCTION_TAG, "GETSCHEDULE URL PAGE FINISHED " + getSchedule.toString());
-            Log.e(PRODUCTION_TAG, "THE PAGE ENDED STATE IS: " + pageEnded);
-
-
-            //Logout
-            //window.location.replace("/ESS/AuthN/SwyLogin.aspx?ReturnUrl=%2fESS")
         } //pageEnded()
 
 
@@ -877,8 +827,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                         " Is connected? " + refreshDisplay);
             Toast.makeText(getApplicationContext(), "" +
                     "NO WIFI. NOT CONNECTED (DEBUG MODE)", Toast.LENGTH_LONG).show();
-
-
         }
 
         /*

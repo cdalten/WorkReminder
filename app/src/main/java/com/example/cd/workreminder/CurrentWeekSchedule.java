@@ -688,22 +688,12 @@ public class CurrentWeekSchedule extends ListActivity  {
         super.onActivityResult(requestCode, resultCode, data);
 
         int newPosition = -1; // don't enter switch
-        int minutes = 0;
         String day = "";
         if (data != null) {
-            AlarmTimer alarmTimer = AlarmTimer.getInstance();
-            dayNotification dayNotification = new dayNotification(this);
-            dayNotification.displayNotification(//pref.getInt("ALARM_HOUR", 0)
-                    alarmTimer.getUpdatedHour()
-                            + ":" +
-                                    //week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE)
-                            alarmTimer.getUpdatedMinute()
-                                    //pref.getInt("MINUTES", 0)
-                            + " "
-                            + alarmTimer.getAMorPM(), "ALARM");
-
             newPosition = data.getIntExtra("CURRENT_DAY", -99);  //position in listview
-            if (newPosition != -99) {
+            //0 - 6 represent Sun to Sat. 7 represents off. -99 is just to make it work on the hardware
+
+            if (newPosition != -99 && newPosition != 7) {
                 newStartHour = data.getStringExtra(getString(R.string.START_HOUR)); //hardware bug??
                 newStartMinute = data.getStringExtra(getString(R.string.START_MINUTE));
                 newStartAmOrPm = data.getStringExtra(getString(R.string.START_AM_OR_PM));
@@ -713,11 +703,24 @@ public class CurrentWeekSchedule extends ListActivity  {
                 day = data.getStringExtra(getString(R.string.DAY_OF_WEEK));
 
                 MilitaryTime militaryTime = MilitaryTime.getInstance();
+                AlarmTimer alarmTimer = AlarmTimer.getInstance();
+
                 militaryTime.convertStartCivilianTimeToMilitaryTime(newStartHour, newStartMinute, newStartAmOrPm);
                 alarmTimer = AlarmTimer.getInstance();
                 alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(),
                         militaryTime.getStartMilitaryMinute(),
                         pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
+                dayNotification dayNotification = new dayNotification(getApplicationContext());
+                dayNotification.displayNotification(//pref.getInt("ALARM_HOUR", 0)
+                        alarmTimer.getUpdatedHour()
+                                + ":" +
+                                //week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE)
+                                alarmTimer.getUpdatedMinute()
+                                //pref.getInt("MINUTES", 0)
+                                + " "
+                                + alarmTimer.getAMorPM(), "ALARM");
+
+
             }
         }
         //editor.apply();

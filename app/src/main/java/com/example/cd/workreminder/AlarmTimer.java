@@ -78,11 +78,13 @@ public class AlarmTimer extends AppCompatActivity {
 
     @TargetApi(24)
     public int getUpdatedMinute() {
+        cal = Calendar.getInstance();
         return cal.get(Calendar.MINUTE);
     }
 
     @TargetApi(24)
     public int getUpdatedHour() {
+        cal = Calendar.getInstance();
         return cal.get(Calendar.HOUR);
     }
 
