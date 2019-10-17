@@ -59,6 +59,7 @@ public class CurrentWeekSchedule extends ListActivity  {
 
     private AlarmManager alarmMgr; //Added on 8 - 4 - 2019
     private PendingIntent alarmIntent; //Added on 8 - 4 - 2019
+    private int currentHours = 0; //Added on 10 - 17 - 2014
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +75,9 @@ public class CurrentWeekSchedule extends ListActivity  {
 
         //Finish = (Button) findViewById(R.id.Finish);
         //list = (ListView) findViewById(android.R.id.list);
+
+        dayNotification dayNotification = new dayNotification(this);
+        currentHours = dayNotification.handleThirdShift();
 
         list = getListView();
 
@@ -504,8 +508,8 @@ public class CurrentWeekSchedule extends ListActivity  {
             //text_day.setMinTimumHeight(0); // Min Height
             //text_day.setHeight(120); // Height in pixels. Not dip?
 
-            dayNotification dayNotification = new dayNotification(getContext());
-            if (dayNotification.handleThirdShift() == position + 1) {
+
+            if (currentHours == position + 1) {
                 text_start_hour.setTypeface(text_start_hour.getTypeface(), Typeface.BOLD);  //vs null??
                 text_separator.setTypeface(text_separator.getTypeface(), Typeface.BOLD);  //vs null??
                 text_end_hour.setTypeface(text_end_hour.getTypeface(), Typeface.BOLD);  //vs null??

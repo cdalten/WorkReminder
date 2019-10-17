@@ -10,6 +10,7 @@ import android.icu.util.Calendar;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import static android.app.Notification.EXTRA_NOTIFICATION_ID;
 
@@ -25,7 +26,7 @@ public class dayNotification extends AppCompatActivity {
     //Schizophrenic method call ripped off from the Android Notification source code -)
     @TargetApi(24)
     public int handleThirdShift() {
-
+        Log.e("NOTIFICATION TAG", "handleThirdShift()");
         Calendar cal = Calendar.getInstance();
         int currentDay = cal.get(Calendar.DAY_OF_WEEK); //vs inside if??
         //CurrentWorkHours currentWorkHours = new CurrentWorkHours();
@@ -148,7 +149,10 @@ public class dayNotification extends AppCompatActivity {
     ) {
         Calendar cal = Calendar.getInstance();
         MilitaryTime militaryTime = MilitaryTime.getInstance();
+        Log.e("NOTIFICATION TAG", "2)SET NOTIFICATION GOT CALLED BEFORE ALARM TIMER");
         AlarmTimer alarmTimer = AlarmTimer.getInstance();
+        Log.e("NOTIFICATION TAG", "3)SET NOTIFICATION GOT CALLED AFTER ALARM TIMER");
+
         pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
 
 
@@ -186,6 +190,7 @@ public class dayNotification extends AppCompatActivity {
                         alarmTimer.getAMorPM()),
                         "ALARM");
             }else {
+                Log.e("NOTIFICATION TAG", "BEFORE DISPLAY NOTIFICATION GOT CALLED");
                 displayNotification( buildAlarmTimeFormatDisplay(context.getString(dayOfWeek),
                         alarmTimer.getUpdatedHour(),
                         alarmTimer.getUpdatedMinute(),
@@ -216,10 +221,11 @@ public class dayNotification extends AppCompatActivity {
         //snoozeIntent.setAction(ACTION_SNOOZE);
         dismissIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
         dismissIntent.setAction(WorkAlarmReceiver.ACTION_DISMISS);
+        Log.e("NOTIFICATION TAG", "4)ACTION DISMISS GOT CALLED");
         PendingIntent dismissPendingIntent =
                 PendingIntent.getBroadcast(context, 0, dismissIntent, 0);
+        Log.e("NOTIFICATION TAG", "5)BROADCAST CALLED");
 
-        //NotificationCompat.Builder
         NotificationCompat.Builder notificationCompatBuilder = new NotificationCompat.Builder(context.getApplicationContext(), "0");
 
         GlobalNotificationBuilder.setNotificationCompatBuilderInstance(notificationCompatBuilder);
