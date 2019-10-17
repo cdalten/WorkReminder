@@ -65,6 +65,8 @@ public class CurrentWeekSchedule extends ListActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
+        Log.e(PRODUCTION_TAG, "CURRENT WEEK SCHEDULE GOT CALLED.");
+
         pref =  this.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
 
         //Update = (Button) findViewById(R.id.Update);

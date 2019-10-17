@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.Ringtone;
-//package com.example.cd.shiftreminder;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -19,8 +18,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.SystemClock;
 import android.util.Log;
-import android.widget.BaseAdapter;
-
 import java.util.Calendar;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -33,7 +30,10 @@ public class WorkAlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.e(PRODUCTION_TAG, "THE INTENT ACTION IS: " + intent.getAction());
+        final String action = intent.getAction();
+        if (ACTION_DISMISS.equals(action)) {
+            Log.e(PRODUCTION_TAG, "THE INTENT ACTION IS: " + intent.getAction());
+        }
 
         pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
         Calendar c=Calendar.getInstance();
@@ -50,6 +50,8 @@ public class WorkAlarmReceiver extends BroadcastReceiver {
         //if ( pref.getInt("MINUTES", 0) == c.get(Calendar.MINUTE)
         //        && pref.getInt("HOUR", 0) == c.get(Calendar.HOUR)) {
             Log.e(PRODUCTION_TAG, "ALARM RINGER GOT CALLED");
+
+            //code copy and pasted from stackoverflow
             Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
             if (alarmUri == null) {
                 alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);

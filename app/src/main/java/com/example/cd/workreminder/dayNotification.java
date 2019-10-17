@@ -216,7 +216,7 @@ public class dayNotification extends AppCompatActivity {
         //snoozeIntent.setAction(ACTION_SNOOZE);
         dismissIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
         dismissIntent.setAction(WorkAlarmReceiver.ACTION_DISMISS);
-        PendingIntent snoozePendingIntent =
+        PendingIntent dismissPendingIntent =
                 PendingIntent.getBroadcast(context, 0, dismissIntent, 0);
 
         //NotificationCompat.Builder
@@ -225,9 +225,9 @@ public class dayNotification extends AppCompatActivity {
         GlobalNotificationBuilder.setNotificationCompatBuilderInstance(notificationCompatBuilder);
         notificationCompatBuilder.setSmallIcon(R.drawable.ic_stat_work)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(snoozePendingIntent)
+                .setContentIntent(dismissPendingIntent)
                 .addAction(R.drawable.ic_action_stat_share,
-                        context.getResources().getString(R.string.action_share), snoozePendingIntent);
+                        context.getResources().getString(R.string.action_share), dismissPendingIntent);
         notificationCompatBuilder.setContentTitle(notificationTitle);
         notificationCompatBuilder.setContentText(notificationText);
         NotificationManagerCompat mNotificationManagerCompat;

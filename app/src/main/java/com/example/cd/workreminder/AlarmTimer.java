@@ -62,7 +62,7 @@ public class AlarmTimer extends AppCompatActivity {
 
         Log.e("LG_WORK_PHONE", "ALARM GOT CALLED");
         SharedPreferences.Editor editor = pref.edit();
-        editor.putInt("ALARM_HOUR", cal.get(Calendar.HOUR)); //military
+        editor.putInt("MILITARY_HOUR", cal.get(Calendar.HOUR)); //military
         editor.putInt("HOUR", cal.get(Calendar.HOUR_OF_DAY)); // gets passed to alarm receiver
         editor.putInt("MINUTES", cal.get(Calendar.MINUTE));
         editor.apply();
@@ -78,14 +78,12 @@ public class AlarmTimer extends AppCompatActivity {
 
     @TargetApi(24)
     public int getUpdatedMinute() {
-        cal = Calendar.getInstance();
-        return cal.get(Calendar.MINUTE);
+        return pref.getInt("MINUTES", 0);
     }
 
     @TargetApi(24)
     public int getUpdatedHour() {
-        cal = Calendar.getInstance();
-        return cal.get(Calendar.HOUR);
+        return pref.getInt("MILITARY_HOUR", 0);
     }
 
     //Added on 6 - 28 - 2019

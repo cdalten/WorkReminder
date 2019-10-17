@@ -2,33 +2,20 @@ package com.example.cd.workreminder;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
+
 import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
-import android.content.IntentFilter;
-import android.content.res.Configuration;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.http.HttpResponseCache;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.provider.AlarmClock;
-import android.support.v4.app.FragmentActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.icu.util.Calendar;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.http.SslError;
-import android.os.AsyncTask;
-import android.os.Build;
-//import android.provider.AlarmClock;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -48,7 +35,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,8 +48,6 @@ import java.net.ProtocolException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -89,7 +73,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
     private boolean pageEnded = false; //Added on 11 - 12 - 2018
     private boolean onClick = false; //Added on 11 - 13 - 2018
-    private TableLayout update; //Added on 11 - 15 - 2018
 
     private String OfflineMessage; //Added on 11 - 21 - 2018
     private Intent intent; //Added on 11 - 21 - 2018
@@ -156,10 +139,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         //offlineUpdate = (Button) findViewById(R.id.offlineUpdate);
         //offlineUpdate.setVisibility(View.GONE);
 
-        //mNetworkFragment = WorkNetworkFragment.getInstance(
-        //        getSupportFragmentManager(),
-        //        "https://" + LANDINGPAGE_URL);
-
         //WebView getSchedule = new WebView(this);
         //setContentView(getSchedule);
 
@@ -180,13 +159,14 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             Log.i(PRODUCTION_TAG, "HTTP response cache installation failed:" + e);
         }
 
+        intent = new Intent(MainActivity.this, CurrentWeekSchedule.class);
+
         if (savedInstanceState == null) {
             Log.e(PRODUCTION_TAG, "ONCREATE() WHEN SAVEDINSTANCE() IS NULL");
 
             //Attempt to invoke interface method 'java.lang.String android.content.SharedPreferences.getString(java.lang.String, java.lang.String)'
             //on a null object reference
 
-            intent = new Intent(MainActivity.this, CurrentWeekSchedule.class);
 
             OfflineMessage = "<html>" +
                     "<font size =\"32\"><b>THIS PAGE CANNOT BE LOADED BECAUSE YOUR CELL PHONE CARRIER" +
@@ -195,118 +175,68 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
             pref = this.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
 
-            SharedPreferences.Editor editor = pref.edit();
-
             webViewSettings();
             //Change "SUNDAY" to getString(R.String.SUNDAY)???
-            editor.putString(getString(R.string.SUNDAY), pref.getString(getString(R.string.SUNDAY),"SUNDAY"));
-            editor.putString(getString(R.string.SUNDAY_START_HOUR),
-                    pref.getString(getString(R.string.SUNDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
-            editor.putString(getString(R.string.SUNDAY_START_MINUTE),
-                    pref.getString(getString(R.string.SUNDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
-            editor.putString(getString(R.string.SUNDAY_START_AM_OR_PM),
-                    pref.getString(getString(R.string.SUNDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-            editor.putString(getString(R.string.SUNDAY_END_HOUR),
-                    pref.getString(getString(R.string.SUNDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
-            editor.putString(getString(R.string.SUNDAY_END_MINUTE),
-                    pref.getString(getString(R.string.SUNDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
-            editor.putString(getString(R.string.SUNDAY_END_AM_OR_PM),
-                    pref.getString(getString(R.string.SUNDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
+            saveCurrentSchedule(R.string.SUNDAY,
+                    R.string.SUNDAY_START_HOUR,
+                    R.string.SUNDAY_START_MINUTE,
+                    R.string.SUNDAY_START_AM_OR_PM,
+                    R.string.SUNDAY_END_HOUR,
+                    R.string.SUNDAY_END_MINUTE,
+                    R.string.SUNDAY_END_AM_OR_PM);
 
-            editor.putString(getString(R.string.MONDAY), pref.getString(getString(R.string.MONDAY), "MONDAY"));
-            editor.putString(getString(R.string.MONDAY_START_HOUR), pref.getString(getString(R.string.MONDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
-            editor.putString(getString(R.string.MONDAY_START_MINUTE), pref.getString(getString(R.string.MONDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
-            editor.putString(getString(R.string.MONDAY_START_AM_OR_PM),  pref.getString(getString(R.string.MONDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-            editor.putString(getString(R.string.MONDAY_END_HOUR),  pref.getString(getString(R.string.MONDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
-            editor.putString(getString(R.string.MONDAY_END_MINUTE), pref.getString(getString(R.string.MONDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
-            editor.putString(getString(R.string.MONDAY_END_AM_OR_PM),pref.getString(getString(R.string.MONDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
+            saveCurrentSchedule(R.string.MONDAY,
+                    R.string.MONDAY_START_HOUR,
+                    R.string.MONDAY_START_MINUTE,
+                    R.string.MONDAY_START_AM_OR_PM,
+                    R.string.MONDAY_END_HOUR,
+                    R.string.MONDAY_END_MINUTE,
+                    R.string.MONDAY_END_AM_OR_PM);
 
-            editor.putString(getString(R.string.TUESDAY), pref.getString(getString(R.string.TUESDAY), "TUESDAY") );
-            editor.putString("TUESDAY_START_HOUR",
-                    pref.getString(getString(R.string.TUESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
-            editor.putString("TUESDAY_START_MINUTE",
-                    pref.getString(getString(R.string.TUESDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
-            editor.putString("TUESDAY_START_AM_OR_PM",
-                    pref.getString(getString(R.string.TUESDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-            editor.putString("TUESDAY_END_HOUR",
-                    pref.getString(getString(R.string.TUESDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
-            editor.putString("TUESDAY_END_MINUTE",
-                    pref.getString(getString(R.string.TUESDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
-            editor.putString("TUESDAY_END_AM_OR_PM",
-                    pref.getString(getString(R.string.TUESDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
+            saveCurrentSchedule(R.string.TUESDAY,
+                    R.string.TUESDAY_START_HOUR,
+                    R.string.TUESDAY_START_MINUTE,
+                    R.string.TUESDAY_START_AM_OR_PM,
+                    R.string.TUESDAY_END_HOUR,
+                    R.string.TUESDAY_END_MINUTE,
+                    R.string.TUESDAY_END_AM_OR_PM);
 
+            saveCurrentSchedule(R.string.WEDNESDAY,
+                    R.string.WEDNESDAY_START_HOUR,
+                    R.string.WEDNESDAY_START_MINUTE,
+                    R.string.WEDNESDAY_START_AM_OR_PM,
+                    R.string.WEDNESDAY_END_HOUR,
+                    R.string.WEDNESDAY_END_MINUTE,
+                    R.string.WEDNESDAY_END_AM_OR_PM);
 
-            editor.putString(getString(R.string.WEDNESDAY),
-                    pref.getString(getString(R.string.WEDNESDAY), "WEDNESDAY") );
-            editor.putString(getString(R.string.
-                    WEDNESDAY_START_HOUR), pref.getString(getString(R.string.WEDNESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
-            editor.putString(getString(R.string.WEDNESDAY_START_MINUTE),
-                    pref.getString(getString(R.string.WEDNESDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
-            editor.putString(getString(R.string.WEDNESDAY_START_AM_OR_PM),
-                    pref.getString(getString(R.string.WEDNESDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT) );
-            editor.putString(getString(R.string.WEDNESDAY_END_HOUR),
-                    pref.getString(getString(R.string.WEDNESDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
-            editor.putString(getString(R.string.WEDNESDAY_END_MINUTE),
-                    pref.getString(getString(R.string.WEDNESDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
-            editor.putString(getString(R.string.WEDNESDAY_END_AM_OR_PM),
-                    pref.getString(getString(R.string.WEDNESDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
-
-
-            editor.putString(getString(R.string.THURSDAY),
-                    pref.getString(getString(R.string.THURSDAY), "THURSDAY"));
-            editor.putString(getString(R.string.THURSDAY_START_HOUR),
-                    pref.getString(getString(R.string.THURSDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
-            editor.putString(getString(R.string.THURSDAY_START_MINUTE),
-                    pref.getString(getString(R.string.THURSDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
-            editor.putString(getString(R.string.THURSDAY_START_AM_OR_PM),
-                    pref.getString(getString(R.string.THURSDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-            editor.putString(getString(R.string.THURSDAY_END_HOUR),
-                    pref.getString(getString(R.string.THURSDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT) );
-            editor.putString(getString(R.string.THURSDAY_END_MINUTE),
-                    pref.getString(getString(R.string.THURSDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
-            editor.putString(getString(R.string.THURSDAY_END_AM_OR_PM),
-                    pref.getString(getString(R.string.THURSDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
+            saveCurrentSchedule(R.string.THURSDAY,
+                    R.string.THURSDAY_START_HOUR,
+                    R.string.THURSDAY_START_MINUTE,
+                    R.string.THURSDAY_START_AM_OR_PM,
+                    R.string.THURSDAY_END_HOUR,
+                    R.string.THURSDAY_END_MINUTE,
+                    R.string.THURSDAY_END_AM_OR_PM);
 
             //12AM represents midnight on my phone
+            saveCurrentSchedule(R.string.FRIDAY,
+                    R.string.FRIDAY_START_HOUR,
+                    R.string.FRIDAY_START_MINUTE,
+                    R.string.FRIDAY_START_AM_OR_PM,
+                    R.string.FRIDAY_END_HOUR,
+                    R.string.FRIDAY_END_MINUTE,
+                    R.string.FRIDAY_END_AM_OR_PM);
 
-            editor.putString(getString(R.string.FRIDAY),
-                    pref.getString(getString(R.string.FRIDAY), "FRIDAY"));
-            editor.putString(getString(R.string.FRIDAY_START_HOUR),
-                    pref.getString(getString(R.string.FRIDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
-            editor.putString(getString(R.string.FRIDAY_START_MINUTE),
-                    pref.getString(getString(R.string.FRIDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
-            editor.putString(getString(R.string.FRIDAY_START_AM_OR_PM),
-                    pref.getString(getString(R.string.FRIDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-            editor.putString(getString(R.string.FRIDAY_END_HOUR),
-                    pref.getString(getString(R.string.FRIDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
-            editor.putString(getString(R.string.FRIDAY_END_MINUTE),
-                    pref.getString(getString(R.string.FRIDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
-            editor.putString(getString(R.string.FRIDAY_END_AM_OR_PM),
-                    pref.getString(getString(R.string.FRIDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
-
-            editor.putString(getString(R.string.SATURDAY),
-                    pref.getString(getString(R.string.SATURDAY ), "SATURDAY"));
-            editor.putString(getString(R.string.SATURDAY_START_HOUR),
-                    pref.getString(getString(R.string.SATURDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
-            editor.putString(getString(R.string.SATURDAY_START_MINUTE),
-                    pref.getString(getString(R.string.SATURDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
-            editor.putString(getString(R.string.SATURDAY_START_AM_OR_PM),
-                    pref.getString(getString(R.string.SATURDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-            editor.putString(getString(R.string.SATURDAY_END_HOUR),
-                    pref.getString(getString(R.string.SATURDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
-            editor.putString(getString(R.string.SATURDAY_END_MINUTE),
-                    pref.getString(getString(R.string.SATURDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
-            editor.putString(getString(R.string.SATURDAY_END_AM_OR_PM),
-                    pref.getString(getString(R.string.SATURDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
-            //intent.putExtra("SaturdayHours", saturdayWorkHours);
-
-            editor.apply();
+            saveCurrentSchedule(R.string.SATURDAY,
+                    R.string.SATURDAY_START_HOUR,
+                    R.string.SATURDAY_START_MINUTE,
+                    R.string.SATURDAY_START_AM_OR_PM,
+                    R.string.SATURDAY_END_HOUR,
+                    R.string.SATURDAY_END_MINUTE,
+                    R.string.SATURDAY_END_AM_OR_PM);
 
         } else {
             Log.e(PRODUCTION_TAG, "ONCREATE() WHEN SAVEDINSTANCE() IS NOT NULL");
             savedInstanceState.getString("UPDATED_SCHEDULE"); //???
-
-            intent = new Intent(MainActivity.this, CurrentWeekSchedule.class);
 
             pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE); //redudant??
             //readFromInternalDirectory(new File(CurrentSchedule + ThisWeek));
@@ -315,8 +245,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
         }
 
-
-        //getSchedule.getSettings().setDatabaseEnabled(true); //added on 10 - 5- 2017
 
         /*getSchedule.setWebChromeClient(new WebChromeClient() {
 
@@ -332,6 +260,36 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
     }
 
+    //Added on 10 - 16 - 2019
+    private void saveCurrentSchedule(
+            int day,
+            int startHour,
+            int startMinute,
+            int startAmOrPm,
+            int endHour,
+            int endMinute,
+            int endAmOrPm
+    )
+    {
+        SharedPreferences.Editor editor = pref.edit();
+
+        editor.putString(getString(R.string.SATURDAY),
+                pref.getString(getString(day ), getString(day)));
+        editor.putString(getString(startHour),
+                pref.getString(getString(startHour), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
+        editor.putString(getString(startMinute),
+                pref.getString(getString(startMinute), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
+        editor.putString(getString(startAmOrPm),
+                pref.getString(getString(startAmOrPm), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
+        editor.putString(getString(endHour),
+                pref.getString(getString(endHour), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
+        editor.putString(getString(endMinute),
+                pref.getString(getString(endMinute), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
+        editor.putString(getString(endAmOrPm),
+                pref.getString(getString(endAmOrPm), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
+
+        editor.apply();
+    }
 
     //Added on 10 - 16 - 2019
     private void webViewSettings() {

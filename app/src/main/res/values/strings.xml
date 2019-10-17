@@ -12,8 +12,8 @@
         nec magna. Donec lacinia ligula at libero volutpat volutpat nec nec tortor.
     </string>
 
-    <string name="action_share">SNOOZE</string>
-    <string name="action_reply">DISMISS</string>
+    <string name="action_share">DISMISS</string>
+    <string name="action_reply">SNOOZE</string>
     <string name="SUNDAY">SUNDAY</string>
     <string name="MONDAY">MONDAY</string>
     <string name="TUESDAY">TUESDAY</string>
