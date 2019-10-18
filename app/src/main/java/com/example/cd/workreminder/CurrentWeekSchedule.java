@@ -494,9 +494,6 @@ public class CurrentWeekSchedule extends ListActivity  {
             text_start_hour.setHeight(120); // Height in pixels. Not dip?
             text_start_hour.setWidth(0);
 
-            //text_separator.setMinHeight(0); // Min Height
-            //text_separator.setMinimumHeight(0); // Min Height
-            //text_separator.setHeight(120); // Height in pixels. Not dip?
             //text_separator.setWidth(20);
 
             text_end_hour.setMinHeight(0); // Min Height
@@ -504,7 +501,6 @@ public class CurrentWeekSchedule extends ListActivity  {
             text_end_hour.setHeight(120); // Height in pixels. Not dip?
             text_end_hour.setWidth(0);
 
-            //text_day.setMinHeight(0); // Min Height
             //text_day.setMinTimumHeight(0); // Min Height
             //text_day.setHeight(120); // Height in pixels. Not dip?
 
@@ -519,7 +515,6 @@ public class CurrentWeekSchedule extends ListActivity  {
 
             //return super.getView(position, convertView, parent);
             return convertView;
-            //return  view;
         }//end method
 
     }//end inner class
@@ -717,14 +712,11 @@ public class CurrentWeekSchedule extends ListActivity  {
                         militaryTime.getStartMilitaryMinute(),
                         pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
                 dayNotification dayNotification = new dayNotification(getApplicationContext());
-                dayNotification.displayNotification(//pref.getInt("ALARM_HOUR", 0)
-                        alarmTimer.getUpdatedHour()
-                                + ":" +
-                                //week.get(position).get(WorkReaderContract.WorkEntry.START_MINUTE)
-                                alarmTimer.getUpdatedMinute()
+                dayNotification.displayNotification(day,
+                        alarmTimer.getUpdatedHour(),
+                                alarmTimer.getUpdatedMinute(),
                                 //pref.getInt("MINUTES", 0)
-                                + " "
-                                + alarmTimer.getAMorPM(), "ALARM");
+                                 alarmTimer.getAMorPM(), "ALARM");
 
 
             }

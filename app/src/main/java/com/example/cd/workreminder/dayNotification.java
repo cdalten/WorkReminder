@@ -149,12 +149,9 @@ public class dayNotification extends AppCompatActivity {
     ) {
         Calendar cal = Calendar.getInstance();
         MilitaryTime militaryTime = MilitaryTime.getInstance();
-        Log.e("NOTIFICATION TAG", "2)SET NOTIFICATION GOT CALLED BEFORE ALARM TIMER");
         AlarmTimer alarmTimer = AlarmTimer.getInstance();
-        Log.e("NOTIFICATION TAG", "3)SET NOTIFICATION GOT CALLED AFTER ALARM TIMER");
 
         pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
-
 
         if (!(pref.getString(context.getString(dayOfWeek), "OFF").equals("OFF"))) {
             int currentHour = cal.get(Calendar.HOUR);
@@ -172,32 +169,54 @@ public class dayNotification extends AppCompatActivity {
 
             alarmTimer.setAlarmTime(context, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
                     pref.getInt(context.getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
-            if (currentHour > militaryTime.getStartMilitaryHour() && currentHour < militaryTime.getEndMilitaryHour()) {
-                displayNotification("YOU'RE SUPPOSED TO BE AT WORK", "");
-            } else if (currentHour == militaryTime.getStartMilitaryHour()) {
-                //setCurrentAlarm(militaryTime.getStartMilitaryHour(), militaryTime.getEndMilitaryMinute());
-                if (currentMinute > militaryTime.getStartMilitaryMinute()) {
-                    displayNotification("YOU'RE SUPPOSED TO BE AT WORK", "");
-                }
-            } else if (currentHour == militaryTime.getEndMilitaryHour()) {
-                if (currentMinute < militaryTime.getEndMilitaryMinute()) {
-                    displayNotification("YOU'RE SUPPOSED TO BE AT WORK", "");
-                }
-            } else if (  pref.getInt("ALARM_HOUR", 0) == 0) {
-                displayNotification( buildAlarmTimeFormatDisplay(context.getString(dayOfWeek),
-                        alarmTimer.getUpdatedHour(),
-                        alarmTimer.getUpdatedMinute(),
-                        alarmTimer.getAMorPM()),
-                        "ALARM");
-            }else {
-                Log.e("NOTIFICATION TAG", "BEFORE DISPLAY NOTIFICATION GOT CALLED");
-                displayNotification( buildAlarmTimeFormatDisplay(context.getString(dayOfWeek),
-                        alarmTimer.getUpdatedHour(),
-                        alarmTimer.getUpdatedMinute(),
-                        alarmTimer.getAMorPM()),
-                        "ALARM");
-            }
 
+            setNotification(
+                    context.getString(dayOfWeek),
+                    militaryTime.getStartMilitaryHour(),
+                    militaryTime.getStartMilitaryMinute(),
+                    militaryTime.getEndMilitaryHour(),
+                    militaryTime.getStartMilitaryMinute());
+        }
+    }
+
+    //Added on 10 - 18 - 2019
+    @TargetApi(24)
+    private void setNotification(
+            String dayOfWeek,
+            int startMilitaryHour,
+            int startMilitaryMinute,
+            int endMilitaryHour,
+            int endMilitaryMinute
+    )
+    {
+        Calendar cal = Calendar.getInstance();
+        AlarmTimer alarmTimer = AlarmTimer.getInstance();
+        int currentHour = cal.get(Calendar.HOUR);
+        int currentMinute = cal.get(Calendar.MINUTE);
+
+        if (currentHour > startMilitaryHour && currentHour < endMilitaryHour) {
+            displayNotification("YOU'RE SUPPOSED TO BE AT WORK");
+        } else if (currentHour == startMilitaryHour) {
+            //setCurrentAlarm(militaryTime.getStartMilitaryHour(), militaryTime.getEndMilitaryMinute());
+            if (currentMinute > startMilitaryMinute) {
+                displayNotification("YOU'RE SUPPOSED TO BE AT WORK");
+            }
+        } else if (currentHour == endMilitaryHour) {
+            if (currentMinute < endMilitaryMinute) {
+                displayNotification("YOU'RE SUPPOSED TO BE AT WORK");
+            }
+        } else if (  pref.getInt("ALARM_HOUR", 0) == 0) {
+            displayNotification(dayOfWeek,
+                    alarmTimer.getUpdatedHour(),
+                    alarmTimer.getUpdatedMinute(),
+                    alarmTimer.getAMorPM(),
+                    "ALARM");
+        }else {
+            displayNotification( dayOfWeek,
+                    alarmTimer.getUpdatedHour(),
+                    alarmTimer.getUpdatedMinute(),
+                    alarmTimer.getAMorPM(),
+                    "ALARM");
         }
     }
 
@@ -215,16 +234,39 @@ public class dayNotification extends AppCompatActivity {
         return timeFormat;
     }
 
+    //Added on 10 - 18 -2019
+    public void displayNotification(String notificationTitle) {
+        NotificationCompat.Builder notificationCompatBuilder = new NotificationCompat.Builder(context.getApplicationContext(), "0");
+
+        GlobalNotificationBuilder.setNotificationCompatBuilderInstance(notificationCompatBuilder);
+        notificationCompatBuilder.setSmallIcon(R.drawable.ic_stat_work)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        notificationCompatBuilder.setContentTitle(notificationTitle);
+        NotificationManagerCompat mNotificationManagerCompat;
+        mNotificationManagerCompat = NotificationManagerCompat.from(context.getApplicationContext());
+        Notification notification = notificationCompatBuilder.build();
+        mNotificationManagerCompat.notify(0, notification);
+    }
+
+
     //Added on 10 - 7 - 2019
-    public void displayNotification(String notificationText, String notificationTitle) {
+    public void displayNotification(String dayOfWeek,
+                                    int newHour,
+                                    int newMinute,
+                                    String newAmOrPm,
+                                    String notificationTitle) {
         Intent dismissIntent = new Intent(context, WorkAlarmReceiver.class);
+        String notificationText = buildAlarmTimeFormatDisplay(dayOfWeek,
+                newHour,
+                newMinute,
+                newAmOrPm);
+
+
         //snoozeIntent.setAction(ACTION_SNOOZE);
         dismissIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
         dismissIntent.setAction(WorkAlarmReceiver.ACTION_DISMISS);
-        Log.e("NOTIFICATION TAG", "4)ACTION DISMISS GOT CALLED");
         PendingIntent dismissPendingIntent =
                 PendingIntent.getBroadcast(context, 0, dismissIntent, 0);
-        Log.e("NOTIFICATION TAG", "5)BROADCAST CALLED");
 
         NotificationCompat.Builder notificationCompatBuilder = new NotificationCompat.Builder(context.getApplicationContext(), "0");
 
