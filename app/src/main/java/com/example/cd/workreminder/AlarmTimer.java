@@ -15,11 +15,13 @@ public class AlarmTimer extends AppCompatActivity {
     private SharedPreferences pref; //Added on 5 - 14 - 2019
     private int startMilitaryMinute; //Added on 6 - 27 -2019
     private int startMilitaryHour; //Added on 6 - 27 -2017
+    private int listPosition; //Added on 10 - 18 - 2019
 
-    int endMilitaryHour = 0;
-    int endMilitaryMinute = 0;
-    int newMilitaryHour = 0;
-    int newMilitaryMinute = 0;
+    private int endMilitaryHour = 0;
+    private int endMilitaryMinute = 0;
+    private int newMilitaryHour = 0;
+    private int newMilitaryMinute = 0;
+    private int timeBeforeShift = 0; //Added on 10 - 21 - 2019
 
     private static AlarmTimer instance = new AlarmTimer();
 
@@ -33,15 +35,18 @@ public class AlarmTimer extends AppCompatActivity {
     }
 
     @TargetApi(24)
-    public void setAlarmTime(Context context, int startMilitaryHour, int startMilitaryMinute, int timeBeforeShift) {
+    public void setAlarmTime(Context context,
+                             int startMilitaryHour,
+                             int startMilitaryMinute)
+    {
         pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
         this.startMilitaryMinute = startMilitaryMinute;
         this.startMilitaryHour = startMilitaryHour;
 
-
         if (timeBeforeShift < 60) {
             newMilitaryHour = startMilitaryHour;
-            endMilitaryMinute = timeBeforeShift;
+            //endMilitaryMinute = timeBeforeShift;
+            endMilitaryMinute = pref.getInt(context.getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT);
         }
 
         //newMilitaryHour = startMilitaryHour - endMilitaryHour;
@@ -62,11 +67,20 @@ public class AlarmTimer extends AppCompatActivity {
 
         Log.e("LG_WORK_PHONE", "ALARM GOT CALLED");
         SharedPreferences.Editor editor = pref.edit();
-        editor.putInt("MILITARY_HOUR", cal.get(Calendar.HOUR)); //military
+        editor.putInt("MILITARY_HOUR", cal.get(Calendar.HOUR)); //military. Do I need?
         editor.putInt("HOUR", cal.get(Calendar.HOUR_OF_DAY)); // gets passed to alarm receiver
         editor.putInt("MINUTES", cal.get(Calendar.MINUTE));
         editor.apply();
     }//setAlarmTime
+
+    //Added on 10 - 21 - 2019
+    public void setMinutesBeforeShift(Context context, int minutesBeforeShift) {
+        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        //pref.getInt(context.getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putInt(context.getString(R.string.ALARM_MINUTES),minutesBeforeShift);
+        editor.apply();
+    }
 
     public int getMilitaryMinute() {
         return this.startMilitaryMinute;
@@ -83,8 +97,9 @@ public class AlarmTimer extends AppCompatActivity {
 
     @TargetApi(24)
     public int getUpdatedHour() {
-        return pref.getInt("MILITARY_HOUR", 0);
+        return pref.getInt("HOUR", 0);
     }
+
 
     //Added on 6 - 28 - 2019
     public String getAMorPM () {

@@ -25,7 +25,6 @@ public class WorkPreferences extends AppCompatActivity {
     private Button save; //Added on 6 - 24 - 2019
     private EditText getAlarmMinutesPreference; //Added on 6 - 24 - 2019
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +79,7 @@ public class WorkPreferences extends AppCompatActivity {
                 //alarmMinutesPreference.setText(updateTime);
                 //Log.e("LG_WORK_PHONE", "NEW ALARM TIME IS: " + newAlarmTime );
                 Log.e("LG_WORK_PHONE", "NEW ALARM TIME AGAIN IS: " + updateTime);
-                editPref = pref.edit();
+                //editPref = pref.edit();
                 //newAlarmTime = alarmMinutesPreference.getText().toString();
                 //alarmMinutesPreference.setText(newAlarmTime);
                 //alarmMinutesPreference.app;
@@ -90,13 +89,13 @@ public class WorkPreferences extends AppCompatActivity {
                 //alarmMinutesPreference.setText(updateTime);
 
                 AlarmTimer alarmTimer = AlarmTimer.getInstance();
-                alarmTimer.setAlarmTime(getBaseContext(), alarmTimer.getStartMilitaryHour(),alarmTimer.getMilitaryMinute(), Integer.parseInt(updateTime) );
+                alarmTimer.setMinutesBeforeShift(getApplicationContext(), Integer.parseInt(updateTime));
+                alarmTimer.setAlarmTime(getBaseContext(), alarmTimer.getStartMilitaryHour(),alarmTimer.getMilitaryMinute() );
 
-                editPref.putInt("ALARM_HOUR", alarmTimer.getUpdatedHour());
-                editPref.putInt("MINUTES", alarmTimer.getUpdatedMinute());
+                //editPref.putInt("ALARM_HOUR", alarmTimer.getUpdatedHour()); //??
+                //editPref.putInt("MINUTES", alarmTimer.getUpdatedMinute()); //??
                 //editPref.putInt("NEW_DOWNLOAD_DATE", 3);
-                editPref.apply();
-
+                //editPref.apply(); //??
 
                 setResult(1, i);
                 finish();

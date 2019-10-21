@@ -267,7 +267,7 @@ public class CurrentWeekSchedule extends ListActivity  {
     }
 
     //Added on 10 - 16 - 2019
-    private void saveData(Bundle outState,
+    private void saveDataOnRotation(Bundle outState,
                           String key,
                           int day,
                           int startHour,
@@ -298,7 +298,7 @@ public class CurrentWeekSchedule extends ListActivity  {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         //super.onSaveInstanceState(outState);
-        saveData(
+        saveDataOnRotation(
                 outState,
                 "DAY_SUNDAY",
                 R.string.SUNDAY,
@@ -311,7 +311,7 @@ public class CurrentWeekSchedule extends ListActivity  {
         );
 
 
-        saveData(
+        saveDataOnRotation(
                 outState,
                 "DAY_MONDAY",
                 R.string.MONDAY,
@@ -323,7 +323,7 @@ public class CurrentWeekSchedule extends ListActivity  {
                 R.string.MONDAY_END_AM_OR_PM
         );
 
-        saveData(
+        saveDataOnRotation(
                 outState,
                 "DAY_TUESDAY",
                 R.string.TUESDAY,
@@ -335,7 +335,7 @@ public class CurrentWeekSchedule extends ListActivity  {
                 R.string.TUESDAY_END_AM_OR_PM
         );
 
-        saveData(
+        saveDataOnRotation(
                 outState,
                 "DAY_WEDNESDAY",
                 R.string.WEDNESDAY,
@@ -347,7 +347,7 @@ public class CurrentWeekSchedule extends ListActivity  {
                 R.string.WEDNESDAY_END_AM_OR_PM
         );
 
-        saveData(
+        saveDataOnRotation(
                 outState,
                 "DAY_THURSDAY",
                 R.string.THURSDAY,
@@ -359,7 +359,7 @@ public class CurrentWeekSchedule extends ListActivity  {
                 R.string.THURSDAY_END_AM_OR_PM
         );
 
-        saveData(
+        saveDataOnRotation(
                 outState,
                 "DAY_FRIDAY",
                 R.string.FRIDAY,
@@ -372,7 +372,7 @@ public class CurrentWeekSchedule extends ListActivity  {
         );
 
 
-        saveData(
+        saveDataOnRotation(
                 outState,
                 "DAY_SATURDAY",
                 R.string.SATURDAY,
@@ -571,117 +571,156 @@ public class CurrentWeekSchedule extends ListActivity  {
         week.remove(currentPosition); //??
         week.add(currentPosition, updatedHour); //??
 
-        SharedPreferences.Editor editor = pref.edit();
         //editor.putString(getString(R.string.com_example_cd_shiftreminder_SAVE_DAY), updatedHour);
         switch(currentPosition){
-
             case WorkReaderContract.WorkEntry.SUNDAY:
-                /*sundayHours.setStartHour(newStartHour);
-                sundayHours.setStartMinute(newStartMinute);
-                sundayHours.setStartAmOrPm(newStartAmOrPm);
-                sundayHours.setEndHour(newEndHour);
-                sundayHours.setEndMinute(newEndMinute);
-                sundayHours.setEndAmOrPm(newEndAmOrPm);
-                */
-                if (pref.getString(getString(R.string.SUNDAY),"")!= "OFF"){
-                editor.putString(getString(R.string.SUNDAY), getString(R.string.SUNDAY));
-                editor.putString(getString(R.string.SUNDAY_START_HOUR), newStartHour);
-                editor.putString(getString(R.string.SUNDAY_START_MINUTE), newStartMinute);
-                editor.putString(getString(R.string.SUNDAY_START_AM_OR_PM), newStartAmOrPm);
-                editor.putString(getString(R.string.SUNDAY_END_HOUR), newEndHour);
-                editor.putString(getString(R.string.SUNDAY_END_MINUTE), newEndMinute);
-                editor.putString(getString(R.string.SUNDAY_END_AM_OR_PM), newEndAmOrPm);
-            }
+                saveDataToMemory(R.string.SUNDAY,
+                        R.string.SUNDAY_START_HOUR,
+                        R.string.SUNDAY_START_MINUTE,
+                        R.string.SUNDAY_START_AM_OR_PM,
+                        R.string.SUNDAY_END_HOUR,
+                        R.string.SUNDAY_END_MINUTE,
+                        R.string.SUNDAY_END_AM_OR_PM,
+                        newStartHour,
+                        newStartMinute,
+                        newStartAmOrPm,
+                        newEndHour,
+                        newEndMinute,
+                        newEndAmOrPm);
                 break;
             case WorkReaderContract.WorkEntry.MONDAY:
-                if (pref.getString(getString(R.string.MONDAY),"")!= "OFF") {
-                    editor.putString(getString(R.string.MONDAY), getString(R.string.MONDAY));
-                    editor.putString(getString(R.string.MONDAY_START_HOUR), newStartHour);
-                    editor.putString(getString(R.string.MONDAY_START_MINUTE), newStartMinute);
-                    editor.putString(getString(R.string.MONDAY_START_AM_OR_PM), newStartAmOrPm);
-                    editor.putString(getString(R.string.MONDAY_END_HOUR), newEndHour);
-                    editor.putString(getString(R.string.MONDAY_END_MINUTE), newEndMinute);
-                    editor.putString(getString(R.string.MONDAY_END_AM_OR_PM), newEndAmOrPm);
-                }
+                saveDataToMemory(R.string.SATURDAY,
+                        R.string.MONDAY_START_HOUR,
+                        R.string.MONDAY_START_MINUTE,
+                        R.string.MONDAY_START_AM_OR_PM,
+                        R.string.MONDAY_END_HOUR,
+                        R.string.MONDAY_END_MINUTE,
+                        R.string.MONDAY_END_AM_OR_PM,
+                        newStartHour,
+                        newStartMinute,
+                        newStartAmOrPm,
+                        newEndHour,
+                        newEndMinute,
+                        newEndAmOrPm);
                 break;
             case WorkReaderContract.WorkEntry.TUESDAY:
-
-                if (pref.getString(getString(R.string.TUESDAY),"")!= "OFF") {
-                    editor.putString(getString(R.string.TUESDAY), getString(R.string.TUESDAY));
-                    editor.putString(getString(R.string.TUESDAY_START_HOUR), newStartHour);
-                    editor.putString(getString(R.string.TUESDAY_START_MINUTE), newStartMinute);
-                    editor.putString(getString(R.string.TUESDAY_START_AM_OR_PM), newStartAmOrPm);
-                    editor.putString(getString(R.string.TUESDAY_END_HOUR), newEndHour);
-                    editor.putString(getString(R.string.TUESDAY_END_MINUTE), newEndMinute);
-                    editor.putString(getString(R.string.TUESDAY_END_AM_OR_PM), newEndAmOrPm);
-                }
+                saveDataToMemory(R.string.TUESDAY,
+                        R.string.TUESDAY_START_HOUR,
+                        R.string.TUESDAY_START_MINUTE,
+                        R.string.TUESDAY_START_AM_OR_PM,
+                        R.string.TUESDAY_END_HOUR,
+                        R.string.TUESDAY_END_MINUTE,
+                        R.string.TUESDAY_END_AM_OR_PM,
+                        newStartHour,
+                        newStartMinute,
+                        newStartAmOrPm,
+                        newEndHour,
+                        newEndMinute,
+                        newEndAmOrPm);
                 break;
             case WorkReaderContract.WorkEntry.WEDNESDAY:
-                if (pref.getString(getString(R.string.WEDNESDAY),"")!= "OFF") {
-                    editor.putString(getString(R.string.WEDNESDAY), getString(R.string.WEDNESDAY));
-                    editor.putString(getString(R.string.WEDNESDAY_START_HOUR), newStartHour);
-                    editor.putString(getString(R.string.WEDNESDAY_START_MINUTE), newStartMinute);
-                    editor.putString(getString(R.string.WEDNESDAY_START_AM_OR_PM), newStartAmOrPm);
-                    editor.putString(getString(R.string.WEDNESDAY_END_HOUR), newEndHour);
-                    editor.putString(getString(R.string.WEDNESDAY_END_MINUTE), newEndMinute);
-                    editor.putString(getString(R.string.WEDNESDAY_END_AM_OR_PM), newEndAmOrPm);
-                }
+                saveDataToMemory(R.string.WEDNESDAY,
+                        R.string.WEDNESDAY_START_HOUR,
+                        R.string.WEDNESDAY_START_MINUTE,
+                        R.string.WEDNESDAY_START_AM_OR_PM,
+                        R.string.WEDNESDAY_END_HOUR,
+                        R.string.WEDNESDAY_END_MINUTE,
+                        R.string.WEDNESDAY_END_AM_OR_PM,
+                        newStartHour,
+                        newStartMinute,
+                        newStartAmOrPm,
+                        newEndHour,
+                        newEndMinute,
+                        newEndAmOrPm);
                 break;
             case WorkReaderContract.WorkEntry.THURSDAY:
-                if (pref.getString(getString(R.string.THURSDAY),"")!= "OFF") {
-                    editor.putString(getString(R.string.THURSDAY), "THURSDAY");
-                    editor.putString(getString(R.string.THURSDAY_START_HOUR), newStartHour);
-                    editor.putString(getString(R.string.THURSDAY_START_MINUTE), newStartMinute);
-                    editor.putString(getString(R.string.THURSDAY_START_AM_OR_PM), newStartAmOrPm);
-                    editor.putString(getString(R.string.THURSDAY_END_HOUR), newEndHour);
-                    editor.putString(getString(R.string.THURSDAY_END_MINUTE), newEndMinute);
-                    editor.putString(getString(R.string.THURSDAY_END_AM_OR_PM), newEndAmOrPm);
-                } else {
-                    editor.putString(getString(R.string.THURSDAY), "OFF");
-                    editor.putString(getString(R.string.THURSDAY_START_HOUR), "");
-                    editor.putString(getString(R.string.THURSDAY_START_MINUTE), "");
-                    editor.putString(getString(R.string.THURSDAY_START_AM_OR_PM), "");
-                    editor.putString(getString(R.string.THURSDAY_END_HOUR), "");
-                    editor.putString(getString(R.string.THURSDAY_END_MINUTE), "");
-                    editor.putString(getString(R.string.THURSDAY_END_AM_OR_PM), "");
-                }
+                saveDataToMemory(R.string.THURSDAY,
+                        R.string.THURSDAY_START_HOUR,
+                        R.string.THURSDAY_START_MINUTE,
+                        R.string.THURSDAY_START_AM_OR_PM,
+                        R.string.THURSDAY_END_HOUR,
+                        R.string.THURSDAY_END_MINUTE,
+                        R.string.THURSDAY_END_AM_OR_PM,
+                        newStartHour,
+                        newStartMinute,
+                        newStartAmOrPm,
+                        newEndHour,
+                        newEndMinute,
+                        newEndAmOrPm);
                 break;
             case WorkReaderContract.WorkEntry.FRIDAY:
-                //Emulate Intent SEND. Fuck Java.
-                //intent.setAction(Intent.ACTION_SEND);
-                //intent.putStringArrayListExtra(getString(R.string.com_example_cd_shiftreminder_FRIDAY), updateCurrrentHour)
-                //editor.putString(getString(R.string.FRIDAY), "FRIDAY");
-
-                if ( pref.getString(getString(R.string.FRIDAY),"")!= "OFF") {
-                    editor.putString(getString(R.string.FRIDAY), getString(R.string.FRIDAY));
-                    editor.putString(getString(R.string.FRIDAY_START_HOUR), newStartHour);
-                    editor.putString(getString(R.string.FRIDAY_START_MINUTE), newStartMinute);
-                    editor.putString(getString(R.string.FRIDAY_START_AM_OR_PM), newStartAmOrPm);
-                    editor.putString(getString(R.string.FRIDAY_END_HOUR), newEndHour);
-                    editor.putString(getString(R.string.FRIDAY_END_MINUTE), newEndMinute);
-                    editor.putString(getString(R.string.FRIDAY_END_AM_OR_PM), newEndAmOrPm);
-                }
-
+                saveDataToMemory(R.string.FRIDAY,
+                        R.string.FRIDAY_START_HOUR,
+                        R.string.FRIDAY_START_MINUTE,
+                        R.string.FRIDAY_START_AM_OR_PM,
+                        R.string.FRIDAY_END_HOUR,
+                        R.string.FRIDAY_END_MINUTE,
+                        R.string.FRIDAY_END_AM_OR_PM,
+                        newStartHour,
+                        newStartMinute,
+                        newStartAmOrPm,
+                        newEndHour,
+                        newEndMinute,
+                        newEndAmOrPm);
                 break;
             case WorkReaderContract.WorkEntry.SATURDAY:
-                if (pref.getString(getString(R.string.SATURDAY),"")!= "OFF") {
-                    editor.putString(getString(R.string.SATURDAY), getString(R.string.SATURDAY));
-                    editor.putString(getString(R.string.SATURDAY_START_HOUR), newStartHour);
-                    editor.putString(getString(R.string.SATURDAY_START_MINUTE), newStartMinute);
-                    editor.putString(getString(R.string.SATURDAY_START_AM_OR_PM), newStartAmOrPm);
-                    editor.putString(getString(R.string.SATURDAY_END_HOUR), newEndHour);
-                    editor.putString(getString(R.string.SATURDAY_END_MINUTE), newEndMinute);
-                    editor.putString(getString(R.string.SATURDAY_END_AM_OR_PM), newEndAmOrPm);
-                }
+                saveDataToMemory(R.string.SATURDAY,
+                        R.string.SATURDAY_START_HOUR,
+                        R.string.SATURDAY_START_MINUTE,
+                        R.string.SATURDAY_START_AM_OR_PM,
+                        R.string.SATURDAY_END_HOUR,
+                        R.string.SATURDAY_END_MINUTE,
+                        R.string.SATURDAY_END_AM_OR_PM,
+                        newStartHour,
+                        newStartMinute,
+                        newStartAmOrPm,
+                        newEndHour,
+                        newEndMinute,
+                        newEndAmOrPm);
                 break;
         }
 
-        editor.apply();
         //adapter.remove("foo");
         //adapter.insert(updatedHour.toString() , currentPosition);
         adapter.notifyDataSetChanged();
 
     }
+
+    //Added on 10 - 18 - 2017
+    //Used by both updateHours() and after displayNotification() in onActivityResult()
+    private void saveDataToMemory(
+            int day,
+            int startHour,
+            int startMinute,
+            int startAmOrPm,
+            int endHour,
+            int endMinute,
+            int endAmOrPM,
+
+            String newStartHour,
+            String newStartMinute,
+            String newStartAmOrPm,
+            String newEndHour,
+            String newEndMinute,
+            String newEndAmOrPm
+
+    )
+    {
+        SharedPreferences.Editor editor = pref.edit();
+
+        if (pref.getString(getString(day),"")!= "OFF") {
+            editor.putString(getString(day), getString(day));
+            editor.putString(getString(startHour), newStartHour);
+            editor.putString(getString(startMinute), newStartMinute);
+            editor.putString(getString(startAmOrPm), newStartAmOrPm);
+            editor.putString(getString(endHour), newEndHour);
+            editor.putString(getString(endMinute), newEndMinute);
+            editor.putString(getString(endAmOrPM), newEndAmOrPm);
+        }
+
+        editor.apply();
+    }
+
     //Added on 2 - 27 - 2019
     @TargetApi(24)
     @Override
@@ -694,6 +733,10 @@ public class CurrentWeekSchedule extends ListActivity  {
             newPosition = data.getIntExtra("CURRENT_DAY", -99);  //position in listview
             //0 - 6 represent Sun to Sat. 7 represents off. -99 is just to make it work on the hardware
 
+            MilitaryTime militaryTime = MilitaryTime.getInstance();
+            AlarmTimer alarmTimer = AlarmTimer.getInstance();
+            dayNotification dayNotification = new dayNotification(getApplicationContext());
+
             if (newPosition != -99 && newPosition != 7) {
                 newStartHour = data.getStringExtra(getString(R.string.START_HOUR)); //hardware bug??
                 newStartMinute = data.getStringExtra(getString(R.string.START_MINUTE));
@@ -703,15 +746,11 @@ public class CurrentWeekSchedule extends ListActivity  {
                 newEndAmOrPm = data.getStringExtra(getString(R.string.END_AM_OR_PM));
                 day = data.getStringExtra(getString(R.string.DAY_OF_WEEK));
 
-                MilitaryTime militaryTime = MilitaryTime.getInstance();
-                AlarmTimer alarmTimer = AlarmTimer.getInstance();
-
                 militaryTime.convertStartCivilianTimeToMilitaryTime(newStartHour, newStartMinute, newStartAmOrPm);
                 alarmTimer = AlarmTimer.getInstance();
                 alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(),
-                        militaryTime.getStartMilitaryMinute(),
-                        pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
-                dayNotification dayNotification = new dayNotification(getApplicationContext());
+                        militaryTime.getStartMilitaryMinute());
+
                 dayNotification.displayNotification(day,
                         alarmTimer.getUpdatedHour(),
                                 alarmTimer.getUpdatedMinute(),
@@ -719,6 +758,12 @@ public class CurrentWeekSchedule extends ListActivity  {
                                  alarmTimer.getAMorPM(), "ALARM");
 
 
+            } else {
+                dayNotification.displayNotification(day,
+                        alarmTimer.getUpdatedHour(),
+                        alarmTimer.getUpdatedMinute(),
+                        alarmTimer.getAMorPM(), "ALARM");
+                //save current schedule in shared pref?
             }
         }
         //editor.apply();
@@ -862,7 +907,7 @@ public class CurrentWeekSchedule extends ListActivity  {
                             //newWorkHours.getEndAmOrPm()
                             "");
             }
-        }
+    }
 
 
     @Override

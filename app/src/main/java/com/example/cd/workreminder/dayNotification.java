@@ -26,12 +26,12 @@ public class dayNotification extends AppCompatActivity {
     //Schizophrenic method call ripped off from the Android Notification source code -)
     @TargetApi(24)
     public int handleThirdShift() {
-        Log.e("NOTIFICATION TAG", "handleThirdShift()");
         Calendar cal = Calendar.getInstance();
         int currentDay = cal.get(Calendar.DAY_OF_WEEK); //vs inside if??
         //CurrentWorkHours currentWorkHours = new CurrentWorkHours();
         if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.SUNDAY) {
             setNotification(
+                    WorkReaderContract.WorkEntry.SUNDAY,
                     R.string.SUNDAY,
                     R.string.SUNDAY_START_HOUR,
                     R.string.SUNDAY_START_MINUTE,
@@ -47,6 +47,7 @@ public class dayNotification extends AppCompatActivity {
         } else if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.MONDAY) {
             //if(!week.get(position).get(0).equals("OFF")) {
             setNotification(
+                    WorkReaderContract.WorkEntry.MONDAY,
                     R.string.MONDAY,
                     R.string.MONDAY_START_HOUR,
                     R.string.MONDAY_START_MINUTE,
@@ -61,6 +62,7 @@ public class dayNotification extends AppCompatActivity {
             );
         } else if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.TUESDAY) {
             setNotification(
+                    WorkReaderContract.WorkEntry.TUESDAY,
                     R.string.TUESDAY,
                     R.string.TUESDAY_START_HOUR,
                     R.string.TUESDAY_START_MINUTE,
@@ -75,6 +77,7 @@ public class dayNotification extends AppCompatActivity {
             );
         } else if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.WEDNESDAY) {
             setNotification(
+                    WorkReaderContract.WorkEntry.WEDNESDAY,
                     R.string.WEDNESDAY,
                     R.string.WEDNESDAY_START_HOUR,
                     R.string.WEDNESDAY_START_MINUTE,
@@ -89,6 +92,7 @@ public class dayNotification extends AppCompatActivity {
             );
         }else if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.THURSDAY) {
             setNotification(
+                    WorkReaderContract.WorkEntry.THURSDAY,
                     R.string.THURSDAY,
                     R.string.THURSDAY_START_HOUR,
                     R.string.THURSDAY_START_MINUTE,
@@ -104,6 +108,7 @@ public class dayNotification extends AppCompatActivity {
         } else if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.FRIDAY) {
             //if(!week.get(position).get(0).equals("OFF")) {
             setNotification(
+                    WorkReaderContract.WorkEntry.FRIDAY,
                     R.string.FRIDAY,
                     R.string.FRIDAY_START_HOUR,
                     R.string.FRIDAY_START_MINUTE,
@@ -119,6 +124,7 @@ public class dayNotification extends AppCompatActivity {
         }
         else if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.SATURDAY) {
             setNotification(
+                    WorkReaderContract.WorkEntry.SATURDAY,
                     R.string.SATURDAY,
                     R.string.SATURDAY_START_HOUR,
                     R.string.SATURDAY_START_MINUTE,
@@ -141,21 +147,20 @@ public class dayNotification extends AppCompatActivity {
     //Do I need the last three args in the function??
     @TargetApi(24)
     private void setNotification(
+            int listPosition,
             int dayOfWeek,
             int dayOfWeekStartHour, int dayOfWeekStartMinute, int dayOfWeekStartAmOrPm,
             int dayOfWeekEndHour, int dayOfWeekEndMinute, int dayOfWeekEndAmOrPm,
 
             int endDayOfWeekStartHour, int endDayOfWeekStartMinute, int endDayOfWeekStartAmOrPm
-    ) {
-        Calendar cal = Calendar.getInstance();
+    )
+    {
         MilitaryTime militaryTime = MilitaryTime.getInstance();
         AlarmTimer alarmTimer = AlarmTimer.getInstance();
 
         pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
 
         if (!(pref.getString(context.getString(dayOfWeek), "OFF").equals("OFF"))) {
-            int currentHour = cal.get(Calendar.HOUR);
-            int currentMinute = cal.get(Calendar.MINUTE);
             //pref.getString( getString(R.string.FRIDAY_START_HOUR), "" );
             militaryTime.convertStartCivilianTimeToMilitaryTime(
                     pref.getString(context.getString(dayOfWeekStartHour), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
@@ -167,10 +172,10 @@ public class dayNotification extends AppCompatActivity {
                     pref.getString(context.getString(dayOfWeekEndMinute), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
                     pref.getString(context.getString(dayOfWeekEndAmOrPm), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
 
-            alarmTimer.setAlarmTime(context, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(),
-                    pref.getInt(context.getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT));
+            alarmTimer.setAlarmTime(context,
+                    militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute());
 
-            setNotification(
+            setNotificationDisplay(
                     context.getString(dayOfWeek),
                     militaryTime.getStartMilitaryHour(),
                     militaryTime.getStartMilitaryMinute(),
@@ -181,7 +186,7 @@ public class dayNotification extends AppCompatActivity {
 
     //Added on 10 - 18 - 2019
     @TargetApi(24)
-    private void setNotification(
+    private void setNotificationDisplay(
             String dayOfWeek,
             int startMilitaryHour,
             int startMilitaryMinute,
@@ -191,7 +196,7 @@ public class dayNotification extends AppCompatActivity {
     {
         Calendar cal = Calendar.getInstance();
         AlarmTimer alarmTimer = AlarmTimer.getInstance();
-        int currentHour = cal.get(Calendar.HOUR);
+        int currentHour = cal.get(Calendar.HOUR_OF_DAY);
         int currentMinute = cal.get(Calendar.MINUTE);
 
         if (currentHour > startMilitaryHour && currentHour < endMilitaryHour) {
@@ -200,6 +205,12 @@ public class dayNotification extends AppCompatActivity {
             //setCurrentAlarm(militaryTime.getStartMilitaryHour(), militaryTime.getEndMilitaryMinute());
             if (currentMinute > startMilitaryMinute) {
                 displayNotification("YOU'RE SUPPOSED TO BE AT WORK");
+            } else {
+                displayNotification( dayOfWeek,
+                        alarmTimer.getUpdatedHour(),
+                        alarmTimer.getUpdatedMinute(),
+                        alarmTimer.getAMorPM(),
+                        "ALARM");
             }
         } else if (currentHour == endMilitaryHour) {
             if (currentMinute < endMilitaryMinute) {
@@ -211,7 +222,7 @@ public class dayNotification extends AppCompatActivity {
                     alarmTimer.getUpdatedMinute(),
                     alarmTimer.getAMorPM(),
                     "ALARM");
-        }else {
+        }else { //???
             displayNotification( dayOfWeek,
                     alarmTimer.getUpdatedHour(),
                     alarmTimer.getUpdatedMinute(),
@@ -223,6 +234,10 @@ public class dayNotification extends AppCompatActivity {
     //Added on 10 - 11 - 2019
     private String buildAlarmTimeFormatDisplay(String dayOfWeek, int hour, int minute, String amOrPm) {
         String timeFormat = "";
+
+        if (hour == 0) {
+            hour = 12;
+        }
 
         //Something like 1:5 becomes while 1:05 while something like 1:10 stays 1:10
         if (minute < 10) {
@@ -260,7 +275,6 @@ public class dayNotification extends AppCompatActivity {
                 newHour,
                 newMinute,
                 newAmOrPm);
-
 
         //snoozeIntent.setAction(ACTION_SNOOZE);
         dismissIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);

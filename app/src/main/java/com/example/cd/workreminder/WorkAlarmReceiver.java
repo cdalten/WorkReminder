@@ -17,6 +17,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.SystemClock;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import java.util.Calendar;
 
@@ -26,12 +27,15 @@ public class WorkAlarmReceiver extends BroadcastReceiver {
 
     private static final String PRODUCTION_TAG = "LG_WORK_PHONE"; //Added on 4 - 16 - 2019
     public static final String ACTION_DISMISS = "com.example.cd.workreminder.action.DISMISS";
+    private Context context; //Added on 10 - 21 - 2019
     SharedPreferences pref;
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        this.context = context;
         final String action = intent.getAction();
         if (ACTION_DISMISS.equals(action)) {
+            handleActionDismiss(context);
             Log.e(PRODUCTION_TAG, "THE INTENT ACTION IS: " + intent.getAction());
         }
 
@@ -71,4 +75,15 @@ public class WorkAlarmReceiver extends BroadcastReceiver {
             ringtone.play();
         }
     //}
+
+    //Added on 10 - 21 - 2019
+    //Method ripped of from...
+    //https://github.com/googlearchive/android-Notifications/blob/master/Wearable/src/main/java/com/example/android/wearable/wear/wearnotifications/handlers/BigTextIntentService.java
+    private void handleActionDismiss(Context context) {
+        Log.d(PRODUCTION_TAG, "handleActionDismiss()");
+
+        NotificationManagerCompat notificationManagerCompat =
+                NotificationManagerCompat.from(context.getApplicationContext());
+        notificationManagerCompat.cancel(MainActivity.NOTIFICATION_ID);
+    }
 }
