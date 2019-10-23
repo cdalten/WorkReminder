@@ -61,14 +61,14 @@ public class AlarmTimer extends AppCompatActivity {
 
         cal = Calendar.getInstance();
         cal.setTimeInMillis(System.currentTimeMillis());
+        //cal.set(Calendar.HOUR, newMilitaryHour);
         cal.set(Calendar.HOUR, newMilitaryHour);
-        //cal.set(Calendar.HOUR_OF_DAY, newMilitaryHour); //24 hour
         cal.set(Calendar.MINUTE, newMilitaryMinute);
 
         Log.e("LG_WORK_PHONE", "ALARM GOT CALLED");
         SharedPreferences.Editor editor = pref.edit();
-        editor.putInt("MILITARY_HOUR", cal.get(Calendar.HOUR)); //military. Do I need?
-        editor.putInt("HOUR", cal.get(Calendar.HOUR_OF_DAY)); // gets passed to alarm receiver
+        //editor.putInt("MILITARY_HOUR", cal.get(Calendar.HOUR)); //military. Do I need?
+        editor.putInt("HOUR", cal.get(Calendar.HOUR)); // gets passed to alarm receiver
         editor.putInt("MINUTES", cal.get(Calendar.MINUTE));
         editor.apply();
     }//setAlarmTime
@@ -82,6 +82,21 @@ public class AlarmTimer extends AppCompatActivity {
         editor.apply();
     }
 
+    //Added on 10 - 23 - 2019
+    public int getNewMilitaryHour() {
+        return newMilitaryHour;
+    }
+
+    //Added on 10 - 23 - 2019
+    public int getStartMilitaryMinute(){
+        return newMilitaryMinute;
+    }
+
+    //Added on 10 - 23 - 2019
+    public void setStartMilitaryHour(int startMilitaryHour) {
+        this.startMilitaryHour = startMilitaryHour;
+    }
+
     public int getMilitaryMinute() {
         return this.startMilitaryMinute;
     }
@@ -90,16 +105,13 @@ public class AlarmTimer extends AppCompatActivity {
         return this.startMilitaryHour;
     }
 
-    @TargetApi(24)
     public int getUpdatedMinute() {
         return pref.getInt("MINUTES", 0);
     }
 
-    @TargetApi(24)
     public int getUpdatedHour() {
         return pref.getInt("HOUR", 0);
     }
-
 
     //Added on 6 - 28 - 2019
     public String getAMorPM () {
@@ -109,4 +121,6 @@ public class AlarmTimer extends AppCompatActivity {
             return "AM";
         }
     }
+
+
 }//end class

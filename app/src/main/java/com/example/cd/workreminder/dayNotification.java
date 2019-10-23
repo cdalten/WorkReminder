@@ -10,6 +10,7 @@ import android.icu.util.Calendar;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import static android.app.Notification.EXTRA_NOTIFICATION_ID;
@@ -184,6 +185,94 @@ public class dayNotification extends AppCompatActivity {
         }
     }
 
+    //Added on 10 - 23 - 2019
+    @TargetApi(24)
+    public long convertToStartTime(
+            int startMilitaryHour,
+            int startMilitaryMinute
+    )
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, startMilitaryHour);
+        cal.set(Calendar.MINUTE, startMilitaryMinute);
+
+        return cal.getTime().getTime();
+    }
+
+    //Added on 10 -23 - 2019
+    @TargetApi(24)
+    public long convertToEndTime(
+            int endMilitaryHour,
+            int endMilitaryMinute
+    )
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, endMilitaryHour);
+        cal.set(Calendar.MINUTE, endMilitaryMinute);
+
+        return cal.getTime().getTime();
+    }
+
+    //Added on 10 - 23 - 2019
+    @TargetApi(24)
+    public long getCurrentTime() {
+        Calendar cal = Calendar.getInstance();
+        int currentHour = cal.get(Calendar.HOUR_OF_DAY);
+        int currentMinute = cal.get(Calendar.MINUTE);
+
+        cal.set(Calendar.HOUR_OF_DAY, currentHour);
+        cal.set(Calendar.MINUTE, currentMinute);
+
+        return cal.getTime().getTime();
+    }
+
+
+    //Added on 10 - 23 - 2019
+    //vs trying to overload the current method?
+    public void setNewNotificationDisplay(
+            String dayOfWeek,
+            long startTime,
+            long endTime,
+            long currentTime
+    )
+    {
+        AlarmTimer alarmTimer = AlarmTimer.getInstance();
+
+        if (currentTime > startTime && currentTime < endTime) {
+            displayNotification("YOU'RE SUPPOSED TO BE AT WORK");
+        } else if (currentTime == startTime) {
+            alarmTimer.setStartMilitaryHour(alarmTimer.getNewMilitaryHour());
+            displayNotification( dayOfWeek,
+                    alarmTimer.getUpdatedHour(),
+                    alarmTimer.getUpdatedMinute(),
+                    alarmTimer.getAMorPM(),
+                    "ALARM");
+
+        } else if (currentTime == endTime) {
+            alarmTimer.setStartMilitaryHour(alarmTimer.getStartMilitaryHour());
+            displayNotification( dayOfWeek,
+                    alarmTimer.getUpdatedHour(),
+                    alarmTimer.getUpdatedMinute(),
+                    alarmTimer.getAMorPM(),
+                    "ALARM");
+        } /*else if (  pref.getInt("ALARM_HOUR", 0) == 0) {
+            displayNotification(dayOfWeek,
+                    alarmTimer.getUpdatedHour(),
+                    alarmTimer.getUpdatedMinute(),
+                    alarmTimer.getAMorPM(),
+                    "ALARM");
+        } */
+        else {
+            alarmTimer.setStartMilitaryHour(alarmTimer.getNewMilitaryHour());
+            displayNotification( dayOfWeek,
+                    alarmTimer.getUpdatedHour(),
+                    alarmTimer.getUpdatedMinute(),
+                    alarmTimer.getAMorPM(),
+                    "ALARM");
+        }
+
+    }
+
     //Added on 10 - 18 - 2019
     @TargetApi(24)
     private void setNotificationDisplay(
@@ -194,10 +283,21 @@ public class dayNotification extends AppCompatActivity {
             int endMilitaryMinute
     )
     {
-        Calendar cal = Calendar.getInstance();
-        AlarmTimer alarmTimer = AlarmTimer.getInstance();
-        int currentHour = cal.get(Calendar.HOUR_OF_DAY);
-        int currentMinute = cal.get(Calendar.MINUTE);
+        //Calendar cal = Calendar.getInstance();
+        //AlarmTimer alarmTimer = AlarmTimer.getInstance();
+        //alarmTimer.setStartMilitaryHour(startMilitaryHour);
+        //int currentHour = cal.get(Calendar.HOUR_OF_DAY);
+        //int currentMinute = cal.get(Calendar.MINUTE);
+
+        long startTime = convertToStartTime(startMilitaryHour, startMilitaryMinute);
+        long endTime = convertToEndTime(endMilitaryHour, endMilitaryMinute);
+        long currentTime = getCurrentTime();
+
+        setNewNotificationDisplay(dayOfWeek, startTime, endTime, currentTime);
+
+        /*if (startMilitaryHour == 0) {
+            startMilitaryHour = 12;
+        }
 
         if (currentHour > startMilitaryHour && currentHour < endMilitaryHour) {
             displayNotification("YOU'RE SUPPOSED TO BE AT WORK");
@@ -222,13 +322,14 @@ public class dayNotification extends AppCompatActivity {
                     alarmTimer.getUpdatedMinute(),
                     alarmTimer.getAMorPM(),
                     "ALARM");
-        }else { //???
+        }else {
             displayNotification( dayOfWeek,
                     alarmTimer.getUpdatedHour(),
                     alarmTimer.getUpdatedMinute(),
                     alarmTimer.getAMorPM(),
                     "ALARM");
         }
+        */
     }
 
     //Added on 10 - 11 - 2019
@@ -270,17 +371,35 @@ public class dayNotification extends AppCompatActivity {
                                     int newMinute,
                                     String newAmOrPm,
                                     String notificationTitle) {
-        Intent dismissIntent = new Intent(context, WorkAlarmReceiver.class);
         String notificationText = buildAlarmTimeFormatDisplay(dayOfWeek,
                 newHour,
                 newMinute,
                 newAmOrPm);
 
-        //snoozeIntent.setAction(ACTION_SNOOZE);
+        //Intent dismissIntent = new Intent(context, WorkAlarmReceiver.class);
+        Intent snoozeIntent = new Intent(context, WorkAlarmReceiver.class);
+        snoozeIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
+        snoozeIntent.setAction(WorkAlarmReceiver.ACTION_SNOOZE);
+        PendingIntent snoozePendingIntent =
+                PendingIntent.getBroadcast(context, 0, snoozeIntent, 0);
+        NotificationCompat.Action snoozeAction =
+                new NotificationCompat.Action.Builder(
+                        R.drawable.ic_action_stat_reply,
+                        "Snooze",
+                        snoozePendingIntent)
+                        .build();
+
+        Intent dismissIntent = new Intent(context, WorkAlarmReceiver.class);
         dismissIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
         dismissIntent.setAction(WorkAlarmReceiver.ACTION_DISMISS);
         PendingIntent dismissPendingIntent =
                 PendingIntent.getBroadcast(context, 0, dismissIntent, 0);
+        NotificationCompat.Action dismissAction =
+                new NotificationCompat.Action.Builder(
+                        R.drawable.ic_action_stat_share,
+                        "Dismiss",
+                        dismissPendingIntent)
+                        .build();
 
         NotificationCompat.Builder notificationCompatBuilder = new NotificationCompat.Builder(context.getApplicationContext(), "0");
 
@@ -288,8 +407,8 @@ public class dayNotification extends AppCompatActivity {
         notificationCompatBuilder.setSmallIcon(R.drawable.ic_stat_work)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(dismissPendingIntent)
-                .addAction(R.drawable.ic_action_stat_share,
-                        context.getResources().getString(R.string.action_share), dismissPendingIntent);
+                .addAction(snoozeAction)
+                .addAction(dismissAction);
         notificationCompatBuilder.setContentTitle(notificationTitle);
         notificationCompatBuilder.setContentText(notificationText);
         NotificationManagerCompat mNotificationManagerCompat;

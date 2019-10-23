@@ -32,7 +32,7 @@
     <string name="START_AM_OR_PM">START_AM_OR_PM</string>
     <string name="END_HOUR">END_HOUR</string>
     <string name="END_MINUTE">END_MINUTE</string>
-    <string name="END_AM_OR_PM">START_AM_OR_PM</string>
+    <string name="END_AM_OR_PM">END_AM_OR_PM</string>
 
     <string name="ALARM_MINUTES">ALARM_MINUTES</string>
 

@@ -747,16 +747,24 @@ public class CurrentWeekSchedule extends ListActivity  {
                 day = data.getStringExtra(getString(R.string.DAY_OF_WEEK));
 
                 militaryTime.convertStartCivilianTimeToMilitaryTime(newStartHour, newStartMinute, newStartAmOrPm);
+                militaryTime.convertEndCivilianTimeToMilitaryTime(newEndHour, newEndMinute, newEndAmOrPm);
+
                 alarmTimer = AlarmTimer.getInstance();
                 alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(),
                         militaryTime.getStartMilitaryMinute());
 
-                dayNotification.displayNotification(day,
+
+                long startTime = dayNotification.convertToStartTime(militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute());
+                long endTime = dayNotification.convertToEndTime(militaryTime.getEndMilitaryHour(), militaryTime.getEndMilitaryMinute());
+                long currentTime = dayNotification.getCurrentTime();
+                dayNotification.setNewNotificationDisplay(day, startTime, endTime, currentTime);
+
+                /*dayNotification.displayNotification(day,
                         alarmTimer.getUpdatedHour(),
                                 alarmTimer.getUpdatedMinute(),
                                 //pref.getInt("MINUTES", 0)
                                  alarmTimer.getAMorPM(), "ALARM");
-
+                                 */
 
             } else {
                 dayNotification.displayNotification(day,

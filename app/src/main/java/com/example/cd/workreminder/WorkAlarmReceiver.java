@@ -10,80 +10,79 @@ import android.media.Ringtone;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.media.AudioAttributes;
-import android.media.AudioManager;
-import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.SystemClock;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
-import java.util.Calendar;
 
-import static android.content.Context.MODE_PRIVATE;
 
 public class WorkAlarmReceiver extends BroadcastReceiver {
 
     private static final String PRODUCTION_TAG = "LG_WORK_PHONE"; //Added on 4 - 16 - 2019
+    public static final String ACTION_SNOOZE = "com.example.cd.workreminder.action.SNOOZE";
     public static final String ACTION_DISMISS = "com.example.cd.workreminder.action.DISMISS";
-    private Context context; //Added on 10 - 21 - 2019
-    SharedPreferences pref;
+    private Ringtone ringtone; //Added on 10 - 21 - 2019
 
     @Override
-    public void onReceive(Context context, Intent intent) {
-        this.context = context;
+    public void onReceive(Context context, Intent intent) { ;
         final String action = intent.getAction();
-        if (ACTION_DISMISS.equals(action)) {
-            handleActionDismiss(context);
-            Log.e(PRODUCTION_TAG, "THE INTENT ACTION IS: " + intent.getAction());
+
+        //ringtone = getRingtone(context);
+
+        if (intent != null) {
+            if (ACTION_DISMISS.equals(action)) {
+                Log.e(PRODUCTION_TAG, "ACTION_DISMISS GOT CALLED");
+                //ringtone.stop();
+                handleActionDismiss(context);
+            } else if (ACTION_SNOOZE.equals(action)) {
+                Log.e(PRODUCTION_TAG, "ACTION_SNOOZE GOT CALLED");
+                //ringtone.play();
+                handleActionSnooze(context);
+            }
         }
 
-        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
-        Calendar c=Calendar.getInstance();
-        c.setTimeInMillis(System.currentTimeMillis());
-        //c.setTimeInMillis(SystemClock.elapsedRealtime());
-        //Log.e(PRODUCTION_TAG, "THE ALARM TIME IN MILLISECONDS IS: " + intent.getLongExtra("MILLISECONDS", 0));
-        //Log.e(PRODUCTION_TAG, "THE SYSTEM TIME SECONDS IS: " + (int)((System.currentTimeMillis()/1000)%3600));
-        Log.e(PRODUCTION_TAG, "THE SYSTEM ELAPSED TIME TIME IS: " + SystemClock.elapsedRealtime());
-        Log.e(PRODUCTION_TAG, "THE SYSTEM ALARM HOUR IS: " + c.get(Calendar.HOUR));
-        Log.e(PRODUCTION_TAG, "THE SYSTEM ALARM MINUTES ARE: " + c.get(Calendar.MINUTE));
-        Log.e(PRODUCTION_TAG, "THE ALARM HOUR is: " + pref.getInt("HOUR", 0));
-        Log.e(PRODUCTION_TAG, "THE ALARM MINUTES ARE: " + pref.getInt("MINUTES", 0));
-        //if (intent.getIntExtra("MINUTE", 0) == cal.get(Calendar.MINUTE)) {
-        //if ( pref.getInt("MINUTES", 0) == c.get(Calendar.MINUTE)
-        //        && pref.getInt("HOUR", 0) == c.get(Calendar.HOUR)) {
-            Log.e(PRODUCTION_TAG, "ALARM RINGER GOT CALLED");
-
-            //code copy and pasted from stackoverflow
-            Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-            if (alarmUri == null) {
-                alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-            }
-
-            Ringtone ringtone = RingtoneManager.getRingtone(context, alarmUri);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                AudioAttributes aa = new AudioAttributes.Builder()
-                        .setUsage(AudioAttributes.USAGE_ALARM)
-                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                        .build();
-                ringtone.setAudioAttributes(aa);
-            } else {
-                ringtone.setStreamType(AudioManager.STREAM_ALARM);
-            }
-
-            ringtone.play();
-        }
-    //}
+        Log.e(PRODUCTION_TAG, "THE ACTION IS: " + action);
+    }
 
     //Added on 10 - 21 - 2019
     //Method ripped of from...
     //https://github.com/googlearchive/android-Notifications/blob/master/Wearable/src/main/java/com/example/android/wearable/wear/wearnotifications/handlers/BigTextIntentService.java
     private void handleActionDismiss(Context context) {
-        Log.d(PRODUCTION_TAG, "handleActionDismiss()");
+        Log.e(PRODUCTION_TAG, "handleActionDismiss()");
+        //getRingtone(context).stop(); //Because cancel doesn't mean cancel.
+
+        //RingtoneManager ringMan = new RingtoneManager(context.getApplicationContext());
+        //ringMan.stopPreviousRingtone();
 
         NotificationManagerCompat notificationManagerCompat =
                 NotificationManagerCompat.from(context.getApplicationContext());
         notificationManagerCompat.cancel(MainActivity.NOTIFICATION_ID);
     }
-}
+
+    private void handleActionSnooze(Context context) {
+        Log.d(PRODUCTION_TAG, "handleActionSnooze()");
+        getRingtone(context).play();
+    }
+
+    //Added on 10 - 23 - 2019
+    private Ringtone getRingtone(Context context) {
+        //Part of the code copied and pasted from stackoverflow
+        Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        if (alarmUri == null) {
+            alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        }
+
+        Ringtone ringtone = RingtoneManager.getRingtone(context.getApplicationContext(), alarmUri);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            AudioAttributes aa = new AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_ALARM)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                    .build();
+            ringtone.setAudioAttributes(aa);
+        } else {
+            ringtone.setStreamType(AudioManager.STREAM_ALARM);
+        }
+        return ringtone;
+    }
+}//end class
