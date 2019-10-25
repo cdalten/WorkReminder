@@ -1,6 +1,7 @@
 package com.example.cd.workreminder;
 
 import android.annotation.TargetApi;
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -400,6 +401,7 @@ public class dayNotification extends AppCompatActivity {
                         "Dismiss",
                         dismissPendingIntent)
                         .build();
+
 
         NotificationCompat.Builder notificationCompatBuilder = new NotificationCompat.Builder(context.getApplicationContext(), "0");
 
