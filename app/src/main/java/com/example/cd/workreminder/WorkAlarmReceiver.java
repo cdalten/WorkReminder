@@ -23,10 +23,8 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class WorkAlarmReceiver extends BroadcastReceiver {
 
-    private static final String PRODUCTION_TAG = "LG_WORK_PHONE"; //Added on 4 - 16 - 2019
     public static final String ACTION_SNOOZE = "com.example.cd.workreminder.action.SNOOZE";
     public static final String ACTION_DISMISS = "com.example.cd.workreminder.action.DISMISS";
-    private Ringtone ringtone; //Added on 10 - 21 - 2019
     private static AudioAttributes aa;
     private SharedPreferences pref; //Added on 10 - 25 - 2019
 
