@@ -218,12 +218,6 @@ public class dayNotification extends AppCompatActivity {
     @TargetApi(24)
     public long getCurrentTime() {
         Calendar cal = Calendar.getInstance();
-        int currentHour = cal.get(Calendar.HOUR_OF_DAY);
-        int currentMinute = cal.get(Calendar.MINUTE);
-
-        cal.set(Calendar.HOUR_OF_DAY, currentHour);
-        cal.set(Calendar.MINUTE, currentMinute);
-
         return cal.getTime().getTime();
     }
 

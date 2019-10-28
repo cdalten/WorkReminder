@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         this.getSupportActionBar().hide();
         setContentView(R.layout.activity_update_job_schedule);
 
+
         Log.e(PRODUCTION_TAG, "ONCREATE() BEFORE SAVEDINSTANCE()");
         final ProgressBar progressBar = findViewById(R.id.progressBar);
         //progressBar.setLayoutParams(new ViewGroup.LayoutParams(150, 10));
@@ -176,64 +177,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             pref = this.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
 
             webViewSettings();
-            //Change "SUNDAY" to getString(R.String.SUNDAY)???
-            /*saveCurrentSchedule(R.string.SUNDAY,
-                    R.string.SUNDAY_START_HOUR,
-                    R.string.SUNDAY_START_MINUTE,
-                    R.string.SUNDAY_START_AM_OR_PM,
-                    R.string.SUNDAY_END_HOUR,
-                    R.string.SUNDAY_END_MINUTE,
-                    R.string.SUNDAY_END_AM_OR_PM);
-
-            saveCurrentSchedule(R.string.MONDAY,
-                    R.string.MONDAY_START_HOUR,
-                    R.string.MONDAY_START_MINUTE,
-                    R.string.MONDAY_START_AM_OR_PM,
-                    R.string.MONDAY_END_HOUR,
-                    R.string.MONDAY_END_MINUTE,
-                    R.string.MONDAY_END_AM_OR_PM);
-
-            saveCurrentSchedule(R.string.TUESDAY,
-                    R.string.TUESDAY_START_HOUR,
-                    R.string.TUESDAY_START_MINUTE,
-                    R.string.TUESDAY_START_AM_OR_PM,
-                    R.string.TUESDAY_END_HOUR,
-                    R.string.TUESDAY_END_MINUTE,
-                    R.string.TUESDAY_END_AM_OR_PM);
-
-            saveCurrentSchedule(R.string.WEDNESDAY,
-                    R.string.WEDNESDAY_START_HOUR,
-                    R.string.WEDNESDAY_START_MINUTE,
-                    R.string.WEDNESDAY_START_AM_OR_PM,
-                    R.string.WEDNESDAY_END_HOUR,
-                    R.string.WEDNESDAY_END_MINUTE,
-                    R.string.WEDNESDAY_END_AM_OR_PM);
-
-            saveCurrentSchedule(R.string.THURSDAY,
-                    R.string.THURSDAY_START_HOUR,
-                    R.string.THURSDAY_START_MINUTE,
-                    R.string.THURSDAY_START_AM_OR_PM,
-                    R.string.THURSDAY_END_HOUR,
-                    R.string.THURSDAY_END_MINUTE,
-                    R.string.THURSDAY_END_AM_OR_PM);
 
             //12AM represents midnight on my phone
-            saveCurrentSchedule(R.string.FRIDAY,
-                    R.string.FRIDAY_START_HOUR,
-                    R.string.FRIDAY_START_MINUTE,
-                    R.string.FRIDAY_START_AM_OR_PM,
-                    R.string.FRIDAY_END_HOUR,
-                    R.string.FRIDAY_END_MINUTE,
-                    R.string.FRIDAY_END_AM_OR_PM);
-
-            saveCurrentSchedule(R.string.SATURDAY,
-                    R.string.SATURDAY_START_HOUR,
-                    R.string.SATURDAY_START_MINUTE,
-                    R.string.SATURDAY_START_AM_OR_PM,
-                    R.string.SATURDAY_END_HOUR,
-                    R.string.SATURDAY_END_MINUTE,
-                    R.string.SATURDAY_END_AM_OR_PM);
-                    */
 
         } else {
             Log.e(PRODUCTION_TAG, "ONCREATE() WHEN SAVEDINSTANCE() IS NOT NULL");
@@ -261,36 +206,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
     }
 
-    //Added on 10 - 16 - 2019
-    private void saveCurrentSchedule(
-            int day,
-            int startHour,
-            int startMinute,
-            int startAmOrPm,
-            int endHour,
-            int endMinute,
-            int endAmOrPm
-    )
-    {
-        SharedPreferences.Editor editor = pref.edit();
-
-        editor.putString(getString(R.string.SATURDAY),
-                pref.getString(getString(day ), getString(day)));
-        editor.putString(getString(startHour),
-                pref.getString(getString(startHour), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
-        editor.putString(getString(startMinute),
-                pref.getString(getString(startMinute), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
-        editor.putString(getString(startAmOrPm),
-                pref.getString(getString(startAmOrPm), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-        editor.putString(getString(endHour),
-                pref.getString(getString(endHour), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
-        editor.putString(getString(endMinute),
-                pref.getString(getString(endMinute), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
-        editor.putString(getString(endAmOrPm),
-                pref.getString(getString(endAmOrPm), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
-
-        editor.apply();
-    }
 
     //Added on 10 - 16 - 2019
     private void webViewSettings() {
