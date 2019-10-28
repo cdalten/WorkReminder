@@ -18,12 +18,10 @@ public class WorkPreferences extends AppCompatActivity {
     private EditText currentPassword; //Added on 4 - 4- 2019
     private Button rememberPassword; //Added on 7 - 3- 2019
     private Intent i;
-    private SharedPreferences.Editor editPref; //Added on 4 - 4 - 2019
     private SharedPreferences pref;
-    private String newAlarmTime;
+    private int newAlarmTime; //Added on 10 - 28 - 2019
 
     private Button save; //Added on 6 - 24 - 2019
-    private EditText getAlarmMinutesPreference; //Added on 6 - 24 - 2019
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,31 +29,16 @@ public class WorkPreferences extends AppCompatActivity {
         setContentView(R.layout.activity_work_preferences);
         //dayPreference = (Spinner) findViewById(R.id.dayPreference);
         this.pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
-        alarmMinutesPreference = (EditText) findViewById(R.id.AlarmMinutesPreference);
+        alarmMinutesPreference = (EditText) findViewById(R.id.alarmMinutesPreference);
         rememberPassword = (Button) findViewById(R.id.RememberPassword);
-        //alarmMinutesPreference.setText(pref.getString("NEW_ALARM_TIME", ""));
-        //newAlarmTime = alarmMinutesPreference.getText().toString();
 
-        String minutes = pref.getString("NEW_ALARM_TIME", "20");
-        alarmMinutesPreference.setText(minutes);
-
-        //alarmMinutesPreference.setText(newAlarmTime);
         //currentPassword = (EditText) findViewById(R.id.currentPassword);
         save = (Button) findViewById(R.id.save);
         i = getIntent();
 
-        //editPref = pref.edit();
-        //i.putExtra("SAVE_ALARM_MINUTES", alarmMinutesPreference.getText().toString());
-
-        //editPref.putString("NEW_ALARM_MINUTES", "15");
-        //alarmMinutesPreference.setText(pref.getString("UPDATED_ALARM_TIME", ""));
-        //newAlarmTime = alarmMinutesPreference.getText().toString();
-
-
-        //editPref.putString("UPDATED_ALARM_TIME", newAlarmTime);
-        i.putExtra("NEW_ALARM_TIME", newAlarmTime);
-
-        //editPref.putString("UPDATED_ALARM_TIME", alarmMinutesPreference.getText().toString()); //don't check for length
+        pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        newAlarmTime = pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT);
+        alarmMinutesPreference.setText(newAlarmTime + " ");
 
         //editPref = pref.edit();
         //editPref.putString("PASSWORD", currentPassword.getText().toString());
@@ -76,17 +59,9 @@ public class WorkPreferences extends AppCompatActivity {
                     updateTime =  pref.getString("NEW_ALARM_TIME", "20");
 
                 }
-                //alarmMinutesPreference.setText(updateTime);
-                //Log.e("LG_WORK_PHONE", "NEW ALARM TIME IS: " + newAlarmTime );
-                Log.e("LG_WORK_PHONE", "NEW ALARM TIME AGAIN IS: " + updateTime);
-                //editPref = pref.edit();
-                //newAlarmTime = alarmMinutesPreference.getText().toString();
-                //alarmMinutesPreference.setText(newAlarmTime);
-                //alarmMinutesPreference.app;
-                //i.putExtra("NEW_ALARM_TIME", newAlarmTime);
-                //editPref.putString("NEW_ALARM_TIME", newAlarmTime);
+                alarmMinutesPreference.setText(updateTime);
 
-                //alarmMinutesPreference.setText(updateTime);
+                Log.e("LG_WORK_PHONE", "NEW ALARM TIME AGAIN IS: " + updateTime);
 
                 AlarmTimer alarmTimer = AlarmTimer.getInstance();
                 alarmTimer.setMinutesBeforeShift(getApplicationContext(), Integer.parseInt(updateTime));

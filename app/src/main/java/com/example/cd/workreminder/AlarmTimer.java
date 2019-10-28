@@ -60,7 +60,7 @@ public class AlarmTimer extends AppCompatActivity {
         }
 
         cal = Calendar.getInstance();
-        cal.setTimeInMillis(System.currentTimeMillis());
+        cal.setTimeInMillis(System.currentTimeMillis()); //?
         //cal.set(Calendar.HOUR, newMilitaryHour);
         cal.set(Calendar.HOUR, newMilitaryHour);
         cal.set(Calendar.MINUTE, newMilitaryMinute);

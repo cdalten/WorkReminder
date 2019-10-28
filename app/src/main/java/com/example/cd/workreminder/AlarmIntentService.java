@@ -18,19 +18,20 @@ public class AlarmIntentService extends IntentService {
     private static final String TAG = "AlarmService";
 
     public static final String ACTION_DISMISS =
-            "com.example.android.wearable.wear.wearnotifications.handlers.action.DISMISS";  //need to change
+            "com.example.cd.workreminder.action.DISMISS";  //need to change
     public static final String ACTION_SNOOZE =
-            "com.example.android.wearable.wear.wearnotifications.handlers.action.SNOOZE"; //need to change
+            "com.example.cd.workreminder.action.SNOOZE"; //need to change
 
     private static final long SNOOZE_TIME = TimeUnit.SECONDS.toMillis(5);
 
     public AlarmIntentService() {
         super("AlarmIntentService");
+        Log.e(TAG, "ALARM INTENT SERVICE GOT CALLED");
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.d(TAG, "onHandleIntent(): " + intent);
+        Log.e(TAG, "onHandleIntent(): " + intent);
 
         if (intent != null) {
             final String action = intent.getAction();
@@ -46,7 +47,7 @@ public class AlarmIntentService extends IntentService {
      * Handles action Dismiss in the provided background thread.
      */
     private void handleActionDismiss() {
-        Log.d(TAG, "handleActionDismiss()");
+        Log.e(TAG, "handleActionDismiss()");
 
         NotificationManagerCompat notificationManagerCompat =
                 NotificationManagerCompat.from(getApplicationContext());
@@ -58,7 +59,7 @@ public class AlarmIntentService extends IntentService {
      * Handles action Snooze in the provided background thread.
      */
     private void handleActionSnooze() {
-        Log.d(TAG, "handleActionSnooze()");
+        Log.e(TAG, "handleActionSnooze()");
 
         // You could use NotificationManager.getActiveNotifications() if you are targeting SDK 23
         // and above, but we are targeting devices with lower SDK API numbers, so we saved the

@@ -371,12 +371,14 @@ public class dayNotification extends AppCompatActivity {
                 newMinute,
                 newAmOrPm);
 
-        //Intent dismissIntent = new Intent(context, WorkAlarmReceiver.class);
-        Intent snoozeIntent = new Intent(context, WorkAlarmReceiver.class);
+
+        //Intent snoozeIntent = new Intent(context, WorkAlarmReceiver.class);
+        Intent snoozeIntent = new Intent(context, AlarmIntentService.class);
         snoozeIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
         snoozeIntent.setAction(WorkAlarmReceiver.ACTION_SNOOZE);
-        PendingIntent snoozePendingIntent =
-                PendingIntent.getBroadcast(context, 0, snoozeIntent, 0);
+        PendingIntent snoozePendingIntent = PendingIntent.getService(context, 0, snoozeIntent, 0);
+        //PendingIntent snoozePendingIntent =
+        //        PendingIntent.getBroadcast(context, 0, snoozeIntent, 0);
         NotificationCompat.Action snoozeAction =
                 new NotificationCompat.Action.Builder(
                         R.drawable.ic_action_stat_reply,
@@ -384,11 +386,13 @@ public class dayNotification extends AppCompatActivity {
                         snoozePendingIntent)
                         .build();
 
-        Intent dismissIntent = new Intent(context, WorkAlarmReceiver.class);
+        //Intent dismissIntent = new Intent(context, WorkAlarmReceiver.class);
+        Intent dismissIntent = new Intent(context, AlarmIntentService.class);
         dismissIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
         dismissIntent.setAction(WorkAlarmReceiver.ACTION_DISMISS);
-        PendingIntent dismissPendingIntent =
-                PendingIntent.getBroadcast(context, 0, dismissIntent, 0);
+        PendingIntent dismissPendingIntent = PendingIntent.getService(context, 0, dismissIntent, 0);
+        //PendingIntent dismissPendingIntent =
+        //        PendingIntent.getBroadcast(context, 0, dismissIntent, 0);
         NotificationCompat.Action dismissAction =
                 new NotificationCompat.Action.Builder(
                         R.drawable.ic_action_stat_share,
