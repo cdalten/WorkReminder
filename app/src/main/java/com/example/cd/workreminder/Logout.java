@@ -1,3 +1,14 @@
+/*
+ Copyright © 2017-2019 Chad Altenburg <cdalten@PumpingDansHotLookingStepMom.com>
+
+ Permission to use, copy, modify, distribute, and sell this software and its
+ documentation for any purpose is hereby granted without fee, provided that
+ the above copyright notice appear in all copies and that both that
+ copyright notice and this permission notice appear in supporting
+ documentation.  No representations are made about the suitability of this
+ software for any purpose.  It is provided "as is" without express or
+ implied warranty.
+*/
 package com.example.cd.workreminder;
 
 import android.content.SharedPreferences;
@@ -7,7 +18,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 public class Logout extends AppCompatActivity {
-    private WebView loginPage; //Added o n 7 - 2 - 2019
+    private WebView loginPage; //Added on 7 - 2 - 2019
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

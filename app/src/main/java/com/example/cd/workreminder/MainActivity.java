@@ -1,3 +1,14 @@
+/*
+ Copyright © 2017-2019 Chad Altenburg <cdalten@PumpingDansHotLookingStepMom.com>
+
+ Permission to use, copy, modify, distribute, and sell this software and its
+ documentation for any purpose is hereby granted without fee, provided that
+ the above copyright notice appear in all copies and that both that
+ copyright notice and this permission notice appear in supporting
+ documentation.  No representations are made about the suitability of this
+ software for any purpose.  It is provided "as is" without express or
+ implied warranty.
+*/
 package com.example.cd.workreminder;
 
 import android.annotation.SuppressLint;
@@ -56,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     public String LANDINGPAGE_URL = "myschedule.safeway.com";
     //public static String LOGIN_URL = "https://myschedule.safeway.com/ESS/AuthN/SwyLogin.aspx?ReturnUrl=%2fESS";
     public static String LOGIN_URL = "http://172.31.99.60/index.html";
+    //public static String LOGIN_URL = "http:/https://usr56.dayforcehcm.com/mydayforce/mydayforce.aspx/";
     protected static final String UA = "Pak N Slave Mobile App; Written by cda@stanford.edu; Uhh...Hi Mom!";
     public static final int NOTIFICATION_ID = 0; //Added on 10 - 14 - 2019
 
@@ -160,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             Log.i(PRODUCTION_TAG, "HTTP response cache installation failed:" + e);
         }
 
-        intent = new Intent(MainActivity.this, CurrentWeekSchedule.class);
+        //intent = new Intent(MainActivity.this, CurrentWeekSchedule.class);
 
         if (savedInstanceState == null) {
             Log.e(PRODUCTION_TAG, "ONCREATE() WHEN SAVEDINSTANCE() IS NULL");
@@ -170,9 +182,9 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
 
             OfflineMessage = "<html>" +
-                    "<font size =\"32\"><b>THIS PAGE CANNOT BE LOADED BECAUSE YOUR CELL PHONE CARRIER" +
+                    "<font size =\"32\"><b>THIS PAGE CANNOT BE LOADED BECAUSE YOUR CELL PHONE CARRIER";
             //readFromInternalDirectory(new File(CurrentSchedule + ThisWeek));
-            intent.setAction(Intent.ACTION_SEND);
+            //intent.setAction(Intent.ACTION_SEND);
 
             pref = this.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
 
@@ -580,7 +592,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 }
             }
 
-            startActivity(intent);
+            //Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity( new Intent(MainActivity.this, CurrentWeekSchedule.class));
             return true;
             //return false;
         }
@@ -695,8 +708,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
             //put super() before getschedule cache()?
             //super.onReceivedError(view, request, error);
-            Intent offlineSchedule = new Intent(MainActivity.this, CurrentWeekSchedule.class);
-            startActivity(offlineSchedule);
+            //Intent offlineSchedule = new Intent(MainActivity.this, CurrentWeekSchedule.class);
+            //startActivity(offlineSchedule);
             Log.e(PRODUCTION_TAG, "Error: " + error.getDescription().toString() +
                         " Is connected? " + refreshDisplay);
             Toast.makeText(getApplicationContext(), "" +
