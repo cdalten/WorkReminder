@@ -194,7 +194,7 @@ public class dayNotification extends AppCompatActivity {
                     militaryTime.getStartMilitaryHour(),
                     militaryTime.getStartMilitaryMinute(),
                     militaryTime.getEndMilitaryHour(),
-                    militaryTime.getStartMilitaryMinute());
+                    militaryTime.getStartMilitaryMinute()                    );
         }
     }
 
@@ -236,6 +236,7 @@ public class dayNotification extends AppCompatActivity {
 
     //Added on 10 - 23 - 2019
     //vs trying to overload the current method?
+    @TargetApi(24)
     public void setNewNotificationDisplay(
             String dayOfWeek,
             long startTime,
@@ -244,6 +245,17 @@ public class dayNotification extends AppCompatActivity {
     )
     {
         AlarmTimer alarmTimer = AlarmTimer.getInstance();
+        Calendar cal = Calendar.getInstance();
+
+        int currentHour = cal.get(Calendar.HOUR_OF_DAY);
+        int currentMinute = cal. get(Calendar.MINUTE);
+
+        //Just check for minute until I figure out the rest
+        if (currentMinute == alarmTimer.getMilitaryMinute()) {
+            //play ringtone?
+            Log.e("LG WORK PHONE", " THE PHONE ALARM SHOULD GO OFF NOW??");
+
+        }
 
         if (currentTime > startTime && currentTime < endTime) {
             displayNotification("YOU'RE SUPPOSED TO BE AT WORK");
@@ -357,7 +369,7 @@ public class dayNotification extends AppCompatActivity {
         return timeFormat;
     }
 
-    //Added on 10 - 18 -2019
+    //Added on 10 - 18 -2019. Change channelID to NOTIFICATION_ID???
     public void displayNotification(String notificationTitle) {
         NotificationCompat.Builder notificationCompatBuilder = new NotificationCompat.Builder(context.getApplicationContext(), "0");
 
@@ -428,5 +440,6 @@ public class dayNotification extends AppCompatActivity {
         Notification notification = notificationCompatBuilder.build();
         mNotificationManagerCompat.notify(0, notification);
     }
+
 
 }//end class

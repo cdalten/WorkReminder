@@ -15,6 +15,7 @@ import android.app.IntentService;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
@@ -34,11 +35,14 @@ public class AlarmIntentService extends IntentService {
     private static final String TAG = "AlarmService";
 
     public static final String ACTION_DISMISS =
-            "com.example.cd.workreminder.action.DISMISS";  //need to change
+            "com.example.cd.workreminder.action.DISMISS";
     public static final String ACTION_SNOOZE =
-            "com.example.cd.workreminder.action.SNOOZE"; //need to change
+            "com.example.cd.workreminder.action.SNOOZE";
 
-    private static final long SNOOZE_TIME = TimeUnit.SECONDS.toMillis(5);
+    private static final long SNOOZE_TIME = TimeUnit.SECONDS.toMillis(5); //Need to change
+
+    private static SharedPreferences pref; //Added on 10 - 29 - 2019
+    private static Ringtone ringtone; //Added on 10 - 29 - 2019
 
     public AlarmIntentService() {
         super("AlarmIntentService");
@@ -49,11 +53,21 @@ public class AlarmIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         Log.e(TAG, "onHandleIntent(): " + intent);
 
+        pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+
         if (intent != null) {
             final String action = intent.getAction();
             if (ACTION_DISMISS.equals(action)) {
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putBoolean("RINGTONE", false);
+                editor.apply();
+
                 handleActionDismiss();
             } else if (ACTION_SNOOZE.equals(action)) {
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putBoolean("RINGTONE", true);
+                editor.apply();
+
                 handleActionSnooze();
             }
         }
@@ -64,6 +78,9 @@ public class AlarmIntentService extends IntentService {
      */
     private void handleActionDismiss() {
         Log.e(TAG, "handleActionDismiss()");
+
+        playRingtone();
+        //Log.e(TAG, "THE DISMISS RINGTONE INSTANCE IS: " + playRingtone());
 
         NotificationManagerCompat notificationManagerCompat =
                 NotificationManagerCompat.from(getApplicationContext());
@@ -99,6 +116,9 @@ public class AlarmIntentService extends IntentService {
 
             notificationManagerCompat.cancel(MainActivity.NOTIFICATION_ID);
 
+            playRingtone();
+            //Log.e(TAG, "THE SNOOZE RINGTONE INSTANCE IS: " + playRingtone());
+
             try {
                 Thread.sleep(SNOOZE_TIME);
             } catch (InterruptedException ex) {
@@ -109,8 +129,8 @@ public class AlarmIntentService extends IntentService {
 
     }
 
-    //Added on 10 - 29 - 2019
-    private void playRingtone() {
+    //Added on 10 - 29 - 2019. Changed from private to public on 10 - 30 - 2019
+    public Ringtone playRingtone() {
         //pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
         //Part of the code copied and pasted from stackoverflow
         Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
@@ -118,8 +138,9 @@ public class AlarmIntentService extends IntentService {
             alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         }
 
-        //if (pref.getBoolean("RINGTONE", false) == true) {
-            Ringtone ringtone = RingtoneManager.getRingtone(getApplicationContext(), alarmUri);
+
+        if (pref.getBoolean("RINGTONE", false) == true) {
+            ringtone = RingtoneManager.getRingtone(getApplicationContext(), alarmUri);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 AudioAttributes aa = new AudioAttributes.Builder()
                         .setUsage(AudioAttributes.USAGE_ALARM)
@@ -132,15 +153,22 @@ public class AlarmIntentService extends IntentService {
                 Log.e(TAG, "LESS THAN LOLLIPOP");
                 ringtone.setStreamType(AudioManager.STREAM_ALARM);
             }
-        //}
+        }
 
         Log.e(TAG, "THE RINGTONE INSTANCE IS: " + ringtone);
 
-        //if (pref.getBoolean("RINGTONE", false) == true) {
+        if (pref.getBoolean("RINGTONE", false) == true) {
             ringtone.play();
-        //} else {
-        //    ringtone.stop();
-        //}
+        } else {
+            ringtone.stop();
+        }
+
+        return ringtone;
+    }
+
+    //Added on 10 - 30 - 2019
+    private void playRingtoneNotification() {
+
     }
 
     private NotificationCompat.Builder recreateBuilderWithBigTextStyle() {
@@ -172,43 +200,43 @@ public class AlarmIntentService extends IntentService {
 
 
         // 3. Set up main Intent for notification.
-        //Intent mainIntent = new Intent(this, BigTextMainActivity.class);
+        Intent mainIntent = new Intent(this, AlarmNotificationMainActivity.class);
 
-        //PendingIntent mainPendingIntent =
-        //        PendingIntent.getActivity(
-        //                this,
-        //                0,
-        //                mainIntent,
-        //                PendingIntent.FLAG_UPDATE_CURRENT
-        //        );
+        PendingIntent mainPendingIntent =
+                PendingIntent.getActivity(
+                        this,
+                        0,
+                        mainIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
 
 
         // 4. Create additional Actions (Intents) for the Notification.
 
         // Snooze Action.
-        //Intent snoozeIntent = new Intent(this, BigTextIntentService.class);
-        //snoozeIntent.setAction(BigTextIntentService.ACTION_SNOOZE);
+        Intent snoozeIntent = new Intent(this, AlarmIntentService.class);
+        snoozeIntent.setAction(AlarmIntentService.ACTION_SNOOZE);
 
-        //PendingIntent snoozePendingIntent = PendingIntent.getService(this, 0, snoozeIntent, 0);
-        //NotificationCompat.Action snoozeAction =
-        //        new NotificationCompat.Action.Builder(
-        //                R.drawable.ic_alarm_white_48dp,
-        //                "Snooze",
-        //                snoozePendingIntent)
-        //                .build();
+        PendingIntent snoozePendingIntent = PendingIntent.getService(this, 0, snoozeIntent, 0);
+        NotificationCompat.Action snoozeAction =
+                new NotificationCompat.Action.Builder(
+                        R.drawable.ic_action_stat_reply,
+                        "Snooze",
+                        snoozePendingIntent)
+                        .build();
 
 
         // Dismiss Action
-        //Intent dismissIntent = new Intent(this, BigTextIntentService.class);
-        //dismissIntent.setAction(BigTextIntentService.ACTION_DISMISS);
+        Intent dismissIntent = new Intent(this, AlarmIntentService.class);
+        dismissIntent.setAction(AlarmIntentService.ACTION_DISMISS);
 
-        //PendingIntent dismissPendingIntent = PendingIntent.getService(this, 0, dismissIntent, 0);
-        //NotificationCompat.Action dismissAction =
-        //        new NotificationCompat.Action.Builder(
-        //                R.drawable.ic_cancel_white_48dp,
-        //                "Dismiss",
-        //                dismissPendingIntent)
-        //                .build();
+        PendingIntent dismissPendingIntent = PendingIntent.getService(this, 0, dismissIntent, 0);
+        NotificationCompat.Action dismissAction =
+                new NotificationCompat.Action.Builder(
+                        R.drawable.ic_action_stat_reply,
+                        "Dismiss",
+                        dismissPendingIntent)
+                        .build();
 
 
         // 5. Build and issue the notification.
@@ -221,21 +249,26 @@ public class AlarmIntentService extends IntentService {
 
         GlobalNotificationBuilder.setNotificationCompatBuilderInstance(notificationCompatBuilder);
 
-        /*notificationCompatBuilder
-                .setStyle(bigTextStyle)
-                .setContentTitle(bigTextStyleReminderAppData.getContentTitle())
-                .setContentText(bigTextStyleReminderAppData.getContentText())
-                .setSmallIcon(R.drawable.ic_launcher)
+        //Handle when app is killed. 10 - 29 - 2019
+        notificationCompatBuilder
+                //.setStyle(bigTextStyle)
+                //.setContentTitle(bigTextStyleReminderAppData.getContentTitle())
+                .setContentTitle("TITLE DEBUG MODE")
+                //.setContentText(bigTextStyleReminderAppData.getContentText())
+                .setContentText("CONTENT TITLE DEBUG MODE")
+                .setSmallIcon(R.drawable.ic_stat_work)
                 .setLargeIcon(BitmapFactory.decodeResource(
                         getResources(),
-                        R.drawable.ic_alarm_white_48dp))
+                        R.drawable.ic_stat_work))
+                .setContentIntent(mainPendingIntent)
                 .setColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary))
                 .setCategory(Notification.CATEGORY_REMINDER)
-                .setPriority(bigTextStyleReminderAppData.getPriority())
-                .setVisibility(bigTextStyleReminderAppData.getChannelLockscreenVisibility())
+                //.setPriority(bigTextStyleReminderAppData.getPriority())
+                //.setVisibility(bigTextStyleReminderAppData.getChannelLockscreenVisibility())
                 .addAction(snoozeAction)
                 .addAction(dismissAction);
-                */
+
+
         /* REPLICATE_NOTIFICATION_STYLE_CODE:
          * You can replicate Notification Style functionality on Wear 2.0 (24+) by not setting the
          * main content intent, that is, skipping the call setContentIntent(). However, you need to

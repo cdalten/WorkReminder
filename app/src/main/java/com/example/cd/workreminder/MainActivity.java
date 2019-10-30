@@ -66,7 +66,11 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     private WebView getSchedule;
     public String LANDINGPAGE_URL = "myschedule.safeway.com";
     //public static String LOGIN_URL = "https://myschedule.safeway.com/ESS/AuthN/SwyLogin.aspx?ReturnUrl=%2fESS";
-    public static String LOGIN_URL = "http://172.31.99.60/index.html";
+
+    //public static String LOGIN_URL = "http://172.31.99.60/index.html";
+
+    public static String LOGIN_URL = "http://10.105.185.33/index.html"; //Level D 4104 Dwinelle Hall
+
     //public static String LOGIN_URL = "http:/https://usr56.dayforcehcm.com/mydayforce/mydayforce.aspx/";
     protected static final String UA = "Pak N Slave Mobile App; Written by cda@stanford.edu; Uhh...Hi Mom!";
     public static final int NOTIFICATION_ID = 0; //Added on 10 - 14 - 2019
@@ -592,7 +596,10 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 }
             }
 
-            //Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            //Log.e(PRODUCTION_TAG, "THE PARSED URI IS: " + Uri.parse(request.getUrl().getHost()));
+            //Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://" + request.getUrl().getHost()));
+            //startActivity(intent);
+
             startActivity( new Intent(MainActivity.this, CurrentWeekSchedule.class));
             return true;
             //return false;

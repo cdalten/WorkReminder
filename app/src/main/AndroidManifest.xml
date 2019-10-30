@@ -52,7 +52,6 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".Logout"
             android:label="@string/app_name">
@@ -65,12 +64,10 @@
             </intent-filter>
         </activity>
 
-        <!--Added on 10 - 28 - 2019 -->
+        <!-- Added on 10 - 28 - 2019 -->
         <service
             android:name=".AlarmIntentService"
-            android:exported="false">
-        </service>
-
+            android:exported="false"></service>
 
         <activity
             android:name=".AlarmTimer"
@@ -94,7 +91,8 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".RememberMe"></activity>
+        <activity android:name=".RememberMe" />
+        <activity android:name=".AlarmNotificationMainActivity"></activity>
     </application>
 
 </manifest>
