@@ -50,9 +50,8 @@ public class AlarmNotificationMainActivity extends AppCompatActivity {
             alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         }
 
-        ringtone = RingtoneManager.getRingtone(getApplicationContext(), alarmUri);
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ringtone = RingtoneManager.getRingtone(getApplicationContext(), alarmUri);
             AudioAttributes aa = new AudioAttributes.Builder()
                     .setUsage(AudioAttributes.USAGE_ALARM)
                     .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)

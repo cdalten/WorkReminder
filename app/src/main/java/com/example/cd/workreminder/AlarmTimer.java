@@ -100,7 +100,7 @@ public class AlarmTimer extends AppCompatActivity {
     }
 
     //Added on 10 - 23 - 2019
-    public int getStartMilitaryMinute(){
+    public int getNewMilitaryMinute(){
         return newMilitaryMinute;
     }
 

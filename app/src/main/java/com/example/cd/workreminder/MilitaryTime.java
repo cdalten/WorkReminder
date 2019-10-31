@@ -34,9 +34,9 @@ public class MilitaryTime extends FragmentActivity {
     private static MilitaryTime instance = new MilitaryTime();
 
     //CurrentWorkHours currentWorkHours;
-    //private MilitaryTime () {
+    private MilitaryTime () {
     //    currentWorkHours = new CurrentWorkHours();
-    //}
+    }
 
     public static MilitaryTime getInstance(){
         return instance;

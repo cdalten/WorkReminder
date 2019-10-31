@@ -49,7 +49,7 @@ public class WorkPreferences extends AppCompatActivity {
 
         pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
         newAlarmTime = pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT);
-        alarmMinutesPreference.setText(newAlarmTime + " ");
+        alarmMinutesPreference.setText(newAlarmTime + "");
 
         //editPref = pref.edit();
         //editPref.putString("PASSWORD", currentPassword.getText().toString());
@@ -63,7 +63,7 @@ public class WorkPreferences extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String updateTime = alarmMinutesPreference.getText().toString();
+                String updateTime = alarmMinutesPreference.getText().toString().trim();
 
                 //if (updateTime == "" || updateTime == null) {
                 if (updateTime.equals("")) {

@@ -28,9 +28,24 @@ import android.util.Log;
 
 import static android.app.Notification.EXTRA_NOTIFICATION_ID;
 
+
+/*private static AlarmTimer instance = new AlarmTimer();
+
+private AlarmTimer() {
+
+        }
+
+//Added on 6 - 13 - 2019
+public static AlarmTimer getInstance(){
+        return instance;
+        }
+*/
+
 public class dayNotification extends AppCompatActivity {
     SharedPreferences pref;
     Context context; //Added on 10 - 14 - 2019
+    private AlarmManager alarmMgr; //Added on 10 - 30- 2019
+    private PendingIntent alarmIntent; //Added on 10 - 30 - 2019
 
     public dayNotification(Context context) {
         this.context = context;
@@ -245,17 +260,27 @@ public class dayNotification extends AppCompatActivity {
     )
     {
         AlarmTimer alarmTimer = AlarmTimer.getInstance();
-        Calendar cal = Calendar.getInstance();
 
-        int currentHour = cal.get(Calendar.HOUR_OF_DAY);
-        int currentMinute = cal. get(Calendar.MINUTE);
+        //----------------------------------------------------------------------------
+        //code copied from
+        //https://developer.android.com/training/scheduling/alarms
+        alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, WorkAlarmReceiver.class);
+        alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
-        //Just check for minute until I figure out the rest
-        if (currentMinute == alarmTimer.getMilitaryMinute()) {
-            //play ringtone?
-            Log.e("LG WORK PHONE", " THE PHONE ALARM SHOULD GO OFF NOW??");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        //calendar.set(Calendar.HOUR_OF_DAY, alarmTimer.getNewMilitaryHour());
+        //calendar.set(Calendar.MINUTE, alarmTimer.getNewMilitaryMinute());
 
-        }
+        calendar.set(Calendar.HOUR_OF_DAY, 5);
+        calendar.set(Calendar.MINUTE, 14);
+
+
+        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                1000 * 60 * 20, alarmIntent);
+        //------------------------------------------------------------------------------
+
 
         if (currentTime > startTime && currentTime < endTime) {
             displayNotification("YOU'RE SUPPOSED TO BE AT WORK");
@@ -359,6 +384,7 @@ public class dayNotification extends AppCompatActivity {
             hour = 12;
         }
 
+
         //Something like 1:5 becomes while 1:05 while something like 1:10 stays 1:10
         if (minute < 10) {
             timeFormat = dayOfWeek + " " + hour + ":0" + minute + " " + amOrPm;
@@ -399,7 +425,7 @@ public class dayNotification extends AppCompatActivity {
         //Intent snoozeIntent = new Intent(context, WorkAlarmReceiver.class);
         Intent snoozeIntent = new Intent(context, AlarmIntentService.class);
         snoozeIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
-        snoozeIntent.setAction(WorkAlarmReceiver.ACTION_SNOOZE);
+        //.setAction(WorkAlarmReceiver.ACTION_SNOOZE);
         PendingIntent snoozePendingIntent = PendingIntent.getService(context, 0, snoozeIntent, 0);
         //PendingIntent snoozePendingIntent =
         //        PendingIntent.getBroadcast(context, 0, snoozeIntent, 0);
@@ -413,7 +439,8 @@ public class dayNotification extends AppCompatActivity {
         //Intent dismissIntent = new Intent(context, WorkAlarmReceiver.class);
         Intent dismissIntent = new Intent(context, AlarmIntentService.class);
         dismissIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
-        dismissIntent.setAction(WorkAlarmReceiver.ACTION_DISMISS);
+        //dismissIntent.setAction(WorkAlarmReceiver.ACTION_DISMISS);
+        //dismissIntent.setAction(WorkAlarmReceiver.ACTION_DISMISS);
         PendingIntent dismissPendingIntent = PendingIntent.getService(context, 0, dismissIntent, 0);
         //PendingIntent dismissPendingIntent =
         //        PendingIntent.getBroadcast(context, 0, dismissIntent, 0);
