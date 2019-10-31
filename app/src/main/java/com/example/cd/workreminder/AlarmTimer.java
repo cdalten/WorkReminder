@@ -27,7 +27,6 @@ public class AlarmTimer extends AppCompatActivity {
     private SharedPreferences pref; //Added on 5 - 14 - 2019
     private int startMilitaryMinute; //Added on 6 - 27 -2019
     private int startMilitaryHour; //Added on 6 - 27 -2017
-    private int listPosition; //Added on 10 - 18 - 2019
 
     private int endMilitaryHour = 0;
     private int endMilitaryMinute = 0;
@@ -62,7 +61,8 @@ public class AlarmTimer extends AppCompatActivity {
         }
 
         //newMilitaryHour = startMilitaryHour - endMilitaryHour;
-        newMilitaryMinute = startMilitaryMinute - endMilitaryMinute;
+        //newMilitaryMinute = startMilitaryMinute - endMilitaryMinute;
+        newMilitaryMinute = startMilitaryMinute - pref.getInt(context.getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT);
 
         if (newMilitaryMinute < 0) {
             newMilitaryMinute = newMilitaryMinute + 60;
@@ -116,6 +116,11 @@ public class AlarmTimer extends AppCompatActivity {
     public int getStartMilitaryHour() {
         return this.startMilitaryHour;
     }
+
+    public int getStartMilitaryMinute() {
+        return this.startMilitaryMinute;
+    }
+
 
     public int getUpdatedMinute() {
         return pref.getInt("MINUTES", 0);

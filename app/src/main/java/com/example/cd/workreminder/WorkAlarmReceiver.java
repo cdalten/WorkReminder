@@ -27,18 +27,25 @@ import android.util.Log;
 
 
 public class WorkAlarmReceiver extends BroadcastReceiver {
-    public static final String ACTION_DISMISS =
-            "com.example.cd.workreminder.action.DISMISS";
-    public static final String ACTION_SNOOZE =
-            "com.example.cd.workreminder.action.SNOOZE";
+    public static final String ACTION_DISMISS = "com.example.cd.workreminder.action.DISMISS";
+    public static final String ACTION_SNOOZE = "com.example.cd.workreminder.action.SNOOZE";
 
     private dayNotification dayNotification; //Added on 10 - 31 - 2019
 
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.e("LG_WORK: ", "DEBUG ALARM GOT CALLED");
+
+        AlarmTimer alarmTimer =AlarmTimer.getInstance();
         dayNotification = new dayNotification(context);
-        dayNotification.displayNotification("DEBUG MODE");
+
+        dayNotification.displayNotification(dayNotification.getDayOfWeek(),
+                alarmTimer.getNewMilitaryHour(),
+                alarmTimer.getNewMilitaryMinute(),
+                alarmTimer.getAMorPM(),
+                "ALARM");
+
+        //dayNotification.displayNotification("DEBUG MODE");
 
         if (intent != null) {
             final String action = intent.getAction();

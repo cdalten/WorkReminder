@@ -76,7 +76,7 @@ public class WorkPreferences extends AppCompatActivity {
 
                 AlarmTimer alarmTimer = AlarmTimer.getInstance();
                 alarmTimer.setMinutesBeforeShift(getApplicationContext(), Integer.parseInt(updateTime));
-                alarmTimer.setAlarmTime(getBaseContext(), alarmTimer.getStartMilitaryHour(),alarmTimer.getMilitaryMinute() );
+                //alarmTimer.setAlarmTime(getBaseContext(), alarmTimer.getStartMilitaryHour(),alarmTimer.getMilitaryMinute() );
 
                 //editPref.putInt("ALARM_HOUR", alarmTimer.getUpdatedHour()); //??
                 //editPref.putInt("MINUTES", alarmTimer.getUpdatedMinute()); //??

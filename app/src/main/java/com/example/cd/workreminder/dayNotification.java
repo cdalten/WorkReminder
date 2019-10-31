@@ -46,6 +46,7 @@ public class dayNotification extends AppCompatActivity {
     Context context; //Added on 10 - 14 - 2019
     private AlarmManager alarmMgr; //Added on 10 - 30- 2019
     private PendingIntent alarmIntent; //Added on 10 - 30 - 2019
+    private String dayOfWeek; //Added on 10 - 31 - 2019
 
     public dayNotification(Context context) {
         this.context = context;
@@ -184,10 +185,13 @@ public class dayNotification extends AppCompatActivity {
             int endDayOfWeekStartHour, int endDayOfWeekStartMinute, int endDayOfWeekStartAmOrPm
     )
     {
+
         MilitaryTime militaryTime = MilitaryTime.getInstance();
         AlarmTimer alarmTimer = AlarmTimer.getInstance();
 
         pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+
+        this.dayOfWeek = pref.getString(context.getString(dayOfWeek), "OFF");
 
         if (!(pref.getString(context.getString(dayOfWeek), "OFF").equals("OFF"))) {
             //pref.getString( getString(R.string.FRIDAY_START_HOUR), "" );
@@ -211,6 +215,11 @@ public class dayNotification extends AppCompatActivity {
                     militaryTime.getEndMilitaryHour(),
                     militaryTime.getStartMilitaryMinute()                    );
         }
+    }
+
+    //Added on 10 - 31 - 2019
+    public String getDayOfWeek() {
+        return this.dayOfWeek;
     }
 
     //Added on 10 - 23 - 2019
@@ -270,11 +279,11 @@ public class dayNotification extends AppCompatActivity {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        //calendar.set(Calendar.HOUR_OF_DAY, alarmTimer.getNewMilitaryHour());
-        //calendar.set(Calendar.MINUTE, alarmTimer.getNewMilitaryMinute());
+        calendar.set(Calendar.HOUR_OF_DAY, alarmTimer.getNewMilitaryHour());
+        calendar.set(Calendar.MINUTE, alarmTimer.getNewMilitaryMinute());
 
-        calendar.set(Calendar.HOUR_OF_DAY, 5);
-        calendar.set(Calendar.MINUTE, 14);
+        //calendar.set(Calendar.HOUR_OF_DAY, 5);
+        //calendar.set(Calendar.MINUTE, 14);
 
 
         alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
@@ -312,7 +321,7 @@ public class dayNotification extends AppCompatActivity {
                     alarmTimer.getUpdatedHour(),
                     alarmTimer.getUpdatedMinute(),
                     alarmTimer.getAMorPM(),
-                    "ALARM");
+                    "ALARM (DEBUG MODE)");
         }
 
     }
