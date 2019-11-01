@@ -71,7 +71,7 @@ public class CurrentWeekSchedule extends ListActivity  {
 
     private AlarmManager alarmMgr; //Added on 8 - 4 - 2019
     private PendingIntent alarmIntent; //Added on 8 - 4 - 2019
-    private int currentHours = 0; //Added on 10 - 17 - 2014
+    private int currentHours = 0; //Added on 10 - 17 - 2019
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -463,7 +463,6 @@ public class CurrentWeekSchedule extends ListActivity  {
             height = size.y;
             */
 
-
             //((TextView) view.findViewById(android.R.id.text1)).setText("-");
             // Need to erase values that trail "off" header byes??
             if (week.get(position).get(0).equals("SUNDAY")) {
@@ -749,6 +748,7 @@ public class CurrentWeekSchedule extends ListActivity  {
             AlarmTimer alarmTimer = AlarmTimer.getInstance();
             dayNotification dayNotification = new dayNotification(getApplicationContext());
 
+
             if (newPosition != -99 && newPosition != 7) {
                 newStartHour = data.getStringExtra(getString(R.string.START_HOUR)); //hardware bug??
                 newStartMinute = data.getStringExtra(getString(R.string.START_MINUTE));
@@ -762,9 +762,8 @@ public class CurrentWeekSchedule extends ListActivity  {
                 militaryTime.convertEndCivilianTimeToMilitaryTime(newEndHour, newEndMinute, newEndAmOrPm);
 
                 //----DUPLICATE??? ------------------------------------------------------------
-                alarmTimer = AlarmTimer.getInstance();
-                alarmTimer.setAlarmTime(this, alarmTimer.getStartMilitaryHour(),
-                        alarmTimer.getStartMilitaryMinute());
+                alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(),
+                        militaryTime.getStartMilitaryMinute());
 
 
                 //long startTime = dayNotification.convertToStartTime(militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute());
@@ -773,20 +772,28 @@ public class CurrentWeekSchedule extends ListActivity  {
                 //dayNotification.setNewNotificationDisplay(day, startTime, endTime, currentTime);
 
                 dayNotification.displayNotification(day,
+                        alarmTimer.getNewMilitaryHour(),
                         alarmTimer.getNewMilitaryMinute(),
-                                alarmTimer.getNewMilitaryMinute(),
-                                //pref.getInt("MINUTES", 0)
-                                 alarmTimer.getAMorPM(), "ALARM");
+                        alarmTimer.getAMorPM(), "ALARM (ON ACTIVITY RESULT)");
                 //------------------------------------------------------------------------
 
 
             } else {
-                alarmTimer = AlarmTimer.getInstance();
-                alarmTimer.setAlarmTime(this, alarmTimer.getStartMilitaryHour(),
-                        alarmTimer.getStartMilitaryMinute());
+                newStartHour = week.get(currentHours-1).get(WorkReaderContract.WorkEntry.START_HOUR);
+                newStartMinute = week.get(currentHours-1).get(WorkReaderContract.WorkEntry.START_MINUTE);
+                newStartAmOrPm = week.get(currentHours-1).get(WorkReaderContract.WorkEntry.START_AM_OR_PM);
+                newEndHour = week.get(currentHours-1).get(WorkReaderContract.WorkEntry.END_HOUR);
+                newEndMinute = week.get(currentHours-1).get(WorkReaderContract.WorkEntry.START_MINUTE);
+                newEndAmOrPm = week.get(currentHours-1).get(WorkReaderContract.WorkEntry.END_AM_OR_PM);
+                day = week.get(currentHours-1).get(0);
+
+                //militaryTime.convertStartCivilianTimeToMilitaryTime(newStartHour, newStartMinute, newStartAmOrPm);
+                //militaryTime.convertEndCivilianTimeToMilitaryTime(newEndHour, newEndMinute, newEndAmOrPm);
+                alarmTimer.setAlarmTime(this, Integer.parseInt(newStartHour),
+                        Integer.parseInt(newStartMinute));
 
                 dayNotification.displayNotification(day,
-                        alarmTimer.getStartMilitaryHour(),
+                        alarmTimer.getNewMilitaryHour(),
                         alarmTimer.getNewMilitaryMinute(),
                         alarmTimer.getAMorPM(), "ALARM (ON ACTIVITY RESULT)");
                 //save current schedule in shared pref?
