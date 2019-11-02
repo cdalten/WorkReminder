@@ -6,21 +6,21 @@
 
 # --------
 # Now for an outline of the code.
-AlarmIntentService - Used to handle when I hit snooze of dismiss on my alarm.
-AlarmNotificationMainAcitivy - Handle the notification if the app is destoryed.
-AlarmRingTone - Have the notification make noise when the alarm goes off.
-AlarmTimer - Calculate the new time based on the minutes before the shift.
-ConnectionCallback - Used to handle should the wifi lose its signal.
-CurrentWeekSchedule - Display and possibly update the schedule list because HTML won'Hant work
-dayNotification - set the Nofication based on the the day and the current time.
-GlobalNotificationBuilder - Memory management stuff.
-HourFormat - This autofills and updates the menu with of the shift the person clicked on.
-Logout - Logout the user.
-MainActivity - Used to set up the web page display.
-Military Time - Convert to military time. Need for time comparisons.
-RememberMe - Save my name and password.
-StoreHoursInGUI - Have the current schedule stored in a list. Needed to display as list
-WorkAlarmReceiver - So that I don't have to have the phone check every minute to see if I have to work.
-WorkNetworkFragment - Handle when I lose my wifi signal.
-WorkPreferences - Save how many minutes before my shift should the alarm go off.W
-WorkReaderContract - For global variables that the resource file can't handle.
+AlarmIntentService - Used to handle when I hit snooze of dismiss on my alarm. <br>
+AlarmNotificationMainAcitivy - Handle the notification if the app is destoryed. <br>
+AlarmRingTone - Have the notification make noise when the alarm goes off. <br>
+AlarmTimer - Calculate the new time based on the minutes before the shift. <br> 
+ConnectionCallback - Used to handle should the wifi lose its signal. <br>
+CurrentWeekSchedule - Display and possibly update the schedule list because HTML won't work. <br>
+dayNotification - set the Nofication based on the the day and the current time. <br>
+GlobalNotificationBuilder - Memory management stuff. <br>
+HourFormat - This autofills and updates the menu with the shift the person clicked on. <br>
+Logout - Logout the user. <br>
+MainActivity - Used to set up the web page display. <br>
+Military Time - Convert to military time. Needed for time comparisons. <br>
+RememberMe - Save my name and password. <br>
+StoreHoursInGUI - Have the current schedule stored in a list. Needed to display as list <br>
+WorkAlarmReceiver - So that I don't have to have the phone check every minute to see if I have to work. <br>
+WorkNetworkFragment - Handle when I lose my wifi signal. <br>
+WorkPreferences - Save how many minutes before my shift should the alarm go off. <br>
+WorkReaderContract - For global variables that the resource file can't handle. <br>
