@@ -47,6 +47,7 @@ public class dayNotification extends AppCompatActivity {
     private AlarmManager alarmMgr; //Added on 10 - 30- 2019
     private PendingIntent alarmIntent; //Added on 10 - 30 - 2019
     private String day; //Added on 10 - 31 - 2019
+    private long newAlarmTime; //Added on 11 - 2 - 2019
 
     public dayNotification(Context context) {
         this.context = context;
@@ -262,22 +263,7 @@ public class dayNotification extends AppCompatActivity {
     {
         AlarmTimer alarmTimer = AlarmTimer.getInstance();
 
-        //----------------------------------------------------------------------------
-        //code copied from
-        //https://developer.android.com/training/scheduling/alarms
-        alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, WorkAlarmReceiver.class);
-        alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, alarmTimer.getNewMilitaryHour());
-        calendar.set(Calendar.MINUTE, alarmTimer.getNewMilitaryMinute());
-
-        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                1000 * 60 * 20, alarmIntent);
-        //------------------------------------------------------------------------------
-
+        setAlarm( alarmTimer.getNewMilitaryHour(), alarmTimer.getNewMilitaryMinute());
 
         if (currentTime > startTime && currentTime < endTime) {
             displayNotification("YOU'RE SUPPOSED TO BE AT WORK");
@@ -303,7 +289,7 @@ public class dayNotification extends AppCompatActivity {
                     alarmTimer.getAMorPM(),
                     "ALARM");
         } */
-        else {
+        /*else {
             alarmTimer.setStartMilitaryHour(alarmTimer.getNewMilitaryHour());
             displayNotification( dayOfWeek,
                     alarmTimer.getUpdatedHour(),
@@ -311,7 +297,32 @@ public class dayNotification extends AppCompatActivity {
                     alarmTimer.getAMorPM(),
                     "ALARM (DEBUG MODE)");
         }
+        */
 
+    }
+
+    @TargetApi(24)
+    public void setAlarm(int newMilitaryHour, int newMilitaryMinute) {
+        //code copied from
+        //https://developer.android.com/training/scheduling/alarms
+        alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, WorkAlarmReceiver.class);
+        alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, newMilitaryHour);
+        calendar.set(Calendar.MINUTE, newMilitaryMinute);
+        this.newAlarmTime = calendar.getTime().getTime();
+
+        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                1000 * 60 * 20, alarmIntent);
+    }
+
+    //Added on 11 - 2  2019
+    //Reason 1007 why Java sucks massive dick. Fuck Java. Fuck OOP. And fuck this cold weather.
+    public long getNewAlarmTime() {
+        return this.newAlarmTime;
     }
 
     //Added on 10 - 18 - 2019

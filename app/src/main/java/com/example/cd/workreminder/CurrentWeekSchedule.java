@@ -732,6 +732,21 @@ public class CurrentWeekSchedule extends ListActivity  {
         editor.apply();
     }
 
+    //Added on 11 - 2 - 2019
+    @TargetApi(24)
+    private void displayUpdatedAlarm() {
+        dayNotification dayNotification = new dayNotification(this);
+        long currentTime = dayNotification.getCurrentTime();
+        long getNewAlarmTime = dayNotification.getNewAlarmTime();
+        //dayNotification.setAlarm();
+
+        if (getNewAlarmTime < currentTime) {
+
+        } else {
+            //display shit right away
+        }
+    }
+
     //Added on 2 - 27 - 2019
     @TargetApi(24)
     @Override
@@ -772,8 +787,8 @@ public class CurrentWeekSchedule extends ListActivity  {
                 //dayNotification.setNewNotificationDisplay(day, startTime, endTime, currentTime);
 
                 dayNotification.displayNotification(day,
-                        alarmTimer.getNewMilitaryHour(),
-                        alarmTimer.getNewMilitaryMinute(),
+                        alarmTimer.getUpdatedHour(),
+                        alarmTimer.getMilitaryMinute(),
                         alarmTimer.getAMorPM(), "ALARM (ON ACTIVITY RESULT)");
                 //------------------------------------------------------------------------
 
@@ -787,14 +802,14 @@ public class CurrentWeekSchedule extends ListActivity  {
                 newEndAmOrPm = week.get(currentHours-1).get(WorkReaderContract.WorkEntry.END_AM_OR_PM);
                 day = week.get(currentHours-1).get(0);
 
-                //militaryTime.convertStartCivilianTimeToMilitaryTime(newStartHour, newStartMinute, newStartAmOrPm);
-                //militaryTime.convertEndCivilianTimeToMilitaryTime(newEndHour, newEndMinute, newEndAmOrPm);
-                alarmTimer.setAlarmTime(this, Integer.parseInt(newStartHour),
-                        Integer.parseInt(newStartMinute));
+                militaryTime.convertStartCivilianTimeToMilitaryTime(newStartHour, newStartMinute, newStartAmOrPm);
+                militaryTime.convertEndCivilianTimeToMilitaryTime(newEndHour, newEndMinute, newEndAmOrPm);
+                alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(),
+                        militaryTime.getStartMilitaryMinute());
 
                 dayNotification.displayNotification(day,
-                        alarmTimer.getNewMilitaryHour(),
-                        alarmTimer.getNewMilitaryMinute(),
+                        alarmTimer.getUpdatedHour(),
+                        alarmTimer.getUpdatedMinute(),
                         alarmTimer.getAMorPM(), "ALARM (ON ACTIVITY RESULT)");
                 //save current schedule in shared pref?
             }

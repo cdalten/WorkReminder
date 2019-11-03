@@ -11,9 +11,7 @@
 */
 package com.example.cd.workreminder;
 
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.ListActivity;
 import android.content.Context;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -22,8 +20,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-//Because I don't have the time nor patience to install the new fangled library the device emulator.
-//Maybe they shouldn't fucking dep. shit?
+//Because I don't have the time nor patience to install the new fangled library on my device emulator.
+//Maybe they shouldn't fucking reinvent shit?
 public class MilitaryTime extends FragmentActivity {
     private int startMilitaryHour = 0;
     private int endMilitaryHour = 0; //Need to convert back to string??
