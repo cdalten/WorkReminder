@@ -780,7 +780,6 @@ public class CurrentWeekSchedule extends ListActivity  {
                 alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(),
                         militaryTime.getStartMilitaryMinute());
 
-
                 //long startTime = dayNotification.convertToStartTime(militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute());
                 //long endTime = dayNotification.convertToEndTime(militaryTime.getEndMilitaryHour(), militaryTime.getEndMilitaryMinute());
                 //long currentTime = dayNotification.getCurrentTime();

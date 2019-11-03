@@ -178,7 +178,6 @@ public class dayNotification extends AppCompatActivity {
             int endDayOfWeekStartHour, int endDayOfWeekStartMinute, int endDayOfWeekStartAmOrPm
     )
     {
-
         MilitaryTime militaryTime = MilitaryTime.getInstance();
         AlarmTimer alarmTimer = AlarmTimer.getInstance();
 

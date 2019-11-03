@@ -92,7 +92,6 @@ public class MilitaryTime extends FragmentActivity {
             date = df.parse(timeFormat);
         } catch (Exception e) {
             //pass
-
         }
 
         String time[] = date.toString().split(" ");
