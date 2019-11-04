@@ -531,25 +531,6 @@ public class CurrentWeekSchedule extends ListActivity  {
     }//end inner class
 
 
-    //Added on 8 - 4 - 2019
-    @TargetApi(24)
-    private void setCurrentAlarm(int startMilitaryHour, int startMilitaryMinute) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, startMilitaryHour);
-        calendar.set(Calendar.MINUTE, startMilitaryMinute);
-        Log.e(PRODUCTION_TAG, "CURRENT MILITARY HOUR IS: " + startMilitaryHour);
-        Log.e(PRODUCTION_TAG,"SET CURRENT ALARM GOT CALLED");
-        alarmMgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(CurrentWeekSchedule.this, WorkAlarmReceiver.class);
-        alarmIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-// With setInexactRepeating(), you have to use one of the AlarmManager interval
-// constants--in this case, AlarmManager.INTERVAL_DAY.
-        //alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-        //        AlarmManager.INTERVAL_DAY, alarmIntent);
-        alarmMgr.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
-    }
-
     //Added on 6 - 23 - 2019
     //Get the previous Saturday.
 
@@ -777,7 +758,9 @@ public class CurrentWeekSchedule extends ListActivity  {
                 militaryTime.convertEndCivilianTimeToMilitaryTime(newEndHour, newEndMinute, newEndAmOrPm);
 
                 //----DUPLICATE??? ------------------------------------------------------------
-                alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(),
+                alarmTimer.setAlarmTime(this,
+                        day,
+                        militaryTime.getStartMilitaryHour(),
                         militaryTime.getStartMilitaryMinute());
 
                 //long startTime = dayNotification.convertToStartTime(militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute());
@@ -785,10 +768,7 @@ public class CurrentWeekSchedule extends ListActivity  {
                 //long currentTime = dayNotification.getCurrentTime();
                 //dayNotification.setNewNotificationDisplay(day, startTime, endTime, currentTime);
 
-                dayNotification.displayNotification(day,
-                        alarmTimer.getUpdatedHour(),
-                        alarmTimer.getMilitaryMinute(),
-                        alarmTimer.getAMorPM(), "ALARM (ON ACTIVITY RESULT)");
+                dayNotification.displayNotification(alarmTimer, "ALARM (ON ACTIVITY RESULT)");
                 //------------------------------------------------------------------------
 
 
@@ -803,13 +783,12 @@ public class CurrentWeekSchedule extends ListActivity  {
 
                 militaryTime.convertStartCivilianTimeToMilitaryTime(newStartHour, newStartMinute, newStartAmOrPm);
                 militaryTime.convertEndCivilianTimeToMilitaryTime(newEndHour, newEndMinute, newEndAmOrPm);
-                alarmTimer.setAlarmTime(this, militaryTime.getStartMilitaryHour(),
+                alarmTimer.setAlarmTime(this,
+                        day,
+                        militaryTime.getStartMilitaryHour(),
                         militaryTime.getStartMilitaryMinute());
 
-                dayNotification.displayNotification(day,
-                        alarmTimer.getUpdatedHour(),
-                        alarmTimer.getUpdatedMinute(),
-                        alarmTimer.getAMorPM(), "ALARM (ON ACTIVITY RESULT)");
+                dayNotification.displayNotification(alarmTimer, "ALARM (ON ACTIVITY RESULT)");
                 //save current schedule in shared pref?
             }
         }

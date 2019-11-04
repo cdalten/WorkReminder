@@ -198,7 +198,9 @@ public class dayNotification extends AppCompatActivity {
                     pref.getString(context.getString(dayOfWeekEndAmOrPm), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
 
             alarmTimer.setAlarmTime(context,
-                    militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute());
+                    this.day,
+                    militaryTime.getStartMilitaryHour(),
+                    militaryTime.getStartMilitaryMinute());
 
             setNotificationDisplay(
                     context.getString(dayOfWeek),
@@ -268,18 +270,12 @@ public class dayNotification extends AppCompatActivity {
             displayNotification("YOU'RE SUPPOSED TO BE AT WORK");
         } else if (currentTime == startTime) {
             alarmTimer.setStartMilitaryHour(alarmTimer.getNewMilitaryHour());
-            displayNotification( dayOfWeek,
-                    alarmTimer.getUpdatedHour(),
-                    alarmTimer.getUpdatedMinute(),
-                    alarmTimer.getAMorPM(),
+            displayNotification(alarmTimer,
                     "ALARM");
 
         } else if (currentTime == endTime) {
             alarmTimer.setStartMilitaryHour(alarmTimer.getStartMilitaryHour());
-            displayNotification( dayOfWeek,
-                    alarmTimer.getUpdatedHour(),
-                    alarmTimer.getUpdatedMinute(),
-                    alarmTimer.getAMorPM(),
+            displayNotification(alarmTimer,
                     "ALARM");
         } /*else if (  pref.getInt("ALARM_HOUR", 0) == 0) {
             displayNotification(dayOfWeek,
@@ -316,6 +312,7 @@ public class dayNotification extends AppCompatActivity {
 
         alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                 1000 * 60 * 20, alarmIntent);
+
     }
 
     //Added on 11 - 2  2019
@@ -376,16 +373,15 @@ public class dayNotification extends AppCompatActivity {
 
 
     //Added on 10 - 7 - 2019
-    public void displayNotification(String dayOfWeek,
-                                    int newHour,
-                                    int newMinute,
-                                    String newAmOrPm,
+    public void displayNotification(AlarmTimer alarmTimer,
                                     String notificationTitle) {
-        String notificationText = buildAlarmTimeFormatDisplay(dayOfWeek,
-                newHour,
-                newMinute,
-                newAmOrPm);
+        String notificationText = buildAlarmTimeFormatDisplay(
+                alarmTimer.getDayOfWeek(),
+                alarmTimer.getUpdatedHour(),
+                alarmTimer.getUpdatedMinute(),
+                alarmTimer.getAMorPM());
 
+        //setAlarm( alarmTimer.getNewMilitaryHour(), alarmTimer.getNewMilitaryMinute());
 
         //Intent snoozeIntent = new Intent(context, WorkAlarmReceiver.class);
         Intent snoozeIntent = new Intent(context, AlarmIntentService.class);

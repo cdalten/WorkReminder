@@ -33,6 +33,7 @@ public class AlarmTimer extends AppCompatActivity {
     private int newMilitaryHour = 0;
     private int newMilitaryMinute = 0;
     private int timeBeforeShift = 0; //Added on 10 - 21 - 2019
+    private String dayOfWeek; //Added on 11 - 4 - 2019
 
     private static AlarmTimer instance = new AlarmTimer();
 
@@ -47,10 +48,12 @@ public class AlarmTimer extends AppCompatActivity {
 
     @TargetApi(24)
     public void setAlarmTime(Context context,
+                             String dayOfWeek,
                              int startMilitaryHour,
                              int startMilitaryMinute)
     {
         pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        this.dayOfWeek = dayOfWeek;
         this.startMilitaryMinute = startMilitaryMinute;
         this.startMilitaryHour = startMilitaryHour;
 
@@ -80,6 +83,7 @@ public class AlarmTimer extends AppCompatActivity {
         Log.e("LG_WORK_PHONE", "ALARM GOT CALLED");
         SharedPreferences.Editor editor = pref.edit();
         //editor.putInt("MILITARY_HOUR", cal.get(Calendar.HOUR)); //military. Do I need?
+        editor.putString("DAY_OF_WEEK", dayOfWeek);
         editor.putInt("HOUR", cal.get(Calendar.HOUR)); // gets passed to alarm receiver
         editor.putInt("MINUTES", cal.get(Calendar.MINUTE));
         editor.apply();
@@ -129,6 +133,9 @@ public class AlarmTimer extends AppCompatActivity {
     public int getUpdatedHour() {
         return pref.getInt("HOUR", 0);
     }
+
+    //Added on 11 - 4 - 2019
+    public String getDayOfWeek() { return pref.getString("DAY_OF_WEEK", "");}
 
     //Added on 6 - 28 - 2019
     public String getAMorPM () {
