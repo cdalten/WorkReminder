@@ -134,6 +134,10 @@ public class AlarmTimer extends AppCompatActivity {
         return pref.getInt("HOUR", 0);
     }
 
+    public int getMinutesBeforeShift(Context context) {
+        return pref.getInt(context.getString(R.string.ALARM_MINUTES), 0);
+    }
+
     //Added on 11 - 4 - 2019
     public String getDayOfWeek() { return pref.getString("DAY_OF_WEEK", "");}
 

@@ -46,6 +46,42 @@
         <item>SATURDAY</item>
         <item>OFF</item>
     </string-array>
+
+    <string-array name="sunday">
+        <item>SUNDAY</item>
+        <item>OFF</item>
+    </string-array>
+
+    <string-array name="monday">
+        <item>MONDAY</item>
+        <item>OFF</item>
+    </string-array>
+
+    <string-array name="tuesday">
+        <item>TUESDAY</item>
+        <item>OFF</item>
+    </string-array>
+
+    <string-array name="wednesday">
+        <item>WEDNESDAY</item>
+        <item>OFF</item>
+    </string-array>
+
+    <string-array name="thursday">
+        <item>THURSDAY</item>
+        <item>OFF</item>
+    </string-array>
+
+    <string-array name="friday">
+        <item>FRIDAY</item>
+        <item>OFF</item>
+    </string-array>
+
+    <string-array name="saturday">
+        <item>SATURDAY</item>
+        <item>OFF</item>
+    </string-array>
+
     <string-array name="start_hour">
         <item>00</item>
         <item>1</item>

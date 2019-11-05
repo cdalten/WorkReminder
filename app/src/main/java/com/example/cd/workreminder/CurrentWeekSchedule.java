@@ -32,6 +32,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ public class CurrentWeekSchedule extends ListActivity  {
 
     private int currentPosition = 0; //Added on 1 - 20 - 2019
     static List<String> values; //Modified on 1 - 18 - 2019
-    private ArrayAdapter<String> adapter;
+    private WS adapter;
 
     ListView list;
     private Intent i;
@@ -119,14 +120,16 @@ public class CurrentWeekSchedule extends ListActivity  {
                 String value = (String)adapter.getItem(position);
                 //values.add("FOO");
 
-                i = new Intent(CurrentWeekSchedule.this, HourFormat.class);
+                //i = new Intent(CurrentWeekSchedule.this, HourFormat.class);
                 currentDay = position; //Stupid hack
                 currentPosition = position; //position on clicked list
                 switch (position) {
                     case WorkReaderContract.WorkEntry.SUNDAY:
                         //currentPosition = 6; //handle integer wrap around case
                         //if (week.get(WorkReaderContract.WorkEntry.SUNDAY).get(0).equals("OFF")) {
-                        fillListviewDropdown(position,
+                        fillListviewDropdown(
+                                new Intent(CurrentWeekSchedule.this, HourFormat.class),
+                                position,
                                 R.string.SUNDAY,
                                 R.string.SUNDAY_START_HOUR,
                                 R.string.SUNDAY_START_MINUTE,
@@ -137,7 +140,10 @@ public class CurrentWeekSchedule extends ListActivity  {
                         );
                         break;
                     case WorkReaderContract.WorkEntry.MONDAY:
-                        fillListviewDropdown(position,
+                        //i = new Intent(CurrentWeekSchedule.this, DayMonday.class);
+                        fillListviewDropdown(
+                                new Intent(CurrentWeekSchedule.this, DayMonday.class),
+                                position,
                                 R.string.MONDAY,
                                 R.string.MONDAY_START_HOUR,
                                 R.string.MONDAY_START_MINUTE,
@@ -148,7 +154,9 @@ public class CurrentWeekSchedule extends ListActivity  {
                         );
                         break;
                     case WorkReaderContract.WorkEntry.TUESDAY:
-                        fillListviewDropdown(position,
+                        fillListviewDropdown(
+                                new Intent(CurrentWeekSchedule.this, HourFormat.class),
+                                position,
                                 R.string.TUESDAY,
                                 R.string.TUESDAY_START_HOUR,
                                 R.string.TUESDAY_START_MINUTE,
@@ -159,7 +167,9 @@ public class CurrentWeekSchedule extends ListActivity  {
                         );
                         break;
                     case WorkReaderContract.WorkEntry.WEDNESDAY:
-                        fillListviewDropdown(position,
+                        fillListviewDropdown(
+                                new Intent(CurrentWeekSchedule.this, HourFormat.class),
+                                position,
                                 R.string.WEDNESDAY,
                                 R.string.WEDNESDAY_START_HOUR,
                                 R.string.WEDNESDAY_START_MINUTE,
@@ -170,7 +180,9 @@ public class CurrentWeekSchedule extends ListActivity  {
                         );
                         break;
                     case WorkReaderContract.WorkEntry.THURSDAY:
-                        fillListviewDropdown(position,
+                        fillListviewDropdown(
+                                new Intent(CurrentWeekSchedule.this, HourFormat.class),
+                                position,
                                 R.string.THURSDAY,
                                 R.string.THURSDAY_START_HOUR,
                                 R.string.THURSDAY_START_MINUTE,
@@ -181,7 +193,9 @@ public class CurrentWeekSchedule extends ListActivity  {
                         );
                         break;
                     case WorkReaderContract.WorkEntry.FRIDAY:
-                        fillListviewDropdown(position,
+                        fillListviewDropdown(
+                                new Intent(CurrentWeekSchedule.this, HourFormat.class),
+                                position,
                                 R.string.FRIDAY,
                                 R.string.FRIDAY_START_HOUR,
                                 R.string.FRIDAY_START_MINUTE,
@@ -193,7 +207,9 @@ public class CurrentWeekSchedule extends ListActivity  {
                         break;
 
                     case WorkReaderContract.WorkEntry.SATURDAY:
-                        fillListviewDropdown(position,
+                        fillListviewDropdown(
+                                new Intent(CurrentWeekSchedule.this, HourFormat.class),
+                                position,
                                 R.string.SATURDAY,
                                 R.string.SATURDAY_START_HOUR,
                                 R.string.SATURDAY_START_MINUTE,
@@ -205,7 +221,7 @@ public class CurrentWeekSchedule extends ListActivity  {
                         break;
                 }//end
 
-                startActivityForResult(i, 0); //does writepar save the data??? Need to test for Thursday case.
+                //startActivityForResult(i, 0);
             }
         });
 
@@ -213,10 +229,15 @@ public class CurrentWeekSchedule extends ListActivity  {
         storeHoursInGUI currentWeek = new storeHoursInGUI(this);
         //if (savedInstanceState == null) {
             week = currentWeek.addHours();
-            adapter = new WS(this,
-                    R.layout.schedule_list, week);
 
+        //final Spinner spinner = (Spinner) findViewById(R.id.dayOfTheWeek);
+
+        adapter = new WS(this,
+                    R.layout.schedule_list, week);
             setListAdapter(adapter);
+
+        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        //spinner.setAdapter(adapter);
         //} else {
         //    week = currentWeek.addHours();
         //    adapter = new WS(this,
@@ -227,7 +248,9 @@ public class CurrentWeekSchedule extends ListActivity  {
     } //end onCreate()
 
     //Added on 10 - 14 - 2019
-    private void fillListviewDropdown(int position,
+    private void fillListviewDropdown(
+                              Intent i,
+                              int position,
                               int dayOfWeek,
                               int startHour,
                               int startMinute,
@@ -275,6 +298,8 @@ public class CurrentWeekSchedule extends ListActivity  {
                 i.putExtra("END_AM_OR_PM", 1);
             }
         }
+
+        startActivityForResult(i, 0);
 
     }
 
@@ -401,11 +426,16 @@ public class CurrentWeekSchedule extends ListActivity  {
 
     //I use list view because HTML fonts don't get preserved when the device changes orientation.
     private class WS<String> extends ArrayAdapter<java.lang.String> {
-        private int visibleMenuOptions = 3; //3 is for debugging only
+        private int hideItemPostion = 3; //3 is for debugging only
 
         WS(Context context, int resource, List<java.lang.String> Objects) {
             super(context, resource, Objects);
-            this.visibleMenuOptions = visibleMenuOptions;
+            //this.visibleMenuOptions = visibleMenuOptions;
+        }
+
+        public void setItemToHide(int itemToHide)
+        {
+            this.hideItemPostion =itemToHide;
         }
 
         @Override
@@ -428,18 +458,17 @@ public class CurrentWeekSchedule extends ListActivity  {
         //Added on 6 - 24 - 201
         @Override
         public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            //return super.getDropDownView(position, convertView, parent);
-            Log.e(PRODUCTION_TAG, "MENU GOT HIDDEN AT POSITION: " + position);
-            View v = null;
-            if (position == visibleMenuOptions) {
-                Log.e(PRODUCTION_TAG, "MENU GOT HIDDEN AT POSITION: " + position);
-                TextView tv = new TextView(getContext());
+            View view = super.getDropDownView(position, convertView, parent);
+            TextView tv = (TextView) view;
+
+            if(position == 3){
+                // Hide the second item from Spinner
                 tv.setVisibility(View.GONE);
-                v = tv;
-            } else {
-                v = super.getDropDownView(position, null, parent);
             }
-            return v;
+            else {
+                tv.setVisibility(View.VISIBLE);
+            }
+            return view;
         }
 
         @TargetApi(24)

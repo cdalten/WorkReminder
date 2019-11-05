@@ -264,7 +264,6 @@ public class dayNotification extends AppCompatActivity {
     {
         AlarmTimer alarmTimer = AlarmTimer.getInstance();
 
-        setAlarm( alarmTimer.getNewMilitaryHour(), alarmTimer.getNewMilitaryMinute());
 
         if (currentTime > startTime && currentTime < endTime) {
             displayNotification("YOU'RE SUPPOSED TO BE AT WORK");
@@ -277,22 +276,11 @@ public class dayNotification extends AppCompatActivity {
             alarmTimer.setStartMilitaryHour(alarmTimer.getStartMilitaryHour());
             displayNotification(alarmTimer,
                     "ALARM");
-        } /*else if (  pref.getInt("ALARM_HOUR", 0) == 0) {
-            displayNotification(dayOfWeek,
-                    alarmTimer.getUpdatedHour(),
-                    alarmTimer.getUpdatedMinute(),
-                    alarmTimer.getAMorPM(),
-                    "ALARM");
-        } */
-        /*else {
-            alarmTimer.setStartMilitaryHour(alarmTimer.getNewMilitaryHour());
-            displayNotification( dayOfWeek,
-                    alarmTimer.getUpdatedHour(),
-                    alarmTimer.getUpdatedMinute(),
-                    alarmTimer.getAMorPM(),
-                    "ALARM (DEBUG MODE)");
+        } else {
+            setAlarm( alarmTimer.getNewMilitaryHour(), alarmTimer.getNewMilitaryMinute());
         }
-        */
+
+
 
     }
 
@@ -300,6 +288,9 @@ public class dayNotification extends AppCompatActivity {
     public void setAlarm(int newMilitaryHour, int newMilitaryMinute) {
         //code copied from
         //https://developer.android.com/training/scheduling/alarms
+        Log.e("ALARM_TAG", "THE NEW MILITARY HOUR IS: " + newMilitaryHour);
+        Log.e("ALARM_TAG", "THE NEW MILITARY MINUTE IS: " + newMilitaryMinute);
+
         alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, WorkAlarmReceiver.class);
         alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);

@@ -93,6 +93,20 @@
 
         <activity android:name=".RememberMe" />
         <activity android:name=".AlarmNotificationMainActivity"></activity>
+
+
+        <activity
+            android:name=".DayMonday"
+            android:label="@string/app_name">
+            <intent-filter>
+
+                <!-- <action android:name="android.intent.action.MAIN" /> -->
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>
