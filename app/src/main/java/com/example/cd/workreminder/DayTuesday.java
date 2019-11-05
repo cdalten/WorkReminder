@@ -29,7 +29,7 @@ import android.widget.Spinner;
 import java.util.Calendar;
 
 //public class HourFormat extends AppCompatActivity {
-public class DayMonday extends FragmentActivity {
+public class DayTuesday extends FragmentActivity {
     Spinner startHour; //Added on 1 - 22 - 2019
     Spinner startMinute; //Added on 1 - 23 - 2019
     Spinner startAmOrPm;
@@ -79,21 +79,20 @@ public class DayMonday extends FragmentActivity {
 
                 dayPosition = position;
                 switch (position) {
-                    case WorkReaderContract.WorkEntry.MONDAY:
+                    case WorkReaderContract.WorkEntry.TUESDAY:
                         saveDay = position;
-                        Log.e(PRODUCTION_TAG, "THE DAY IS MONDAY");
                         break;
                     case WorkReaderContract.WorkEntry.OFF:
                         SharedPreferences.Editor editor = pref.edit();
                         switch(saveDay) {
-                            case WorkReaderContract.WorkEntry.MONDAY:
-                                editor.putString(getString(R.string.MONDAY), "OFF");
-                                editor.putString(getString(R.string.MONDAY_START_HOUR), "");
-                                editor.putString(getString(R.string.MONDAY_START_MINUTE), "");
-                                editor.putString(getString(R.string.MONDAY_START_AM_OR_PM), "");
-                                editor.putString(getString(R.string.MONDAY_END_HOUR), "");
-                                editor.putString(getString(R.string.MONDAY_END_MINUTE), "");
-                                editor.putString(getString(R.string.MONDAY_END_AM_OR_PM), "");
+                            case WorkReaderContract.WorkEntry.TUESDAY:
+                                editor.putString(getString(R.string.TUESDAY), "OFF");
+                                editor.putString(getString(R.string.TUESDAY_START_HOUR), "");
+                                editor.putString(getString(R.string.TUESDAY_START_MINUTE), "");
+                                editor.putString(getString(R.string.TUESDAY_START_AM_OR_PM), "");
+                                editor.putString(getString(R.string.TUESDAY_END_HOUR), "");
+                                editor.putString(getString(R.string.TUESDAY_END_MINUTE), "");
+                                editor.putString(getString(R.string.TUESDAY_END_AM_OR_PM), "");
                                 intent.putExtra("POSITION", WorkReaderContract.WorkEntry.MONDAY);
                                 break;
                         }
@@ -141,8 +140,8 @@ public class DayMonday extends FragmentActivity {
 
                 SharedPreferences.Editor editor = pref.edit();
                 switch (dayPosition) {
-                    case WorkReaderContract.WorkEntry.MONDAY:
-                        editor.putString(getString(R.string.MONDAY_START_HOUR),
+                    case WorkReaderContract.WorkEntry.TUESDAY:
+                        editor.putString(getString(R.string.TUESDAY_START_HOUR),
                                 //pref.getString(getString(R.string.MONDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
                                 parent.getItemAtPosition(position).toString());
                         break;
@@ -176,8 +175,8 @@ public class DayMonday extends FragmentActivity {
                 SharedPreferences.Editor editor = pref.edit();
                 Log.e(PRODUCTION_TAG, "THE POSITION BEFORE IS: " + position);
                 switch (dayPosition) {
-                    case WorkReaderContract.WorkEntry.MONDAY:
-                        editor.putString(getString(R.string.MONDAY_START_MINUTE),
+                    case WorkReaderContract.WorkEntry.TUESDAY:
+                        editor.putString(getString(R.string.TUESDAY_START_MINUTE),
                                 parent.getItemAtPosition(position).toString());
                         break;
                 }
@@ -208,8 +207,8 @@ public class DayMonday extends FragmentActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 SharedPreferences.Editor editor = pref.edit();
                 switch (dayPosition) {
-                    case WorkReaderContract.WorkEntry.MONDAY:
-                        editor.putString(getString(R.string.MONDAY_START_AM_OR_PM),
+                    case WorkReaderContract.WorkEntry.TUESDAY:
+                        editor.putString(getString(R.string.TUESDAY_START_AM_OR_PM),
                                 parent.getItemAtPosition(position).toString());
                         break;
                 }
@@ -239,8 +238,8 @@ public class DayMonday extends FragmentActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 SharedPreferences.Editor editor = pref.edit();
                 switch (dayPosition) {
-                    case WorkReaderContract.WorkEntry.MONDAY:
-                        editor.putString(getString(R.string.MONDAY_END_HOUR),
+                    case WorkReaderContract.WorkEntry.TUESDAY:
+                        editor.putString(getString(R.string.TUESDAY_END_HOUR),
                                 parent.getItemAtPosition(position).toString());
                         break;
                 }
@@ -267,8 +266,8 @@ public class DayMonday extends FragmentActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 SharedPreferences.Editor editor = pref.edit();
                 switch (dayPosition) {
-                    case WorkReaderContract.WorkEntry.MONDAY:
-                        editor.putString(getString(R.string.MONDAY_END_MINUTE),
+                    case WorkReaderContract.WorkEntry.TUESDAY:
+                        editor.putString(getString(R.string.TUESDAY_END_MINUTE),
                                 parent.getItemAtPosition(position).toString());
                         break;
                 }
@@ -295,8 +294,8 @@ public class DayMonday extends FragmentActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 SharedPreferences.Editor editor = pref.edit();
                 switch (dayPosition) {
-                    case WorkReaderContract.WorkEntry.MONDAY:
-                        editor.putString(getString(R.string.MONDAY_END_AM_OR_PM),
+                    case WorkReaderContract.WorkEntry.TUESDAY:
+                        editor.putString(getString(R.string.TUESDAY_END_AM_OR_PM),
                                 parent.getItemAtPosition(position).toString());
                         break;
                 }
@@ -343,3 +342,4 @@ public class DayMonday extends FragmentActivity {
         ;
     }
 }//end class
+
