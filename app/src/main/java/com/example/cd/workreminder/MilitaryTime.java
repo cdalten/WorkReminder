@@ -46,7 +46,10 @@ public class MilitaryTime extends FragmentActivity {
     public void convertEndCivilianTimeToMilitaryTime(String endHour, String endMinute, String endAmOrPm) {
         String timeFormat = endHour + " " + endMinute  + " " + endAmOrPm;
         DateFormat df = new SimpleDateFormat("hh mm aa");
-        //String militaryTime = null;
+        String[] newTime = new String[3];
+        newTime[0] = "0";
+        newTime[1] = "0";
+
         Date date = null;
         try {
             date = df.parse(timeFormat);
@@ -55,31 +58,15 @@ public class MilitaryTime extends FragmentActivity {
 
         }
 
-        String time[] = date.toString().split(" ");
-        String newTime[] = time[3].split(":");
+        try {
+            String time[] = date.toString().split(" ");
+            newTime = time[3].split(":");
+        } catch (Exception e) {
+            //pass
+        }
         endMilitaryHour = Integer.parseInt(newTime[0]);
         endMilitaryMinute = Integer.parseInt(newTime[1]);
 
-
-        /*if (endAmOrPm.equals("PM") && !endHour.equals("12")) {
-            endMilitaryHour = Integer.parseInt(endHour) + 12;
-            endMilitaryMinute = Integer.parseInt(endMinute);
-            //setStartMilitaryHour(startMilitaryHour);
-            //setStartMilitaryMinute(Integer.parseInt(startMinute));
-        } else if (endAmOrPm.equals("AM") && endHour.equals("12")) {
-            endMilitaryHour = 24;
-            endMilitaryMinute = Integer.parseInt(endMinute);
-        }
-        else {
-            try {
-                endMilitaryHour = Integer.parseInt(endHour);
-                endMilitaryMinute = Integer.parseInt(endMinute);
-            } catch (Exception e) {
-                Log.e("LG_WORK_PHONE",  "BLANK: " + e);
-            }
-
-        }
-        */
     }
 
     @TargetApi(24)
@@ -88,14 +75,22 @@ public class MilitaryTime extends FragmentActivity {
         DateFormat df = new SimpleDateFormat("hh mm aa");
         //String militaryTime = null;
         Date date = null;
+        String[] newTime = new String[3];
+        newTime[0] = "0";
+        newTime[1] = "0";
+
         try {
             date = df.parse(timeFormat);
         } catch (Exception e) {
             //pass
         }
 
-        String time[] = date.toString().split(" ");
-        String newTime[] = time[3].split(":");
+        try {
+            String time[] = date.toString().split(" ");
+            newTime = time[3].split(":");
+        } catch (Exception e) {
+            //pass
+        }
         startMilitaryHour = Integer.parseInt(newTime[0]);
         startMilitaryMinute = Integer.parseInt(newTime[1]);
 

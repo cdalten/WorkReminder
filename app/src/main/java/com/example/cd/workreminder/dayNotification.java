@@ -20,10 +20,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.icu.util.Calendar;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import static android.app.Notification.EXTRA_NOTIFICATION_ID;
@@ -51,6 +54,12 @@ public class dayNotification extends AppCompatActivity {
 
     public dayNotification(Context context) {
         this.context = context;
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.e("LG_WORK_PHONE", "DAY NOTIFICATION ONCREATE() GOT CALLED");
     }
 
     //Added on 7 - 1 - 2019
@@ -277,34 +286,21 @@ public class dayNotification extends AppCompatActivity {
             displayNotification(alarmTimer,
                     "ALARM");
         } else {
-            setAlarm( alarmTimer.getNewMilitaryHour(), alarmTimer.getNewMilitaryMinute());
+            //Calendar cal = Calendar.getInstance();
+            //int minutesBeforeShift = alarmTimer.getMinutesBeforeShift(context); //7
+            //int currentMinutes = cal.get(Calendar.MINUTE);
+
+            //
+            //if (currentMinutes <= alarmTimer.getMilitaryMinute()) {
+                setAlarm(alarmTimer.getNewMilitaryHour(), alarmTimer.getNewMilitaryMinute());
+                displayNotification(alarmTimer, "ALARM (SET NOTIFICATION)");
+            //}
         }
 
 
 
     }
 
-    @TargetApi(24)
-    public void setAlarm(int newMilitaryHour, int newMilitaryMinute) {
-        //code copied from
-        //https://developer.android.com/training/scheduling/alarms
-        Log.e("ALARM_TAG", "THE NEW MILITARY HOUR IS: " + newMilitaryHour);
-        Log.e("ALARM_TAG", "THE NEW MILITARY MINUTE IS: " + newMilitaryMinute);
-
-        alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, WorkAlarmReceiver.class);
-        alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, newMilitaryHour);
-        calendar.set(Calendar.MINUTE, newMilitaryMinute);
-        this.newAlarmTime = calendar.getTime().getTime();
-
-        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                1000 * 60 * 20, alarmIntent);
-
-    }
 
     //Added on 11 - 2  2019
     //Reason 1007 why Java sucks massive dick. Fuck Java. Fuck OOP. And fuck this cold weather.
@@ -363,6 +359,30 @@ public class dayNotification extends AppCompatActivity {
     }
 
 
+    //Added ringtone alarm on 11 - 9 - 2019
+    @TargetApi(24)
+    public void setAlarm(int newMilitaryHour,
+                         int newMilitaryMinute) {
+        //code copied from
+        //https://developer.android.com/training/scheduling/alarms
+
+        alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, WorkAlarmReceiver.class);
+
+        intent.putExtra("ALARM_RINGTONE", RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
+
+        alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, newMilitaryHour);
+        calendar.set(Calendar.MINUTE, newMilitaryMinute);
+        this.newAlarmTime = calendar.getTime().getTime();
+
+        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                1000 * 60 * 20, alarmIntent);
+
+    }
     //Added on 10 - 7 - 2019
     public void displayNotification(AlarmTimer alarmTimer,
                                     String notificationTitle) {
@@ -372,15 +392,18 @@ public class dayNotification extends AppCompatActivity {
                 alarmTimer.getUpdatedMinute(),
                 alarmTimer.getAMorPM());
 
-        //setAlarm( alarmTimer.getNewMilitaryHour(), alarmTimer.getNewMilitaryMinute());
 
         //Intent snoozeIntent = new Intent(context, WorkAlarmReceiver.class);
         Intent snoozeIntent = new Intent(context, AlarmIntentService.class);
         snoozeIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
-        //.setAction(WorkAlarmReceiver.ACTION_SNOOZE);
+        snoozeIntent.setAction(WorkAlarmReceiver.ACTION_SNOOZE);
+        //snoozeIntent.putExtra("ACTION_SNOOZE", "ACTION_SNOOZE");
         PendingIntent snoozePendingIntent = PendingIntent.getService(context, 0, snoozeIntent, 0);
         //PendingIntent snoozePendingIntent =
         //        PendingIntent.getBroadcast(context, 0, snoozeIntent, 0);
+
+        //setAlarm( alarmTimer.getNewMilitaryHour(), alarmTimer.getNewMilitaryMinute(), snoozePendingIntent);
+
         NotificationCompat.Action snoozeAction =
                 new NotificationCompat.Action.Builder(
                         R.drawable.ic_action_stat_reply,
@@ -391,11 +414,17 @@ public class dayNotification extends AppCompatActivity {
         //Intent dismissIntent = new Intent(context, WorkAlarmReceiver.class);
         Intent dismissIntent = new Intent(context, AlarmIntentService.class);
         dismissIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
-        //dismissIntent.setAction(WorkAlarmReceiver.ACTION_DISMISS);
-        //dismissIntent.setAction(WorkAlarmReceiver.ACTION_DISMISS);
+        dismissIntent.setAction(WorkAlarmReceiver.ACTION_DISMISS);
+        //dismissIntent.putExtra("ACTION_DISMISS", "ACTION_DISMISS");
+        //context.sendBroadcast(dismissIntent);
         PendingIntent dismissPendingIntent = PendingIntent.getService(context, 0, dismissIntent, 0);
         //PendingIntent dismissPendingIntent =
         //        PendingIntent.getBroadcast(context, 0, dismissIntent, 0);
+
+
+        //setAlarm( alarmTimer.getNewMilitaryHour(), alarmTimer.getNewMilitaryMinute(), dismissPendingIntent);
+
+
         NotificationCompat.Action dismissAction =
                 new NotificationCompat.Action.Builder(
                         R.drawable.ic_action_stat_share,
@@ -404,12 +433,13 @@ public class dayNotification extends AppCompatActivity {
                         .build();
 
 
-        NotificationCompat.Builder notificationCompatBuilder = new NotificationCompat.Builder(context.getApplicationContext(), "0");
 
+        NotificationCompat.Builder notificationCompatBuilder = new NotificationCompat.Builder(context.getApplicationContext(), "0");
         GlobalNotificationBuilder.setNotificationCompatBuilderInstance(notificationCompatBuilder);
         notificationCompatBuilder.setSmallIcon(R.drawable.ic_stat_work)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(dismissPendingIntent)
+                //.setSound(alarmUri)
                 .addAction(snoozeAction)
                 .addAction(dismissAction);
         notificationCompatBuilder.setContentTitle(notificationTitle);
@@ -418,6 +448,15 @@ public class dayNotification extends AppCompatActivity {
         mNotificationManagerCompat = NotificationManagerCompat.from(context.getApplicationContext());
         Notification notification = notificationCompatBuilder.build();
         mNotificationManagerCompat.notify(0, notification);
+
+        //dismissPendingIntent.cancel();
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.e("DAY NOTIFICATION"," DAY NOTIFICATION PAUSE CALLED");
     }
 
 

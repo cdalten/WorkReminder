@@ -67,9 +67,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     public String LANDINGPAGE_URL = "myschedule.safeway.com";
     //public static String LOGIN_URL = "https://myschedule.safeway.com/ESS/AuthN/SwyLogin.aspx?ReturnUrl=%2fESS";
 
-    //public static String LOGIN_URL = "http://172.31.99.60/index.html";
-
-    public static String LOGIN_URL = "http://10.105.185.33/index.html"; //Level D 4104 Dwinelle Hall
+    public static String LOGIN_URL = "http://172.31.99.60/index.html";
+    //public static String LOGIN_URL = "http://10.105.185.33/index.html"; //Level D 4104 Dwinelle Hall
 
     //public static String LOGIN_URL = "http:/https://usr56.dayforcehcm.com/mydayforce/mydayforce.aspx/";
     protected static final String UA = "Pak N Slave Mobile App; Written by cda@stanford.edu; Uhh...Hi Mom!";
@@ -552,8 +551,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             //produces infinite get requests when offline.
             Log.i(PRODUCTION_TAG, "The url is: " + url);
             Log.i(PRODUCTION_TAG, "The viewed page is: " + view.getUrl());
-            Log.i(PRODUCTION_TAG, "ON PAGE STARTED (DEBUG MODE)");
-
         }
 
         //Only download the schedule once a week. Rest of the time have the client handle the connection.
