@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     //public static String LOGIN_URL = "http:/https://usr56.dayforcehcm.com/mydayforce/mydayforce.aspx/";
     protected static final String UA = "Pak N Slave Mobile App; Written by cda@stanford.edu; Uhh...Hi Mom!";
     public static final int NOTIFICATION_ID = 0; //Added on 10 - 14 - 2019
+    public static final String ALARM_RINGTONE = "ALARM_RINGTONE"; //Added on 11  - 26 - 2019
 
     private final String name = "9857701"; //modified on 1 - 8 - 201
     public static boolean refreshDisplay = true; //added on 6 - 14 - 2018

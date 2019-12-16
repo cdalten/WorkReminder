@@ -36,6 +36,8 @@
 
     <string name="ALARM_MINUTES">ALARM_MINUTES</string>
 
+    <string name="FOO">FOO</string>
+
     <string-array name="day_of_the_week">
         <item>SUNDAY</item>
         <item>MONDAY</item>

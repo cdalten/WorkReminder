@@ -43,31 +43,37 @@ public class AlarmIntentService extends IntentService {
 
     private static SharedPreferences pref; //Added on 10 - 29 - 2019
     private static Ringtone ringtone; //Added on 10 - 29 - 2019
+    private static Uri uri;
 
     public AlarmIntentService() {
         super("AlarmIntentService");
-        Log.e(TAG, "ALARM INTENT SERVICE GOT CALLED");
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        //Uri uri = Uri.parse(intent.getExtras().get("ALARM_RINGTONE").toString());
+        //ringtone = RingtoneManager.getRingtone(this, uri);
+        //Log.e(TAG, "onHandleIntent() RINGTONE IS: " + ringtone);
+        //ringtone.play();
+
+
+
+
         Log.e(TAG, "onHandleIntent(): " + intent);
 
-        pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
 
         if (intent != null) {
             final String action = intent.getAction();
             if (ACTION_DISMISS.equals(action)) {
-                SharedPreferences.Editor editor = pref.edit();
-                editor.putBoolean("RINGTONE", false);
-                editor.apply();
+                //SharedPreferences.Editor editor = pref.edit();
+                //editor.putBoolean("RINGTONE", false);
+                //editor.apply();
 
                 handleActionDismiss();
             } else if (ACTION_SNOOZE.equals(action)) {
-                SharedPreferences.Editor editor = pref.edit();
-                editor.putBoolean("RINGTONE", true);
-                editor.apply();
-
+                //SharedPreferences.Editor editor = pref.edit();
+                //editor.putBoolean("RINGTONE", true);
+                //editor.apply();
                 handleActionSnooze();
             }
         }
@@ -78,8 +84,8 @@ public class AlarmIntentService extends IntentService {
      */
     private void handleActionDismiss() {
         Log.e(TAG, "handleActionDismiss()");
-
-        playRingtone();
+        ringtone.stop();
+        //playRingtone();
         //Log.e(TAG, "THE DISMISS RINGTONE INSTANCE IS: " + playRingtone());
 
         NotificationManagerCompat notificationManagerCompat =
@@ -93,11 +99,11 @@ public class AlarmIntentService extends IntentService {
      */
     private void handleActionSnooze() {
         Log.e(TAG, "handleActionSnooze()");
+        Log.e(TAG, "THE RINGTONE INSTANCE IN SNOOZE IS: " + ringtone);
 
         // You could use NotificationManager.getActiveNotifications() if you are targeting SDK 23
         // and above, but we are targeting devices with lower SDK API numbers, so we saved the
         // builder globally and get the notification back to recreate it later.
-
         NotificationCompat.Builder notificationCompatBuilder =
                 GlobalNotificationBuilder.getNotificationCompatBuilderInstance();
 
@@ -116,7 +122,7 @@ public class AlarmIntentService extends IntentService {
 
             notificationManagerCompat.cancel(MainActivity.NOTIFICATION_ID);
 
-            playRingtone();
+            //playRingtone();
             //Log.e(TAG, "THE SNOOZE RINGTONE INSTANCE IS: " + playRingtone());
 
             try {
@@ -139,7 +145,7 @@ public class AlarmIntentService extends IntentService {
         }
 
 
-        if (pref.getBoolean("RINGTONE", false) == true) {
+        //if (pref.getBoolean("RINGTONE", false) == true) {
             ringtone = RingtoneManager.getRingtone(getApplicationContext(), alarmUri);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 AudioAttributes aa = new AudioAttributes.Builder()
@@ -153,23 +159,19 @@ public class AlarmIntentService extends IntentService {
                 Log.e(TAG, "LESS THAN LOLLIPOP");
                 ringtone.setStreamType(AudioManager.STREAM_ALARM);
             }
-        }
+        //}
 
-        Log.e(TAG, "THE RINGTONE INSTANCE IS: " + ringtone);
+        //Log.e(TAG, "THE RINGTONE INSTANCE IS: " + ringtone);
 
-        if (pref.getBoolean("RINGTONE", false) == true) {
+        //if (pref.getBoolean("RINGTONE", false) == true) {
             ringtone.play();
-        } else {
-            ringtone.stop();
-        }
+        //} else {
+        //    ringtone.stop();
+        //}
 
         return ringtone;
     }
 
-    //Added on 10 - 30 - 2019
-    private void playRingtoneNotification() {
-
-    }
 
     private NotificationCompat.Builder recreateBuilderWithBigTextStyle() {
 
@@ -215,6 +217,7 @@ public class AlarmIntentService extends IntentService {
 
         // Snooze Action.
         Intent snoozeIntent = new Intent(this, AlarmIntentService.class);
+
         snoozeIntent.setAction(AlarmIntentService.ACTION_SNOOZE);
 
         PendingIntent snoozePendingIntent = PendingIntent.getService(this, 0, snoozeIntent, 0);

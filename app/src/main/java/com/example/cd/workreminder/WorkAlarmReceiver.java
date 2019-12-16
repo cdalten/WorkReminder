@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import android.content.SharedPreferences;
+import android.icu.util.Calendar;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.Ringtone;
@@ -44,29 +45,41 @@ public class WorkAlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.e("LG_WORK: ", "DEBUG ALARM GOT CALLED");
+        //String alarmUri = intent.getStringExtra("ALARM_RINGTONE");
+        //String alarmUri = intent.getExtras().get("ALARM_RINGTONE").toString();
+        //Uri uri = Uri.parse(alarmUri);
+        //ringtone = RingtoneManager.getRingtone(context.getApplicationContext(), uri);
 
-        AlarmTimer alarmTimer =AlarmTimer.getInstance();
+        //Uri uri = Uri.parse(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM).toString());
+        //ringtone = RingtoneManager.getRingtone(context.getApplicationContext(), uri);
+
+        //Log.e("WORK ALARM RECEIVER", "THE WORK ALARM RECEIVER INSTANCE IS: " + ringtone);
+        //Log.e("LG_WORK: ", "DEBUG ALARM GOT CALLED");
+
+        AlarmTimer alarmTimer = AlarmTimer.getInstance();
+
         dayNotification = new dayNotification(context);
-
         dayNotification.displayNotification(
                 alarmTimer,
                 "ALARM (ON RECEIVE)");
 
 
-        //String alarmUri = intent.getStringExtra("ALARM_RINGTONE");
-        //Uri uri = Uri.parse(alarmUri);
-        //ringtone = RingtoneManager.getRingtone(context.getApplicationContext(), uri);
+        Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
 
-        /*Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        //Intent i = new Intent(context, dayNotification.class);
+        //i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        //i.putExtra("ALARM_RINGTONE", alarmUri);
+        //context.startActivity(i);
+
         if (alarmUri == null) {
             alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         }
 
-        ringtone = RingtoneManager.getRingtone(context.getApplicationContext(), alarmUri);
+
         //if (pref.getBoolean("RINGTONE", false) == true) {
+        ringtone = RingtoneManager.getRingtone(context.getApplicationContext(), alarmUri);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            aa = new AudioAttributes.Builder()
+            AudioAttributes aa = new AudioAttributes.Builder()
                     .setUsage(AudioAttributes.USAGE_ALARM)
                     .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                     .build();
@@ -77,76 +90,15 @@ public class WorkAlarmReceiver extends BroadcastReceiver {
         }
         //}
 
+        //Log.e(TAG, "THE RINGTONE INSTANCE IS: " + ringtone);
+
         //if (pref.getBoolean("RINGTONE", false) == true) {
         ringtone.play();
-        */
-
-        //Intent soundService = new Intent(context, SoundService.class);
-        //soundService.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        //context.startActivity(soundService);
-        //--------------------
-        /*if (intent != null) {
-            final String action = intent.getAction();
-            if (intent.getStringExtra("ACTION_DISMISS").equals("ACTION_DISMISS")) {
-                //abortBroadcast();
-                handleActionDismiss(context);
-            } else if (intent.getStringExtra("ACTION_SNOOZE").equals("ACTION_SNOOZE")) {
-                handleActionSnooze();
-            } else {
-
-
-            }
-        }
-        */
-
-
-        //context.startActivity(i);
-
-        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", context.MODE_PRIVATE);
 
 
     }
 
-    private void handleActionDismiss(Context context) {
-        Log.e("LG WORK", "DISMISS GOT CALLED");
-        /*SharedPreferences.Editor editor = pref.edit();
-        editor = pref.edit();
-        editor.putBoolean("RINGTONE", false);
-        editor.apply();
-        */
 
-        /*Method[] m = ringtone.getClass().getMethods();
-
-        for (int i = 0; i < m.length; i++) {
-            if (m[i].getName().startsWith("stop")) {
-                Log.e("AUDIO TAG", " THE METHODS ARE: " + m[i]);
-                try {
-                    m[i].invoke(m, null);
-                } catch (Exception e) {
-                    //pass
-                }
-            }//end if
-        }//end for
-        */
-
-        AlarmManager aManager = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
-        Intent intent = new Intent(context.getApplicationContext(), WorkAlarmReceiver.class);
-        PendingIntent pIntent = PendingIntent.getBroadcast(context, 0, intent,  PendingIntent.FLAG_UPDATE_CURRENT);
-        aManager.cancel(pIntent);
-
-        NotificationManagerCompat notificationManagerCompat =
-                NotificationManagerCompat.from(context.getApplicationContext());
-        notificationManagerCompat.cancel(MainActivity.NOTIFICATION_ID);
-        //abortBroadcast();
-    }
-
-    private void handleActionSnooze() {
-        Log.e("LG WORK", "SNOOZE GOT CALLED");
-    }
-
-    private void playRingtone() {
-
-    }
 
 
 }//end class

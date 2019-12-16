@@ -47,7 +47,7 @@ public class AlarmTimer extends AppCompatActivity {
     }
 
     @TargetApi(24)
-    public void setAlarmTime(Context context,
+    public void setSavedAlarmTime(Context context,
                              String dayOfWeek,
                              int startMilitaryHour,
                              int startMilitaryMinute)
@@ -113,6 +113,10 @@ public class AlarmTimer extends AppCompatActivity {
         this.startMilitaryHour = startMilitaryHour;
     }
 
+    public void setStartMilitaryMinute(int startMilitaryMinute) {
+        this.startMilitaryMinute = startMilitaryMinute;
+    }
+
     public int getMilitaryMinute() {
         return this.startMilitaryMinute;
     }
@@ -134,12 +138,12 @@ public class AlarmTimer extends AppCompatActivity {
         return pref.getInt("HOUR", 0);
     }
 
+    //Added on 11 - 4 - 2019
+    public String getDayOfWeek() { return pref.getString("DAY_OF_WEEK", "");}
+
     public int getMinutesBeforeShift(Context context) {
         return pref.getInt(context.getString(R.string.ALARM_MINUTES), 0);
     }
-
-    //Added on 11 - 4 - 2019
-    public String getDayOfWeek() { return pref.getString("DAY_OF_WEEK", "");}
 
     //Added on 6 - 28 - 2019
     public String getAMorPM () {

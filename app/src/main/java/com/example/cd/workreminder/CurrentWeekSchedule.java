@@ -795,11 +795,12 @@ public class CurrentWeekSchedule extends ListActivity  {
             dayNotification dayNotification = new dayNotification(getApplicationContext());
 
             if (resultCode == WorkReaderContract.WorkEntry.RESULT_OKAY_NO_WORK) {
-                dayNotification.displayNotification("ALARM (ON ACTIVITY RESULT)");
+                //dayNotification.displayNotification("ALARM (ON ACTIVITY RESULT)");
+                Log.e(PRODUCTION_TAG, "ALARM CAN'T BE SET");
             }
 
-            else if (resultCode == WorkReaderContract.WorkEntry.RESULT_OK_WORK) {
-                if (newPosition != -99 && newPosition != 7) {
+            if (resultCode == WorkReaderContract.WorkEntry.RESULT_OK_WORK) {
+                if (newPosition != -99 && newPosition != 7) { //possibly need to remove
                     newStartHour = data.getStringExtra(getString(R.string.START_HOUR)); //hardware bug??
                     newStartMinute = data.getStringExtra(getString(R.string.START_MINUTE));
                     newStartAmOrPm = data.getStringExtra(getString(R.string.START_AM_OR_PM));
@@ -812,10 +813,11 @@ public class CurrentWeekSchedule extends ListActivity  {
                     militaryTime.convertEndCivilianTimeToMilitaryTime(newEndHour, newEndMinute, newEndAmOrPm);
 
                     //----DUPLICATE??? ------------------------------------------------------------
-                    alarmTimer.setAlarmTime(this,
+                    /*alarmTimer.setAlarmTime(this,
                             day,
                             militaryTime.getStartMilitaryHour(),
                             militaryTime.getStartMilitaryMinute());
+                    */
 
                     //long startTime = dayNotification.convertToStartTime(militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute());
                     //long endTime = dayNotification.convertToEndTime(militaryTime.getEndMilitaryHour(), militaryTime.getEndMilitaryMinute());
@@ -830,7 +832,22 @@ public class CurrentWeekSchedule extends ListActivity  {
                     week.get(currentHours - 1).add(newStartAmOrPm);
                     */
 
-                    dayNotification.displayNotification(alarmTimer, "ALARM (ON ACTIVITY RESULT)");
+                    dayNotification.setNotificationDisplay(day,
+                            Integer.parseInt(newStartHour),
+                            Integer.parseInt(newStartMinute),
+                            Integer.parseInt(newEndHour),
+                            Integer.parseInt(newEndMinute));
+
+                    /*alarmTimer.setAlarmTime(this,
+                            day,
+                            militaryTime.getStartMilitaryHour(),
+                            militaryTime.getStartMilitaryMinute());
+                     */
+
+                    //dayNotification.displayNotification(alarmTimer, "ALARM (ON ACTIVITY RESULT)");
+
+
+                    //dayNotification.setAlarm(alarmTimer);
                     //------------------------------------------------------------------------
 
 
@@ -845,7 +862,7 @@ public class CurrentWeekSchedule extends ListActivity  {
 
                     militaryTime.convertStartCivilianTimeToMilitaryTime(newStartHour, newStartMinute, newStartAmOrPm);
                     militaryTime.convertEndCivilianTimeToMilitaryTime(newEndHour, newEndMinute, newEndAmOrPm);
-                    alarmTimer.setAlarmTime(this,
+                    alarmTimer.setSavedAlarmTime(this,
                             day,
                             militaryTime.getStartMilitaryHour(),
                             militaryTime.getStartMilitaryMinute());
