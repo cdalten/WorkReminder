@@ -25,8 +25,10 @@ import java.util.Date;
 public class MilitaryTime extends FragmentActivity {
     private int startMilitaryHour = 0;
     private int endMilitaryHour = 0; //Need to convert back to string??
+    private String startAmOrPm = ""; //added on 12 - 18 - 2019
     private int startMilitaryMinute = 0;
     private int endMilitaryMinute = 0;
+    private String endAmOrPm = ""; //Added on 12 - 18 - 2019
     Context context;
 
     private static MilitaryTime instance = new MilitaryTime();
@@ -66,6 +68,7 @@ public class MilitaryTime extends FragmentActivity {
         }
         endMilitaryHour = Integer.parseInt(newTime[0]);
         endMilitaryMinute = Integer.parseInt(newTime[1]);
+        this.endAmOrPm = endAmOrPm;
 
     }
 
@@ -93,6 +96,7 @@ public class MilitaryTime extends FragmentActivity {
         }
         startMilitaryHour = Integer.parseInt(newTime[0]);
         startMilitaryMinute = Integer.parseInt(newTime[1]);
+        this.startAmOrPm = startAmOrPm;
 
         /*if (startAmOrPm.equals("PM") && !startHour.equals("12")) {
             startMilitaryHour = Integer.parseInt(startHour) + 12;
@@ -123,6 +127,15 @@ public class MilitaryTime extends FragmentActivity {
         return this.startMilitaryMinute;
     }
 
+    //Added on 12 - 18 - 2019
+    public String getStartAmOrPm() {
+        return this.startAmOrPm;
+    }
+
+    //Added on 12 - 19 - 2019
+    public String getEndAmOrPm() {
+        return this.endAmOrPm;
+    }
     //Added on 7 - 9 - 2019
     public int getEndMilitaryHour() {
         return this.endMilitaryHour;

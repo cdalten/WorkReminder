@@ -39,7 +39,7 @@ public class AlarmIntentService extends IntentService {
     public static final String ACTION_SNOOZE =
             "com.example.cd.workreminder.action.SNOOZE";
 
-    private static final long SNOOZE_TIME = TimeUnit.SECONDS.toMillis(5); //Need to change
+    private static final long SNOOZE_TIME = TimeUnit.SECONDS.toMinutes(10); //Need to change
 
     private static SharedPreferences pref; //Added on 10 - 29 - 2019
     private static Ringtone ringtone; //Added on 10 - 29 - 2019
@@ -48,6 +48,7 @@ public class AlarmIntentService extends IntentService {
     public AlarmIntentService() {
         super("AlarmIntentService");
     }
+
 
     @Override
     protected void onHandleIntent(Intent intent) {

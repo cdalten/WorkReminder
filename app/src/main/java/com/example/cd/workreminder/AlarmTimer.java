@@ -34,6 +34,7 @@ public class AlarmTimer extends AppCompatActivity {
     private int newMilitaryMinute = 0;
     private int timeBeforeShift = 0; //Added on 10 - 21 - 2019
     private String dayOfWeek; //Added on 11 - 4 - 2019
+    private String updatedAmOrPm = ""; //Added on 12 - 18 - 2019
 
     private static AlarmTimer instance = new AlarmTimer();
 
@@ -46,16 +47,17 @@ public class AlarmTimer extends AppCompatActivity {
         return instance;
     }
 
-    @TargetApi(24)
     public void setSavedAlarmTime(Context context,
                              String dayOfWeek,
                              int startMilitaryHour,
-                             int startMilitaryMinute)
+                             int startMilitaryMinute,
+                             boolean shouldISaveTheAlarmTime )
     {
         pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
         this.dayOfWeek = dayOfWeek;
         this.startMilitaryMinute = startMilitaryMinute;
         this.startMilitaryHour = startMilitaryHour;
+        updatedAmOrPm = getAMorPM(startMilitaryHour);
 
         if (timeBeforeShift < 60) {
             newMilitaryHour = startMilitaryHour;
@@ -74,6 +76,13 @@ public class AlarmTimer extends AppCompatActivity {
             newMilitaryHour = newMilitaryHour - endMilitaryHour;
         }
 
+        saveAlarmTime(true);
+
+    }//setAlarmTime
+
+    //Added on 12 - 16 - 2019
+    @TargetApi(24)
+    private void saveAlarmTime(boolean shouldISaveTheAlarmTime) {
         cal = Calendar.getInstance();
         cal.setTimeInMillis(System.currentTimeMillis()); //?
         //cal.set(Calendar.HOUR, newMilitaryHour);
@@ -87,7 +96,7 @@ public class AlarmTimer extends AppCompatActivity {
         editor.putInt("HOUR", cal.get(Calendar.HOUR)); // gets passed to alarm receiver
         editor.putInt("MINUTES", cal.get(Calendar.MINUTE));
         editor.apply();
-    }//setAlarmTime
+    }
 
     //Added on 10 - 21 - 2019
     public void setMinutesBeforeShift(Context context, int minutesBeforeShift) {
@@ -138,6 +147,11 @@ public class AlarmTimer extends AppCompatActivity {
         return pref.getInt("HOUR", 0);
     }
 
+    //Added on 12 - 18 - 2019
+    public String getUpdatedStartAmOrPm() {
+        return pref.getString("AMORPM", updatedAmOrPm);
+    }
+
     //Added on 11 - 4 - 2019
     public String getDayOfWeek() { return pref.getString("DAY_OF_WEEK", "");}
 
@@ -146,8 +160,16 @@ public class AlarmTimer extends AppCompatActivity {
     }
 
     //Added on 6 - 28 - 2019
-    public String getAMorPM () {
-        if (startMilitaryHour >= 12){
+    private String getAMorPM (int startMilitaryHour) {
+        if (startMilitaryHour == 12) {
+            return "AM";
+        }
+
+        if (startMilitaryHour == 0) {
+            return "PM";
+        }
+
+        if (startMilitaryHour > 12){
             return "PM";
         } else {
             return "AM";

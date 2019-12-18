@@ -31,6 +31,7 @@ public class WorkPreferences extends AppCompatActivity {
     private Intent i;
     private SharedPreferences pref;
     private int newAlarmTime; //Added on 10 - 28 - 2019
+    private int currentDay = 0; //Added on 12 - 17 - 2019
 
     private Button save; //Added on 6 - 24 - 2019
 
@@ -63,6 +64,16 @@ public class WorkPreferences extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                i.getIntExtra("CURRENT_DAY", -99);
+                i.getStringExtra("NEW_START_HOUR");
+                i.getStringExtra("NEW_START_MINUTE");
+                i.getStringExtra("NEW_START_AM_OR_PM");
+                i.getStringExtra("NEW_END_HOUR");
+                i.getStringExtra("NEW_END_MINUTE");
+                i.getStringExtra("NEW_END_AM_OR_PM");
+                i.getStringExtra("NEW_DAY");
+
+
                 String updateTime = alarmMinutesPreference.getText().toString().trim();
 
                 //if (updateTime == "" || updateTime == null) {
@@ -76,7 +87,8 @@ public class WorkPreferences extends AppCompatActivity {
 
                 AlarmTimer alarmTimer = AlarmTimer.getInstance();
                 alarmTimer.setMinutesBeforeShift(getApplicationContext(), Integer.parseInt(updateTime));
-                //alarmTimer.setAlarmTime(getBaseContext(), alarmTimer.getStartMilitaryHour(),alarmTimer.getMilitaryMinute() );
+                //alarmTimer.setSavedAlarmTime(getApplicationContext(), "",
+                //        alarmTimer.getStartMilitaryHour(),alarmTimer.getMilitaryMinute(), true );
 
                 //editPref.putInt("ALARM_HOUR", alarmTimer.getUpdatedHour()); //??
                 //editPref.putInt("MINUTES", alarmTimer.getUpdatedMinute()); //??

@@ -24,6 +24,7 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -58,8 +59,11 @@ public class dayNotification extends AppCompatActivity {
     private String dayOfWeek = ""; //Added on 12 - 16 - 2019
     private int startMilitaryHour = 0; //Added on 12 - 15 - 2019
     private int startMilitaryMinute = 0;
+    private String startAmOrPm = ""; //Added on 12 - 18 - 2019
     private int endMilitaryHour = 0;
     private int endMilitaryMinute = 0;
+    private String endAmOrPm = "";
+    private  MilitaryTime militaryTime; //Added on 12 - 18 - 2019
 
     public dayNotification() {} //Added on 11 - 22 - 2019
     public dayNotification(Context context) {
@@ -197,8 +201,8 @@ public class dayNotification extends AppCompatActivity {
             int endDayOfWeekStartHour, int endDayOfWeekStartMinute, int endDayOfWeekStartAmOrPm
     )
     {
-        MilitaryTime militaryTime = MilitaryTime.getInstance();
-        AlarmTimer alarmTimer = AlarmTimer.getInstance();
+        militaryTime = MilitaryTime.getInstance();
+        //AlarmTimer alarmTimer = AlarmTimer.getInstance();
 
         pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
 
@@ -216,21 +220,20 @@ public class dayNotification extends AppCompatActivity {
                     pref.getString(context.getString(dayOfWeekEndMinute), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
                     pref.getString(context.getString(dayOfWeekEndAmOrPm), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
 
-            alarmTimer.setSavedAlarmTime(context,
-                    this.day,
-                    militaryTime.getStartMilitaryHour(),
-                    militaryTime.getStartMilitaryMinute());
-
+            setMilitaryTimeForWorkPreferences(militaryTime);
             setNotificationDisplay(
-                    context.getString(dayOfWeek),
-                    militaryTime.getStartMilitaryHour(),
-                    militaryTime.getStartMilitaryMinute(),
-                    militaryTime.getEndMilitaryHour(),
-                    militaryTime.getStartMilitaryMinute()                    );
+                    context.getString(dayOfWeek), militaryTime);
         }
     }
 
+    //Added on 12 - 18 - 2019
+    private void setMilitaryTimeForWorkPreferences(MilitaryTime militaryTime) {
+        this.militaryTime = militaryTime;
+    }
 
+    public MilitaryTime getCurrentMilitaryTime() {
+        return this.militaryTime;
+    }
 
     //Added on 10 - 23 - 2019
     @TargetApi(24)
@@ -267,15 +270,31 @@ public class dayNotification extends AppCompatActivity {
         return cal.getTime().getTime();
     }
 
-    //Added on 10 - 23 - 2019
-    //vs trying to overload the current method?
+
+    //Added on 11 - 2  2019
+    //Reason 1007 why Java sucks massive dick. Fuck Java. Fuck OOP. And fuck this cold weather.
+    public long getNewAlarmTime() {
+        return this.newAlarmTime;
+    }
+
+    //Added on 10 - 18 - 2019
     @TargetApi(24)
-    public void setNewNotificationDisplayAlarm(
-            String dayOfWeek,
-            long startTime,
-            long endTime,
-            long currentTime)
+    public void setNotificationDisplay(String dayOfWeek, MilitaryTime militaryTime)
     {
+
+        setDayOfWeek(dayOfWeek);
+        //I'm not that sure that I need thse methodds
+        setStartMilitaryHour(militaryTime.getStartMilitaryHour());
+        setStartMilitaryMinute(militaryTime.getStartMilitaryMinute());
+        setStartAmOrPm(militaryTime.getStartAmOrPm());
+        setEndMilitaryHour(militaryTime.getEndMilitaryHour());
+        setEndMilitaryMinute(militaryTime.getEndMilitaryMinute());
+        setEndAmOrPm(militaryTime.getEndAmOrPm());
+
+        long startTime = convertToStartTime(militaryTime.getStartMilitaryHour(),militaryTime.getStartMilitaryMinute());
+        long endTime = convertToEndTime(militaryTime.getEndMilitaryHour(), militaryTime.getEndMilitaryMinute());
+        long currentTime = getCurrentTime();
+
         AlarmTimer alarmTimer = AlarmTimer.getInstance();
 
         if (currentTime > startTime && currentTime < endTime) {
@@ -292,9 +311,24 @@ public class dayNotification extends AppCompatActivity {
         } else {
             //alarmTimer.setStartMilitaryHour(getStartMilitaryHour());
             //alarmTimer.setStartMilitaryMinute(getEndMilitaryMinute());
-            alarmTimer.setSavedAlarmTime(context, getDayOfWeek(), getStartMilitaryHour(), getStartMilitaryMinute());
-            setAlarm(alarmTimer);
+            setNewNotificationDisplayAlarm();
+
         }
+    }
+
+    //Added on 10 - 23 - 2019
+    //vs trying to overload the current method?
+    @TargetApi(24)
+    public void setNewNotificationDisplayAlarm()
+    {
+        AlarmTimer alarmTimer = AlarmTimer.getInstance();
+        alarmTimer.setSavedAlarmTime(context,
+                getDayOfWeek(),
+                getStartMilitaryHour(),
+                getStartMilitaryMinute(),
+                true
+        );
+        setAlarm(alarmTimer);
     }
 
     @TargetApi(24)
@@ -320,36 +354,6 @@ public class dayNotification extends AppCompatActivity {
 
     }
 
-    //Added on 11 - 2  2019
-    //Reason 1007 why Java sucks massive dick. Fuck Java. Fuck OOP. And fuck this cold weather.
-    public long getNewAlarmTime() {
-        return this.newAlarmTime;
-    }
-
-    //Added on 10 - 18 - 2019
-    @TargetApi(24)
-    public void setNotificationDisplay(
-            String dayOfWeek,
-            int startMilitaryHour,
-            int startMilitaryMinute,
-            int endMilitaryHour,
-            int endMilitaryMinute
-    )
-    {
-
-        setDayOfWeek(dayOfWeek);
-        setStartMilitaryHour(startMilitaryHour);
-        setStartMilitaryMinute(startMilitaryMinute);
-        setEndMilitaryHour(endMilitaryHour);
-        setEndMilitaryMinute(endMilitaryMinute);
-
-        long startTime = convertToStartTime(startMilitaryHour, startMilitaryMinute);
-        long endTime = convertToEndTime(endMilitaryHour, endMilitaryMinute);
-        long currentTime = getCurrentTime();
-
-        setNewNotificationDisplayAlarm(dayOfWeek, startTime, endTime, currentTime);
-    }
-
     //Added on 12 - 16 - 2019
     private void setDayOfWeek(String dayOfWeek) {
         this.dayOfWeek = dayOfWeek;
@@ -368,6 +372,12 @@ public class dayNotification extends AppCompatActivity {
         this.startMilitaryMinute = startMilitaryMinute;
     }
 
+    //Added on 12 - 18 - 2019
+    private void setStartAmOrPm(String startAmOrPm) {
+        this.startAmOrPm = startAmOrPm;
+    }
+
+    //Added on 12 - 18 - 2019
     private void setEndMilitaryHour(int endMilitaryHour) {
         this.endMilitaryHour = endMilitaryHour;
     }
@@ -376,20 +386,28 @@ public class dayNotification extends AppCompatActivity {
         this.endMilitaryMinute = startMilitaryMinute;
     }
 
+    //Added on 12 - 18 - 2019
+    private void setEndAmOrPm(String endAmOrPm) {
+        this.endAmOrPm = endAmOrPm;
+    }
 
-    private int getStartMilitaryHour() {
+    public int getStartMilitaryHour() {
         return this.startMilitaryHour;
     }
 
-    private int getStartMilitaryMinute() {
+    public int getStartMilitaryMinute() {
         return this.startMilitaryMinute;
     }
 
-    private int getEndMilitaryHour() {
+    //Added on 12 - 18 - 2019
+    public String getStartAmOrPm() {
+        return this.startAmOrPm;
+    }
+    public int getEndMilitaryHour() {
         return this.endMilitaryHour;
     }
 
-    private int getEndMilitaryMinute() {
+    public int getEndMilitaryMinute() {
         return this.endMilitaryMinute;
     }
     //Added on 10 - 11 - 2019
@@ -399,7 +417,6 @@ public class dayNotification extends AppCompatActivity {
         if (hour == 0) {
             hour = 12;
         }
-
 
         //Something like 1:5 becomes while 1:05 while something like 1:10 stays 1:10
         if (minute < 10) {
@@ -433,7 +450,7 @@ public class dayNotification extends AppCompatActivity {
                 alarmTimer.getDayOfWeek(),
                 alarmTimer.getUpdatedHour(),
                 alarmTimer.getUpdatedMinute(),
-                alarmTimer.getAMorPM());
+                alarmTimer.getUpdatedStartAmOrPm());
 
         //Intent snoozeIntent = new Intent(context, WorkAlarmReceiver.class);
         Intent snoozeIntent = new Intent(context, AlarmIntentService.class);
