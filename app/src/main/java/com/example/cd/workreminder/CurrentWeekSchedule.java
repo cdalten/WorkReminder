@@ -101,16 +101,6 @@ public class CurrentWeekSchedule extends ListActivity  {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(CurrentWeekSchedule.this, WorkPreferences.class);
-                intent.putExtra("CURRENT_DAY", currentHours);
-                intent.putExtra("NEW_START_HOUR",dayNotification.getCurrentMilitaryTime().getStartMilitaryHour());
-                intent.putExtra("NEW_START_MINUTE", dayNotification.getCurrentMilitaryTime().getStartMilitaryMinute());
-                intent.putExtra("NEW_START_AM_OR_PM",dayNotification.getCurrentMilitaryTime().getStartAmOrPm());
-                intent.putExtra("NEW_END_HOUR", dayNotification.getCurrentMilitaryTime().getEndMilitaryHour());
-                intent.putExtra("NEW_END_MINUTE",dayNotification.getCurrentMilitaryTime().getEndMilitaryMinute());
-                intent.putExtra("NEW_END_AM_OR_PM",dayNotification.getCurrentMilitaryTime().getEndAmOrPm());
-                intent.putExtra("NEW_DAY",week.get(currentHours - 1).get(0));
-
-
                 startActivityForResult(intent, 0);
             }
         });
@@ -799,13 +789,14 @@ public class CurrentWeekSchedule extends ListActivity  {
 
         int newPosition = -1; // don't enter switch
         //String day = "";
+        MilitaryTime militaryTime = MilitaryTime.getInstance();
+        AlarmTimer alarmTimer = AlarmTimer.getInstance();
+
+
         if (data != null) {
             newPosition = data.getIntExtra("CURRENT_DAY", -99);  //position in listview
             //0 - 6 represent Sun to Sat. 7 represents off. -99 is just to make it work on the hardware
 
-            MilitaryTime militaryTime = MilitaryTime.getInstance();
-            AlarmTimer alarmTimer = AlarmTimer.getInstance();
-            dayNotification dayNotification = new dayNotification(getApplicationContext());
 
             if (resultCode == WorkReaderContract.WorkEntry.RESULT_OKAY_NO_WORK) {
                 //dayNotification.displayNotification("ALARM (ON ACTIVITY RESULT)");
@@ -825,59 +816,38 @@ public class CurrentWeekSchedule extends ListActivity  {
                     day = data.getStringExtra(getString(R.string.DAY_OF_WEEK));
                     */
 
-                newStartHour = data.getStringExtra("NEW_START_HOUR"); //hardware bug??
-                newStartMinute = data.getStringExtra("NEW_START_MINUTE");
-                newStartAmOrPm = data.getStringExtra("NEW_START_AM_OR_PM");
-                newEndHour = data.getStringExtra("NEW_END_HOUR");
-                newEndMinute = data.getStringExtra("NEW_END_MINUTE");
-                newEndAmOrPm = data.getStringExtra("NEW_END_AM_OR_PM");
-                day = data.getStringExtra("NEW_DAY");
+                newStartHour = data.getStringExtra("START_HOUR"); //hardware bug??
+                newStartMinute = data.getStringExtra("START_MINUTE");
+                newStartAmOrPm = data.getStringExtra("START_AM_OR_PM");
+                newEndHour = data.getStringExtra("END_HOUR");
+                newEndMinute = data.getStringExtra("END_MINUTE");
+                newEndAmOrPm = data.getStringExtra("END_AM_OR_PM");
+                day = data.getStringExtra("DAY_WEEK");
 
-                    militaryTime.convertStartCivilianTimeToMilitaryTime(newStartHour, newStartMinute, newStartAmOrPm);
-                    militaryTime.convertEndCivilianTimeToMilitaryTime(newEndHour, newEndMinute, newEndAmOrPm);
+                militaryTime.convertStartCivilianTimeToMilitaryTime(newStartHour, newStartMinute, newStartAmOrPm);
+                militaryTime.convertEndCivilianTimeToMilitaryTime(newEndHour, newEndMinute, newEndAmOrPm);
 
-                    //----DUPLICATE??? ------------------------------------------------------------
-                    /*alarmTimer.setAlarmTime(this,
-                            day,
-                            militaryTime.getStartMilitaryHour(),
-                            militaryTime.getStartMilitaryMinute());
-                    */
-
-                    //long startTime = dayNotification.convertToStartTime(militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute());
-                    //long endTime = dayNotification.convertToEndTime(militaryTime.getEndMilitaryHour(), militaryTime.getEndMilitaryMinute());
-                    //long currentTime = dayNotification.getCurrentTime();
-                    //dayNotification.setNewNotificationDisplay(day, startTime, endTime, currentTime);
-
-                    dayNotification.setNotificationDisplay(day, militaryTime);
+                dayNotification dayNotification = new dayNotification(getApplicationContext());
+                dayNotification.setNotificationDisplay(day, militaryTime);
 
 
-                } /*else {
-                    newStartHour = week.get(currentHours - 1).get(WorkReaderContract.WorkEntry.START_HOUR);
-                    newStartMinute = week.get(currentHours - 1).get(WorkReaderContract.WorkEntry.START_MINUTE);
-                    newStartAmOrPm = week.get(currentHours - 1).get(WorkReaderContract.WorkEntry.START_AM_OR_PM);
-                    newEndHour = week.get(currentHours - 1).get(WorkReaderContract.WorkEntry.END_HOUR);
-                    newEndMinute = week.get(currentHours - 1).get(WorkReaderContract.WorkEntry.END_MINUTE);
-                    newEndAmOrPm = week.get(currentHours - 1).get(WorkReaderContract.WorkEntry.END_AM_OR_PM);
-                    day = week.get(currentHours - 1).get(0);
+            } else if (resultCode == WorkReaderContract.WorkEntry.RESULT_OKAY_UPDATE_WORK_ALARM_TIME) {
 
-                    militaryTime.convertStartCivilianTimeToMilitaryTime(newStartHour, newStartMinute, newStartAmOrPm);
-                    militaryTime.convertEndCivilianTimeToMilitaryTime(newEndHour, newEndMinute, newEndAmOrPm);
-                    alarmTimer.setSavedAlarmTime(this,
-                            day,
-                            militaryTime.getStartMilitaryHour(),
-                            militaryTime.getStartMilitaryMinute(),
-                            true);
+                dayNotification dayNotification = new dayNotification(getApplicationContext());
+                currentHours = dayNotification.handleThirdShift();
+                militaryTime.convertStartCivilianTimeToMilitaryTime(
+                        dayNotification.getStartMilitaryHour() + "",
+                        dayNotification.getStartMilitaryMinute() +"",
+                        dayNotification.getStartAmOrPm() +"");
+                militaryTime.convertEndCivilianTimeToMilitaryTime(
+                        dayNotification.getEndMilitaryHour() +"",
+                        dayNotification.getEndMilitaryMinute() +"",
+                        dayNotification.getEndAmOrPm() +"");
 
-                    dayNotification.displayNotification(alarmTimer, "ALARM (ON ACTIVITY RESULT)");
-                    //save current schedule in shared pref?
-                }*/
-
+                dayNotification.setNotificationDisplay("NONE", militaryTime);
+            }
 
         }
-        //editor.apply();
-        //newStartDay = week.get(weekPosition).get(0); //BUG  -- DEFAULTS TO SUNDAY
-        //newStartDay = week.get(newPosition).get(0);
-        //data.getStringExtra(getString(R.string.DAY_OF_WEEK)); //CORRECTED VERSION/
 
         //Yes I know this sucks.
             switch (newPosition) {

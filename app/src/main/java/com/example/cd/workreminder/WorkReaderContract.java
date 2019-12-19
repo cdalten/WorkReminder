@@ -49,5 +49,6 @@ public final class WorkReaderContract {
         public static final int RESULT_OK_WORK = 1; //Added on 11 - 12 - 2019
         public static final int RESULT_FAILED = 2;
         public static final int RESULT_OKAY_NO_WORK = 3; //Added on 11 - 13 - 2019
+        public static final int RESULT_OKAY_UPDATE_WORK_ALARM_TIME = 4; //Added on 12 - 19 - 2019
     }
 }//end class

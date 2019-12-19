@@ -31,9 +31,18 @@ public class WorkPreferences extends AppCompatActivity {
     private Intent i;
     private SharedPreferences pref;
     private int newAlarmTime; //Added on 10 - 28 - 2019
-    private int currentDay = 0; //Added on 12 - 17 - 2019
 
     private Button save; //Added on 6 - 24 - 2019
+
+    private static int currentDay = 0;
+    private static String startHour = ""; //Added on 12 - 19 - 2019
+    private static String startMinute = "";
+    private static String startAmOrPm = "";
+    private static String endHour = "";
+    private static String endMinute = "";
+    private static String endAmOrPm = "";
+    private static String newDay = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +56,17 @@ public class WorkPreferences extends AppCompatActivity {
         //currentPassword = (EditText) findViewById(R.id.currentPassword);
         save = (Button) findViewById(R.id.save);
         i = getIntent();
+
+        //Because inner classes in Java are the worst thing since pantyhose
+        /*currentDay = i.getIntExtra("CURRENT_DAY", -99);
+        startHour =i.getStringExtra("START_HOUR");
+        startMinute = i.getStringExtra("START_MINUTE");
+        startAmOrPm = i.getStringExtra("START_AM_OR_PM");
+        endHour = i.getStringExtra("END_HOUR");
+        endMinute = i.getStringExtra("END_MINUTE");
+        endAmOrPm = i.getStringExtra("END_AM_OR_PM");
+        newDay = i.getStringExtra("NEW_DAY");
+        */
 
         pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
         newAlarmTime = pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT);
@@ -64,15 +84,27 @@ public class WorkPreferences extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                i.getIntExtra("CURRENT_DAY", -99);
-                i.getStringExtra("NEW_START_HOUR");
-                i.getStringExtra("NEW_START_MINUTE");
-                i.getStringExtra("NEW_START_AM_OR_PM");
-                i.getStringExtra("NEW_END_HOUR");
-                i.getStringExtra("NEW_END_MINUTE");
-                i.getStringExtra("NEW_END_AM_OR_PM");
-                i.getStringExtra("NEW_DAY");
 
+                //Intent intent = new Intent();
+                /*i.getIntExtra("CURRENT_DAY", -99);
+                i.getStringExtra("START_HOUR");
+                i.getStringExtra("START_MINUTE");
+                i.getStringExtra("START_AM_OR_PM");
+                i.getStringExtra("END_HOUR");
+                i.getStringExtra("END_MINUTE");
+                i.getStringExtra("END_AM_OR_PM");
+                i.getStringExtra("NEW_DAY");
+                */
+
+                /*i.putExtra("CURRENT_DAY", currentDay);
+                i.putExtra("START_HOUR", startHour);
+                i.putExtra("START_MINUTE", startMinute);
+                i.putExtra("START_AM_OR_PM", startAmOrPm);
+                i.putExtra("END_HOUR", endHour);
+                i.putExtra("END_MINUTE", endMinute);
+                i.putExtra("END_AM_OR_PM", endAmOrPm);
+                i.putExtra("NEW_DAY", newDay);
+                */
 
                 String updateTime = alarmMinutesPreference.getText().toString().trim();
 
@@ -95,7 +127,7 @@ public class WorkPreferences extends AppCompatActivity {
                 //editPref.putInt("NEW_DOWNLOAD_DATE", 3);
                 //editPref.apply(); //??
 
-                setResult(1, i);
+                setResult(WorkReaderContract.WorkEntry.RESULT_OKAY_UPDATE_WORK_ALARM_TIME, i);
                 finish();
             }
         });

@@ -283,13 +283,13 @@ public class dayNotification extends AppCompatActivity {
     {
 
         setDayOfWeek(dayOfWeek);
-        //I'm not that sure that I need thse methodds
         setStartMilitaryHour(militaryTime.getStartMilitaryHour());
         setStartMilitaryMinute(militaryTime.getStartMilitaryMinute());
         setStartAmOrPm(militaryTime.getStartAmOrPm());
         setEndMilitaryHour(militaryTime.getEndMilitaryHour());
         setEndMilitaryMinute(militaryTime.getEndMilitaryMinute());
         setEndAmOrPm(militaryTime.getEndAmOrPm());
+
 
         long startTime = convertToStartTime(militaryTime.getStartMilitaryHour(),militaryTime.getStartMilitaryMinute());
         long endTime = convertToEndTime(militaryTime.getEndMilitaryHour(), militaryTime.getEndMilitaryMinute());
@@ -359,7 +359,7 @@ public class dayNotification extends AppCompatActivity {
         this.dayOfWeek = dayOfWeek;
     }
 
-    private String getDayOfWeek() {
+    public String getDayOfWeek() {
         return this.dayOfWeek;
     }
 
@@ -409,6 +409,9 @@ public class dayNotification extends AppCompatActivity {
 
     public int getEndMilitaryMinute() {
         return this.endMilitaryMinute;
+    }
+    public String getEndAmOrPm() {
+        return this.endAmOrPm;
     }
     //Added on 10 - 11 - 2019
     private String buildAlarmTimeFormatDisplay(String dayOfWeek, int hour, int minute, String amOrPm) {

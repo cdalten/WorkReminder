@@ -116,7 +116,7 @@ public class DayMonday extends FragmentActivity {
                 Log.e(PRODUCTION_TAG, "THE DAY OF THE WEEK IS: " + position);
 
                 //intent.putExtra("CURRENT_DAY", WorkReaderContract.WorkEntry.MONDAY);
-                intent.putExtra(getString(R.string.DAY_OF_WEEK),  parent.getItemAtPosition(0).toString());
+                intent.putExtra("DAY_WEEK",  parent.getItemAtPosition(0).toString());
                 //setResult(WorkReaderContract.WorkEntry.RESULT_OK_WORK, intent);
             }
 
