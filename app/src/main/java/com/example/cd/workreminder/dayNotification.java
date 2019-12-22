@@ -65,6 +65,13 @@ public class dayNotification extends AppCompatActivity {
     private String endAmOrPm = "";
     private  MilitaryTime militaryTime; //Added on 12 - 18 - 2019
 
+    private String newDayOfWeekStartHour = ""; //Added on 12 - 22 - 2019
+    private String newDayOfWeekStartMinute = "";
+    private String newDayOfWeekStartAmOrPm = "";
+    private String newDayOfWeekEndHour = "";
+    private String newDayOfWeekEndMinute =  "";
+    private String newDayOfWeekEndAmOrPm = "";
+
     public dayNotification() {} //Added on 11 - 22 - 2019
     public dayNotification(Context context) {
         this.context = context;
@@ -190,10 +197,11 @@ public class dayNotification extends AppCompatActivity {
     }
 
 
+
     //Added on 10 - 7 - 2019
     //Do I need the last three args in the function??
     @TargetApi(24)
-    private void setNotification(
+    public void setNotification(
             int dayOfWeek,
             int dayOfWeekStartHour, int dayOfWeekStartMinute, int dayOfWeekStartAmOrPm,
             int dayOfWeekEndHour, int dayOfWeekEndMinute, int dayOfWeekEndAmOrPm,
@@ -201,29 +209,81 @@ public class dayNotification extends AppCompatActivity {
             int endDayOfWeekStartHour, int endDayOfWeekStartMinute, int endDayOfWeekStartAmOrPm
     )
     {
+        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+
+        newDayOfWeekStartHour = pref.getString(context.getString(dayOfWeekStartHour), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT);
+        newDayOfWeekStartMinute = pref.getString(context.getString(dayOfWeekStartMinute), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT);
+        newDayOfWeekStartAmOrPm = pref.getString(context.getString(dayOfWeekStartAmOrPm), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT);
+        newDayOfWeekEndHour = pref.getString(context.getString(dayOfWeekEndHour), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT);
+        newDayOfWeekEndMinute =  pref.getString(context.getString(dayOfWeekEndMinute), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT);
+        newDayOfWeekEndAmOrPm = pref.getString(context.getString(dayOfWeekEndAmOrPm), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT);
+
         militaryTime = MilitaryTime.getInstance();
         //AlarmTimer alarmTimer = AlarmTimer.getInstance();
 
         pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
 
         this.day = pref.getString(context.getString(dayOfWeek), "OFF");
+        setCurrentDay(day);
 
         if (!(pref.getString(context.getString(dayOfWeek), "OFF").equals("OFF"))) {
             //pref.getString( getString(R.string.FRIDAY_START_HOUR), "" );
             militaryTime.convertStartCivilianTimeToMilitaryTime(
-                    pref.getString(context.getString(dayOfWeekStartHour), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
-                    pref.getString(context.getString(dayOfWeekStartMinute), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT),
-                    pref.getString(context.getString(dayOfWeekStartAmOrPm), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
+                    newDayOfWeekStartHour, newDayOfWeekStartMinute, newDayOfWeekStartAmOrPm);
 
             militaryTime.convertEndCivilianTimeToMilitaryTime(
-                    pref.getString(context.getString(dayOfWeekEndHour), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT),
-                    pref.getString(context.getString(dayOfWeekEndMinute), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT),
-                    pref.getString(context.getString(dayOfWeekEndAmOrPm), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
+                    newDayOfWeekEndHour, newDayOfWeekEndMinute, newDayOfWeekEndAmOrPm);
 
             setMilitaryTimeForWorkPreferences(militaryTime);
             setNotificationDisplay(
                     context.getString(dayOfWeek), militaryTime);
         }
+    }
+
+
+    @TargetApi(24)
+    public void setNotification(
+            String dayOfWeek,
+            int dayOfWeekStartHour, int dayOfWeekStartMinute, String dayOfWeekStartAmOrPm,
+            int dayOfWeekEndHour, int dayOfWeekEndMinute, String dayOfWeekEndAmOrPm
+
+    )
+    {
+        newDayOfWeekStartHour = pref.getString(context.getString(dayOfWeekStartHour), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT);
+        newDayOfWeekStartMinute = pref.getString(context.getString(dayOfWeekStartMinute), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT);
+        //newDayOfWeekStartAmOrPm = pref.getString(context.getString(dayOfWeekStartAmOrPm), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT);
+        newDayOfWeekEndHour = pref.getString(context.getString(dayOfWeekEndHour), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT);
+        newDayOfWeekEndMinute =  pref.getString(context.getString(dayOfWeekEndMinute), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT);
+        //newDayOfWeekEndAmOrPm = pref.getString(context.getString(dayOfWeekEndAmOrPm), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT);
+
+        militaryTime = MilitaryTime.getInstance();
+        //AlarmTimer alarmTimer = AlarmTimer.getInstance();
+
+        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+
+        //this.day = pref.getString(context.getString(dayOfWeek), "OFF");
+        setCurrentDay(dayOfWeek);
+
+        if (dayOfWeek.equals("OFF")) {
+            //pref.getString( getString(R.string.FRIDAY_START_HOUR), "" );
+            militaryTime.convertStartCivilianTimeToMilitaryTime(
+                    newDayOfWeekStartHour, newDayOfWeekStartMinute, newDayOfWeekStartAmOrPm);
+
+            militaryTime.convertEndCivilianTimeToMilitaryTime(
+                    newDayOfWeekEndHour, newDayOfWeekEndMinute, newDayOfWeekEndAmOrPm);
+
+            setMilitaryTimeForWorkPreferences(militaryTime);
+            setNotificationDisplay(dayOfWeek, militaryTime);
+        }
+    }
+
+    //Added on 12 - 22 - 2019
+    public void setCurrentDay (String day) {
+        this.day = day;
+    }
+
+    public String getCurrentDay() {
+        return this.day;
     }
 
     //Added on 12 - 18 - 2019
@@ -301,27 +361,25 @@ public class dayNotification extends AppCompatActivity {
             displayNotification("YOU'RE SUPPOSED TO BE AT WORK");
         } else if (currentTime == startTime) {
             alarmTimer.setStartMilitaryHour(alarmTimer.getUpdatedHour());
-            displayNotification(alarmTimer,
+            displayNotification(alarmTimer, false,
                     "ALARM");
 
         } else if (currentTime == endTime) {
             alarmTimer.setStartMilitaryHour(alarmTimer.getStartMilitaryHour());
-            displayNotification(alarmTimer,
+            displayNotification(alarmTimer, false,
                     "ALARM");
         } else {
             //alarmTimer.setStartMilitaryHour(getStartMilitaryHour());
             //alarmTimer.setStartMilitaryMinute(getEndMilitaryMinute());
-            setNewNotificationDisplayAlarm();
-
+            setNewNotificationDisplayAlarm(alarmTimer);
         }
     }
 
     //Added on 10 - 23 - 2019
     //vs trying to overload the current method?
     @TargetApi(24)
-    public void setNewNotificationDisplayAlarm()
+    public void setNewNotificationDisplayAlarm(AlarmTimer alarmTimer)
     {
-        AlarmTimer alarmTimer = AlarmTimer.getInstance();
         alarmTimer.setSavedAlarmTime(context,
                 getDayOfWeek(),
                 getStartMilitaryHour(),
@@ -334,7 +392,8 @@ public class dayNotification extends AppCompatActivity {
     @TargetApi(24)
     public void setAlarm(AlarmTimer alarmTimer)
     {
-        displayNotification(alarmTimer,
+        Log.e(PRODUCTION_TAG, "setAlarm() GOT CALLED");
+        displayNotification(alarmTimer, false,
                 "ALARM");
         //code copied from
         //https://developer.android.com/training/scheduling/alarms
@@ -345,8 +404,8 @@ public class dayNotification extends AppCompatActivity {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, getStartMilitaryHour());
-        calendar.set(Calendar.MINUTE, getStartMilitaryMinute());
+        calendar.set(Calendar.HOUR_OF_DAY, alarmTimer.getUpdatedHour());
+        calendar.set(Calendar.MINUTE, alarmTimer.getUpdatedMinute());
         this.newAlarmTime = calendar.getTime().getTime();
 
         alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
@@ -414,7 +473,25 @@ public class dayNotification extends AppCompatActivity {
         return this.endAmOrPm;
     }
     //Added on 10 - 11 - 2019
-    private String buildAlarmTimeFormatDisplay(String dayOfWeek, int hour, int minute, String amOrPm) {
+    public String buildAlarmTimeFormatDisplay(String dayOfWeek, int hour, int minute, String amOrPm) {
+        String timeFormat = "";
+
+        if (hour == 0) {
+            hour = 12;
+        }
+
+        //Something like 1:5 becomes while 1:05 while something like 1:10 stays 1:10
+        if (minute < 10) {
+            timeFormat = dayOfWeek + " " + hour + ":0" + minute + " " + amOrPm;
+        } else {
+            timeFormat = dayOfWeek + " " + hour + ":" + minute + " " + amOrPm;
+        }
+
+        return timeFormat;
+    }
+
+    //Added on 12 - 20 - 2019 because I can't fucking get the OS to recognize snooze as an it.
+    public String buildAlarmTimeFormatDisplay(String dayOfWeek, int hour, long minute, String amOrPm) {
         String timeFormat = "";
 
         if (hour == 0) {
@@ -448,6 +525,7 @@ public class dayNotification extends AppCompatActivity {
 
     //Added on 10 - 7 - 2019
     public void displayNotification(AlarmTimer alarmTimer,
+                                    boolean amSnoozed,
                                     String notificationTitle) {
         String notificationText = buildAlarmTimeFormatDisplay(
                 alarmTimer.getDayOfWeek(),

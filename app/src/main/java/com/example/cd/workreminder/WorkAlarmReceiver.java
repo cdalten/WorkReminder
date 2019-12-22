@@ -57,10 +57,12 @@ public class WorkAlarmReceiver extends BroadcastReceiver {
         //Log.e("LG_WORK: ", "DEBUG ALARM GOT CALLED");
 
         AlarmTimer alarmTimer = AlarmTimer.getInstance();
+        alarmTimer.getAlarmSnooze();
 
         dayNotification = new dayNotification(context);
         dayNotification.displayNotification(
                 alarmTimer,
+                AlarmIntentService.amSnoozed,
                 "ALARM (ON RECEIVE)");
 
 

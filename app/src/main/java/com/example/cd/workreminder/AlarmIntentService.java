@@ -39,16 +39,16 @@ public class AlarmIntentService extends IntentService {
     public static final String ACTION_SNOOZE =
             "com.example.cd.workreminder.action.SNOOZE";
 
-    private static final long SNOOZE_TIME = TimeUnit.SECONDS.toMinutes(10); //Need to change
+    private static final long SNOOZE_TIME = TimeUnit.SECONDS.toMillis(60); //Need to change
+    public static boolean amSnoozed = false; //Added on 12 - 22 - 2010
 
     private static SharedPreferences pref; //Added on 10 - 29 - 2019
     private static Ringtone ringtone; //Added on 10 - 29 - 2019
     private static Uri uri;
-
+    //private  AlarmTimer alarmTimer; //Added on 12 - 20 - 2019
     public AlarmIntentService() {
         super("AlarmIntentService");
     }
-
 
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -94,13 +94,15 @@ public class AlarmIntentService extends IntentService {
         notificationManagerCompat.cancel(MainActivity.NOTIFICATION_ID);
     }
 
-
     /**
      * Handles action Snooze in the provided background thread.
      */
     private void handleActionSnooze() {
         Log.e(TAG, "handleActionSnooze()");
         Log.e(TAG, "THE RINGTONE INSTANCE IN SNOOZE IS: " + ringtone);
+
+        //alarmTimer = AlarmTimer.getInstance();
+        //alarmTimer.setAlarmSnoooze(SNOOZE_TIME); //Set *before* the thread goes to sleep
 
         // You could use NotificationManager.getActiveNotifications() if you are targeting SDK 23
         // and above, but we are targeting devices with lower SDK API numbers, so we saved the
@@ -127,6 +129,7 @@ public class AlarmIntentService extends IntentService {
             //Log.e(TAG, "THE SNOOZE RINGTONE INSTANCE IS: " + playRingtone());
 
             try {
+                amSnoozed = true;
                 Thread.sleep(SNOOZE_TIME);
             } catch (InterruptedException ex) {
                 Thread.currentThread().interrupt();
@@ -254,12 +257,17 @@ public class AlarmIntentService extends IntentService {
         GlobalNotificationBuilder.setNotificationCompatBuilderInstance(notificationCompatBuilder);
 
         //Handle when app is killed. 10 - 29 - 2019
+        dayNotification dayNotification = new dayNotification();
+        // public String buildAlarmTimeFormatDisplay(String dayOfWeek, int hour, int minute, String amOrPm)
+        //String snoozeDisplayText = dayNotification.buildAlarmTimeFormatDisplay(
+        //        "", 0, alarmTimer.getAlarmSnooze(), ""
+        //);
         notificationCompatBuilder
                 //.setStyle(bigTextStyle)
                 //.setContentTitle(bigTextStyleReminderAppData.getContentTitle())
                 .setContentTitle("TITLE DEBUG MODE")
                 //.setContentText(bigTextStyleReminderAppData.getContentText())
-                .setContentText("CONTENT TITLE DEBUG MODE")
+                .setContentText("ALARM INTENT SERVICE")
                 .setSmallIcon(R.drawable.ic_stat_work)
                 .setLargeIcon(BitmapFactory.decodeResource(
                         getResources(),

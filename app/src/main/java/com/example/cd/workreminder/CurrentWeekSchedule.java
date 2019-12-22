@@ -796,8 +796,6 @@ public class CurrentWeekSchedule extends ListActivity  {
         if (data != null) {
             newPosition = data.getIntExtra("CURRENT_DAY", -99);  //position in listview
             //0 - 6 represent Sun to Sat. 7 represents off. -99 is just to make it work on the hardware
-
-
             if (resultCode == WorkReaderContract.WorkEntry.RESULT_OKAY_NO_WORK) {
                 //dayNotification.displayNotification("ALARM (ON ACTIVITY RESULT)");
                 Log.e(PRODUCTION_TAG, "ALARM CAN'T BE SET");
@@ -833,8 +831,20 @@ public class CurrentWeekSchedule extends ListActivity  {
 
             } else if (resultCode == WorkReaderContract.WorkEntry.RESULT_OKAY_UPDATE_WORK_ALARM_TIME) {
 
-                dayNotification dayNotification = new dayNotification(getApplicationContext());
+                dayNotification dayNotification = new dayNotification(
+                        getApplicationContext());
                 currentHours = dayNotification.handleThirdShift();
+                String day = dayNotification.getCurrentDay();
+                /*dayNotification.setNotification(
+                        day,
+                        dayNotification.getStartMilitaryHour(),
+                        dayNotification.getStartMilitaryMinute(),
+                        dayNotification.getStartAmOrPm(),
+                        dayNotification.getEndMilitaryHour(),
+                        dayNotification.getEndMilitaryMinute(),
+                        dayNotification.getEndAmOrPm()
+                );
+                */
                 militaryTime.convertStartCivilianTimeToMilitaryTime(
                         dayNotification.getStartMilitaryHour() + "",
                         dayNotification.getStartMilitaryMinute() +"",
@@ -844,7 +854,8 @@ public class CurrentWeekSchedule extends ListActivity  {
                         dayNotification.getEndMilitaryMinute() +"",
                         dayNotification.getEndAmOrPm() +"");
 
-                dayNotification.setNotificationDisplay("NONE", militaryTime);
+                dayNotification.setNotificationDisplay(day, militaryTime);
+                dayNotification.setNewNotificationDisplayAlarm(alarmTimer);
             }
 
         }
