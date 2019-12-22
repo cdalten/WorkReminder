@@ -478,24 +478,7 @@ public class dayNotification extends AppCompatActivity {
 
         if (hour == 0) {
             hour = 12;
-        }
-
-        //Something like 1:5 becomes while 1:05 while something like 1:10 stays 1:10
-        if (minute < 10) {
-            timeFormat = dayOfWeek + " " + hour + ":0" + minute + " " + amOrPm;
-        } else {
-            timeFormat = dayOfWeek + " " + hour + ":" + minute + " " + amOrPm;
-        }
-
-        return timeFormat;
-    }
-
-    //Added on 12 - 20 - 2019 because I can't fucking get the OS to recognize snooze as an it.
-    public String buildAlarmTimeFormatDisplay(String dayOfWeek, int hour, long minute, String amOrPm) {
-        String timeFormat = "";
-
-        if (hour == 0) {
-            hour = 12;
+            amOrPm = "PM";
         }
 
         //Something like 1:5 becomes while 1:05 while something like 1:10 stays 1:10
@@ -527,11 +510,20 @@ public class dayNotification extends AppCompatActivity {
     public void displayNotification(AlarmTimer alarmTimer,
                                     boolean amSnoozed,
                                     String notificationTitle) {
-        String notificationText = buildAlarmTimeFormatDisplay(
+        String notificationText = "";
+        if (amSnoozed == false) {
+        notificationText = buildAlarmTimeFormatDisplay(
                 alarmTimer.getDayOfWeek(),
                 alarmTimer.getUpdatedHour(),
                 alarmTimer.getUpdatedMinute(),
                 alarmTimer.getUpdatedStartAmOrPm());
+        } else {
+            notificationText = buildAlarmTimeFormatDisplay(
+                    alarmTimer.getDayOfWeek(),
+                    alarmTimer.getUpdatedHour(),
+                    alarmTimer.getUpdatedMinute() + alarmTimer.getAlarmSnooze(),
+                    alarmTimer.getUpdatedStartAmOrPm());
+        }
 
         //Intent snoozeIntent = new Intent(context, WorkAlarmReceiver.class);
         Intent snoozeIntent = new Intent(context, AlarmIntentService.class);

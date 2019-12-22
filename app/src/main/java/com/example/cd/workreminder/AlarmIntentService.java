@@ -101,8 +101,17 @@ public class AlarmIntentService extends IntentService {
         Log.e(TAG, "handleActionSnooze()");
         Log.e(TAG, "THE RINGTONE INSTANCE IN SNOOZE IS: " + ringtone);
 
-        //alarmTimer = AlarmTimer.getInstance();
-        //alarmTimer.setAlarmSnoooze(SNOOZE_TIME); //Set *before* the thread goes to sleep
+        AlarmTimer alarmTimer = AlarmTimer.getInstance();
+        AlarmIntentService.amSnoozed = true;
+        alarmTimer.setAlarmSnoooze((int)SNOOZE_TIME);
+
+        dayNotification dayNotification = new dayNotification(getApplicationContext());
+        dayNotification.displayNotification(
+                alarmTimer,
+                AlarmIntentService.amSnoozed,
+                "ALARM (INTENT SERVICE)");
+
+        //Set *before* the thread goes to sleep
 
         // You could use NotificationManager.getActiveNotifications() if you are targeting SDK 23
         // and above, but we are targeting devices with lower SDK API numbers, so we saved the

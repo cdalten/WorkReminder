@@ -35,7 +35,8 @@ public class AlarmTimer extends AppCompatActivity {
     private int timeBeforeShift = 0; //Added on 10 - 21 - 2019
     private String dayOfWeek; //Added on 11 - 4 - 2019
     private String updatedAmOrPm = ""; //Added on 12 - 18 - 2019
-    private long snoozeTime = 0; //Added on 12 - 20 - 2019
+    private int snoozeTime = 0; //Added on 12 - 20 - 2019
+    private int milliSecondsToMinutes = 60000; //Added on 12 - 22 - 2019
 
     private static AlarmTimer instance = new AlarmTimer();
 
@@ -109,11 +110,11 @@ public class AlarmTimer extends AppCompatActivity {
     }
 
     //Added on 12 - 20 - 2019
-    public void setAlarmSnoooze(long snoozeTime) {
-        this.snoozeTime = snoozeTime;
+    public void setAlarmSnoooze(int snoozeTime) {
+        this.snoozeTime = snoozeTime/milliSecondsToMinutes;
     }
 
-    public long getAlarmSnooze() {
+    public int getAlarmSnooze() {
         return this.snoozeTime;
     }
 
