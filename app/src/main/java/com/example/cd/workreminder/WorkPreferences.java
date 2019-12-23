@@ -85,27 +85,6 @@ public class WorkPreferences extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                //Intent intent = new Intent();
-                /*i.getIntExtra("CURRENT_DAY", -99);
-                i.getStringExtra("START_HOUR");
-                i.getStringExtra("START_MINUTE");
-                i.getStringExtra("START_AM_OR_PM");
-                i.getStringExtra("END_HOUR");
-                i.getStringExtra("END_MINUTE");
-                i.getStringExtra("END_AM_OR_PM");
-                i.getStringExtra("NEW_DAY");
-                */
-
-                /*i.putExtra("CURRENT_DAY", currentDay);
-                i.putExtra("START_HOUR", startHour);
-                i.putExtra("START_MINUTE", startMinute);
-                i.putExtra("START_AM_OR_PM", startAmOrPm);
-                i.putExtra("END_HOUR", endHour);
-                i.putExtra("END_MINUTE", endMinute);
-                i.putExtra("END_AM_OR_PM", endAmOrPm);
-                i.putExtra("NEW_DAY", newDay);
-                */
-
                 String updateTime = alarmMinutesPreference.getText().toString().trim();
 
                 //if (updateTime == "" || updateTime == null) {

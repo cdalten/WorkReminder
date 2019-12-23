@@ -172,10 +172,15 @@ public class AlarmTimer extends AppCompatActivity {
 
     //Added on 6 - 28 - 2019
     private String getAMorPM (int startMilitaryHour) {
+        /*
+          When the alarm 12:00 PM, and the alarm is set 20 minutes before the shift,
+          we want it to display 11:40 AM.
+         */
         if (startMilitaryHour == 12) {
             return "AM";
         }
 
+        //Same thing, except military time runs from 0 to 23
         if (startMilitaryHour == 0) {
             return "PM";
         }

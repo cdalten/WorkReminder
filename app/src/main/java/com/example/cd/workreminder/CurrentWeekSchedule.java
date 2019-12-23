@@ -801,7 +801,6 @@ public class CurrentWeekSchedule extends ListActivity  {
                 Log.e(PRODUCTION_TAG, "ALARM CAN'T BE SET");
             }
 
-            Calendar cal = Calendar.getInstance();
             if (resultCode == WorkReaderContract.WorkEntry.RESULT_OK_WORK) {
                 //if (newPosition != -99 && newPosition != 7) { //possibly need to remove
 
@@ -830,21 +829,16 @@ public class CurrentWeekSchedule extends ListActivity  {
 
 
             } else if (resultCode == WorkReaderContract.WorkEntry.RESULT_OKAY_UPDATE_WORK_ALARM_TIME) {
-
+                /*
+                  I don't get the current time because I assume when a person sets the alarm to
+                  something like 20 minutes before their shift, they mean for day in question, and not
+                  say, three shifts from now.
+                 */
                 dayNotification dayNotification = new dayNotification(
                         getApplicationContext());
                 currentHours = dayNotification.handleThirdShift();
                 String day = dayNotification.getCurrentDay();
-                /*dayNotification.setNotification(
-                        day,
-                        dayNotification.getStartMilitaryHour(),
-                        dayNotification.getStartMilitaryMinute(),
-                        dayNotification.getStartAmOrPm(),
-                        dayNotification.getEndMilitaryHour(),
-                        dayNotification.getEndMilitaryMinute(),
-                        dayNotification.getEndAmOrPm()
-                );
-                */
+
                 militaryTime.convertStartCivilianTimeToMilitaryTime(
                         dayNotification.getStartMilitaryHour() + "",
                         dayNotification.getStartMilitaryMinute() +"",

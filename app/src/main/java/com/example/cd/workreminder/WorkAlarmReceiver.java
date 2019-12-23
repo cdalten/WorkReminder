@@ -45,19 +45,14 @@ public class WorkAlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        //String alarmUri = intent.getStringExtra("ALARM_RINGTONE");
-        //String alarmUri = intent.getExtras().get("ALARM_RINGTONE").toString();
-        //Uri uri = Uri.parse(alarmUri);
-        //ringtone = RingtoneManager.getRingtone(context.getApplicationContext(), uri);
-
-        //Uri uri = Uri.parse(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM).toString());
-        //ringtone = RingtoneManager.getRingtone(context.getApplicationContext(), uri);
-
-        //Log.e("WORK ALARM RECEIVER", "THE WORK ALARM RECEIVER INSTANCE IS: " + ringtone);
-        //Log.e("LG_WORK: ", "DEBUG ALARM GOT CALLED");
 
         AlarmTimer alarmTimer = AlarmTimer.getInstance();
         alarmTimer.getAlarmSnooze();
+
+        //Otherwise the alarm will delay by a few minutes when the app first starts on reboot
+        if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
+            //Set the alarm here??
+        }
 
         dayNotification = new dayNotification(context);
         dayNotification.displayNotification(
@@ -68,10 +63,6 @@ public class WorkAlarmReceiver extends BroadcastReceiver {
 
         Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
 
-        //Intent i = new Intent(context, dayNotification.class);
-        //i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        //i.putExtra("ALARM_RINGTONE", alarmUri);
-        //context.startActivity(i);
 
         if (alarmUri == null) {
             alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);

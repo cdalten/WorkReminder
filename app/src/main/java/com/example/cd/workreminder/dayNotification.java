@@ -241,42 +241,6 @@ public class dayNotification extends AppCompatActivity {
     }
 
 
-    @TargetApi(24)
-    public void setNotification(
-            String dayOfWeek,
-            int dayOfWeekStartHour, int dayOfWeekStartMinute, String dayOfWeekStartAmOrPm,
-            int dayOfWeekEndHour, int dayOfWeekEndMinute, String dayOfWeekEndAmOrPm
-
-    )
-    {
-        newDayOfWeekStartHour = pref.getString(context.getString(dayOfWeekStartHour), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT);
-        newDayOfWeekStartMinute = pref.getString(context.getString(dayOfWeekStartMinute), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT);
-        //newDayOfWeekStartAmOrPm = pref.getString(context.getString(dayOfWeekStartAmOrPm), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT);
-        newDayOfWeekEndHour = pref.getString(context.getString(dayOfWeekEndHour), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT);
-        newDayOfWeekEndMinute =  pref.getString(context.getString(dayOfWeekEndMinute), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT);
-        //newDayOfWeekEndAmOrPm = pref.getString(context.getString(dayOfWeekEndAmOrPm), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT);
-
-        militaryTime = MilitaryTime.getInstance();
-        //AlarmTimer alarmTimer = AlarmTimer.getInstance();
-
-        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
-
-        //this.day = pref.getString(context.getString(dayOfWeek), "OFF");
-        setCurrentDay(dayOfWeek);
-
-        if (dayOfWeek.equals("OFF")) {
-            //pref.getString( getString(R.string.FRIDAY_START_HOUR), "" );
-            militaryTime.convertStartCivilianTimeToMilitaryTime(
-                    newDayOfWeekStartHour, newDayOfWeekStartMinute, newDayOfWeekStartAmOrPm);
-
-            militaryTime.convertEndCivilianTimeToMilitaryTime(
-                    newDayOfWeekEndHour, newDayOfWeekEndMinute, newDayOfWeekEndAmOrPm);
-
-            setMilitaryTimeForWorkPreferences(militaryTime);
-            setNotificationDisplay(dayOfWeek, militaryTime);
-        }
-    }
-
     //Added on 12 - 22 - 2019
     public void setCurrentDay (String day) {
         this.day = day;
@@ -330,7 +294,6 @@ public class dayNotification extends AppCompatActivity {
         return cal.getTime().getTime();
     }
 
-
     //Added on 11 - 2  2019
     //Reason 1007 why Java sucks massive dick. Fuck Java. Fuck OOP. And fuck this cold weather.
     public long getNewAlarmTime() {
@@ -369,6 +332,7 @@ public class dayNotification extends AppCompatActivity {
             displayNotification(alarmTimer, false,
                     "ALARM");
         } else {
+
             //alarmTimer.setStartMilitaryHour(getStartMilitaryHour());
             //alarmTimer.setStartMilitaryMinute(getEndMilitaryMinute());
             setNewNotificationDisplayAlarm(alarmTimer);
@@ -380,6 +344,10 @@ public class dayNotification extends AppCompatActivity {
     @TargetApi(24)
     public void setNewNotificationDisplayAlarm(AlarmTimer alarmTimer)
     {
+        /*
+         need to shift time to calculate the time time based on the minutes set
+         before the start the start of the minutes
+         */
         alarmTimer.setSavedAlarmTime(context,
                 getDayOfWeek(),
                 getStartMilitaryHour(),
@@ -392,7 +360,7 @@ public class dayNotification extends AppCompatActivity {
     @TargetApi(24)
     public void setAlarm(AlarmTimer alarmTimer)
     {
-        Log.e(PRODUCTION_TAG, "setAlarm() GOT CALLED");
+
         displayNotification(alarmTimer, false,
                 "ALARM");
         //code copied from
@@ -404,12 +372,17 @@ public class dayNotification extends AppCompatActivity {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
+        /*
+          Time changes when the user changes the time before shift from something like
+          20 minutes before the start of the shift to something like 10 minutes before
+          the start of a shift.
+         */
         calendar.set(Calendar.HOUR_OF_DAY, alarmTimer.getUpdatedHour());
         calendar.set(Calendar.MINUTE, alarmTimer.getUpdatedMinute());
         this.newAlarmTime = calendar.getTime().getTime();
 
         alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                1000 * 60 * 20, alarmIntent);
+                1000 * 60 * alarmTimer.getAlarmSnooze(), alarmIntent);
 
     }
 
@@ -476,12 +449,19 @@ public class dayNotification extends AppCompatActivity {
     public String buildAlarmTimeFormatDisplay(String dayOfWeek, int hour, int minute, String amOrPm) {
         String timeFormat = "";
 
-        if (hour == 0) {
+        /*
+          When the Alarm is set to something like 12:15 PM, and the alarm is set 15 minutes before,
+          we want it to show 12:00 PM
+         */
+        if ((hour == 0) && amOrPm.equals("AM") ) {
             hour = 12;
             amOrPm = "PM";
+        } else  if ((hour == 0) && amOrPm.equals("PM") ) {
+            hour = 12;
+            amOrPm = "AM";
         }
 
-        //Something like 1:5 becomes while 1:05 while something like 1:10 stays 1:10
+        //Something like 1:5 PM becomes while 1:05 PM while something like 1:10 PM stays 1:10 PM
         if (minute < 10) {
             timeFormat = dayOfWeek + " " + hour + ":0" + minute + " " + amOrPm;
         } else {
