@@ -849,7 +849,7 @@ public class CurrentWeekSchedule extends ListActivity  {
                         dayNotification.getEndAmOrPm() +"");
 
                 dayNotification.setNotificationDisplay(day, militaryTime);
-                dayNotification.setNewNotificationDisplayAlarm(alarmTimer);
+                //dayNotification.setNewNotificationDisplayAlarm(alarmTimer);
             }
 
         }

@@ -105,11 +105,12 @@ public class AlarmIntentService extends IntentService {
         AlarmIntentService.amSnoozed = true;
         alarmTimer.setAlarmSnoooze((int)SNOOZE_TIME);
 
-        dayNotification dayNotification = new dayNotification(getApplicationContext());
+        /*dayNotification dayNotification = new dayNotification(getApplicationContext());
         dayNotification.displayNotification(
                 alarmTimer,
                 AlarmIntentService.amSnoozed,
                 "ALARM (INTENT SERVICE)");
+                */
 
         //Set *before* the thread goes to sleep
 

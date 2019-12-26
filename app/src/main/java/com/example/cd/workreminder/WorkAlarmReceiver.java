@@ -30,6 +30,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.lang.reflect.Method;
 
@@ -38,6 +39,7 @@ public class WorkAlarmReceiver extends BroadcastReceiver {
     public static final String ACTION_DISMISS = "com.example.cd.workreminder.action.DISMISS";
     public static final String ACTION_SNOOZE = "com.example.cd.workreminder.action.SNOOZE";
 
+
     private dayNotification dayNotification; //Added on 10 - 31 - 2019
     private SharedPreferences pref; //Added on 11 - 4 - 2019
     private Ringtone ringtone;
@@ -45,24 +47,40 @@ public class WorkAlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-
+        Log.e("PRODUCTION TAG", "WORK ALARM RECEIVER GOT CALLED WITH: " + intent.getAction());
+        Log.e("PRODUCTION TAG", "WORK ALARM RECEIVER GOT CALLED WITH: " + intent.getExtras());
         AlarmTimer alarmTimer = AlarmTimer.getInstance();
-        alarmTimer.getAlarmSnooze();
-
-        //Otherwise the alarm will delay by a few minutes when the app first starts on reboot
-        if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
-            //Set the alarm here??
-        }
 
         dayNotification = new dayNotification(context);
+        dayNotification.setAlarm(alarmTimer);
         dayNotification.displayNotification(
                 alarmTimer,
                 AlarmIntentService.amSnoozed,
                 "ALARM (ON RECEIVE)");
 
+        /*
+         Otherwise the alarm won't fire when the user changes the alarm time after the device after
+         the phone reboots. More info on this can be found at...
+         https://developer.android.com/training/scheduling/alarms
+         */
+        try {
+            if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
+                Toast.makeText(context, "Boot Detected.", Toast.LENGTH_LONG).show();
+                dayNotification.setAlarm(alarmTimer);
+                dayNotification.displayNotification(
+                        alarmTimer,
+                        AlarmIntentService.amSnoozed,
+                        "ALARM (ON RECEIVE)");
+            }
+        } catch (Exception e) {
+            Log.e("PRODUCTION TAG", "BOOT ERROR IS: " + e);
+        }
 
+
+        /*
+         Because I lose friends if I use a Debbie Gibson ringtone for the alarm notification.
+         */
         Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-
 
         if (alarmUri == null) {
             alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);

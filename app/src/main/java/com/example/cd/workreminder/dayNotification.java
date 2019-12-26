@@ -16,8 +16,10 @@ import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.icu.util.Calendar;
 import android.media.Ringtone;
@@ -72,6 +74,8 @@ public class dayNotification extends AppCompatActivity {
     private String newDayOfWeekEndMinute =  "";
     private String newDayOfWeekEndAmOrPm = "";
 
+    BroadcastReceiver br;
+    IntentFilter intentFilter;
     public dayNotification() {} //Added on 11 - 22 - 2019
     public dayNotification(Context context) {
         this.context = context;
@@ -323,16 +327,16 @@ public class dayNotification extends AppCompatActivity {
         if (currentTime > startTime && currentTime < endTime) {
             displayNotification("YOU'RE SUPPOSED TO BE AT WORK");
         } else if (currentTime == startTime) {
-            alarmTimer.setStartMilitaryHour(alarmTimer.getUpdatedHour());
-            displayNotification(alarmTimer, false,
-                    "ALARM");
-
+            //alarmTimer.setStartMilitaryHour(alarmTimer.getUpdatedHour());
+            //displayNotification(alarmTimer, false,
+            //        "ALARM");
+            displayNotification("YOU'RE SUPPOSED TO BE AT WORK");
         } else if (currentTime == endTime) {
-            alarmTimer.setStartMilitaryHour(alarmTimer.getStartMilitaryHour());
-            displayNotification(alarmTimer, false,
-                    "ALARM");
+            //alarmTimer.setStartMilitaryHour(alarmTimer.getStartMilitaryHour());
+            //displayNotification(alarmTimer, false,
+            //        "ALARM");
+            displayNotification("YOU'RE SUPPOSED TO BE AT WORK");
         } else {
-
             //alarmTimer.setStartMilitaryHour(getStartMilitaryHour());
             //alarmTimer.setStartMilitaryMinute(getEndMilitaryMinute());
             setNewNotificationDisplayAlarm(alarmTimer);
@@ -355,14 +359,29 @@ public class dayNotification extends AppCompatActivity {
                 true
         );
         setAlarm(alarmTimer);
+        //br = new WorkAlarmReceiver();
+        //intentFilter = new IntentFilter();
+        //intentFilter.addAction(Intent.ACTION_BOOT_COMPLETED);
+        //intentFilter.addAction(Intent.ACTION_SEND);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //context.registerReceiver(br, intentFilter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //context.unregisterReceiver(br);
     }
 
     @TargetApi(24)
     public void setAlarm(AlarmTimer alarmTimer)
     {
 
-        displayNotification(alarmTimer, false,
-                "ALARM");
         //code copied from
         //https://developer.android.com/training/scheduling/alarms
         alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
@@ -377,13 +396,19 @@ public class dayNotification extends AppCompatActivity {
           20 minutes before the start of the shift to something like 10 minutes before
           the start of a shift.
          */
-        calendar.set(Calendar.HOUR_OF_DAY, alarmTimer.getUpdatedHour());
-        calendar.set(Calendar.MINUTE, alarmTimer.getUpdatedMinute());
-        this.newAlarmTime = calendar.getTime().getTime();
+        calendar.set(Calendar.HOUR_OF_DAY, alarmTimer.getUpdatedHour(context.getApplicationContext()));
+        calendar.set(Calendar.MINUTE, alarmTimer.getUpdatedMinute(context.getApplicationContext()));
+
+        Log.e(PRODUCTION_TAG, "setAlarm() GOT CALLED WITH HOUR:" + calendar.get(Calendar.HOUR_OF_DAY)
+                + " AND MINUTE:" + alarmTimer.getUpdatedMinute(context.getApplicationContext())
+                + " AND AM/PM:" + alarmTimer.getUpdatedStartAmOrPm(context.getApplicationContext()));
+        //this.newAlarmTime = calendar.getTime().getTime();
 
         alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                 1000 * 60 * alarmTimer.getAlarmSnooze(), alarmIntent);
 
+        displayNotification(alarmTimer, false,
+                "ALARM (AFTER getBroadcast())");
     }
 
     //Added on 12 - 16 - 2019
@@ -493,16 +518,16 @@ public class dayNotification extends AppCompatActivity {
         String notificationText = "";
         if (amSnoozed == false) {
         notificationText = buildAlarmTimeFormatDisplay(
-                alarmTimer.getDayOfWeek(),
-                alarmTimer.getUpdatedHour(),
-                alarmTimer.getUpdatedMinute(),
-                alarmTimer.getUpdatedStartAmOrPm());
+                alarmTimer.getDayOfWeek(context.getApplicationContext()),
+                alarmTimer.getUpdatedHour(context.getApplicationContext()),
+                alarmTimer.getUpdatedMinute(context.getApplicationContext()),
+                alarmTimer.getUpdatedStartAmOrPm(context.getApplicationContext()));
         } else {
             notificationText = buildAlarmTimeFormatDisplay(
-                    alarmTimer.getDayOfWeek(),
-                    alarmTimer.getUpdatedHour(),
-                    alarmTimer.getUpdatedMinute() + alarmTimer.getAlarmSnooze(),
-                    alarmTimer.getUpdatedStartAmOrPm());
+                    alarmTimer.getDayOfWeek(context.getApplicationContext()),
+                    alarmTimer.getUpdatedHour(context.getApplicationContext()),
+                    alarmTimer.getUpdatedMinute(context.getApplicationContext()) + alarmTimer.getAlarmSnooze(),
+                    alarmTimer.getUpdatedStartAmOrPm(context.getApplicationContext()));
         }
 
         //Intent snoozeIntent = new Intent(context, WorkAlarmReceiver.class);
@@ -511,7 +536,7 @@ public class dayNotification extends AppCompatActivity {
         snoozeIntent.setAction(WorkAlarmReceiver.ACTION_SNOOZE);
 
         //Uri uri = Uri.parse(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM).toString());
-        //ringtone = RingtoneManager.getRingtone(context.getApplicationContext(), uri);
+        //ringtone = RingtoneManager.getRingtone(context.context.getApplicationContext(), uri);
         snoozeIntent.putExtra("ALARM_RINGTONE", RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
         //snoozeIntent.putExtra("ALARM_RINGTONE", ringtone);
         //snoozeIntent.putExtra("ACTION_SNOOZE", "ACTION_SNOOZE");

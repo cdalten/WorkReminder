@@ -35,8 +35,9 @@ public class AlarmTimer extends AppCompatActivity {
     private int timeBeforeShift = 0; //Added on 10 - 21 - 2019
     private String dayOfWeek; //Added on 11 - 4 - 2019
     private String updatedAmOrPm = ""; //Added on 12 - 18 - 2019
-    private int snoozeTime = 0; //Added on 12 - 20 - 2019
+    private int snoozeTime = 5; //5 minute default. Added on 12 - 20 - 2019
     private int milliSecondsToMinutes = 60000; //Added on 12 - 22 - 2019
+    //private Context context; //???
 
     private static AlarmTimer instance = new AlarmTimer();
 
@@ -61,6 +62,10 @@ public class AlarmTimer extends AppCompatActivity {
         this.startMilitaryHour = startMilitaryHour;
         updatedAmOrPm = getAMorPM(startMilitaryHour);
 
+        /*
+          The algorithm was taken from a math book that I got from an Elementary School teacher
+          in Oakland. This code is a direct translation found in the 4th grade book.
+         */
         if (timeBeforeShift < 60) {
             newMilitaryHour = startMilitaryHour;
             //endMilitaryMinute = timeBeforeShift;
@@ -150,23 +155,32 @@ public class AlarmTimer extends AppCompatActivity {
     }
 
 
-    public int getUpdatedMinute() {
+    //Needed if the device reboots
+    public int getUpdatedMinute(Context context) {
+        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
         return pref.getInt("MINUTES", 0);
     }
 
-    public int getUpdatedHour() {
+    //ditto
+    public int getUpdatedHour(Context context) {
+        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
         return pref.getInt("HOUR", 0);
     }
 
     //Added on 12 - 18 - 2019
-    public String getUpdatedStartAmOrPm() {
+    public String getUpdatedStartAmOrPm(Context context) {
+        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
         return pref.getString("AMORPM", updatedAmOrPm);
     }
 
     //Added on 11 - 4 - 2019
-    public String getDayOfWeek() { return pref.getString("DAY_OF_WEEK", "");}
+    public String getDayOfWeek(Context context) {
+        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        return pref.getString("DAY_OF_WEEK", "");
+    }
 
     public int getMinutesBeforeShift(Context context) {
+        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
         return pref.getInt(context.getString(R.string.ALARM_MINUTES), 0);
     }
 

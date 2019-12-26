@@ -44,6 +44,11 @@ public class WorkPreferences extends AppCompatActivity {
     private static String newDay = "";
 
 
+    /*
+      The Diazepam, which I use for Vertigo, was making me a bit loopy when I wrote this. So yeah,
+      I don't know the reasoning behind it since I was high at the time. But I don't touch it
+      because the shit don't break.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,16 +62,6 @@ public class WorkPreferences extends AppCompatActivity {
         save = (Button) findViewById(R.id.save);
         i = getIntent();
 
-        //Because inner classes in Java are the worst thing since pantyhose
-        /*currentDay = i.getIntExtra("CURRENT_DAY", -99);
-        startHour =i.getStringExtra("START_HOUR");
-        startMinute = i.getStringExtra("START_MINUTE");
-        startAmOrPm = i.getStringExtra("START_AM_OR_PM");
-        endHour = i.getStringExtra("END_HOUR");
-        endMinute = i.getStringExtra("END_MINUTE");
-        endAmOrPm = i.getStringExtra("END_AM_OR_PM");
-        newDay = i.getStringExtra("NEW_DAY");
-        */
 
         pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
         newAlarmTime = pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT);
@@ -106,6 +101,11 @@ public class WorkPreferences extends AppCompatActivity {
                 //editPref.putInt("NEW_DOWNLOAD_DATE", 3);
                 //editPref.apply(); //??
 
+                /*
+                  This is done because I don't want the notification calls to be spread across a
+                  bunch of different files. Yeah, this might suck. But it makes debugging 10x
+                  easier.
+                 */
                 setResult(WorkReaderContract.WorkEntry.RESULT_OKAY_UPDATE_WORK_ALARM_TIME, i);
                 finish();
             }

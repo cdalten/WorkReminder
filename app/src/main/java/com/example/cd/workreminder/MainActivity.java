@@ -278,6 +278,10 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         }
     }
 
+    /*
+      getActiveNetworkInfo(), finishDownloading(), and startDownload() code ripped off from the
+      office Google sample Google Android sample code.
+     */
     @Override
     public NetworkInfo getActiveNetworkInfo() {
         ConnectivityManager connectivityManager =
