@@ -22,6 +22,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class WorkPreferences extends AppCompatActivity {
     Spinner dayPreference;
@@ -33,15 +34,6 @@ public class WorkPreferences extends AppCompatActivity {
     private int newAlarmTime; //Added on 10 - 28 - 2019
 
     private Button save; //Added on 6 - 24 - 2019
-
-    private static int currentDay = 0;
-    private static String startHour = ""; //Added on 12 - 19 - 2019
-    private static String startMinute = "";
-    private static String startAmOrPm = "";
-    private static String endHour = "";
-    private static String endMinute = "";
-    private static String endAmOrPm = "";
-    private static String newDay = "";
 
 
     /*
@@ -82,10 +74,13 @@ public class WorkPreferences extends AppCompatActivity {
 
                 String updateTime = alarmMinutesPreference.getText().toString().trim();
 
-                //if (updateTime == "" || updateTime == null) {
-                if (updateTime.equals("")) {
+                if (updateTime.equals("") || updateTime == null ||
+                        Integer.parseInt(updateTime) < 0 ||
+                        Integer.parseInt(updateTime) > 720
+                        )
+                {
                     updateTime =  pref.getString("NEW_ALARM_TIME", "20");
-
+                    Toast.makeText(getApplicationContext(), "Invalid Input.", Toast.LENGTH_LONG).show();
                 }
                 alarmMinutesPreference.setText(updateTime);
 
@@ -114,6 +109,13 @@ public class WorkPreferences extends AppCompatActivity {
 
     }//end onCreate()
 
+
+    //Copied from stackoverflow
+    private boolean isValid(String str) {
+        //if (str.length() != 1) return false;
+        char c = Character.toLowerCase(str.charAt(0));
+        return c >= 'a' && c <= 'z';
+    }
 
     @Override
     public void onBackPressed() {

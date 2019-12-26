@@ -324,21 +324,23 @@ public class dayNotification extends AppCompatActivity {
 
         AlarmTimer alarmTimer = AlarmTimer.getInstance();
 
-        if (currentTime > startTime && currentTime < endTime) {
-            displayNotification("YOU'RE SUPPOSED TO BE AT WORK");
-        } else if (currentTime == startTime) {
-            //alarmTimer.setStartMilitaryHour(alarmTimer.getUpdatedHour());
-            //displayNotification(alarmTimer, false,
-            //        "ALARM");
-            displayNotification("YOU'RE SUPPOSED TO BE AT WORK");
-        } else if (currentTime == endTime) {
-            //alarmTimer.setStartMilitaryHour(alarmTimer.getStartMilitaryHour());
-            //displayNotification(alarmTimer, false,
-            //        "ALARM");
-            displayNotification("YOU'RE SUPPOSED TO BE AT WORK");
+        /*
+         For all you people who have never experienced working third shift for a drunk pervert,
+         third shift usually starts at 12 AM on the NEXT day.
+         */
+        if (militaryTime.getStartMilitaryHour() == 12 && !militaryTime.getStartAmOrPm().equals("AM")) {
+            if (currentTime > startTime && currentTime < endTime) {
+                displayNotification("YOU'RE SUPPOSED TO BE AT WORK");
+            } else if (currentTime == startTime) {
+                displayNotification("YOU'RE SUPPOSED TO BE AT WORK");
+            } else if (currentTime == endTime) {
+                displayNotification("YOU'RE SUPPOSED TO BE AT WORK");
+            } else {
+                //alarmTimer.setStartMilitaryHour(getStartMilitaryHour());
+                //alarmTimer.setStartMilitaryMinute(getEndMilitaryMinute());
+                setNewNotificationDisplayAlarm(alarmTimer);
+            }
         } else {
-            //alarmTimer.setStartMilitaryHour(getStartMilitaryHour());
-            //alarmTimer.setStartMilitaryMinute(getEndMilitaryMinute());
             setNewNotificationDisplayAlarm(alarmTimer);
         }
     }
