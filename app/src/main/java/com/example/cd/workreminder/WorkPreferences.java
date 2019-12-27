@@ -74,7 +74,15 @@ public class WorkPreferences extends AppCompatActivity {
 
                 String updateTime = alarmMinutesPreference.getText().toString().trim();
 
-                if (updateTime.equals("") || updateTime == null ||
+                /*
+                  Because every other forced updated seems to undo my XML preference settings.
+                 */
+                if (isValid(updateTime)) {
+                    updateTime =  pref.getString("NEW_ALARM_TIME", "20");
+                    Toast.makeText(getApplicationContext(), "Invalid Input.", Toast.LENGTH_LONG).show();
+                }
+
+                else if (updateTime.equals("") || updateTime == null ||
                         Integer.parseInt(updateTime) < 0 ||
                         Integer.parseInt(updateTime) > 720
                         )
