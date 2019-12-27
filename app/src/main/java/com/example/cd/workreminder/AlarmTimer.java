@@ -37,7 +37,8 @@ public class AlarmTimer extends AppCompatActivity {
     private String updatedAmOrPm = ""; //Added on 12 - 18 - 2019
     private int snoozeTime = 5; //5 minute default. Added on 12 - 20 - 2019
     private int milliSecondsToMinutes = 60000; //Added on 12 - 22 - 2019
-    //private Context context; //???
+    private String currenDayOfWeek = ""; //Added on 12 - 27 - 2019
+    private String previousDayOfWeek = "";
 
     private static AlarmTimer instance = new AlarmTimer();
 
@@ -112,6 +113,33 @@ public class AlarmTimer extends AppCompatActivity {
         SharedPreferences.Editor editor = pref.edit();
         editor.putInt(context.getString(R.string.ALARM_MINUTES),minutesBeforeShift);
         editor.apply();
+    }
+
+
+    //Added on 12 - 27 - 2019
+    //Just a lame attempt at database emulation, since like, this app doesn't use a database.
+    void saveCurrentDayOfWeek(Context context, String currentDayOfWeek){
+        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("CURRENT_DAY", currentDayOfWeek);
+        editor.apply();
+    }
+
+    public String getCurrentSavedDayOfWeek(Context context) {
+        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        return pref.getString("CURRENT_DAY", "");
+    }
+
+    void savePreviousDayOfWeek(Context context, String previousDayOfWeek){
+        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("PREVIOUS_DAY", previousDayOfWeek);
+        editor.apply();
+    }
+
+    public String getPreviousDayOfWeekSavedDayOfWeek(Context context) {
+        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        return pref.getString("PREVIOUS_DAY", "");
     }
 
     //Added on 12 - 20 - 2019

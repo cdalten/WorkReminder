@@ -73,6 +73,7 @@ public class dayNotification extends AppCompatActivity {
     private String newDayOfWeekEndHour = "";
     private String newDayOfWeekEndMinute =  "";
     private String newDayOfWeekEndAmOrPm = "";
+    private String previousDay = ""; //Added on 12 - 27 - 2019
 
     BroadcastReceiver br;
     IntentFilter intentFilter;
@@ -104,6 +105,7 @@ public class dayNotification extends AppCompatActivity {
                     R.string.SUNDAY_END_MINUTE,
                     R.string.SUNDAY_END_AM_OR_PM,
 
+                    "SATURDAY",
                     R.string.MONDAY_START_HOUR,
                     R.string.MONDAY_START_MINUTE,
                     R.string.MONDAY_START_AM_OR_PM
@@ -119,6 +121,7 @@ public class dayNotification extends AppCompatActivity {
                     R.string.MONDAY_END_MINUTE,
                     R.string.MONDAY_END_AM_OR_PM,
 
+                    "SUNDAY",
                     R.string.TUESDAY_START_HOUR,
                     R.string.TUESDAY_START_MINUTE,
                     R.string.TUESDAY_START_AM_OR_PM
@@ -133,6 +136,7 @@ public class dayNotification extends AppCompatActivity {
                     R.string.TUESDAY_END_MINUTE,
                     R.string.TUESDAY_END_AM_OR_PM,
 
+                    "MONDAY",
                     R.string.WEDNESDAY_START_HOUR,
                     R.string.WEDNESDAY_START_MINUTE,
                     R.string.WEDNESDAY_START_AM_OR_PM
@@ -147,6 +151,7 @@ public class dayNotification extends AppCompatActivity {
                     R.string.WEDNESDAY_END_MINUTE,
                     R.string.WEDNESDAY_END_AM_OR_PM,
 
+                    "TUESDAY",
                     R.string.THURSDAY_START_HOUR,
                     R.string.THURSDAY_START_MINUTE,
                     R.string.THURSDAY_START_AM_OR_PM
@@ -161,6 +166,7 @@ public class dayNotification extends AppCompatActivity {
                     R.string.THURSDAY_END_MINUTE,
                     R.string.THURSDAY_END_AM_OR_PM,
 
+                    "WEDNESDAY",
                     R.string.FRIDAY_START_HOUR,
                     R.string.FRIDAY_START_MINUTE,
                     R.string.FRIDAY_START_AM_OR_PM
@@ -176,6 +182,7 @@ public class dayNotification extends AppCompatActivity {
                     R.string.FRIDAY_END_MINUTE,
                     R.string.FRIDAY_END_AM_OR_PM,
 
+                    "THURSDAY",
                     R.string.SATURDAY_START_HOUR,
                     R.string.SATURDAY_START_MINUTE,
                     R.string.SATURDAY_START_AM_OR_PM
@@ -191,6 +198,7 @@ public class dayNotification extends AppCompatActivity {
                     R.string.SATURDAY_END_MINUTE,
                     R.string.SATURDAY_END_AM_OR_PM,
 
+                    "FRIDAY",
                     R.string.SUNDAY_START_HOUR,
                     R.string.SUNDAY_START_MINUTE,
                     R.string.SUNDAY_START_AM_OR_PM
@@ -201,15 +209,15 @@ public class dayNotification extends AppCompatActivity {
     }
 
 
-
     //Added on 10 - 7 - 2019
     //Do I need the last three args in the function??
     @TargetApi(24)
     public void setNotification(
-            int dayOfWeek,
+            int currentDayOfWeek,
             int dayOfWeekStartHour, int dayOfWeekStartMinute, int dayOfWeekStartAmOrPm,
             int dayOfWeekEndHour, int dayOfWeekEndMinute, int dayOfWeekEndAmOrPm,
 
+            String previousDay,
             int endDayOfWeekStartHour, int endDayOfWeekStartMinute, int endDayOfWeekStartAmOrPm
     )
     {
@@ -223,14 +231,16 @@ public class dayNotification extends AppCompatActivity {
         newDayOfWeekEndAmOrPm = pref.getString(context.getString(dayOfWeekEndAmOrPm), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT);
 
         militaryTime = MilitaryTime.getInstance();
-        //AlarmTimer alarmTimer = AlarmTimer.getInstance();
+        AlarmTimer alarmTimer = AlarmTimer.getInstance();
 
         pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
 
-        this.day = pref.getString(context.getString(dayOfWeek), "OFF");
-        setCurrentDay(day);
+        this.day = pref.getString(context.getString(currentDayOfWeek), "OFF");
 
-        if (!(pref.getString(context.getString(dayOfWeek), "OFF").equals("OFF"))) {
+        alarmTimer.saveCurrentDayOfWeek(context.getApplicationContext(),day);
+        alarmTimer.savePreviousDayOfWeek(context.getApplicationContext(),previousDay);
+
+        if (!(pref.getString(context.getString(currentDayOfWeek), "OFF").equals("OFF"))) {
             //pref.getString( getString(R.string.FRIDAY_START_HOUR), "" );
             militaryTime.convertStartCivilianTimeToMilitaryTime(
                     newDayOfWeekStartHour, newDayOfWeekStartMinute, newDayOfWeekStartAmOrPm);
@@ -239,19 +249,25 @@ public class dayNotification extends AppCompatActivity {
                     newDayOfWeekEndHour, newDayOfWeekEndMinute, newDayOfWeekEndAmOrPm);
 
             setMilitaryTimeForWorkPreferences(militaryTime);
-            setNotificationDisplay(
-                    context.getString(dayOfWeek), militaryTime);
+            setNotificationDisplay(militaryTime);
         }
     }
 
-
     //Added on 12 - 22 - 2019
-    public void setCurrentDay (String day) {
+    public void setCurrentDay(String day) {
         this.day = day;
     }
 
     public String getCurrentDay() {
         return this.day;
+    }
+
+    public void setPreviousDay(String previousDay) {
+        this.previousDay = previousDay;
+    }
+
+    public String getPreviousDay() {
+        return this.previousDay;
     }
 
     //Added on 12 - 18 - 2019
@@ -306,10 +322,9 @@ public class dayNotification extends AppCompatActivity {
 
     //Added on 10 - 18 - 2019
     @TargetApi(24)
-    public void setNotificationDisplay(String dayOfWeek, MilitaryTime militaryTime)
+    public void setNotificationDisplay(MilitaryTime militaryTime)
     {
 
-        setDayOfWeek(dayOfWeek);
         setStartMilitaryHour(militaryTime.getStartMilitaryHour());
         setStartMilitaryMinute(militaryTime.getStartMilitaryMinute());
         setStartAmOrPm(militaryTime.getStartAmOrPm());
@@ -326,9 +341,15 @@ public class dayNotification extends AppCompatActivity {
 
         /*
          For all you people who have never experienced working third shift for a drunk pervert,
-         third shift usually starts at 12 AM on the NEXT day.
+         third shift usually starts at 12 AM on the NEXT day. And because the shift scheduling
+         is usually done by a complete dipshit, the NEXT day becomes the PREVIOUS day.
+
+         I guess if you want to see this in action, go work as a 3rd shift at a place like Walmart
+         or Target for a couple of months.
          */
-        if (militaryTime.getStartMilitaryHour() == 12 && !militaryTime.getStartAmOrPm().equals("AM")) {
+        if (militaryTime.getStartMilitaryHour() == 0 && militaryTime.getStartAmOrPm().equals("AM")) {
+            setNewNotificationDisplayAlarm(alarmTimer.getPreviousDayOfWeekSavedDayOfWeek(context.getApplicationContext()),alarmTimer);
+        } else {
             if (currentTime > startTime && currentTime < endTime) {
                 displayNotification("YOU'RE SUPPOSED TO BE AT WORK");
             } else if (currentTime == startTime) {
@@ -338,24 +359,22 @@ public class dayNotification extends AppCompatActivity {
             } else {
                 //alarmTimer.setStartMilitaryHour(getStartMilitaryHour());
                 //alarmTimer.setStartMilitaryMinute(getEndMilitaryMinute());
-                setNewNotificationDisplayAlarm(alarmTimer);
+                setNewNotificationDisplayAlarm(alarmTimer.getCurrentSavedDayOfWeek(context.getApplicationContext()),alarmTimer);
             }
-        } else {
-            setNewNotificationDisplayAlarm(alarmTimer);
         }
     }
 
     //Added on 10 - 23 - 2019
     //vs trying to overload the current method?
     @TargetApi(24)
-    public void setNewNotificationDisplayAlarm(AlarmTimer alarmTimer)
+    public void setNewNotificationDisplayAlarm(String day, AlarmTimer alarmTimer)
     {
         /*
          need to shift time to calculate the time time based on the minutes set
          before the start the start of the minutes
          */
         alarmTimer.setSavedAlarmTime(context,
-                getDayOfWeek(),
+                day,
                 getStartMilitaryHour(),
                 getStartMilitaryMinute(),
                 true
@@ -381,9 +400,7 @@ public class dayNotification extends AppCompatActivity {
     }
 
     @TargetApi(24)
-    public void setAlarm(AlarmTimer alarmTimer)
-    {
-
+    public void setAlarm(AlarmTimer alarmTimer) {
         //code copied from
         //https://developer.android.com/training/scheduling/alarms
         alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
@@ -413,14 +430,6 @@ public class dayNotification extends AppCompatActivity {
                 "ALARM (AFTER getBroadcast())");
     }
 
-    //Added on 12 - 16 - 2019
-    private void setDayOfWeek(String dayOfWeek) {
-        this.dayOfWeek = dayOfWeek;
-    }
-
-    public String getDayOfWeek() {
-        return this.dayOfWeek;
-    }
 
     //Added on 12 - 15 - 2019
     private void setStartMilitaryHour(int startMilitaryHour) {

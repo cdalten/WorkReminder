@@ -84,10 +84,12 @@ public class WorkPreferences extends AppCompatActivity {
                 }
                 alarmMinutesPreference.setText(updateTime);
 
-                Log.e("LG_WORK_PHONE", "NEW ALARM TIME AGAIN IS: " + updateTime);
-
                 AlarmTimer alarmTimer = AlarmTimer.getInstance();
                 alarmTimer.setMinutesBeforeShift(getApplicationContext(), Integer.parseInt(updateTime));
+
+                Log.e("LG_WORK_PHONE", "NEW ALARM TIME AGAIN IS: " + updateTime);
+                Log.e("LG_WORK_PHONE", "NEW ALARM HOUR IS: " + alarmTimer.getNewMilitaryHour());
+                Log.e("LG_WORK_PHONE", "NEW ALARM MINUTE IS: " + alarmTimer.getNewMilitaryMinute());
                 //alarmTimer.setSavedAlarmTime(getApplicationContext(), "",
                 //        alarmTimer.getStartMilitaryHour(),alarmTimer.getMilitaryMinute(), true );
 
