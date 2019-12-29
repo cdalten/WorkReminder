@@ -34,7 +34,7 @@ public class WorkPreferences extends AppCompatActivity {
     private int newAlarmTime; //Added on 10 - 28 - 2019
 
     private Button save; //Added on 6 - 24 - 2019
-
+    private Button discard; //Added on 12 - 28 - 2019
 
     /*
       The Diazepam, which I use for Vertigo, was making me a bit loopy when I wrote this. So yeah,
@@ -52,6 +52,8 @@ public class WorkPreferences extends AppCompatActivity {
 
         //currentPassword = (EditText) findViewById(R.id.currentPassword);
         save = (Button) findViewById(R.id.save);
+        discard = (Button) findViewById(R.id.discard);
+
         i = getIntent();
 
 
@@ -68,11 +70,19 @@ public class WorkPreferences extends AppCompatActivity {
                 startActivity(new Intent(WorkPreferences.this, RememberMe.class));
             }
         });
+
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 String updateTime = alarmMinutesPreference.getText().toString().trim();
+                //Acquire start time
+                convertMinutesToHoursAndMinutes(updateTime);
+
+                //Acquire End time
+                AlarmTimer alarmTimer = AlarmTimer.getInstance();
+                alarmTimer.setMinutesBeforeShift(getApplicationContext(), Integer.parseInt(updateTime));
+                //alarmTimer.getCurrentEndMilitaryHour(getApplication());
 
                 /*
                   Because every other forced updated seems to undo my XML preference settings.
@@ -92,12 +102,8 @@ public class WorkPreferences extends AppCompatActivity {
                 }
                 alarmMinutesPreference.setText(updateTime);
 
-                AlarmTimer alarmTimer = AlarmTimer.getInstance();
-                alarmTimer.setMinutesBeforeShift(getApplicationContext(), Integer.parseInt(updateTime));
-
                 Log.e("LG_WORK_PHONE", "NEW ALARM TIME AGAIN IS: " + updateTime);
-                Log.e("LG_WORK_PHONE", "NEW ALARM HOUR IS: " + alarmTimer.getNewMilitaryHour());
-                Log.e("LG_WORK_PHONE", "NEW ALARM MINUTE IS: " + alarmTimer.getNewMilitaryMinute());
+                Log.e("LG_WORK_PHONE", "THE END MILITARY TIME IS: " + alarmTimer.getCurrentEndMilitaryHour(getApplication()));
                 //alarmTimer.setSavedAlarmTime(getApplicationContext(), "",
                 //        alarmTimer.getStartMilitaryHour(),alarmTimer.getMilitaryMinute(), true );
 
@@ -116,10 +122,20 @@ public class WorkPreferences extends AppCompatActivity {
             }
         });
 
+        discard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
     }//end onCreate()
 
 
+    //Added on 12 - 29 - 2019
+    private void convertMinutesToHoursAndMinutes(String inputTime) {
+
+    }
     //Copied from stackoverflow
     private boolean isValid(String str) {
         //if (str.length() != 1) return false;

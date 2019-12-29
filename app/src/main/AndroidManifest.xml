@@ -67,7 +67,11 @@
         <!-- Added on 10 - 28 - 2019 -->
         <service
             android:name=".AlarmIntentService"
-            android:exported="false"></service>
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+            </intent-filter>
+        </service>
 
 
         <receiver

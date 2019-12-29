@@ -27,7 +27,6 @@ public class AlarmTimer extends AppCompatActivity {
     private SharedPreferences pref; //Added on 5 - 14 - 2019
     private int startMilitaryMinute; //Added on 6 - 27 -2019
     private int startMilitaryHour; //Added on 6 - 27 -2017
-
     private int endMilitaryHour = 0;
     private int endMilitaryMinute = 0;
     private int newMilitaryHour = 0;
@@ -39,6 +38,8 @@ public class AlarmTimer extends AppCompatActivity {
     private int milliSecondsToMinutes = 60000; //Added on 12 - 22 - 2019
     private String currenDayOfWeek = ""; //Added on 12 - 27 - 2019
     private String previousDayOfWeek = "";
+
+    private int currentEndMilitaryMinute = 0; //Added on 12 - 29 - 2019
 
     private static AlarmTimer instance = new AlarmTimer();
 
@@ -182,6 +183,18 @@ public class AlarmTimer extends AppCompatActivity {
         return this.startMilitaryMinute;
     }
 
+    //Added on 12 - 29 - 2019
+    void saveCurrentEndMilitaryHour(Context context, String currentEndMilitaryHour) {
+        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("CURRENT_MILITARY_HOUR", currentEndMilitaryHour);
+        editor.apply();
+    }
+
+    public String getCurrentEndMilitaryHour(Context context){
+        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        return pref.getString("CURRENT_MILITARY_HOUR", "");
+    }
 
     //Needed if the device reboots
     public int getUpdatedMinute(Context context) {

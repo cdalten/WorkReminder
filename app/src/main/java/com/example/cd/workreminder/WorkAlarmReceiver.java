@@ -39,8 +39,7 @@ public class WorkAlarmReceiver extends BroadcastReceiver {
     public static final String ACTION_DISMISS = "com.example.cd.workreminder.action.DISMISS";
     public static final String ACTION_SNOOZE = "com.example.cd.workreminder.action.SNOOZE";
 
-
-    private dayNotification dayNotification; //Added on 10 - 31 - 2019
+    private DayNofiticationWithSound dayNofiticationWithSound; //Added on 10 - 31 - 2019
     private SharedPreferences pref; //Added on 11 - 4 - 2019
     private Ringtone ringtone;
     private AudioAttributes aa;
@@ -49,13 +48,23 @@ public class WorkAlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.e("PRODUCTION TAG", "WORK ALARM RECEIVER GOT CALLED WITH: " + intent.getAction());
         Log.e("PRODUCTION TAG", "WORK ALARM RECEIVER GOT CALLED WITH: " + intent.getExtras());
+
+        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", context.MODE_PRIVATE);
+        if (pref.getBoolean("RINGTONE", false) == false) {
+            Log.e("WORK ALARM RECEIVER: ", "RINGTONE GOT STOPPED" );
+            //ringtone.stop();
+            //SharedPreferences.Editor editor = pref.edit();
+            //editor.putBoolean("RINGTONE", true);
+            //editor.apply();
+        }
+
         AlarmTimer alarmTimer = AlarmTimer.getInstance();
 
-        dayNotification = new dayNotification(context);
-        dayNotification.setAlarm(alarmTimer);
-        dayNotification.displayNotification(
+        dayNofiticationWithSound = new DayNofiticationWithSound(context);
+        //dayNotification.setAlarm(alarmTimer);
+        dayNofiticationWithSound.displayNotification(
                 alarmTimer,
-                AlarmIntentService.amSnoozed,
+                AlarmIntentService.amSnoozed, true,
                 "ALARM (ON RECEIVE)");
 
         /*
@@ -66,11 +75,7 @@ public class WorkAlarmReceiver extends BroadcastReceiver {
         try {
             if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
                 Toast.makeText(context, "Boot Detected.", Toast.LENGTH_LONG).show();
-                dayNotification.setAlarm(alarmTimer);
-                dayNotification.displayNotification(
-                        alarmTimer,
-                        AlarmIntentService.amSnoozed,
-                        "ALARM (ON RECEIVE)");
+
             }
         } catch (Exception e) {
             Log.e("PRODUCTION TAG", "BOOT ERROR IS: " + e);
@@ -100,11 +105,6 @@ public class WorkAlarmReceiver extends BroadcastReceiver {
             ringtone.setStreamType(AudioManager.STREAM_ALARM);
         }
         //}
-
-        //Log.e(TAG, "THE RINGTONE INSTANCE IS: " + ringtone);
-
-        //if (pref.getBoolean("RINGTONE", false) == true) {
-        ringtone.play();
 
 
     }

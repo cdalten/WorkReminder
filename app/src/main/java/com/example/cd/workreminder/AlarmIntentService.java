@@ -11,21 +11,27 @@
 */
 package com.example.cd.workreminder;
 
+import android.annotation.TargetApi;
+import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
+import android.icu.util.Calendar;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import java.util.concurrent.TimeUnit;
@@ -39,10 +45,12 @@ public class AlarmIntentService extends IntentService {
     public static final String ACTION_SNOOZE =
             "com.example.cd.workreminder.action.SNOOZE";
 
+    public static final String SET_RINGTONE = "false";
+
     private static final long SNOOZE_TIME = TimeUnit.SECONDS.toMillis(60); //Need to change
     public static boolean amSnoozed = false; //Added on 12 - 22 - 2010
 
-    private static SharedPreferences pref; //Added on 10 - 29 - 2019
+    private SharedPreferences pref; //Added on 10 - 29 - 2019
     private static Ringtone ringtone; //Added on 10 - 29 - 2019
     private static Uri uri;
     //private  AlarmTimer alarmTimer; //Added on 12 - 20 - 2019
@@ -52,24 +60,12 @@ public class AlarmIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        //Uri uri = Uri.parse(intent.getExtras().get("ALARM_RINGTONE").toString());
-        //ringtone = RingtoneManager.getRingtone(this, uri);
-        //Log.e(TAG, "onHandleIntent() RINGTONE IS: " + ringtone);
-        //ringtone.play();
-
-
-
 
         Log.e(TAG, "onHandleIntent(): " + intent);
-
 
         if (intent != null) {
             final String action = intent.getAction();
             if (ACTION_DISMISS.equals(action)) {
-                //SharedPreferences.Editor editor = pref.edit();
-                //editor.putBoolean("RINGTONE", false);
-                //editor.apply();
-
                 handleActionDismiss();
             } else if (ACTION_SNOOZE.equals(action)) {
                 //SharedPreferences.Editor editor = pref.edit();
@@ -83,15 +79,36 @@ public class AlarmIntentService extends IntentService {
     /**
      * Handles action Dismiss in the provided background thread.
      */
+    @TargetApi(24)
     private void handleActionDismiss() {
         Log.e(TAG, "handleActionDismiss()");
-        ringtone.stop();
-        //playRingtone();
-        //Log.e(TAG, "THE DISMISS RINGTONE INSTANCE IS: " + playRingtone());
+
+        pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putBoolean("RINGTONE", false);
+        editor.apply();
+
+        /*AlarmTimer alarmTimer = AlarmTimer.getInstance();
+        AlarmManager alarmMgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(getApplicationContext(), WorkAlarmReceiver.class);
+        intent.putExtra("FOO", "BAR");
+
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+
+        //calendar.set(Calendar.HOUR_OF_DAY, alarmTimer.getUpdatedHour(getApplicationContext()));
+        //calendar.set(Calendar.MINUTE, alarmTimer.getUpdatedMinute(getApplicationContext()));
+
+        alarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                SystemClock.elapsedRealtime() +
+                        1 * 1000, alarmIntent); //1 second delay
 
         NotificationManagerCompat notificationManagerCompat =
                 NotificationManagerCompat.from(getApplicationContext());
         notificationManagerCompat.cancel(MainActivity.NOTIFICATION_ID);
+        */
     }
 
     /**
@@ -104,15 +121,6 @@ public class AlarmIntentService extends IntentService {
         AlarmTimer alarmTimer = AlarmTimer.getInstance();
         AlarmIntentService.amSnoozed = true;
         alarmTimer.setAlarmSnoooze((int)SNOOZE_TIME);
-
-        /*dayNotification dayNotification = new dayNotification(getApplicationContext());
-        dayNotification.displayNotification(
-                alarmTimer,
-                AlarmIntentService.amSnoozed,
-                "ALARM (INTENT SERVICE)");
-                */
-
-        //Set *before* the thread goes to sleep
 
         // You could use NotificationManager.getActiveNotifications() if you are targeting SDK 23
         // and above, but we are targeting devices with lower SDK API numbers, so we saved the

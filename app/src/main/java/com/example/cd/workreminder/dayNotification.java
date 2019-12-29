@@ -237,9 +237,6 @@ public class dayNotification extends AppCompatActivity {
 
         this.day = pref.getString(context.getString(currentDayOfWeek), "OFF");
 
-        alarmTimer.saveCurrentDayOfWeek(context.getApplicationContext(),day);
-        alarmTimer.savePreviousDayOfWeek(context.getApplicationContext(),previousDay);
-
         if (!(pref.getString(context.getString(currentDayOfWeek), "OFF").equals("OFF"))) {
             //pref.getString( getString(R.string.FRIDAY_START_HOUR), "" );
             militaryTime.convertStartCivilianTimeToMilitaryTime(
@@ -247,6 +244,10 @@ public class dayNotification extends AppCompatActivity {
 
             militaryTime.convertEndCivilianTimeToMilitaryTime(
                     newDayOfWeekEndHour, newDayOfWeekEndMinute, newDayOfWeekEndAmOrPm);
+
+            alarmTimer.saveCurrentEndMilitaryHour(context, militaryTime.getEndMilitaryHour() + "");
+            alarmTimer.saveCurrentDayOfWeek(context.getApplicationContext(),day);
+            alarmTimer.savePreviousDayOfWeek(context.getApplicationContext(),previousDay);
 
             setMilitaryTimeForWorkPreferences(militaryTime);
             setNotificationDisplay(militaryTime);
@@ -379,6 +380,9 @@ public class dayNotification extends AppCompatActivity {
                 getStartMilitaryMinute(),
                 true
         );
+
+        displayNotification(alarmTimer, false, true,
+                "ALARM");
         setAlarm(alarmTimer);
         //br = new WorkAlarmReceiver();
         //intentFilter = new IntentFilter();
@@ -425,9 +429,6 @@ public class dayNotification extends AppCompatActivity {
 
         alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                 1000 * 60 * alarmTimer.getAlarmSnooze(), alarmIntent);
-
-        displayNotification(alarmTimer, false,
-                "ALARM (AFTER getBroadcast())");
     }
 
 
@@ -525,6 +526,7 @@ public class dayNotification extends AppCompatActivity {
     //Added on 10 - 7 - 2019
     public void displayNotification(AlarmTimer alarmTimer,
                                     boolean amSnoozed,
+                                    boolean canDisplaySnoozeButton,
                                     String notificationTitle) {
         String notificationText = "";
         if (amSnoozed == false) {
@@ -548,20 +550,15 @@ public class dayNotification extends AppCompatActivity {
 
         //Uri uri = Uri.parse(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM).toString());
         //ringtone = RingtoneManager.getRingtone(context.context.getApplicationContext(), uri);
-        snoozeIntent.putExtra("ALARM_RINGTONE", RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
+        //snoozeIntent.putExtra("ALARM_RINGTONE", RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
         //snoozeIntent.putExtra("ALARM_RINGTONE", ringtone);
         //snoozeIntent.putExtra("ACTION_SNOOZE", "ACTION_SNOOZE");
-        PendingIntent snoozePendingIntent = PendingIntent.getService(context, 0, snoozeIntent, 0);
+
         //context.sendBroadcast(snoozeIntent);
         //PendingIntent snoozePendingIntent =
         //        PendingIntent.getBroadcast(context, 0, snoozeIntent, 0);
 
-        NotificationCompat.Action snoozeAction =
-                new NotificationCompat.Action.Builder(
-                        R.drawable.ic_action_stat_reply,
-                        "Snooze",
-                        snoozePendingIntent)
-                        .build();
+
 
         //Intent dismissIntent = new Intent(context, WorkAlarmReceiver.class);
         Intent dismissIntent = new Intent(context, AlarmIntentService.class);
@@ -574,13 +571,14 @@ public class dayNotification extends AppCompatActivity {
         //        PendingIntent.getBroadcast(context, 0, dismissIntent, 0);
 
 
-        Intent alarmSoundIntent = new Intent(context, AlarmIntentService.class);
+        /*Intent alarmSoundIntent = new Intent(context, AlarmIntentService.class);
         alarmSoundIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
         alarmSoundIntent.putExtra("ALARM_RINGTONE", RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
 
         context.startService(alarmSoundIntent);
 
         PendingIntent alarmSoundPendingIntent = PendingIntent.getService(context, 0, alarmSoundIntent, 0);
+        */
 
         NotificationCompat.Action dismissAction =
                 new NotificationCompat.Action.Builder(
@@ -590,13 +588,11 @@ public class dayNotification extends AppCompatActivity {
                         .build();
 
 
-
         NotificationCompat.Builder notificationCompatBuilder = new NotificationCompat.Builder(context.getApplicationContext(), "0");
         GlobalNotificationBuilder.setNotificationCompatBuilderInstance(notificationCompatBuilder);
         notificationCompatBuilder.setSmallIcon(R.drawable.ic_stat_work)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(dismissPendingIntent)
-                .addAction(snoozeAction)
                 .addAction(dismissAction);
         notificationCompatBuilder.setContentTitle(notificationTitle);
         notificationCompatBuilder.setContentText(notificationText);
