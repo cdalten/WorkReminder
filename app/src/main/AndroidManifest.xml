@@ -73,6 +73,13 @@
             </intent-filter>
         </service>
 
+        <service
+            android:name=".AlarmSound"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+            </intent-filter>
+        </service>
 
         <receiver
             android:name=".WorkAlarmReceiver"
@@ -171,16 +178,5 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".SoundService"
-            android:label="@string/app_name">
-            <intent-filter>
-
-                <!-- <action android:name="android.intent.action.MAIN" /> -->
-                <action android:name="android.intent.action.SEND" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
     </application>
 </manifest>

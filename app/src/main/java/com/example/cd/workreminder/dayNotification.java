@@ -74,12 +74,16 @@ public class dayNotification extends AppCompatActivity {
     private String newDayOfWeekEndMinute =  "";
     private String newDayOfWeekEndAmOrPm = "";
     private String previousDay = ""; //Added on 12 - 27 - 2019
+    private long currentTime = 0;
 
     BroadcastReceiver br;
     IntentFilter intentFilter;
     public dayNotification() {} //Added on 11 - 22 - 2019
+    @TargetApi(24)
     public dayNotification(Context context) {
         this.context = context;
+        Calendar calendar = Calendar.getInstance();
+        currentTime = calendar.getTime().getTime();
     }
 
     @Override
@@ -250,7 +254,7 @@ public class dayNotification extends AppCompatActivity {
             alarmTimer.savePreviousDayOfWeek(context.getApplicationContext(),previousDay);
 
             setMilitaryTimeForWorkPreferences(militaryTime);
-            setNotificationDisplay(militaryTime);
+            setNotificationDisplay(context, militaryTime);
         }
     }
 
@@ -323,7 +327,7 @@ public class dayNotification extends AppCompatActivity {
 
     //Added on 10 - 18 - 2019
     @TargetApi(24)
-    public void setNotificationDisplay(MilitaryTime militaryTime)
+    public void setNotificationDisplay(Context context, MilitaryTime militaryTime)
     {
 
         setStartMilitaryHour(militaryTime.getStartMilitaryHour());
@@ -333,10 +337,10 @@ public class dayNotification extends AppCompatActivity {
         setEndMilitaryMinute(militaryTime.getEndMilitaryMinute());
         setEndAmOrPm(militaryTime.getEndAmOrPm());
 
-
         long startTime = convertToStartTime(militaryTime.getStartMilitaryHour(),militaryTime.getStartMilitaryMinute());
         long endTime = convertToEndTime(militaryTime.getEndMilitaryHour(), militaryTime.getEndMilitaryMinute());
-        long currentTime = getCurrentTime();
+        //long currentTime = getCurrentTime();
+
 
         AlarmTimer alarmTimer = AlarmTimer.getInstance();
 
@@ -349,18 +353,23 @@ public class dayNotification extends AppCompatActivity {
          or Target for a couple of months.
          */
         if (militaryTime.getStartMilitaryHour() == 0 && militaryTime.getStartAmOrPm().equals("AM")) {
-            setNewNotificationDisplayAlarm(alarmTimer.getPreviousDayOfWeekSavedDayOfWeek(context.getApplicationContext()),alarmTimer);
+            setNewNotificationDisplayAlarm(context.getApplicationContext(),
+                    alarmTimer.getPreviousDayOfWeekSavedDayOfWeek(context.getApplicationContext()),alarmTimer);
         } else {
             if (currentTime > startTime && currentTime < endTime) {
-                displayNotification("YOU'RE SUPPOSED TO BE AT WORK");
+                displayNotification(context.getApplicationContext(),"YOU'RE SUPPOSED TO BE AT WORK");
             } else if (currentTime == startTime) {
-                displayNotification("YOU'RE SUPPOSED TO BE AT WORK");
+                displayNotification(context.getApplicationContext(), "YOU'RE SUPPOSED TO BE AT WORK");
             } else if (currentTime == endTime) {
-                displayNotification("YOU'RE SUPPOSED TO BE AT WORK");
-            } else {
+                displayNotification(context.getApplicationContext(),"YOU'RE SUPPOSED TO BE AT WORK");
+            } else if (currentTime > endTime) {
+                displayNotification(context.getApplicationContext(), "YOU MISSED YOUR SHIFT");
+            }
+            else {
                 //alarmTimer.setStartMilitaryHour(getStartMilitaryHour());
                 //alarmTimer.setStartMilitaryMinute(getEndMilitaryMinute());
-                setNewNotificationDisplayAlarm(alarmTimer.getCurrentSavedDayOfWeek(context.getApplicationContext()),alarmTimer);
+                setNewNotificationDisplayAlarm(context,
+                        alarmTimer.getCurrentSavedDayOfWeek(context.getApplicationContext()),alarmTimer);
             }
         }
     }
@@ -368,7 +377,7 @@ public class dayNotification extends AppCompatActivity {
     //Added on 10 - 23 - 2019
     //vs trying to overload the current method?
     @TargetApi(24)
-    public void setNewNotificationDisplayAlarm(String day, AlarmTimer alarmTimer)
+    public void setNewNotificationDisplayAlarm(Context context, String day, AlarmTimer alarmTimer)
     {
         /*
          need to shift time to calculate the time time based on the minutes set
@@ -383,7 +392,7 @@ public class dayNotification extends AppCompatActivity {
 
         displayNotification(alarmTimer, false, true,
                 "ALARM");
-        setAlarm(alarmTimer);
+        setAlarm(context, alarmTimer);
         //br = new WorkAlarmReceiver();
         //intentFilter = new IntentFilter();
         //intentFilter.addAction(Intent.ACTION_BOOT_COMPLETED);
@@ -404,7 +413,7 @@ public class dayNotification extends AppCompatActivity {
     }
 
     @TargetApi(24)
-    public void setAlarm(AlarmTimer alarmTimer) {
+    public void setAlarm(Context context, AlarmTimer alarmTimer) {
         //code copied from
         //https://developer.android.com/training/scheduling/alarms
         alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
@@ -509,7 +518,7 @@ public class dayNotification extends AppCompatActivity {
     }
 
     //Added on 10 - 18 -2019. Change channelID to NOTIFICATION_ID???
-    public void displayNotification(String notificationTitle) {
+    public void displayNotification(Context context, String notificationTitle) {
         NotificationCompat.Builder notificationCompatBuilder = new NotificationCompat.Builder(context.getApplicationContext(), "0");
 
         GlobalNotificationBuilder.setNotificationCompatBuilderInstance(notificationCompatBuilder);
@@ -559,6 +568,26 @@ public class dayNotification extends AppCompatActivity {
         //        PendingIntent.getBroadcast(context, 0, snoozeIntent, 0);
 
 
+        //Unimplemented****************************************************************************
+        Intent intent = new Intent(context, WorkPreferences.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, EXTRA_NOTIFICATION_ID)
+                .setSmallIcon(R.drawable.ic_stat_work)
+                .setContentTitle("My notification")
+                .setContentText("Hello World!")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                // Set the intent that will fire when the user taps the notification
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
+
+
+        //NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+
+// notificationId is a unique int for each notification that you must define
+        //notificationManager.notify(0, builder.build());
+        //*******************************************************************************************
 
         //Intent dismissIntent = new Intent(context, WorkAlarmReceiver.class);
         Intent dismissIntent = new Intent(context, AlarmIntentService.class);

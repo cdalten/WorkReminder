@@ -825,7 +825,7 @@ public class CurrentWeekSchedule extends ListActivity  {
                 militaryTime.convertEndCivilianTimeToMilitaryTime(newEndHour, newEndMinute, newEndAmOrPm);
 
                 dayNotification dayNotification = new dayNotification(getApplicationContext());
-                dayNotification.setNotificationDisplay(militaryTime);
+                dayNotification.setNotificationDisplay(getApplicationContext(), militaryTime);
 
 
             } else if (resultCode == WorkReaderContract.WorkEntry.RESULT_OKAY_UPDATE_WORK_ALARM_TIME) {
@@ -837,7 +837,7 @@ public class CurrentWeekSchedule extends ListActivity  {
                 dayNotification dayNotification = new dayNotification(
                         getApplicationContext());
                 currentHours = dayNotification.handleThirdShift();
-                String day = dayNotification.getCurrentDay();
+                /*String day = dayNotification.getCurrentDay();
 
                 militaryTime.convertStartCivilianTimeToMilitaryTime(
                         dayNotification.getStartMilitaryHour() + "",
@@ -847,8 +847,8 @@ public class CurrentWeekSchedule extends ListActivity  {
                         dayNotification.getEndMilitaryHour() +"",
                         dayNotification.getEndMilitaryMinute() +"",
                         dayNotification.getEndAmOrPm() +"");
-
-                dayNotification.setNotificationDisplay(militaryTime);
+                        */
+                //dayNotification.setNotificationDisplay(getApplicationContext(), militaryTime);
                 //dayNotification.setNewNotificationDisplayAlarm(alarmTimer);
             }
 

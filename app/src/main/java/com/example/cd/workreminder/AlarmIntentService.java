@@ -16,6 +16,7 @@ import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -45,17 +46,18 @@ public class AlarmIntentService extends IntentService {
     public static final String ACTION_SNOOZE =
             "com.example.cd.workreminder.action.SNOOZE";
 
-    public static final String SET_RINGTONE = "false";
-
     private static final long SNOOZE_TIME = TimeUnit.SECONDS.toMillis(60); //Need to change
     public static boolean amSnoozed = false; //Added on 12 - 22 - 2010
 
     private SharedPreferences pref; //Added on 10 - 29 - 2019
-    private static Ringtone ringtone; //Added on 10 - 29 - 2019
     private static Uri uri;
     //private  AlarmTimer alarmTimer; //Added on 12 - 20 - 2019
     public AlarmIntentService() {
         super("AlarmIntentService");
+        //pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        //SharedPreferences.Editor editor = pref.edit();
+        //editor.putBoolean("ALARM_DISPLAY", true);
+        //editor.apply();
     }
 
     @Override
@@ -83,32 +85,13 @@ public class AlarmIntentService extends IntentService {
     private void handleActionDismiss() {
         Log.e(TAG, "handleActionDismiss()");
 
-        pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putBoolean("RINGTONE", false);
-        editor.apply();
+        //DayNofiticationWithSound dayNofiticationWithSound= new DayNofiticationWithSound(getApplicationContext());
+        //dayNofiticationWithSound.playRingtone(false);
+        //pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        //SharedPreferences.Editor editor = pref.edit();
+        //editor.putBoolean("ALARM_DISPLAY", false);
+        //editor.apply();
 
-        /*AlarmTimer alarmTimer = AlarmTimer.getInstance();
-        AlarmManager alarmMgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(getApplicationContext(), WorkAlarmReceiver.class);
-        intent.putExtra("FOO", "BAR");
-
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-
-        //calendar.set(Calendar.HOUR_OF_DAY, alarmTimer.getUpdatedHour(getApplicationContext()));
-        //calendar.set(Calendar.MINUTE, alarmTimer.getUpdatedMinute(getApplicationContext()));
-
-        alarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                SystemClock.elapsedRealtime() +
-                        1 * 1000, alarmIntent); //1 second delay
-
-        NotificationManagerCompat notificationManagerCompat =
-                NotificationManagerCompat.from(getApplicationContext());
-        notificationManagerCompat.cancel(MainActivity.NOTIFICATION_ID);
-        */
     }
 
     /**
@@ -116,7 +99,6 @@ public class AlarmIntentService extends IntentService {
      */
     private void handleActionSnooze() {
         Log.e(TAG, "handleActionSnooze()");
-        Log.e(TAG, "THE RINGTONE INSTANCE IN SNOOZE IS: " + ringtone);
 
         AlarmTimer alarmTimer = AlarmTimer.getInstance();
         AlarmIntentService.amSnoozed = true;
@@ -143,9 +125,6 @@ public class AlarmIntentService extends IntentService {
 
             notificationManagerCompat.cancel(MainActivity.NOTIFICATION_ID);
 
-            //playRingtone();
-            //Log.e(TAG, "THE SNOOZE RINGTONE INSTANCE IS: " + playRingtone());
-
             try {
                 amSnoozed = true;
                 Thread.sleep(SNOOZE_TIME);
@@ -155,43 +134,6 @@ public class AlarmIntentService extends IntentService {
             notificationManagerCompat.notify(MainActivity.NOTIFICATION_ID, notification);
         }
 
-    }
-
-    //Added on 10 - 29 - 2019. Changed from private to public on 10 - 30 - 2019
-    public Ringtone playRingtone() {
-        //pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
-        //Part of the code copied and pasted from stackoverflow
-        Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-        if (alarmUri == null) {
-            alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        }
-
-
-        //if (pref.getBoolean("RINGTONE", false) == true) {
-            ringtone = RingtoneManager.getRingtone(getApplicationContext(), alarmUri);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                AudioAttributes aa = new AudioAttributes.Builder()
-                        .setUsage(AudioAttributes.USAGE_ALARM)
-                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                        .build();
-
-                ringtone.setAudioAttributes(aa);
-                Log.e(TAG, "GREATER THAN LOLLIPOP");
-            } else {
-                Log.e(TAG, "LESS THAN LOLLIPOP");
-                ringtone.setStreamType(AudioManager.STREAM_ALARM);
-            }
-        //}
-
-        //Log.e(TAG, "THE RINGTONE INSTANCE IS: " + ringtone);
-
-        //if (pref.getBoolean("RINGTONE", false) == true) {
-            ringtone.play();
-        //} else {
-        //    ringtone.stop();
-        //}
-
-        return ringtone;
     }
 
 
@@ -275,11 +217,7 @@ public class AlarmIntentService extends IntentService {
         GlobalNotificationBuilder.setNotificationCompatBuilderInstance(notificationCompatBuilder);
 
         //Handle when app is killed. 10 - 29 - 2019
-        dayNotification dayNotification = new dayNotification();
-        // public String buildAlarmTimeFormatDisplay(String dayOfWeek, int hour, int minute, String amOrPm)
-        //String snoozeDisplayText = dayNotification.buildAlarmTimeFormatDisplay(
-        //        "", 0, alarmTimer.getAlarmSnooze(), ""
-        //);
+
         notificationCompatBuilder
                 //.setStyle(bigTextStyle)
                 //.setContentTitle(bigTextStyleReminderAppData.getContentTitle())

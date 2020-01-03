@@ -6,16 +6,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
-import android.support.v7.app.AppCompatActivity;
 
 import static android.app.Notification.EXTRA_NOTIFICATION_ID;
 
-public class DayNofiticationWithSound extends AppCompatActivity{
-    private Context context; //Added on 12 - 29 - 2019
-    public DayNofiticationWithSound(Context context) {
-        this.context = context;
+public class DayNotificationWithSnooze extends dayNotification {
+    private Context context;
+
+    public DayNotificationWithSnooze() {
+
     }
 
+    public DayNotificationWithSnooze (Context context) {
+        this.context = context;
+    }
     public String buildAlarmTimeFormatDisplay(String dayOfWeek, int hour, int minute, String amOrPm) {
         String timeFormat = "";
 
@@ -40,6 +43,8 @@ public class DayNofiticationWithSound extends AppCompatActivity{
 
         return timeFormat;
     }
+
+    @Override
     public void displayNotification(AlarmTimer alarmTimer,
                                     boolean amSnoozed,
                                     boolean canDisplaySnoozeButton,
@@ -102,4 +107,4 @@ public class DayNofiticationWithSound extends AppCompatActivity{
         mNotificationManagerCompat.notify(0, notification);
     }
 
-}//End class
+}
