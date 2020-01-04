@@ -51,13 +51,55 @@ public class WorkAlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        //Log.e("PRODUCTION TAG", "WORK ALARM RECEIVER GOT CALLED WITH: " + intent.getAction());
-        //Log.e("PRODUCTION TAG", "WORK ALARM RECEIVER GOT CALLED WITH: " + intent.getExtras());
+        Log.e("PRODUCTION TAG", "WORK ALARM RECEIVER GOT CALLED WITH: " + intent.getAction());
+        Log.e("PRODUCTION TAG", "WORK ALARM RECEIVER GOT CALLED WITH: " + intent.getExtras());
+
+        Log.e("LG_WORK_PHONE", "ONRECEIVE() GOT CALLED");
+
+        boolean amSnoozed = false;
+        NotificationCompat.Builder notificationCompatBuilder =
+                GlobalNotificationBuilder.getNotificationCompatBuilderInstance();
+
+        if (notificationCompatBuilder != null) {
+            Notification notification = notificationCompatBuilder.build();
+
+                /*
+                 Unfinished because the meds are making me high. As a result, my concentration has gone
+                 down like the Titanic -_-
+                 */
+            Intent snoozeIntent = new Intent(context, dayNotification.class);
+            snoozeIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
+            snoozeIntent.setAction(WorkAlarmReceiver.ACTION_SNOOZE);
+            PendingIntent snoozePendingIntent = PendingIntent.getService(context, 0, snoozeIntent, 0);
+
+            NotificationCompat.Action snoozeAction =
+                    new NotificationCompat.Action.Builder(
+                            R.drawable.ic_action_stat_reply,
+                            "Snooze",
+                            snoozePendingIntent)
+                            .build();
+            notificationCompatBuilder.addAction(snoozeAction).build();
 
 
-        final PendingResult pendingResult = goAsync();
-        Task asyncTask = new Task(context, pendingResult, intent);
-        asyncTask.execute();
+            NotificationManagerCompat notificationManagerCompat =
+                    NotificationManagerCompat.from(context.getApplicationContext());
+
+            notificationManagerCompat.cancel(MainActivity.NOTIFICATION_ID);
+
+                /*try {
+                    amSnoozed = true;
+                    Thread.sleep(SNOOZE_TIME);
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }*/
+            notificationManagerCompat.notify(MainActivity.NOTIFICATION_ID, notification);
+        } else {
+            Log.e("LG_WORK_PHONE", "CANT RECREATE THE NOTIFICATION");
+        }
+
+            //final PendingResult pendingResult = goAsync();
+        //Task asyncTask = new Task(context, pendingResult, intent);
+        //asyncTask.execute();
 
         //pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", context.MODE_PRIVATE);
         //MilitaryTime militaryTime = MilitaryTime.getInstance();
@@ -157,7 +199,9 @@ public class WorkAlarmReceiver extends BroadcastReceiver {
                 Log.e("LG_WORK_PHONE", "CANT RECREATE THE NOTIFICATION");
             }
 
-            return "";
+            String log = "0NRECEIVE() doInBackround() got called";
+            Log.e("LG_WORK_PHONE", log);
+            return log;
         }
 
         @Override

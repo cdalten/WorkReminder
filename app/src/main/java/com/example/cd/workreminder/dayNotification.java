@@ -74,7 +74,7 @@ public class dayNotification extends AppCompatActivity {
     private String newDayOfWeekEndMinute =  "";
     private String newDayOfWeekEndAmOrPm = "";
     private String previousDay = ""; //Added on 12 - 27 - 2019
-    private long currentTime = 0;
+    //private long currentTime = 0;
 
     BroadcastReceiver br;
     IntentFilter intentFilter;
@@ -82,8 +82,8 @@ public class dayNotification extends AppCompatActivity {
     @TargetApi(24)
     public dayNotification(Context context) {
         this.context = context;
-        Calendar calendar = Calendar.getInstance();
-        currentTime = calendar.getTime().getTime();
+        // calendar = Calendar.getInstance();
+        //currentTime = calendar.getTime().getTime();
     }
 
     @Override
@@ -339,8 +339,7 @@ public class dayNotification extends AppCompatActivity {
 
         long startTime = convertToStartTime(militaryTime.getStartMilitaryHour(),militaryTime.getStartMilitaryMinute());
         long endTime = convertToEndTime(militaryTime.getEndMilitaryHour(), militaryTime.getEndMilitaryMinute());
-        //long currentTime = getCurrentTime();
-
+        long currentTime = getCurrentTime();
 
         AlarmTimer alarmTimer = AlarmTimer.getInstance();
 
