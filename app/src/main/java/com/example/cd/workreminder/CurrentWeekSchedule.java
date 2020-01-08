@@ -89,8 +89,8 @@ public class CurrentWeekSchedule extends ListActivity  {
         //Finish = (Button) findViewById(R.id.Finish);
         //list = (ListView) findViewById(android.R.id.list);
 
-        final dayNotification dayNotification = new dayNotification(this);
-        currentHours = dayNotification.handleThirdShift();
+        final SetAlarm SetAlarm = new SetAlarm(this);
+        currentHours = SetAlarm.handleThirdShift();
 
         list = getListView();
 
@@ -766,10 +766,10 @@ public class CurrentWeekSchedule extends ListActivity  {
     //Added on 11 - 2 - 2019
     @TargetApi(24)
     private void displayUpdatedAlarm() {
-        dayNotification dayNotification = new dayNotification(this);
-        long currentTime = dayNotification.getCurrentTime();
-        long getNewAlarmTime = dayNotification.getNewAlarmTime();
-        //dayNotification.setAlarm();
+        SetAlarm SetAlarm = new SetAlarm(this);
+        long currentTime = SetAlarm.getCurrentTime();
+        long getNewAlarmTime = SetAlarm.getNewAlarmTime();
+        //SetAlarm.setAlarm();
 
         if (getNewAlarmTime < currentTime) {
 
@@ -797,7 +797,7 @@ public class CurrentWeekSchedule extends ListActivity  {
             newPosition = data.getIntExtra("CURRENT_DAY", -99);  //position in listview
             //0 - 6 represent Sun to Sat. 7 represents off. -99 is just to make it work on the hardware
             if (resultCode == WorkReaderContract.WorkEntry.RESULT_OKAY_NO_WORK) {
-                //dayNotification.displayNotification("ALARM (ON ACTIVITY RESULT)");
+                //SetAlarm.displayNotification("ALARM (ON ACTIVITY RESULT)");
                 Log.e(PRODUCTION_TAG, "ALARM CAN'T BE SET");
             }
 
@@ -824,8 +824,8 @@ public class CurrentWeekSchedule extends ListActivity  {
                 militaryTime.convertStartCivilianTimeToMilitaryTime(newStartHour, newStartMinute, newStartAmOrPm);
                 militaryTime.convertEndCivilianTimeToMilitaryTime(newEndHour, newEndMinute, newEndAmOrPm);
 
-                dayNotification dayNotification = new dayNotification(getApplicationContext());
-                dayNotification.setNotificationDisplay(getApplicationContext(), militaryTime);
+                SetAlarm SetAlarm = new SetAlarm(getApplicationContext());
+                SetAlarm.setNotificationDisplay(getApplicationContext(), militaryTime);
 
 
             } else if (resultCode == WorkReaderContract.WorkEntry.RESULT_OKAY_UPDATE_WORK_ALARM_TIME) {
@@ -834,9 +834,9 @@ public class CurrentWeekSchedule extends ListActivity  {
                   something like 20 minutes before their shift, they mean for day in question, and not
                   say, three shifts from now.
                  */
-                dayNotification dayNotification = new dayNotification(
+                SetAlarm SetAlarm = new SetAlarm(
                         getApplicationContext());
-                currentHours = dayNotification.handleThirdShift();
+                currentHours = SetAlarm.handleThirdShift();
                 /*String day = dayNotification.getCurrentDay();
 
                 militaryTime.convertStartCivilianTimeToMilitaryTime(

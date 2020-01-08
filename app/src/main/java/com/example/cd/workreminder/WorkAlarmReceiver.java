@@ -56,60 +56,16 @@ public class WorkAlarmReceiver extends BroadcastReceiver {
 
         Log.e("LG_WORK_PHONE", "ONRECEIVE() GOT CALLED");
 
-        boolean amSnoozed = false;
-        NotificationCompat.Builder notificationCompatBuilder =
-                GlobalNotificationBuilder.getNotificationCompatBuilderInstance();
 
-        if (notificationCompatBuilder != null) {
-            Notification notification = notificationCompatBuilder.build();
-
-                /*
-                 Unfinished because the meds are making me high. As a result, my concentration has gone
-                 down like the Titanic -_-
-                 */
-            Intent snoozeIntent = new Intent(context, dayNotification.class);
-            snoozeIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
-            snoozeIntent.setAction(WorkAlarmReceiver.ACTION_SNOOZE);
-            PendingIntent snoozePendingIntent = PendingIntent.getService(context, 0, snoozeIntent, 0);
-
-            NotificationCompat.Action snoozeAction =
-                    new NotificationCompat.Action.Builder(
-                            R.drawable.ic_action_stat_reply,
-                            "Snooze",
-                            snoozePendingIntent)
-                            .build();
-            notificationCompatBuilder.addAction(snoozeAction).build();
+        DayNotification dayNotification = new DayNotification(context);
+        dayNotification.setDisplaySnoozeButton(true);
+        dayNotification.createNotification(dayNotification.getNotificationTitle(), dayNotification.getNotificationText());
+        // public void createNotification(String notificationTitle, String notificationText )
 
 
-            NotificationManagerCompat notificationManagerCompat =
-                    NotificationManagerCompat.from(context.getApplicationContext());
-
-            notificationManagerCompat.cancel(MainActivity.NOTIFICATION_ID);
-
-                /*try {
-                    amSnoozed = true;
-                    Thread.sleep(SNOOZE_TIME);
-                } catch (InterruptedException ex) {
-                    Thread.currentThread().interrupt();
-                }*/
-            notificationManagerCompat.notify(MainActivity.NOTIFICATION_ID, notification);
-        } else {
-            Log.e("LG_WORK_PHONE", "CANT RECREATE THE NOTIFICATION");
-        }
-
-            //final PendingResult pendingResult = goAsync();
+        //final PendingResult pendingResult = goAsync();
         //Task asyncTask = new Task(context, pendingResult, intent);
         //asyncTask.execute();
-
-        //pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", context.MODE_PRIVATE);
-        //MilitaryTime militaryTime = MilitaryTime.getInstance();
-        //AlarmTimer alarmTimer = AlarmTimer.getInstance();
-
-        //if (pref.getBoolean("ALARM_DISPLAY", true) ==true) {
-
-            //dayNofiticationWithSnooze = new DayNotificationWithSnooze(context.getApplicationContext());
-            //dayNofiticationWithSnooze.setNotificationDisplay(context.getApplicationContext(), militaryTime);
-        //}
 
         /*
          Otherwise the alarm won't fire when the user changes the alarm time after the device after
@@ -153,52 +109,14 @@ public class WorkAlarmReceiver extends BroadcastReceiver {
 
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+
+        }
+
+        @Override
         protected String doInBackground(String... strings) {
-
-            boolean amSnoozed = false;
-            NotificationCompat.Builder notificationCompatBuilder =
-                    GlobalNotificationBuilder.getNotificationCompatBuilderInstance();
-
-            if (notificationCompatBuilder != null) {
-                Notification notification = notificationCompatBuilder.build();
-
-                /*
-                 Unfinished because the meds are making me high. As a result, my concentration has gone
-                 down like the Titanic -_-
-                 */
-                Intent snoozeIntent = new Intent(context, dayNotification.class);
-                snoozeIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
-                snoozeIntent.setAction(WorkAlarmReceiver.ACTION_SNOOZE);
-                PendingIntent snoozePendingIntent = PendingIntent.getService(context, 0, snoozeIntent, 0);
-
-                NotificationCompat.Action snoozeAction =
-                        new NotificationCompat.Action.Builder(
-                                R.drawable.ic_action_stat_reply,
-                                "Snooze",
-                                snoozePendingIntent)
-                                .build();
-
-                //****END UNFINISHED CODE *****************************************
-
-                notificationCompatBuilder.addAction(snoozeAction).build();
-
-
-                NotificationManagerCompat notificationManagerCompat =
-                        NotificationManagerCompat.from(context.getApplicationContext());
-
-                notificationManagerCompat.cancel(MainActivity.NOTIFICATION_ID);
-
-                /*try {
-                    amSnoozed = true;
-                    Thread.sleep(SNOOZE_TIME);
-                } catch (InterruptedException ex) {
-                    Thread.currentThread().interrupt();
-                }*/
-                notificationManagerCompat.notify(MainActivity.NOTIFICATION_ID, notification);
-            } else {
-                Log.e("LG_WORK_PHONE", "CANT RECREATE THE NOTIFICATION");
-            }
-
             String log = "0NRECEIVE() doInBackround() got called";
             Log.e("LG_WORK_PHONE", log);
             return log;

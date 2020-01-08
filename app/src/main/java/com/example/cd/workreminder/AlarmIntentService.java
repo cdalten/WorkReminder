@@ -127,6 +127,7 @@ public class AlarmIntentService extends IntentService {
 
             try {
                 amSnoozed = true;
+                Log.e("LG_WORK_PHONE", "ALARM INTENT SERVICE GOT CALLED");
                 Thread.sleep(SNOOZE_TIME);
             } catch (InterruptedException ex) {
                 Thread.currentThread().interrupt();

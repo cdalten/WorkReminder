@@ -9,7 +9,7 @@ import android.support.v4.app.NotificationManagerCompat;
 
 import static android.app.Notification.EXTRA_NOTIFICATION_ID;
 
-public class DayNotificationWithSnooze extends dayNotification {
+public class DayNotificationWithSnooze extends SetAlarm {
     private Context context;
 
     public DayNotificationWithSnooze() {

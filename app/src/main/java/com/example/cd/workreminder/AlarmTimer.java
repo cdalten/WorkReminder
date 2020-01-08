@@ -34,7 +34,7 @@ public class AlarmTimer extends AppCompatActivity {
     private int timeBeforeShift = 0; //Added on 10 - 21 - 2019
     private String dayOfWeek; //Added on 11 - 4 - 2019
     private String updatedAmOrPm = ""; //Added on 12 - 18 - 2019
-    private int snoozeTime = 5; //5 minute default. Added on 12 - 20 - 2019
+    private int snoozeTime = 2; //5 minute default. Added on 12 - 20 - 2019
     private int milliSecondsToMinutes = 60000; //Added on 12 - 22 - 2019
     private String currenDayOfWeek = ""; //Added on 12 - 27 - 2019
     private String previousDayOfWeek = "";
