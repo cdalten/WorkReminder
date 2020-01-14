@@ -14,6 +14,7 @@ package com.example.cd.workreminder;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -74,18 +75,17 @@ public class WorkPreferences extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 String updateTime = alarmMinutesPreference.getText().toString().trim();
-                //Acquire start time
-                convertMinutesToHoursAndMinutes(updateTime);
+
+                double currentEndTime = getEndShiftInMinutes() + convertInputTimeToHoursAndMinutes(Integer.parseInt(updateTime));
 
                 //Acquire End time
                 AlarmTimer alarmTimer = AlarmTimer.getInstance();
-                alarmTimer.setMinutesBeforeShift(getApplicationContext(), Integer.parseInt(updateTime));
+                alarmTimer.saveMinutesBeforeShift(getApplicationContext(), Integer.parseInt(updateTime));
                 //alarmTimer.getCurrentEndMilitaryHour(getApplication());
 
                 /*
-                  Because every other forced updated seems to undo my XML preference settings.
+                  Because every other forced update seems to undo my XML preference settings.
                  */
                 if (isValid(updateTime)) {
                     updateTime =  pref.getString("NEW_ALARM_TIME", "20");
@@ -94,7 +94,7 @@ public class WorkPreferences extends AppCompatActivity {
 
                 else if (updateTime.equals("") || updateTime == null ||
                         Integer.parseInt(updateTime) < 0 ||
-                        Integer.parseInt(updateTime) > 720
+                        currentEndTime > 24.0
                         )
                 {
                     updateTime =  pref.getString("NEW_ALARM_TIME", "20");
@@ -103,7 +103,8 @@ public class WorkPreferences extends AppCompatActivity {
                 alarmMinutesPreference.setText(updateTime);
 
                 Log.e("LG_WORK_PHONE", "NEW ALARM TIME AGAIN IS: " + updateTime);
-                Log.e("LG_WORK_PHONE", "THE END MILITARY TIME IS: " + alarmTimer.getCurrentEndMilitaryHour(getApplication()));
+                Log.e("LG_WORK_PHONE", "THE END MILITARY HOUR IS: " + alarmTimer.getCurrentEndMilitaryHour(getApplication()));
+                Log.e("LG_WORK_PHONE", "THE END MILITARY MINUTE IS: " + alarmTimer.getCurrentEndMilitaryMinute(getApplication()));
                 //alarmTimer.setSavedAlarmTime(getApplicationContext(), "",
                 //        alarmTimer.getStartMilitaryHour(),alarmTimer.getMilitaryMinute(), true );
 
@@ -133,9 +134,44 @@ public class WorkPreferences extends AppCompatActivity {
 
 
     //Added on 12 - 29 - 2019
-    private void convertMinutesToHoursAndMinutes(String inputTime) {
+    private double getEndShiftInMinutes() {
+        AlarmTimer alarmTimer = AlarmTimer.getInstance();
+        MilitaryTime militaryTime = MilitaryTime.getInstance();
+        double endMilitaryMinuteInDecimals = 0.0;
+        double totalTime = 0.0;
+
+        int endMilitaryMinute = alarmTimer.getCurrentEndMilitaryMinute(getApplication());
+        double endMilitaryHour = alarmTimer.getCurrentEndMilitaryHour(getApplication());
+
+        //For hourly workers, a lot of places use 15 minute intervals.
+        switch (endMilitaryMinute) {
+            case 0:
+                endMilitaryMinuteInDecimals = 0.0;
+                break;
+            case 15:
+                endMilitaryMinuteInDecimals = 0.15;
+                break;
+            case 30:
+                endMilitaryMinuteInDecimals = 0.30;
+                break;
+            case 45:
+                endMilitaryMinuteInDecimals = 0.45;
+                break;
+        }
+
+        totalTime = endMilitaryHour + endMilitaryMinuteInDecimals;
+        Log.e("THE TOTAL TIME IS ", "" + totalTime);
+
+        return totalTime;
 
     }
+
+    //Added 1 - 14 - 2020
+    private double convertInputTimeToHoursAndMinutes(int inputTime) {
+        double currentTime = inputTime / 100;
+        return currentTime;
+    }
+
     //Copied from stackoverflow
     private boolean isValid(String str) {
         //if (str.length() != 1) return false;

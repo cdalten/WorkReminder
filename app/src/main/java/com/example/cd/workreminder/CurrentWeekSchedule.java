@@ -315,19 +315,10 @@ public class CurrentWeekSchedule extends ListActivity  {
                           int endMinute,
                           int endAmOrPM)
     {
-        outState.putString(key,  pref.getString(getString(day), getString(day)));
-        outState.putString(getString(startHour),
-                pref.getString(getString(startHour), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
-        outState.putString(getString(startMinute),
-                pref.getString(getString(startMinute), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
-        outState.putString(getString(startAmOrPM),
-                pref.getString(getString(startAmOrPM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-        outState.putString(getString(endHour),
-                pref.getString(getString(endHour), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
-        outState.putString(getString(endMinute),
-                pref.getString(getString(endMinute), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
-        outState.putString(getString(endAmOrPM),
-                pref.getString(getString(endAmOrPM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
+        DataToMemory dataToMemory = new DataToMemory(getApplicationContext());
+        dataToMemory.saveDataOnRotation(outState, key, day, startHour, startMinute, startAmOrPM,
+                endHour, endMinute, endAmOrPM
+                );
 
     }
 
@@ -740,27 +731,13 @@ public class CurrentWeekSchedule extends ListActivity  {
 
     )
     {
-        SharedPreferences.Editor editor = pref.edit();
+        DataToMemory dataToMemory = new DataToMemory(getApplicationContext());
+        dataToMemory.saveDataToMemory(
+         day, startHour, startMinute, startAmOrPm, endHour, endMinute, endAmOrPM,
+                dayOnOrOff, newStartHour, newStartMinute, newStartAmOrPm, newEndHour,
+                newEndMinute, newEndAmOrPm
+        );
 
-        if (!dayOnOrOff.equals(WorkReaderContract.WorkEntry.DAY_OFF_DEFAULT)) {
-            editor.putString(getString(day), getString(day));
-            editor.putString(getString(startHour), newStartHour);
-            editor.putString(getString(startMinute), newStartMinute);
-            editor.putString(getString(startAmOrPm), newStartAmOrPm);
-            editor.putString(getString(endHour), newEndHour);
-            editor.putString(getString(endMinute), newEndMinute);
-            editor.putString(getString(endAmOrPM), newEndAmOrPm);
-        } else {
-            editor.putString(getString(day), WorkReaderContract.WorkEntry.DAY_OFF_DEFAULT);
-            editor.putString(getString(startHour), newStartHour);
-            editor.putString(getString(startMinute), newStartMinute);
-            editor.putString(getString(startAmOrPm), newStartAmOrPm);
-            editor.putString(getString(endHour), newEndHour);
-            editor.putString(getString(endMinute), newEndMinute);
-            editor.putString(getString(endAmOrPM), newEndAmOrPm);
-        }
-
-        editor.apply();
     }
 
     //Added on 11 - 2 - 2019

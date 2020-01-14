@@ -17,6 +17,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.icu.util.Calendar;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -85,45 +86,24 @@ public class AlarmTimer extends AppCompatActivity {
             newMilitaryHour = newMilitaryHour - endMilitaryHour;
         }
 
-        saveAlarmTime(true);
+        DataToMemory dataToMemory =  new DataToMemory(context);
+        dataToMemory.saveAlarmTime(dayOfWeek, newMilitaryHour, newMilitaryMinute, true);
 
     }//setAlarmTime
 
-    //Added on 12 - 16 - 2019
-    @TargetApi(24)
-    private void saveAlarmTime(boolean shouldISaveTheAlarmTime) {
-        cal = Calendar.getInstance();
-        cal.setTimeInMillis(System.currentTimeMillis()); //?
-        //cal.set(Calendar.HOUR, newMilitaryHour);
-        cal.set(Calendar.HOUR, newMilitaryHour);
-        cal.set(Calendar.MINUTE, newMilitaryMinute);
-
-        Log.e("LG_WORK_PHONE", "ALARM GOT CALLED");
-        SharedPreferences.Editor editor = pref.edit();
-        //editor.putInt("MILITARY_HOUR", cal.get(Calendar.HOUR)); //military. Do I need?
-        editor.putString("DAY_OF_WEEK", dayOfWeek);
-        editor.putInt("HOUR", cal.get(Calendar.HOUR)); // gets passed to alarm receiver
-        editor.putInt("MINUTES", cal.get(Calendar.MINUTE));
-        editor.apply();
-    }
 
     //Added on 10 - 21 - 2019
-    public void setMinutesBeforeShift(Context context, int minutesBeforeShift) {
-        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
-        //pref.getInt(context.getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putInt(context.getString(R.string.ALARM_MINUTES),minutesBeforeShift);
-        editor.apply();
+    public void saveMinutesBeforeShift(Context context, int minutesBeforeShift) {
+        DataToMemory dataToMemory = new DataToMemory(context);
+        dataToMemory.saveMinutesBeforeShift(minutesBeforeShift);
     }
 
 
     //Added on 12 - 27 - 2019
     //Just a lame attempt at database emulation, since like, this app doesn't use a database.
     void saveCurrentDayOfWeek(Context context, String currentDayOfWeek){
-        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putString("CURRENT_DAY", currentDayOfWeek);
-        editor.apply();
+        DataToMemory dataToMemory = new DataToMemory(context);
+        dataToMemory.saveCurrentDayOfWeek(context, currentDayOfWeek);
     }
 
     public String getCurrentSavedDayOfWeek(Context context) {
@@ -132,10 +112,8 @@ public class AlarmTimer extends AppCompatActivity {
     }
 
     void savePreviousDayOfWeek(Context context, String previousDayOfWeek){
-        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putString("PREVIOUS_DAY", previousDayOfWeek);
-        editor.apply();
+        DataToMemory dataToMemory = new DataToMemory(context);
+        dataToMemory.savePreviousDayOfWeek(context, previousDayOfWeek);
     }
 
     public String getPreviousDayOfWeekSavedDayOfWeek(Context context) {
@@ -152,48 +130,28 @@ public class AlarmTimer extends AppCompatActivity {
         return this.snoozeTime;
     }
 
-    //Added on 10 - 23 - 2019
-    public int getNewMilitaryHour() {
-        return newMilitaryHour;
-    }
-
-    //Added on 10 - 23 - 2019
-    public int getNewMilitaryMinute(){
-        return newMilitaryMinute;
-    }
-
-    //Added on 10 - 23 - 2019
-    public void setStartMilitaryHour(int startMilitaryHour) {
-        this.startMilitaryHour = startMilitaryHour;
-    }
-
-    public void setStartMilitaryMinute(int startMilitaryMinute) {
-        this.startMilitaryMinute = startMilitaryMinute;
-    }
-
-    public int getMilitaryMinute() {
-        return this.startMilitaryMinute;
-    }
-
-    public int getStartMilitaryHour() {
-        return this.startMilitaryHour;
-    }
-
-    public int getStartMilitaryMinute() {
-        return this.startMilitaryMinute;
-    }
 
     //Added on 12 - 29 - 2019
-    void saveCurrentEndMilitaryHour(Context context, String currentEndMilitaryHour) {
-        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putString("CURRENT_MILITARY_HOUR", currentEndMilitaryHour);
-        editor.apply();
+    void saveCurrentEndMilitaryHour(Context context, int currentEndMilitaryHour) {
+        DataToMemory dataToMemory = new DataToMemory(context);
+        dataToMemory.saveCurrentEndMilitaryHour(context, currentEndMilitaryHour);
     }
 
-    public String getCurrentEndMilitaryHour(Context context){
-        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
-        return pref.getString("CURRENT_MILITARY_HOUR", "");
+    public int getCurrentEndMilitaryHour(Context context){
+        DataToMemory dataToMemory = new DataToMemory(context);
+        return dataToMemory.getCurrentEndMilitaryHour(context);
+    }
+
+
+    //Added on 1 - 14 - 2019
+    void saveCurrentEndMilitaryMinute(Context context, int currentEndMilitaryMinute) {
+        DataToMemory dataToMemory = new DataToMemory(context);
+        dataToMemory.saveCurrentEndMilitaryMinute(context, currentEndMilitaryMinute);
+    }
+
+    public int getCurrentEndMilitaryMinute(Context context){
+        DataToMemory dataToMemory = new DataToMemory(context);
+        return dataToMemory.getCurrentEndMilitaryMinute(context);
     }
 
     //Needed if the device reboots
