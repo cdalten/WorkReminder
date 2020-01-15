@@ -28,14 +28,18 @@ import android.widget.Toast;
 public class WorkPreferences extends AppCompatActivity {
     Spinner dayPreference;
     private EditText alarmMinutesPreference; //Added on 4 - 5- 2019
+    private EditText alarmHourPreference; //Added on 1 - 15 - 2019
     private EditText currentPassword; //Added on 4 - 4- 2019
     private Button rememberPassword; //Added on 7 - 3- 2019
     private Intent i;
     private SharedPreferences pref;
-    private int newAlarmTime; //Added on 10 - 28 - 2019
+    private int newAlarmTimeMinutes; //Added on 10 - 28 - 2019
+    private int newAlarmTimeHour;
 
     private Button save; //Added on 6 - 24 - 2019
     private Button discard; //Added on 12 - 28 - 2019
+    private int alarmHour = 0; //Added on 1 - 15 - 2019
+    private int alarmMinutes = 0; //Added on 1 - 15 - 2019
 
     /*
       The Diazepam, which I use for Vertigo, was making me a bit loopy when I wrote this. So yeah,
@@ -49,6 +53,7 @@ public class WorkPreferences extends AppCompatActivity {
         //dayPreference = (Spinner) findViewById(R.id.dayPreference);
         this.pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
         alarmMinutesPreference = (EditText) findViewById(R.id.alarmMinutesPreference);
+        alarmHourPreference = (EditText) findViewById(R.id.alarmHourPreferences);
         rememberPassword = (Button) findViewById(R.id.RememberPassword);
 
         //currentPassword = (EditText) findViewById(R.id.currentPassword);
@@ -59,12 +64,13 @@ public class WorkPreferences extends AppCompatActivity {
 
 
         pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
-        newAlarmTime = pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT);
-        alarmMinutesPreference.setText(newAlarmTime + "");
+        newAlarmTimeMinutes = pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_MINUTE_DEFAULT);
+        newAlarmTimeHour = pref.getInt(getString(R.string.ALARM_HOURS), WorkReaderContract.WorkEntry.ALARM_HOUR_DEFAULT);
+        alarmMinutesPreference.setText(newAlarmTimeMinutes + "");
+        alarmHourPreference.setText(newAlarmTimeHour + "");
 
-        //editPref = pref.edit();
-        //editPref.putString("PASSWORD", currentPassword.getText().toString());
-        //editPref.apply();
+
+        //Not implemented
         rememberPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -75,36 +81,38 @@ public class WorkPreferences extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String updateTime = alarmMinutesPreference.getText().toString().trim();
+                String updateMinutes = alarmMinutesPreference.getText().toString().trim();
+                String updateHour = alarmHourPreference.getText().toString().trim();
 
-                double currentEndTime = getEndShiftInMinutes() + convertInputTimeToHoursAndMinutes(Integer.parseInt(updateTime));
+                double currentEndTime = getEndShiftInMinutes() +
+                        convertInputTimeToHoursAndMinutes(Integer.parseInt(updateMinutes),
+                                Integer.parseInt(updateHour));
 
                 //Acquire End time
                 AlarmTimer alarmTimer = AlarmTimer.getInstance();
-                alarmTimer.saveMinutesBeforeShift(getApplicationContext(), Integer.parseInt(updateTime));
+                alarmTimer.saveMinutesBeforeShift(getApplicationContext(), Integer.parseInt(updateMinutes));
                 //alarmTimer.getCurrentEndMilitaryHour(getApplication());
 
                 /*
                   Because every other forced update seems to undo my XML preference settings.
                  */
-                if (isValid(updateTime)) {
-                    updateTime =  pref.getString("NEW_ALARM_TIME", "20");
+                if (isValid(updateMinutes)) {
+                    updateMinutes =  pref.getString("NEW_ALARM_TIME", "20");
                     Toast.makeText(getApplicationContext(), "Invalid Input.", Toast.LENGTH_LONG).show();
                 }
 
-                else if (updateTime.equals("") || updateTime == null ||
-                        Integer.parseInt(updateTime) < 0 ||
-                        currentEndTime > 24.0
+
+                else if (updateMinutes.equals("") || updateMinutes == null ||
+                        Integer.parseInt(updateMinutes) < 0 ||
+                        Integer.parseInt(updateMinutes) > 60
                         )
                 {
-                    updateTime =  pref.getString("NEW_ALARM_TIME", "20");
+                    updateMinutes =  pref.getString("NEW_ALARM_TIME", "20");
                     Toast.makeText(getApplicationContext(), "Invalid Input.", Toast.LENGTH_LONG).show();
                 }
-                alarmMinutesPreference.setText(updateTime);
+                alarmMinutesPreference.setText(updateMinutes);
 
-                Log.e("LG_WORK_PHONE", "NEW ALARM TIME AGAIN IS: " + updateTime);
-                Log.e("LG_WORK_PHONE", "THE END MILITARY HOUR IS: " + alarmTimer.getCurrentEndMilitaryHour(getApplication()));
-                Log.e("LG_WORK_PHONE", "THE END MILITARY MINUTE IS: " + alarmTimer.getCurrentEndMilitaryMinute(getApplication()));
+                //Log.e("LG_WORK_PHONE", "NEW ALARM TIME AGAIN IS: " + updateTime);
                 //alarmTimer.setSavedAlarmTime(getApplicationContext(), "",
                 //        alarmTimer.getStartMilitaryHour(),alarmTimer.getMilitaryMinute(), true );
 
@@ -167,16 +175,25 @@ public class WorkPreferences extends AppCompatActivity {
     }
 
     //Added 1 - 14 - 2020
-    private double convertInputTimeToHoursAndMinutes(int inputTime) {
-        double currentTime = inputTime / 100;
+    private double convertInputTimeToHoursAndMinutes(int minutes, int hour) {
+        double currentTime = 0.0;
+
+        if (hour != 0) {
+            currentTime = hour + minutes/100.00;
+        } else {
+            currentTime = minutes / 100.00;
+        }
+
         return currentTime;
     }
 
     //Copied from stackoverflow
+
     private boolean isValid(String str) {
         //if (str.length() != 1) return false;
         char c = Character.toLowerCase(str.charAt(0));
         return c >= 'a' && c <= 'z';
+
     }
 
     @Override

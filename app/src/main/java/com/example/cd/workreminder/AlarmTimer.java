@@ -72,12 +72,12 @@ public class AlarmTimer extends AppCompatActivity {
         if (timeBeforeShift < 60) {
             newMilitaryHour = startMilitaryHour;
             //endMilitaryMinute = timeBeforeShift;
-            endMilitaryMinute = pref.getInt(context.getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT);
+            endMilitaryMinute = pref.getInt(context.getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_MINUTE_DEFAULT);
         }
 
         //newMilitaryHour = startMilitaryHour - endMilitaryHour;
         //newMilitaryMinute = startMilitaryMinute - endMilitaryMinute;
-        newMilitaryMinute = startMilitaryMinute - pref.getInt(context.getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT);
+        newMilitaryMinute = startMilitaryMinute - pref.getInt(context.getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_MINUTE_DEFAULT);
 
         if (newMilitaryMinute < 0) {
             newMilitaryMinute = newMilitaryMinute + 60;

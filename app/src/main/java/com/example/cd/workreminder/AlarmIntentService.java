@@ -54,25 +54,20 @@ public class AlarmIntentService extends IntentService {
     //private  AlarmTimer alarmTimer; //Added on 12 - 20 - 2019
     public AlarmIntentService() {
         super("AlarmIntentService");
-        //pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
-        //SharedPreferences.Editor editor = pref.edit();
-        //editor.putBoolean("ALARM_DISPLAY", true);
-        //editor.apply();
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
 
         Log.e(TAG, "onHandleIntent(): " + intent);
+        Log.e(TAG, "THE RINGTONE URI IS: " + intent.getStringExtra("ALARM_URI"));
+
 
         if (intent != null) {
             final String action = intent.getAction();
             if (ACTION_DISMISS.equals(action)) {
                 handleActionDismiss();
             } else if (ACTION_SNOOZE.equals(action)) {
-                //SharedPreferences.Editor editor = pref.edit();
-                //editor.putBoolean("RINGTONE", true);
-                //editor.apply();
                 handleActionSnooze();
             }
         }
@@ -85,13 +80,19 @@ public class AlarmIntentService extends IntentService {
     private void handleActionDismiss() {
         Log.e(TAG, "handleActionDismiss()");
 
-        //DayNofiticationWithSound dayNofiticationWithSound= new DayNofiticationWithSound(getApplicationContext());
-        //dayNofiticationWithSound.playRingtone(false);
-        //pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
-        //SharedPreferences.Editor editor = pref.edit();
-        //editor.putBoolean("ALARM_DISPLAY", false);
-        //editor.apply();
+        //Because some idiot thought that hitting the dismiss button SHOULDN'T clear the notification
+        NotificationCompat.Builder notificationCompatBuilder =
+                GlobalNotificationBuilder.getNotificationCompatBuilderInstance();
 
+        Notification notification;
+        notification = notificationCompatBuilder.build();
+
+        if (notification != null) {
+            NotificationManagerCompat notificationManagerCompat =
+                    NotificationManagerCompat.from(getApplicationContext());
+
+            notificationManagerCompat.cancel(MainActivity.NOTIFICATION_ID);
+        }
     }
 
     /**

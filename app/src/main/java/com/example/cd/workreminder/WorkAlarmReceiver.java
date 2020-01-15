@@ -45,7 +45,6 @@ public class WorkAlarmReceiver extends BroadcastReceiver {
     public static final String ACTION_DISMISS = "com.example.cd.workreminder.action.DISMISS";
     public static final String ACTION_SNOOZE = "com.example.cd.workreminder.action.SNOOZE";
 
-    private DayNotificationWithSnooze dayNofiticationWithSnooze; //Added on 10 - 31 - 2019
     private SharedPreferences pref; //Added on 11 - 4 - 2019
     private static final long SNOOZE_TIME = TimeUnit.SECONDS.toMillis(60); //Need to change
 

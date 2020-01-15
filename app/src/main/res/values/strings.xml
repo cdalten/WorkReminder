@@ -35,6 +35,7 @@
     <string name="END_AM_OR_PM">END_AM_OR_PM</string>
 
     <string name="ALARM_MINUTES">ALARM_MINUTES</string>
+    <string name="ALARM_HOURS">ALARM_HOURS</string>
 
     <string name="FOO">FOO</string>
 

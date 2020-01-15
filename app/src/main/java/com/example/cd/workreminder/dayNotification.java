@@ -4,6 +4,8 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
@@ -46,7 +48,7 @@ public class DayNotification {
         Intent dismissIntent = new Intent(context, AlarmIntentService.class);
         //dismissIntent.putExtra("ALARM_RINGTONE", RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
         dismissIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
-        dismissIntent.setAction(WorkAlarmReceiver.ACTION_DISMISS);
+        dismissIntent.setAction(AlarmIntentService.ACTION_DISMISS);
         //context.sendBroadcast(dismissIntent);
         PendingIntent dismissPendingIntent = PendingIntent.getService(context, 0, dismissIntent, 0);
 
@@ -65,9 +67,14 @@ public class DayNotification {
                 .addAction(dismissAction);
 
         if (getDisplaySnoozeButton() == true) {
+            Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+            if (alarmUri == null) {
+                alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            }
+
             Intent snoozeIntent = new Intent(context, AlarmIntentService.class);
             snoozeIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
-            snoozeIntent.setAction(WorkAlarmReceiver.ACTION_SNOOZE);
+            snoozeIntent.setAction(AlarmIntentService.ACTION_SNOOZE);
             PendingIntent snoozePendingIntent =
                     PendingIntent.getService(context, 0, snoozeIntent, 0);
 
