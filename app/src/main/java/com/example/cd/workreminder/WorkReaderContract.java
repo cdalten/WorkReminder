@@ -45,8 +45,6 @@ public final class WorkReaderContract {
         public static final int END_MINUTE = 5;
         public static final int END_AM_OR_PM = 6;
 
-        public static boolean updateSchesdule = false; //Added on 6 - 26 - 2019
-
         public static final int RESULT_OK_WORK = 1; //Added on 11 - 12 - 2019
         public static final int RESULT_FAILED = 2;
         public static final int RESULT_OKAY_NO_WORK = 3; //Added on 11 - 13 - 2019

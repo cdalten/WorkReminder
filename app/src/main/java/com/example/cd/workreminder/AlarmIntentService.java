@@ -58,10 +58,8 @@ public class AlarmIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-
         Log.e(TAG, "onHandleIntent(): " + intent);
         Log.e(TAG, "THE RINGTONE URI IS: " + intent.getStringExtra("ALARM_URI"));
-
 
         if (intent != null) {
             final String action = intent.getAction();

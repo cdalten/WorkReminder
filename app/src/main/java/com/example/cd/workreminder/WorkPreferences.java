@@ -69,7 +69,6 @@ public class WorkPreferences extends AppCompatActivity {
         alarmMinutesPreference.setText(newAlarmTimeMinutes + "");
         alarmHourPreference.setText(newAlarmTimeHour + "");
 
-
         //Not implemented
         rememberPassword.setOnClickListener(new View.OnClickListener() {
             @Override

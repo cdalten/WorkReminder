@@ -91,7 +91,6 @@ public class AlarmTimer extends AppCompatActivity {
 
     }//setAlarmTime
 
-
     //Added on 10 - 21 - 2019
     public void saveMinutesBeforeShift(Context context, int minutesBeforeShift) {
         DataToMemory dataToMemory = new DataToMemory(context);
