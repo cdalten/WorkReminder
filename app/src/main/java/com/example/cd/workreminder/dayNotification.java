@@ -156,4 +156,5 @@ public class DayNotification {
     public String getNotificationText() {
         return this.notificationText;
     }
+
 }//end class

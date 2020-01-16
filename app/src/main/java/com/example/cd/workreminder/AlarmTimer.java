@@ -39,7 +39,7 @@ public class AlarmTimer extends AppCompatActivity {
     private int milliSecondsToMinutes = 60000; //Added on 12 - 22 - 2019
     private String currenDayOfWeek = ""; //Added on 12 - 27 - 2019
     private String previousDayOfWeek = "";
-
+    private int currentSnoozeTime = 0; //Added on 1 - 16 - 2020
     private int currentEndMilitaryMinute = 0; //Added on 12 - 29 - 2019
 
     private static AlarmTimer instance = new AlarmTimer();
@@ -154,6 +154,12 @@ public class AlarmTimer extends AppCompatActivity {
     }
 
     //Needed if the device reboots
+    public void setUpdatedMinute(int newMinutes) {
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putInt("MINUTES", newMinutes);
+        editor.apply();
+    }
+
     public int getUpdatedMinute(Context context) {
         pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
         return pref.getInt("MINUTES", 0);
@@ -182,6 +188,15 @@ public class AlarmTimer extends AppCompatActivity {
         return pref.getInt(context.getString(R.string.ALARM_MINUTES), 0);
     }
 
+    //Added on 1 - 16 - 2020
+    public void setCurrentSnoozeTime(int snoozeTime) {
+        this.snoozeTime = snoozeTime;
+    }
+
+    public int getCurrentSnoozeTime () {
+        return this.currentSnoozeTime;
+    }
+
     //Added on 6 - 28 - 2019
     private String getAMorPM (int startMilitaryHour) {
         /*
@@ -203,6 +218,7 @@ public class AlarmTimer extends AppCompatActivity {
             return "AM";
         }
     }
+
 
 
 }//end class

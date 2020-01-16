@@ -99,8 +99,8 @@ public class AlarmIntentService extends IntentService {
         Log.e(TAG, "handleActionSnooze()");
 
         AlarmTimer alarmTimer = AlarmTimer.getInstance();
-        AlarmIntentService.amSnoozed = true;
         alarmTimer.setAlarmSnoooze((int)SNOOZE_TIME);
+        AlarmIntentService.amSnoozed = true;
 
         // You could use NotificationManager.getActiveNotifications() if you are targeting SDK 23
         // and above, but we are targeting devices with lower SDK API numbers, so we saved the
@@ -116,8 +116,8 @@ public class AlarmIntentService extends IntentService {
 
         Notification notification;
         notification = notificationCompatBuilder.
-                setContentTitle("ALARM (GOT UPDATED").
-                setContentText(alarmTimer.getUpdatedHour(this) + ":" + alarmTimer.getUpdatedMinute(this)).
+                setContentTitle("ALARM GOT UPDATED").
+                setContentText(new AlarmTimeFormatDisplay(this, alarmTimer, true).toString()).
                 build();
 
         if (notification != null) {
