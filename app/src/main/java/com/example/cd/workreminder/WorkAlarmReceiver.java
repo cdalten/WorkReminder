@@ -55,16 +55,15 @@ public class WorkAlarmReceiver extends BroadcastReceiver {
 
         Log.e("LG_WORK_PHONE", "ONRECEIVE() GOT CALLED");
 
+        Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        if (alarmUri == null) {
+            alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        }
 
         DayNotification dayNotification = new DayNotification(context);
         dayNotification.setDisplaySnoozeButton(true);
+        dayNotification.setNotificationAlarm(alarmUri,true); //pass uri or overload method?
         dayNotification.createNotification(dayNotification.getNotificationTitle(), dayNotification.getNotificationText());
-        // public void createNotification(String notificationTitle, String notificationText )
-
-
-        //final PendingResult pendingResult = goAsync();
-        //Task asyncTask = new Task(context, pendingResult, intent);
-        //asyncTask.execute();
 
         /*
          Otherwise the alarm won't fire when the user changes the alarm time after the device after
@@ -81,53 +80,7 @@ public class WorkAlarmReceiver extends BroadcastReceiver {
                 Log.e("PRODUCTION TAG", "BOOT ERROR IS: " + e);
             }
             */
-
-        // i = new Intent(context, AlarmSound.class);
-        //context.startService(i);
         //}
 
     }
-
-
-    /*
-      Recreate the original notification with the snooze button added. Any other way results in the
-      GUI thread getting blocked for so long that the displayed alarm time might be off by a few
-      minutes. This despite the fact that the alarmManager fires the alarm on time.
-     */
-    private static class Task extends AsyncTask<String, Integer, String> {
-
-        private final PendingResult pendingResult;
-        private final Intent intent;
-        private Context context;
-
-        private Task(Context context, PendingResult pendingResult, Intent intent) {
-            this.pendingResult = pendingResult;
-            this.intent = intent;
-            this.context = context;
-        }
-
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            String log = "0NRECEIVE() doInBackround() got called";
-            Log.e("LG_WORK_PHONE", log);
-            return log;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            // Must call finish() so the BroadcastReceiver can be recycled.
-            pendingResult.finish();
-        }
-
-    }
-
-    }//end class
+}//end class

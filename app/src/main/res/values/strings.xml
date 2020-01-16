@@ -183,6 +183,4 @@
     <string name="SATURDAY_END_MINUTE">SATURDAY_END_MINUTE</string>
     <string name="SATURDAY_END_AM_OR_PM">SATURDAY_END_AM_OR_PM</string>
 
-    <string name="ALARM_HOUR">ALARM_HOUR</string>
-    <string name="ALARM_MINUTE">ALARM_MINUTE</string>
 </resources>

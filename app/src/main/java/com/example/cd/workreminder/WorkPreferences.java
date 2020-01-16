@@ -82,18 +82,9 @@ public class WorkPreferences extends AppCompatActivity {
                 String updateMinutes = alarmMinutesPreference.getText().toString().trim();
                 String updateHour = alarmHourPreference.getText().toString().trim();
 
-                double currentEndTime = getEndShiftInMinutes() +
-                        convertInputTimeToHoursAndMinutes(Integer.parseInt(updateMinutes),
-                                Integer.parseInt(updateHour));
-
-                //Acquire End time
-                AlarmTimer alarmTimer = AlarmTimer.getInstance();
-                alarmTimer.saveMinutesBeforeShift(getApplicationContext(), Integer.parseInt(updateMinutes));
-                //alarmTimer.getCurrentEndMilitaryHour(getApplication());
-
                 /*
                   Because every other forced update seems to undo my XML preference settings.
-                 */
+                */
                 if (isValid(updateMinutes)) {
                     updateMinutes =  pref.getString("NEW_ALARM_TIME", "20");
                     Toast.makeText(getApplicationContext(), "Invalid Input.", Toast.LENGTH_LONG).show();
@@ -108,16 +99,16 @@ public class WorkPreferences extends AppCompatActivity {
                     updateMinutes =  pref.getString("NEW_ALARM_TIME", "20");
                     Toast.makeText(getApplicationContext(), "Invalid Input.", Toast.LENGTH_LONG).show();
                 }
-                alarmMinutesPreference.setText(updateMinutes);
+
+                double currentEndTime = getEndShiftInMinutes() +
+                        convertInputTimeToHoursAndMinutes(Integer.parseInt(updateMinutes),
+                                Integer.parseInt(updateHour));
+
+                //Acquire End time
+                AlarmTimer alarmTimer = AlarmTimer.getInstance();
+                alarmTimer.saveMinutesBeforeShift(getApplicationContext(), Integer.parseInt(updateMinutes));
 
                 //Log.e("LG_WORK_PHONE", "NEW ALARM TIME AGAIN IS: " + updateTime);
-                //alarmTimer.setSavedAlarmTime(getApplicationContext(), "",
-                //        alarmTimer.getStartMilitaryHour(),alarmTimer.getMilitaryMinute(), true );
-
-                //editPref.putInt("ALARM_HOUR", alarmTimer.getUpdatedHour()); //??
-                //editPref.putInt("MINUTES", alarmTimer.getUpdatedMinute()); //??
-                //editPref.putInt("NEW_DOWNLOAD_DATE", 3);
-                //editPref.apply(); //??
 
                 /*
                   This is done because I don't want the notification calls to be spread across a

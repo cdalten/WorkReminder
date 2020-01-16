@@ -51,7 +51,6 @@ public class AlarmIntentService extends IntentService {
 
     private SharedPreferences pref; //Added on 10 - 29 - 2019
     private static Uri uri;
-    //private  AlarmTimer alarmTimer; //Added on 12 - 20 - 2019
     public AlarmIntentService() {
         super("AlarmIntentService");
     }
@@ -116,9 +115,13 @@ public class AlarmIntentService extends IntentService {
         }
 
         Notification notification;
-        notification = notificationCompatBuilder.build();
+        notification = notificationCompatBuilder.
+                setContentTitle("ALARM (GOT UPDATED").
+                setContentText(alarmTimer.getUpdatedHour(this) + ":" + alarmTimer.getUpdatedMinute(this)).
+                build();
 
         if (notification != null) {
+
             NotificationManagerCompat notificationManagerCompat =
                     NotificationManagerCompat.from(getApplicationContext());
 
@@ -207,7 +210,6 @@ public class AlarmIntentService extends IntentService {
 
 
         // 5. Build and issue the notification.
-
         String notificationChannelId = "";
         // Notification Channel Id is ignored for Android pre O (26).
         NotificationCompat.Builder notificationCompatBuilder =
