@@ -51,6 +51,7 @@ public class AlarmIntentService extends IntentService {
 
     private SharedPreferences pref; //Added on 10 - 29 - 2019
     private static Uri uri;
+
     public AlarmIntentService() {
         super("AlarmIntentService");
     }
@@ -58,7 +59,7 @@ public class AlarmIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         Log.e(TAG, "onHandleIntent(): " + intent);
-        Log.e(TAG, "THE RINGTONE URI IS: " + intent.getStringExtra("ALARM_URI"));
+
 
         if (intent != null) {
             final String action = intent.getAction();
@@ -77,7 +78,12 @@ public class AlarmIntentService extends IntentService {
     private void handleActionDismiss() {
         Log.e(TAG, "handleActionDismiss()");
 
-        //Because some idiot thought that hitting the dismiss button SHOULDN'T clear the notification
+        //CurrrentRingtoneInstance.getInstance().getRingtone();
+
+        Ringtone ringtone = (Ringtone)CurrrentRingtoneInstance.getInstance().getArrayList().get(0);
+        ringtone.stop();
+
+        //Because some dumbass thought that hitting the dismiss button SHOULDN'T clear the notification
         NotificationCompat.Builder notificationCompatBuilder =
                 GlobalNotificationBuilder.getNotificationCompatBuilderInstance();
 
@@ -102,6 +108,7 @@ public class AlarmIntentService extends IntentService {
         alarmTimer.setAlarmSnoooze((int)SNOOZE_TIME);
         AlarmIntentService.amSnoozed = true;
 
+        CurrrentRingtoneInstance.getInstance().getRingtone();
         // You could use NotificationManager.getActiveNotifications() if you are targeting SDK 23
         // and above, but we are targeting devices with lower SDK API numbers, so we saved the
         // builder globally and get the notification back to recreate it later.

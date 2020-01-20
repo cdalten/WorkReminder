@@ -225,28 +225,42 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
     //Added on 10 - 16 - 2019
     private void webViewSettings() {
-        getSchedule = (WebView) this.findViewById(R.id.CurrentSchedule);
-        getSchedule.setWebViewClient(new WWebViewClient());
-        //getSchedule.addJavascriptInterface(new MainActivity.JavaScriptBridge(this), "OFFLINE");
-        getSchedule.getSettings().setLoadWithOverviewMode(true);
-        getSchedule.getSettings().setUseWideViewPort(true);
-        getSchedule.getSettings().setJavaScriptEnabled(true);
-        getSchedule.getSettings().setDomStorageEnabled(true);
-        getSchedule.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT); //added on 9 - 23 - 2018
-        CookieManager.getInstance().setAcceptCookie(true);
+        ConnectivityManager cm =
+                (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        //double render????
-        //mNetworkFragment = WorkNetworkFragment.getInstance(
-        //        getSupportFragmentManager(),
-        //        "https://" + LANDINGPAGE_URL);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
 
-        mNetworkFragment = WorkNetworkFragment.getInstance(
-                getSupportFragmentManager(),
-                LOGIN_URL);
+        if (!isConnected) {
+            Log.e(PRODUCTION_TAG, "INTERNET? " + isConnected);
+            Intent intent = new Intent(MainActivity.this, CurrentWeekSchedule.class);
+            startActivity(intent);
+        }
+        else {
 
-        getSchedule.loadUrl(LOGIN_URL);
-        getSchedule.setVisibility(View.VISIBLE); //disable for debugging.
+            getSchedule = (WebView) this.findViewById(R.id.CurrentSchedule);
+            getSchedule.setWebViewClient(new WWebViewClient());
+            //getSchedule.addJavascriptInterface(new MainActivity.JavaScriptBridge(this), "OFFLINE");
+            getSchedule.getSettings().setLoadWithOverviewMode(true);
+            getSchedule.getSettings().setUseWideViewPort(true);
+            getSchedule.getSettings().setJavaScriptEnabled(true);
+            getSchedule.getSettings().setDomStorageEnabled(true);
+            getSchedule.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT); //added on 9 - 23 - 2018
+            CookieManager.getInstance().setAcceptCookie(true);
 
+            //double render????
+            //mNetworkFragment = WorkNetworkFragment.getInstance(
+            //        getSupportFragmentManager(),
+            //        "https://" + LANDINGPAGE_URL);
+
+            mNetworkFragment = WorkNetworkFragment.getInstance(
+                    getSupportFragmentManager(),
+                    LOGIN_URL);
+
+            getSchedule.loadUrl(LOGIN_URL);
+            getSchedule.setVisibility(View.VISIBLE); //disable for debugging.
+        }
         /*getSchedule.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -644,7 +658,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             }
 
             //Password expired. Need to handle change password case.
-            else if (url.equals("https://myschedule.safeway.com/ESS/AuthN/SwyLogInError.aspx")) {
+            /*else if (url.equals("https://myschedule.safeway.com/ESS/AuthN/SwyLogInError.aspx")) {
                 getSchedule.setVisibility(View.VISIBLE);
                 getSchedule.loadDataWithBaseURL("myschedule.safeway.com",
                         "<html><li><font size =\"14\"><b>" +
@@ -662,6 +676,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 //Update.setVisibility(View.VISIBLE);
 
             }
+            */
 
 
             //Update schedule
@@ -693,13 +708,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             Log.i(PRODUCTION_TAG, "UPDATE VISIT HISTORY URL: " + url.toString());
         }
 
-        //Authorization isn't implemented on the remote server.
-        @Override
-        public void onReceivedHttpAuthRequest(WebView view, HttpAuthHandler handler, String host, String realm) {
-            super.onReceivedHttpAuthRequest(view, handler, host, realm);
-            //handler.proceed("9857701@safeway.com", pass);
-            Log.i(PRODUCTION_TAG, "---RECEIVED HTTP AUTH REQUEST");
-        }
 
         //Spits back on 404
         @Override
@@ -713,7 +721,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
         //Display schedule right away if there is no internet connection
         // @Override
-        @TargetApi(24)
+        /*@TargetApi(24)
         public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
             //put super() before getschedule cache()?
             //super.onReceivedError(view, request, error);
@@ -724,19 +732,21 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             Toast.makeText(getApplicationContext(), "" +
                     "NO WIFI. NOT CONNECTED (DEBUG MODE)", Toast.LENGTH_LONG).show();
         }
+        */
 
-        /*
-         * Attempt to handle logout and SSL cert errors correctly. 1 - 23 - 2017
-         * The Alternative is to uninstall the app.
-         *
-         */
-        @Override
-        public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-            //super.onReceivedSslError(view, handler, error);
-            if(handler != null) {
-                //handler.proceed();
-            } else {
-                Log.i(PRODUCTION_TAG, "SSL ERROR");
+
+            /*
+                 * Attempt to handle logout and SSL cert errors correctly. 1 - 23 - 2017
+                 * The Alternative is to uninstall the app.
+                 *
+                 */
+                @Override
+                public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+                    //super.onReceivedSslError(view, handler, error);
+                    if(handler != null) {
+                        //handler.proceed();
+                    } else {
+                        Log.i(PRODUCTION_TAG, "SSL ERROR");
             }
         }
     }

@@ -14,6 +14,8 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 import static android.app.Notification.EXTRA_NOTIFICATION_ID;
 
 public class DayNotification {
@@ -74,11 +76,31 @@ public class DayNotification {
                 .addAction(dismissAction);
 
         if (getDisplaySnoozeButton() == true) {
-            playRingtone(alarmUri);
+            if (notificationAlarm == true ) { //play when the button with snooze first appears
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    ringtone = RingtoneManager.getRingtone(context, alarmUri);
+
+                    AudioAttributes aa = new AudioAttributes.Builder()
+                            .setUsage(AudioAttributes.USAGE_ALARM)
+                            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                            .build();
+
+
+                    ringtone.setAudioAttributes(aa);
+                    Log.e("LG_WORK_PHONE", "GREATER THAN LOLLIPOP");
+                } else {
+                    Log.e("LG_WORK_PHONE", "LESS THAN LOLLIPOP");
+                    ringtone.setStreamType(AudioManager.STREAM_ALARM);
+                }
+                Log.e("LG_WORK_PHONE", "THE RINGTONE (IN GLOBAL MAIN ACTIVITY) IS: " + ringtone);
+                CurrrentRingtoneInstance.getInstance().getArrayList().add(ringtone);
+                ringtone.play();
+            }
 
             Intent snoozeIntent = new Intent(context, AlarmIntentService.class);
             snoozeIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
             snoozeIntent.setAction(AlarmIntentService.ACTION_SNOOZE);
+
             PendingIntent snoozePendingIntent =
                     PendingIntent.getService(context, 0, snoozeIntent, 0);
 
@@ -101,26 +123,6 @@ public class DayNotification {
         mNotificationManagerCompat.notify(0, notification);
     }
 
-    //Added on 10 - 30 - 2019
-    private void playRingtone(Uri alarmUri) {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            ringtone = RingtoneManager.getRingtone(context, alarmUri);
-            AudioAttributes aa = new AudioAttributes.Builder()
-                    .setUsage(AudioAttributes.USAGE_ALARM)
-                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                    .build();
-
-            ringtone.setAudioAttributes(aa);
-            Log.e("LG_WORK_PHONE", "GREATER THAN LOLLIPOP");
-        } else {
-            Log.e("LG_WORK_PHONE", "LESS THAN LOLLIPOP");
-            ringtone.setStreamType(AudioManager.STREAM_ALARM);
-        }
-
-        Log.e("LG_WORK_PHONE", "THE RINGTONE INSTANCE IS: " + ringtone);
-
-    }
 
     //Added on 1 - 16 - 2020
     public void setNotificationAlarm(Uri alarmUri, boolean notificationAlarm) {
@@ -128,8 +130,8 @@ public class DayNotification {
         this.notificationAlarm = notificationAlarm;
     }
 
-    public boolean getNotificationAlarm() {
-        return this.notificationAlarm;
+    public Uri getNotificationAlarmURI() {
+        return this.alarmUri;
     }
 
     //Added on 1 - 7 - 2020
