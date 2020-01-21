@@ -47,7 +47,7 @@ public class AlarmIntentService extends IntentService {
             "com.example.cd.workreminder.action.SNOOZE";
 
     private static final long SNOOZE_TIME = TimeUnit.SECONDS.toMillis(60); //Need to change
-    public static boolean amSnoozed = false; //Added on 12 - 22 - 2010
+    //public static boolean amSnoozed = false; //Added on 12 - 22 - 2010
 
     private SharedPreferences pref; //Added on 10 - 29 - 2019
     private static Uri uri;
@@ -122,7 +122,7 @@ public class AlarmIntentService extends IntentService {
 
         AlarmTimer alarmTimer = AlarmTimer.getInstance();
         alarmTimer.setAlarmSnoooze((int)SNOOZE_TIME);
-        AlarmIntentService.amSnoozed = true;
+        //AlarmIntentService.amSnoozed = true;
 
         CurrrentRingtoneInstance.getInstance().getRingtone();
         // You could use NotificationManager.getActiveNotifications() if you are targeting SDK 23
@@ -151,8 +151,9 @@ public class AlarmIntentService extends IntentService {
             notificationManagerCompat.cancel(MainActivity.NOTIFICATION_ID);
 
             try {
-                amSnoozed = true;
-                Log.e("LG_WORK_PHONE", "ALARM INTENT SERVICE GOT CALLED");
+                //AlarmIntentService.amSnoozed = true;
+                Ringtone ringtone = (Ringtone) CurrrentRingtoneInstance.getInstance().getArrayList().get(0);
+                ringtone.stop();
                 Thread.sleep(SNOOZE_TIME);
             } catch (InterruptedException ex) {
                 Thread.currentThread().interrupt();
