@@ -63,7 +63,7 @@ public class AlarmTimer extends AppCompatActivity {
         this.dayOfWeek = dayOfWeek;
         this.startMilitaryMinute = startMilitaryMinute;
         this.startMilitaryHour = startMilitaryHour;
-        updatedAmOrPm = getAMorPM(startMilitaryHour);
+
 
         /*
           The algorithm was taken from a math book that I got from an Elementary School teacher
@@ -73,30 +73,51 @@ public class AlarmTimer extends AppCompatActivity {
             newMilitaryHour = startMilitaryHour;
             //endMilitaryMinute = timeBeforeShift;
             endMilitaryMinute = pref.getInt(context.getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_MINUTE_DEFAULT);
+            endMilitaryHour = pref.getInt("ALARM_HOUR", 0);
         }
 
         //newMilitaryHour = startMilitaryHour - endMilitaryHour;
         //newMilitaryMinute = startMilitaryMinute - endMilitaryMinute;
         newMilitaryMinute = startMilitaryMinute - pref.getInt(context.getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_MINUTE_DEFAULT);
+        endMilitaryHour = pref.getInt("ALARM_HOUR", 0);
 
-        if (newMilitaryMinute < 0) {
+        if (newMilitaryMinute < 0 && endMilitaryHour == 0) {
             newMilitaryMinute = newMilitaryMinute + 60;
             newMilitaryHour = newMilitaryHour - 1;
-        } else {
+        } else if (newMilitaryMinute < 0 && endMilitaryHour > 0) {
+            newMilitaryMinute = newMilitaryMinute + 60;
+            newMilitaryHour = newMilitaryHour - endMilitaryHour - 1;
+        }
+
+        else {
             newMilitaryHour = newMilitaryHour - endMilitaryHour;
         }
+        //updatedAmOrPm = getAMorPM(startMilitaryHour);
+        updatedAmOrPm = getAMorPM(newMilitaryHour);
 
         DataToMemory dataToMemory =  new DataToMemory(context);
         dataToMemory.saveAlarmTime(dayOfWeek, newMilitaryHour, newMilitaryMinute, true);
 
     }//setAlarmTime
 
+    public int getNewMilitaryHour() {
+        return this.newMilitaryHour;
+    }
+
+    public int getNewMilitaryMinute() {
+        return this.newMilitaryMinute;
+    }
     //Added on 10 - 21 - 2019
     public void saveMinutesBeforeShift(Context context, int minutesBeforeShift) {
         DataToMemory dataToMemory = new DataToMemory(context);
         dataToMemory.saveMinutesBeforeShift(minutesBeforeShift);
     }
 
+
+    public void saveHoursBeforeShift(Context context, int hoursBeforeShift) {
+        DataToMemory dataToMemory = new DataToMemory(context);
+        dataToMemory.saveHoursBeforeShift(hoursBeforeShift);
+    }
 
     //Added on 12 - 27 - 2019
     //Just a lame attempt at database emulation, since like, this app doesn't use a database.
@@ -188,6 +209,10 @@ public class AlarmTimer extends AppCompatActivity {
         return pref.getInt(context.getString(R.string.ALARM_MINUTES), 0);
     }
 
+    public int getHoursBeforeShift(Context context) {
+        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        return pref.getInt("ALARM_HOUR", 0);
+    }
     //Added on 1 - 16 - 2020
     public void setCurrentSnoozeTime(int snoozeTime) {
         this.snoozeTime = snoozeTime;

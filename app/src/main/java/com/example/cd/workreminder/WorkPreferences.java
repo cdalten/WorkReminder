@@ -92,8 +92,8 @@ public class WorkPreferences extends AppCompatActivity {
 
 
                 else if (updateMinutes.equals("") || updateMinutes == null ||
-                        Integer.parseInt(updateMinutes) < 0 ||
-                        Integer.parseInt(updateMinutes) > 60
+                        Integer.parseInt(updateMinutes) < 0
+                        || Integer.parseInt(updateMinutes) > 60
                         )
                 {
                     updateMinutes =  pref.getString("NEW_ALARM_TIME", "20");
@@ -107,6 +107,7 @@ public class WorkPreferences extends AppCompatActivity {
                 //Acquire End time
                 AlarmTimer alarmTimer = AlarmTimer.getInstance();
                 alarmTimer.saveMinutesBeforeShift(getApplicationContext(), Integer.parseInt(updateMinutes));
+                alarmTimer.saveHoursBeforeShift(getApplicationContext(), Integer.parseInt(updateHour));
 
                 //Log.e("LG_WORK_PHONE", "NEW ALARM TIME AGAIN IS: " + updateTime);
 

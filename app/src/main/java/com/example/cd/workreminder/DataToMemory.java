@@ -150,6 +150,13 @@ public class DataToMemory extends AppCompatActivity{
         editor.apply();
     }
 
+    public void saveHoursBeforeShift(int hoursBeforeShift) {
+        //pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        //pref.getInt(context.getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putInt("ALARM_HOUR",hoursBeforeShift);
+        editor.apply();
+    }
     //Added on 12 - 27 - 2019
     //Just a lame attempt at database emulation, since like, this app doesn't use a database.
     void saveCurrentDayOfWeek(Context context, String currentDayOfWeek){

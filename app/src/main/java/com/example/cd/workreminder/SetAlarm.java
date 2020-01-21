@@ -380,6 +380,15 @@ public class SetAlarm extends AppCompatActivity {
                 true
         );
 
+
+        /*alarmTimer.setSavedAlarmTime(context,
+                day,
+                alarmTimer.getNewMilitaryHour(),
+                alarmTimer.getNewMilitaryMinute(),
+                true
+        );
+        */
+
         displayNotification(alarmTimer, false, true,
                 "ALARM");
         setAlarm(context, alarmTimer);

@@ -24,6 +24,35 @@ public class AlarmTimeFormatDisplay {
     }
 
 
+    //Added on 10 - 11 - 2019
+    public String buildAlarmTimeFormatDisplay(String dayOfWeek,
+                                              int hour,
+                                              int minute,
+                                              String amOrPm) {
+        String timeFormat = "";
+
+        /*
+          When the Alarm is set to something like 12:15 PM, and the alarm is set 15 minutes before,
+          we want it to show 12:00 PM
+         */
+        if ((hour == 0) && amOrPm.equals("AM") ) {
+            hour = 12;
+            amOrPm = "PM";
+        } else  if ((hour == 0) && amOrPm.equals("PM") ) {
+            hour = 12;
+            amOrPm = "AM";
+        }
+
+        //Something like 1:5 PM becomes while 1:05 PM while something like 1:10 PM stays 1:10 PM
+        if (minute < 10) {
+            timeFormat = dayOfWeek + " " + hour + ":0" + minute + " " + amOrPm;
+        } else {
+            timeFormat = dayOfWeek + " " + hour + ":" + minute + " " + amOrPm;
+        }
+
+        return timeFormat;
+    }
+
     public void setSnoozeTime(int snoozeTime) {
         this.snoozeTime = snoozeTime;
     }
@@ -37,43 +66,42 @@ public class AlarmTimeFormatDisplay {
           When the Alarm is set to something like 12:15 PM, and the alarm is set 15 minutes before,
           we want it to show 12:00 PM
          */
-        if ((alarmTimer.getUpdatedHour(context) == 0) && alarmTimer.getUpdatedStartAmOrPm(context).equals("AM") ) {
-            hour = 12;
-            amOrPm = "PM";
-        } else  if ((alarmTimer.getUpdatedHour(context) == 12) && alarmTimer.getUpdatedStartAmOrPm(context).equals("PM") ) {
-            hour = 12;
-            amOrPm = "AM";
-        } else if ((alarmTimer.getUpdatedHour(context) == 0) &&  alarmTimer.getUpdatedStartAmOrPm(context).equals("PM") ){
-            hour = 12;
-        }
+
 
         if (amSnoozed == false) {
             //Something like 1:5 PM becomes while 1:05 PM while something like 1:10 PM stays 1:10 PM
-            if (alarmTimer.getUpdatedMinute(context) < 10) {
-                timeFormat = alarmTimer.getDayOfWeek(context) + " "
-                        + alarmTimer.getUpdatedHour(context) + ":0"
-                        + alarmTimer.getUpdatedMinute(context) + " "
-                        + alarmTimer.getUpdatedStartAmOrPm(context);
-            } else {
-                timeFormat = alarmTimer.getDayOfWeek(context) + " "
-                        + alarmTimer.getUpdatedHour(context) + ":"
-                        + alarmTimer.getUpdatedMinute(context) + " "
-                        + alarmTimer.getUpdatedStartAmOrPm(context);
-            }
+            timeFormat = buildAlarmTimeFormatDisplay(
+                    alarmTimer.getDayOfWeek(context.getApplicationContext()),
+                    alarmTimer.getUpdatedHour(context.getApplicationContext()),
+                    alarmTimer.getUpdatedMinute(context.getApplicationContext()),
+                    alarmTimer.getUpdatedStartAmOrPm(context.getApplicationContext()));
         } else {
             snoozeTime = alarmTimer.getUpdatedMinute(context) + alarmTimer.getAlarmSnooze();
             alarmTimer.setUpdatedMinute(snoozeTime);
             Log.e("LG_WORK_PHONE", "THE SNOOZE TIME IS: " + snoozeTime);
             if (snoozeTime < 10) {
-                timeFormat = alarmTimer.getDayOfWeek(context) + " "
+                /*timeFormat = alarmTimer.getDayOfWeek(context) + " "
                         + alarmTimer.getUpdatedHour(context) + ":0"
                         + snoozeTime + " "
                         + alarmTimer.getUpdatedStartAmOrPm(context);
+                        */
+
+                timeFormat = buildAlarmTimeFormatDisplay(
+                        alarmTimer.getDayOfWeek(context.getApplicationContext()),
+                        alarmTimer.getUpdatedHour(context.getApplicationContext()),
+                        snoozeTime,
+                        alarmTimer.getUpdatedStartAmOrPm(context.getApplicationContext()) );
             } else {
-                timeFormat = alarmTimer.getDayOfWeek(context) + " "
+                /*timeFormat = alarmTimer.getDayOfWeek(context) + " "
                         + alarmTimer.getUpdatedHour(context) + ":"
                         + snoozeTime + " "
                         + alarmTimer.getUpdatedStartAmOrPm(context);
+                        */
+                timeFormat = buildAlarmTimeFormatDisplay(
+                        alarmTimer.getDayOfWeek(context.getApplicationContext()),
+                        alarmTimer.getUpdatedHour(context.getApplicationContext()),
+                        snoozeTime,
+                        alarmTimer.getUpdatedStartAmOrPm(context.getApplicationContext()));
             }
         }
 
