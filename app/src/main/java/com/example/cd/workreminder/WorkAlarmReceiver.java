@@ -45,15 +45,37 @@ public class WorkAlarmReceiver extends BroadcastReceiver {
     public static final String ACTION_DISMISS = "com.example.cd.workreminder.action.DISMISS";
     public static final String ACTION_SNOOZE = "com.example.cd.workreminder.action.SNOOZE";
 
-    private SharedPreferences pref; //Added on 11 - 4 - 2019
-    private static final long SNOOZE_TIME = TimeUnit.SECONDS.toMillis(60); //Need to change
-
     @Override
     public void onReceive(Context context, Intent intent) {
+
+
         Log.e("PRODUCTION TAG", "WORK ALARM RECEIVER GOT CALLED WITH: " + intent.getAction());
         Log.e("PRODUCTION TAG", "WORK ALARM RECEIVER GOT CALLED WITH: " + intent.getExtras());
 
         Log.e("LG_WORK_PHONE", "ONRECEIVE() GOT CALLED");
+
+        /*
+         Otherwise the alarm won't fire when the user changes the alarm time after the device after
+         the phone reboots. More info on this can be found at...
+         https://developer.android.com/training/scheduling/alarms
+         */
+
+        //Intent.ACTION_BOOT_COMPLETED
+         /*try {
+                if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
+                    //Toast.makeText(context, "Boot Detected.", Toast.LENGTH_LONG).show();
+                    Log.e("LG_WORK_PHONE: ", "DEVICE BOOT DETECTED");
+
+                } else {
+                    Log.e("LG_WORK_PHONE", "DEVICE BOOT NOT DETECTED");
+                }
+
+
+         } catch (Exception e) {
+             Log.e("LG_WORK_PHONE ", "BOOT ERROR IS: " + e);
+         }*/
+
+
 
         Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
         if (alarmUri == null) {
@@ -65,22 +87,7 @@ public class WorkAlarmReceiver extends BroadcastReceiver {
         dayNotification.setNotificationAlarm(alarmUri,true); //pass uri or overload method?
         dayNotification.createNotification(dayNotification.getNotificationTitle(), dayNotification.getNotificationText());
 
-        /*
-         Otherwise the alarm won't fire when the user changes the alarm time after the device after
-         the phone reboots. More info on this can be found at...
-         https://developer.android.com/training/scheduling/alarms
-         */
 
-         /*try {
-                if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
-                    Toast.makeText(context, "Boot Detected.", Toast.LENGTH_LONG).show();
-
-                }
-            } catch (Exception e) {
-                Log.e("PRODUCTION TAG", "BOOT ERROR IS: " + e);
-            }
-            */
-        //}
 
     }
 }//end class

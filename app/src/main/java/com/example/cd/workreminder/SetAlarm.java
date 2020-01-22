@@ -358,6 +358,7 @@ public class SetAlarm extends AppCompatActivity {
             else {
                 //alarmTimer.setStartMilitaryHour(getStartMilitaryHour());
                 //alarmTimer.setStartMilitaryMinute(getEndMilitaryMinute());
+
                 setNewNotificationDisplayAlarm(context,
                         alarmTimer.getCurrentSavedDayOfWeek(context.getApplicationContext()),alarmTimer);
             }
@@ -427,8 +428,9 @@ public class SetAlarm extends AppCompatActivity {
           20 minutes before the start of the shift to something like 10 minutes before
           the start of a shift.
          */
-        calendar.set(Calendar.HOUR_OF_DAY, alarmTimer.getUpdatedHour(context.getApplicationContext()));
-        calendar.set(Calendar.MINUTE, alarmTimer.getUpdatedMinute(context.getApplicationContext()));
+        calendar.set(Calendar.HOUR_OF_DAY, alarmTimer.getNewMilitaryHour());
+        //calendar.set(Calendar.HOUR_OF_DAY, 12);
+        calendar.set(Calendar.MINUTE, alarmTimer.getNewMilitaryMinute());
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0); //??
 
@@ -436,12 +438,12 @@ public class SetAlarm extends AppCompatActivity {
                 + " AND MINUTE:" + alarmTimer.getUpdatedMinute(context.getApplicationContext())
                 + " AND AM/PM:" + alarmTimer.getUpdatedStartAmOrPm(context.getApplicationContext()));
 
-        //alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-        //        1000 * 60 * alarmTimer.getAlarmSnooze(), alarmIntent);
 
-        alarmMgr.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                SystemClock.elapsedRealtime() +
-                        60 * 1000 , alarmIntent);
+        //alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+        //        1000 * 60 , alarmIntent);
+
+        alarmMgr.setExact(AlarmManager.RTC_WAKEUP,
+                calendar.getTimeInMillis(), alarmIntent);
     }
 
     //Added on 12 - 15 - 2019
