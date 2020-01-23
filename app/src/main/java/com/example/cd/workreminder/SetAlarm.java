@@ -260,8 +260,8 @@ public class SetAlarm extends AppCompatActivity {
 
     //Added on 1 - 14 - 2010
     private void saveAlarmTime(AlarmTimer alarmTimer, MilitaryTime militaryTime) {
-        alarmTimer.saveCurrentEndMilitaryHour(context, militaryTime.getEndMilitaryHour());
-        alarmTimer.saveCurrentEndMilitaryMinute(context, militaryTime.getEndMilitaryMinute());
+        alarmTimer.saveCurrentEndMilitaryHour(context, alarmTimer.getCurrentEndMilitaryHour(context));
+        alarmTimer.saveCurrentEndMilitaryMinute(context, alarmTimer.getCurrentEndMilitaryMinute(context));
         alarmTimer.saveCurrentDayOfWeek(context.getApplicationContext(),day);
         alarmTimer.savePreviousDayOfWeek(context.getApplicationContext(),previousDay);
     }
@@ -359,6 +359,8 @@ public class SetAlarm extends AppCompatActivity {
                 //alarmTimer.setStartMilitaryHour(getStartMilitaryHour());
                 //alarmTimer.setStartMilitaryMinute(getEndMilitaryMinute());
 
+                Log.e(PRODUCTION_TAG, "THE UPDATED ALARM TIME IS: " + alarmTimer.getNewAlarmMilitaryMinute(context));
+                Log.e(PRODUCTION_TAG, "THE END ALARM TIME IS: " + getStartMilitaryMinute());
                 setNewNotificationDisplayAlarm(context,
                         alarmTimer.getCurrentSavedDayOfWeek(context.getApplicationContext()),alarmTimer);
             }
@@ -428,9 +430,9 @@ public class SetAlarm extends AppCompatActivity {
           20 minutes before the start of the shift to something like 10 minutes before
           the start of a shift.
          */
-        calendar.set(Calendar.HOUR_OF_DAY, alarmTimer.getNewMilitaryHour());
+        calendar.set(Calendar.HOUR_OF_DAY, alarmTimer.getNewAlarmMilitaryHour(context));
         //calendar.set(Calendar.HOUR_OF_DAY, 12);
-        calendar.set(Calendar.MINUTE, alarmTimer.getNewMilitaryMinute());
+        calendar.set(Calendar.MINUTE, alarmTimer.getNewAlarmMilitaryMinute(context));
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0); //??
 

@@ -72,11 +72,11 @@ public class AlarmTimeFormatDisplay {
             //Something like 1:5 PM becomes while 1:05 PM while something like 1:10 PM stays 1:10 PM
             timeFormat = buildAlarmTimeFormatDisplay(
                     alarmTimer.getDayOfWeek(context.getApplicationContext()),
-                    alarmTimer.getUpdatedHour(context.getApplicationContext()),
-                    alarmTimer.getUpdatedMinute(context.getApplicationContext()),
+                    alarmTimer.getNewAlarmMilitaryHour(context.getApplicationContext()),
+                    alarmTimer.getNewAlarmMilitaryMinute(context.getApplicationContext()),
                     alarmTimer.getUpdatedStartAmOrPm(context.getApplicationContext()));
         } else {
-            snoozeTime = alarmTimer.getUpdatedMinute(context) + alarmTimer.getAlarmSnooze();
+            snoozeTime = alarmTimer.getNewAlarmMilitaryMinute(context) + alarmTimer.getAlarmSnooze();
             alarmTimer.setUpdatedMinute(snoozeTime);
             Log.e("LG_WORK_PHONE", "THE SNOOZE TIME IS: " + snoozeTime);
             if (snoozeTime < 10) {
@@ -88,7 +88,7 @@ public class AlarmTimeFormatDisplay {
 
                 timeFormat = buildAlarmTimeFormatDisplay(
                         alarmTimer.getDayOfWeek(context.getApplicationContext()),
-                        alarmTimer.getUpdatedHour(context.getApplicationContext()),
+                        alarmTimer.getNewAlarmMilitaryHour(context.getApplicationContext()),
                         snoozeTime,
                         alarmTimer.getUpdatedStartAmOrPm(context.getApplicationContext()) );
             } else {
@@ -99,7 +99,7 @@ public class AlarmTimeFormatDisplay {
                         */
                 timeFormat = buildAlarmTimeFormatDisplay(
                         alarmTimer.getDayOfWeek(context.getApplicationContext()),
-                        alarmTimer.getUpdatedHour(context.getApplicationContext()),
+                        alarmTimer.getNewAlarmMilitaryHour(context.getApplicationContext()),
                         snoozeTime,
                         alarmTimer.getUpdatedStartAmOrPm(context.getApplicationContext()));
             }

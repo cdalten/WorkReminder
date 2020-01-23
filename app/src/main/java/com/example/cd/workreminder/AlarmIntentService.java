@@ -158,6 +158,8 @@ public class AlarmIntentService extends IntentService {
             } catch (InterruptedException ex) {
                 Thread.currentThread().interrupt();
             }
+            Ringtone ringtone = (Ringtone) CurrrentRingtoneInstance.getInstance().getArrayList().get(0);
+            ringtone.play();
             notificationManagerCompat.notify(MainActivity.NOTIFICATION_ID, notification);
         }
 

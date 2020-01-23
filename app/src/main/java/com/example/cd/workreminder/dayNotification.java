@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -102,7 +103,7 @@ public class DayNotification {
             snoozeIntent.setAction(AlarmIntentService.ACTION_SNOOZE);
 
             PendingIntent snoozePendingIntent =
-                    PendingIntent.getService(context, 0, snoozeIntent, 0);
+                    PendingIntent.getService(context, 0, snoozeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             NotificationCompat.Action snoozeAction =
                     new NotificationCompat.Action.Builder(
@@ -111,6 +112,7 @@ public class DayNotification {
                             snoozePendingIntent)
                             .build();
 
+            notificationCompatBuilder.setFullScreenIntent(snoozePendingIntent, true);
             notificationCompatBuilder.addAction(snoozeAction);
         }
 
@@ -158,5 +160,6 @@ public class DayNotification {
     public String getNotificationText() {
         return this.notificationText;
     }
+
 
 }//end class

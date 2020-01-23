@@ -135,12 +135,21 @@ public class DataToMemory extends AppCompatActivity{
         Log.e("LG_WORK_PHONE", "ALARM GOT CALLED");
         //editor.putInt("MILITARY_HOUR", cal.get(Calendar.HOUR)); //military. Do I need?
         editor.putString("DAY_OF_WEEK", dayOfWeek);
-        editor.putInt("HOUR", cal.get(Calendar.HOUR)); // gets passed to alarm receiver
-        editor.putInt("MINUTES", cal.get(Calendar.MINUTE));
+        editor.putInt("NEW_ALARM_HOUR", cal.get(Calendar.HOUR)); // gets passed to alarm receiver
+        editor.putInt("NEW_ALARM_MINUTES", cal.get(Calendar.MINUTE));
         editor.apply();
     }
 
 
+    public int getNewAlarmMilitaryHour(Context context) {
+        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        return pref.getInt("NEW_ALARM_HOUR", 0);
+    }
+
+    public int getNewAlarmMilitaryMinute(Context context) {
+        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        return pref.getInt("NEW_ALARM_MINUTES", 0);
+    }
     //Added on 10 - 21 - 2019
     public void saveMinutesBeforeShift(int minutesBeforeShift) {
         //pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);

@@ -100,13 +100,20 @@ public class AlarmTimer extends AppCompatActivity {
 
     }//setAlarmTime
 
-    public int getNewMilitaryHour() {
-        return this.newMilitaryHour;
+    //Added on 1 - 23 - 2020
+    //----USED TO GET CURRENT TIME IN NOTIFICATION ALARM------------------------
+    public int getNewAlarmMilitaryHour(Context context) {
+        DataToMemory dataToMemory = new DataToMemory(context);
+        return dataToMemory.getNewAlarmMilitaryHour(context);
     }
 
-    public int getNewMilitaryMinute() {
-        return this.newMilitaryMinute;
+    public int getNewAlarmMilitaryMinute(Context context) {
+        DataToMemory dataToMemory = new DataToMemory(context);
+        return dataToMemory.getNewAlarmMilitaryMinute(context);
     }
+
+    //----------------------------------------------------------
+
     //Added on 10 - 21 - 2019
     public void saveMinutesBeforeShift(Context context, int minutesBeforeShift) {
         DataToMemory dataToMemory = new DataToMemory(context);
@@ -181,16 +188,7 @@ public class AlarmTimer extends AppCompatActivity {
         editor.apply();
     }
 
-    public int getUpdatedMinute(Context context) {
-        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
-        return pref.getInt("MINUTES", 0);
-    }
 
-    //ditto
-    public int getUpdatedHour(Context context) {
-        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
-        return pref.getInt("HOUR", 0);
-    }
 
     //Added on 12 - 18 - 2019
     public String getUpdatedStartAmOrPm(Context context) {
