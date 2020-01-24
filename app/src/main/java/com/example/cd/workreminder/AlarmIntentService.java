@@ -124,7 +124,6 @@ public class AlarmIntentService extends IntentService {
         alarmTimer.setAlarmSnoooze((int)SNOOZE_TIME);
         //AlarmIntentService.amSnoozed = true;
 
-        CurrrentRingtoneInstance.getInstance().getRingtone();
         // You could use NotificationManager.getActiveNotifications() if you are targeting SDK 23
         // and above, but we are targeting devices with lower SDK API numbers, so we saved the
         // builder globally and get the notification back to recreate it later.

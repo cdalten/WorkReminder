@@ -188,14 +188,19 @@ public class AlarmTimer extends AppCompatActivity {
         return dataToMemory.getCurrentEndMilitaryMinute(context);
     }
 
-    //Needed if the device reboots
-    public void setUpdatedMinute(int newMinutes) {
+
+    public void setUpdatedAlarmMinute(int newMinutes) {
         SharedPreferences.Editor editor = pref.edit();
         editor.putInt("MINUTES", newMinutes);
         editor.apply();
     }
 
 
+    //Added on 1 - 24 - 2019
+    public int getUpdatedAlarmMinute(Context context) {
+        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        return pref.getInt("MINUTES", 0);
+    }
 
     //Added on 12 - 18 - 2019
     public String getUpdatedStartAmOrPm(Context context) {

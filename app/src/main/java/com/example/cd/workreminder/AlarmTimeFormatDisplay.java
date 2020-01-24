@@ -11,6 +11,7 @@ public class AlarmTimeFormatDisplay {
     private AlarmTimer alarmTimer;
     private Context context;
     private static int snoozeTime = 0;
+    private static int offset = 0;
     private boolean amSnoozed = false;
 
     public AlarmTimeFormatDisplay() {
@@ -76,8 +77,9 @@ public class AlarmTimeFormatDisplay {
                     alarmTimer.getNewAlarmMilitaryMinute(context.getApplicationContext()),
                     alarmTimer.getUpdatedStartAmOrPm(context.getApplicationContext()));
         } else {
-            snoozeTime = alarmTimer.getNewAlarmMilitaryMinute(context) + alarmTimer.getAlarmSnooze();
-            alarmTimer.setUpdatedMinute(snoozeTime);
+
+            snoozeTime = alarmTimer.getNewAlarmMilitaryMinute(context) + alarmTimer.getAlarmSnooze() + offset;
+            offset = offset + 1;
             Log.e("LG_WORK_PHONE", "THE SNOOZE TIME IS: " + snoozeTime);
             if (snoozeTime < 10) {
                 /*timeFormat = alarmTimer.getDayOfWeek(context) + " "
