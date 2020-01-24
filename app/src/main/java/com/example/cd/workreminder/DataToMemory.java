@@ -146,6 +146,14 @@ public class DataToMemory extends AppCompatActivity{
         return pref.getInt("NEW_ALARM_HOUR", 0);
     }
 
+    public void saveNewAlarmMilitaryMinute(Context context, int minutesBeforeShift) {
+        //pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        //pref.getInt(context.getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putInt("NEW_ALARM_MINUTES",minutesBeforeShift);
+        editor.apply();
+    }
+
     public int getNewAlarmMilitaryMinute(Context context) {
         pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
         return pref.getInt("NEW_ALARM_MINUTES", 0);

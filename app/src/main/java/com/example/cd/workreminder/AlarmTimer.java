@@ -93,10 +93,12 @@ public class AlarmTimer extends AppCompatActivity {
             newMilitaryHour = newMilitaryHour - endMilitaryHour;
         }
         //updatedAmOrPm = getAMorPM(startMilitaryHour);
+
         updatedAmOrPm = getAMorPM(newMilitaryHour);
 
         DataToMemory dataToMemory =  new DataToMemory(context);
         dataToMemory.saveAlarmTime(dayOfWeek, newMilitaryHour, newMilitaryMinute, true);
+        setNewAlarmMilitaryMinute(context, newMilitaryMinute);
 
     }//setAlarmTime
 
@@ -105,6 +107,11 @@ public class AlarmTimer extends AppCompatActivity {
     public int getNewAlarmMilitaryHour(Context context) {
         DataToMemory dataToMemory = new DataToMemory(context);
         return dataToMemory.getNewAlarmMilitaryHour(context);
+    }
+
+    public void setNewAlarmMilitaryMinute(Context context, int newMilitaryMinute) {
+        DataToMemory dataToMemory = new DataToMemory(context);
+        dataToMemory.saveNewAlarmMilitaryMinute(context, newMilitaryMinute);
     }
 
     public int getNewAlarmMilitaryMinute(Context context) {

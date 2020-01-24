@@ -356,11 +356,13 @@ public class SetAlarm extends AppCompatActivity {
                 displayNotification(context.getApplicationContext(), "YOU MISSED YOUR SHIFT");
             }
             else {
-                //alarmTimer.setStartMilitaryHour(getStartMilitaryHour());
-                //alarmTimer.setStartMilitaryMinute(getEndMilitaryMinute());
 
+
+                Log.e(PRODUCTION_TAG, "-----------------------------------------------------------");
                 Log.e(PRODUCTION_TAG, "THE UPDATED ALARM TIME IS: " + alarmTimer.getNewAlarmMilitaryMinute(context));
+
                 Log.e(PRODUCTION_TAG, "THE END ALARM TIME IS: " + getStartMilitaryMinute());
+                Log.e(PRODUCTION_TAG, "-------------------------------------------------------------");
                 setNewNotificationDisplayAlarm(context,
                         alarmTimer.getCurrentSavedDayOfWeek(context.getApplicationContext()),alarmTimer);
             }
@@ -368,7 +370,7 @@ public class SetAlarm extends AppCompatActivity {
     }
 
     //Added on 10 - 23 - 2019
-    //vs trying to overload the current method?
+    //A wrapper because I'm so drunk that it hurts to think correctly.
     @TargetApi(24)
     public void setNewNotificationDisplayAlarm(Context context, String day, AlarmTimer alarmTimer)
     {
@@ -392,9 +394,12 @@ public class SetAlarm extends AppCompatActivity {
         );
         */
 
-        displayNotification(alarmTimer, false, true,
-                "ALARM");
-        setAlarm(context, alarmTimer);
+        Calendar cal = Calendar.getInstance();
+        if (alarmTimer.getNewAlarmMilitaryMinute(context) > cal.get(Calendar.MINUTE)) {
+            displayNotification(alarmTimer, false, true,
+                    "ALARM");
+            setAlarm(context, alarmTimer);
+        }
         //br = new WorkAlarmReceiver();
         //intentFilter = new IntentFilter();
         //intentFilter.addAction(Intent.ACTION_BOOT_COMPLETED);
@@ -435,10 +440,6 @@ public class SetAlarm extends AppCompatActivity {
         calendar.set(Calendar.MINUTE, alarmTimer.getNewAlarmMilitaryMinute(context));
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0); //??
-
-        Log.e(PRODUCTION_TAG, "setAlarm() GOT CALLED WITH HOUR:" + calendar.get(Calendar.HOUR_OF_DAY)
-                + " AND MINUTE:" + alarmTimer.getUpdatedMinute(context.getApplicationContext())
-                + " AND AM/PM:" + alarmTimer.getUpdatedStartAmOrPm(context.getApplicationContext()));
 
 
         //alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
