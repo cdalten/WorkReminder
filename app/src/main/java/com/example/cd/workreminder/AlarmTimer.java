@@ -32,6 +32,7 @@ public class AlarmTimer extends AppCompatActivity {
     private int endMilitaryMinute = 0;
     private int newMilitaryHour = 0;
     private int newMilitaryMinute = 0;
+
     private int timeBeforeShift = 0; //Added on 10 - 21 - 2019
     private String dayOfWeek; //Added on 11 - 4 - 2019
     private String updatedAmOrPm = ""; //Added on 12 - 18 - 2019
@@ -96,14 +97,34 @@ public class AlarmTimer extends AppCompatActivity {
 
         updatedAmOrPm = getAMorPM(newMilitaryHour);
 
-        DataToMemory dataToMemory =  new DataToMemory(context);
-        dataToMemory.saveAlarmTime(dayOfWeek, newMilitaryHour, newMilitaryMinute, true);
+        //Used for Alarm since alarm only takes military format
+        setNewAlarmMilitaryHour(context, newMilitaryHour);
         setNewAlarmMilitaryMinute(context, newMilitaryMinute);
+
+        DataToMemory dataToMemory =  new DataToMemory(context);
+        //Save something like 18:29 pm as 6:29 pm in the notification display
+        dataToMemory.saveCivilianAlarmTime(dayOfWeek, newMilitaryHour, newMilitaryMinute, true);
+
+
 
     }//setAlarmTime
 
+    public int getNewAlarmCivilianHour(Context context) {
+        DataToMemory dataToMemory = new DataToMemory(context);
+        return dataToMemory.getNewAlarmCivilianHour(context);
+    }
+
+    public int getNewAlarmCivilianMinutes(Context context) {
+        DataToMemory dataToMemory = new DataToMemory(context);
+        return dataToMemory.getNewAlarmCivilianMinutes(context);
+    }
     //Added on 1 - 23 - 2020
-    //----USED TO GET CURRENT TIME IN NOTIFICATION ALARM------------------------
+    //----USED TO GET CURRENT TIME IN ALARM------------------------
+    public void setNewAlarmMilitaryHour(Context context, int newMilitaryHour) {
+        DataToMemory dataToMemory = new DataToMemory(context);
+        dataToMemory.saveNewAlarmMilitaryHour(context, newMilitaryHour);
+    }
+
     public int getNewAlarmMilitaryHour(Context context) {
         DataToMemory dataToMemory = new DataToMemory(context);
         return dataToMemory.getNewAlarmMilitaryHour(context);
@@ -189,18 +210,6 @@ public class AlarmTimer extends AppCompatActivity {
     }
 
 
-    public void setUpdatedAlarmMinute(int newMinutes) {
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putInt("MINUTES", newMinutes);
-        editor.apply();
-    }
-
-
-    //Added on 1 - 24 - 2019
-    public int getUpdatedAlarmMinute(Context context) {
-        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
-        return pref.getInt("MINUTES", 0);
-    }
 
     //Added on 12 - 18 - 2019
     public String getUpdatedStartAmOrPm(Context context) {
@@ -214,23 +223,7 @@ public class AlarmTimer extends AppCompatActivity {
         return pref.getString("DAY_OF_WEEK", "");
     }
 
-    public int getMinutesBeforeShift(Context context) {
-        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
-        return pref.getInt(context.getString(R.string.ALARM_MINUTES), 0);
-    }
 
-    public int getHoursBeforeShift(Context context) {
-        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
-        return pref.getInt("ALARM_HOUR", 0);
-    }
-    //Added on 1 - 16 - 2020
-    public void setCurrentSnoozeTime(int snoozeTime) {
-        this.snoozeTime = snoozeTime;
-    }
-
-    public int getCurrentSnoozeTime () {
-        return this.currentSnoozeTime;
-    }
 
     //Added on 6 - 28 - 2019
     private String getAMorPM (int startMilitaryHour) {

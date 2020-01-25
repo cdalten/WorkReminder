@@ -117,7 +117,7 @@ public class DataToMemory extends AppCompatActivity{
     //From AlarmTimer.java
     //Added on 12 - 16 - 2019
     @TargetApi(24)
-    public void saveAlarmTime(
+    public void saveCivilianAlarmTime(
             String dayOfWeek,
             int newMilitaryHour,
             int newMilitaryMinute,
@@ -141,16 +141,34 @@ public class DataToMemory extends AppCompatActivity{
     }
 
 
-    public int getNewAlarmMilitaryHour(Context context) {
+    public int getNewAlarmCivilianHour(Context context) {
         pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
         return pref.getInt("NEW_ALARM_HOUR", 0);
     }
 
-    public void saveNewAlarmMilitaryMinute(Context context, int minutesBeforeShift) {
+    public int getNewAlarmCivilianMinutes(Context context) {
+        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        return pref.getInt("NEW_ALARM_MINUTES", 0);
+    }
+
+    public void saveNewAlarmMilitaryHour(Context context, int newMilitaryHour) {
         //pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
         //pref.getInt(context.getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT);
         SharedPreferences.Editor editor = pref.edit();
-        editor.putInt("NEW_ALARM_MINUTES",minutesBeforeShift);
+        editor.putInt("NEW_MILITARY_ALARM_HOUR", newMilitaryHour);
+        editor.apply();
+    }
+
+    public int getNewAlarmMilitaryHour(Context context) {
+        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        return pref.getInt("NEW_MILITARY_ALARM_HOUR", 0);
+    }
+
+    public void saveNewAlarmMilitaryMinute(Context context, int newMilitaryMinute) {
+        //pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        //pref.getInt(context.getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_DEFAULT);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putInt("NEW_ALARM_MINUTES",newMilitaryMinute);
         editor.apply();
     }
 

@@ -73,8 +73,8 @@ public class AlarmTimeFormatDisplay {
             //Something like 1:5 PM becomes while 1:05 PM while something like 1:10 PM stays 1:10 PM
             timeFormat = buildAlarmTimeFormatDisplay(
                     alarmTimer.getDayOfWeek(context.getApplicationContext()),
-                    alarmTimer.getNewAlarmMilitaryHour(context.getApplicationContext()),
-                    alarmTimer.getNewAlarmMilitaryMinute(context.getApplicationContext()),
+                    alarmTimer.getNewAlarmCivilianHour(context.getApplicationContext()),
+                    alarmTimer.getNewAlarmCivilianMinutes(context.getApplicationContext()),
                     alarmTimer.getUpdatedStartAmOrPm(context.getApplicationContext()));
         } else {
 

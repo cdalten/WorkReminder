@@ -117,6 +117,7 @@ public class AlarmIntentService extends IntentService {
     /**
      * Handles action Snooze in the provided background thread.
      */
+    @TargetApi(24)
     private void handleActionSnooze() {
         Log.e(TAG, "handleActionSnooze()");
 
@@ -157,6 +158,30 @@ public class AlarmIntentService extends IntentService {
             } catch (InterruptedException ex) {
                 Thread.currentThread().interrupt();
             }
+
+
+            /*alarmMgr = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+            Intent intent = new Intent(getApplicationContext(), WorkAlarmReceiver.class);
+            alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(System.currentTimeMillis());
+
+            calendar.set(Calendar.HOUR_OF_DAY, alarmTimer.getNewAlarmMilitaryHour(getApplicationContext()));
+            //calendar.set(Calendar.HOUR_OF_DAY, 12);
+            calendar.set(Calendar.MINUTE, alarmTimer.getNewAlarmMilitaryMinute(getApplicationContext()));
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0); //??
+
+
+
+
+            alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP,
+                    calendar.getTimeInMillis(),
+                    1000*60 * SNOOZE_TIME
+                    , alarmIntent);
+
+            */
             Ringtone ringtone = (Ringtone) CurrrentRingtoneInstance.getInstance().getArrayList().get(0);
             ringtone.play();
             notificationManagerCompat.notify(MainActivity.NOTIFICATION_ID, notification);
