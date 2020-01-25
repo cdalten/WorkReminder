@@ -441,7 +441,6 @@ public class SetAlarm extends AppCompatActivity {
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0); //??
 
-
         //alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
         //        1000 * 60 , alarmIntent);
 
