@@ -303,6 +303,18 @@ public class SetAlarm extends AppCompatActivity {
         return cal.getTime().getTime();
     }
 
+    @TargetApi(24)
+    public long convertAlarmTime(
+            int startNewAlarmMilitaryHour,
+            int startNewAlarmMilitaryMinute
+    )
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, startNewAlarmMilitaryHour);
+        cal.set(Calendar.MINUTE, startNewAlarmMilitaryMinute);
+
+        return cal.getTime().getTime();
+    }
     //Added on 10 - 23 - 2019
     @TargetApi(24)
     public long getCurrentTime() {
@@ -321,6 +333,7 @@ public class SetAlarm extends AppCompatActivity {
     public void setNotificationDisplay(Context context, MilitaryTime militaryTime)
     {
 
+        AlarmTimer alarmTimer = AlarmTimer.getInstance();
         setStartMilitaryHour(militaryTime.getStartMilitaryHour());
         setStartMilitaryMinute(militaryTime.getStartMilitaryMinute());
         setStartAmOrPm(militaryTime.getStartAmOrPm());
@@ -330,9 +343,10 @@ public class SetAlarm extends AppCompatActivity {
 
         long startTime = convertToStartTime(militaryTime.getStartMilitaryHour(),militaryTime.getStartMilitaryMinute());
         long endTime = convertToEndTime(militaryTime.getEndMilitaryHour(), militaryTime.getEndMilitaryMinute());
-        long currentTime = getCurrentTime();
+        alarmTimer.setSavedAlarmTime(context,day, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(), false);
 
-        AlarmTimer alarmTimer = AlarmTimer.getInstance();
+        long currentAlarmTime = convertAlarmTime(alarmTimer.getNewAlarmMilitaryHour(context), alarmTimer.getNewAlarmMilitaryMinute(context));
+        long currentTime = getCurrentTime();
 
         /*
          For all you people who have never experienced working third shift for a drunk pervert,
@@ -354,8 +368,7 @@ public class SetAlarm extends AppCompatActivity {
                 displayNotification(context.getApplicationContext(),"YOU'RE SUPPOSED TO BE AT WORK");
             } else if (currentTime > endTime) {
                 displayNotification(context.getApplicationContext(), "YOU MISSED YOUR SHIFT");
-            }
-            else {
+            } else if(currentAlarmTime > currentTime) {
 
 
                 Log.e(PRODUCTION_TAG, "-----------------------------------------------------------");
@@ -378,12 +391,13 @@ public class SetAlarm extends AppCompatActivity {
          need to shift time to calculate the time time based on the minutes set
          before the start the start of the minutes
          */
-        alarmTimer.setSavedAlarmTime(context,
+        /*alarmTimer.setSavedAlarmTime(context,
                 day,
                 getStartMilitaryHour(),
                 getStartMilitaryMinute(),
                 true
         );
+        */
 
 
         /*alarmTimer.setSavedAlarmTime(context,
@@ -394,12 +408,12 @@ public class SetAlarm extends AppCompatActivity {
         );
         */
 
-        Calendar cal = Calendar.getInstance();
-        if (alarmTimer.getNewAlarmMilitaryMinute(context) > cal.get(Calendar.MINUTE)) {
+        //Calendar cal = Calendar.getInstance();
+        //if (alarmTimer.getNewAlarmMilitaryMinute(context) > cal.get(Calendar.MINUTE)) {
             displayNotification(alarmTimer, false, true,
                     "ALARM");
             setAlarm(context, alarmTimer);
-        }
+        //}
         //br = new WorkAlarmReceiver();
         //intentFilter = new IntentFilter();
         //intentFilter.addAction(Intent.ACTION_BOOT_COMPLETED);
