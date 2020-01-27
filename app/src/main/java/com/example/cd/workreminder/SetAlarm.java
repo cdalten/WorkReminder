@@ -378,6 +378,8 @@ public class SetAlarm extends AppCompatActivity {
                 Log.e(PRODUCTION_TAG, "-------------------------------------------------------------");
                 setNewNotificationDisplayAlarm(context,
                         alarmTimer.getCurrentSavedDayOfWeek(context.getApplicationContext()),alarmTimer);
+            } else {
+                displayNotification(context.getApplicationContext(), "DID YOU MISS YOUR SHIFT?");
             }
         }
     }

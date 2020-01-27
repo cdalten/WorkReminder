@@ -13,6 +13,7 @@ public class AlarmTimeFormatDisplay {
     private static int snoozeTime = 0;
     private static int offset = 0;
     private boolean amSnoozed = false;
+    private int currentAlarmTime = 0; //Added on 1 - 27 - 2020
 
     public AlarmTimeFormatDisplay() {
 
@@ -78,7 +79,15 @@ public class AlarmTimeFormatDisplay {
                     alarmTimer.getUpdatedStartAmOrPm(context.getApplicationContext()));
         } else {
 
-            snoozeTime = alarmTimer.getNewAlarmMilitaryMinute(context) + alarmTimer.getAlarmSnooze() + offset;
+            currentAlarmTime = alarmTimer.getNewAlarmMilitaryMinute(context);  //47
+            //snoozeTime = alarmTimer.getNewAlarmMilitaryMinute(context) + alarmTimer.getAlarmSnooze() + offset;
+
+            snoozeTime = currentAlarmTime + alarmTimer.getAlarmSnooze() + offset;
+            if (snoozeTime == 60) {
+                //currentAlarmTime = 0;
+                offset = 0;
+                //alarmTimer.setNewAlarmMilitaryMinute(context, 0);
+            }
             offset = offset + 1;
             Log.e("LG_WORK_PHONE", "THE SNOOZE TIME IS: " + snoozeTime);
             if (snoozeTime < 10) {
@@ -90,7 +99,7 @@ public class AlarmTimeFormatDisplay {
 
                 timeFormat = buildAlarmTimeFormatDisplay(
                         alarmTimer.getDayOfWeek(context.getApplicationContext()),
-                        alarmTimer.getNewAlarmMilitaryHour(context.getApplicationContext()),
+                        alarmTimer.getNewAlarmCivilianHour(context.getApplicationContext()),
                         snoozeTime,
                         alarmTimer.getUpdatedStartAmOrPm(context.getApplicationContext()) );
             } else {
@@ -101,7 +110,7 @@ public class AlarmTimeFormatDisplay {
                         */
                 timeFormat = buildAlarmTimeFormatDisplay(
                         alarmTimer.getDayOfWeek(context.getApplicationContext()),
-                        alarmTimer.getNewAlarmMilitaryHour(context.getApplicationContext()),
+                        alarmTimer.getNewAlarmCivilianHour(context.getApplicationContext()),
                         snoozeTime,
                         alarmTimer.getUpdatedStartAmOrPm(context.getApplicationContext()));
             }

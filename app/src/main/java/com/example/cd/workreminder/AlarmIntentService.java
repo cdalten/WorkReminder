@@ -35,6 +35,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 //Added on 10 - 8 - 2019. Handle snooze, dismiss
@@ -49,8 +51,8 @@ public class AlarmIntentService extends IntentService {
     private static final long SNOOZE_TIME = TimeUnit.SECONDS.toMillis(60); //Need to change
     //public static boolean amSnoozed = false; //Added on 12 - 22 - 2010
 
-    private SharedPreferences pref; //Added on 10 - 29 - 2019
-    private static Uri uri;
+    private AlarmManager alarmMgr; //Added on 10 - 30- 2019
+    private PendingIntent alarmIntent; //Added on 10 - 30 - 2019
 
     public AlarmIntentService() {
         super("AlarmIntentService");
@@ -58,7 +60,7 @@ public class AlarmIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.e(TAG, "onHandleIntent(): " + intent);
+        //Log.e(TAG, "onHandleIntent(): " + intent)
 
 
         if (intent != null) {
@@ -160,6 +162,22 @@ public class AlarmIntentService extends IntentService {
             }
 
 
+
+            /*final Ringtone ringtone = (Ringtone) CurrrentRingtoneInstance.getInstance().getArrayList().get(0);
+            Timer timer = new Timer();
+            TimerTask timerTaskObj = new TimerTask() {
+                @Override
+                public void run() {
+                    ringtone.stop();
+                }
+
+            };
+
+            //timer.schedule(timerTaskObj, 0, 5000L);
+            timer.scheduleAtFixedRate(timerTaskObj, 500, 5000);
+            ringtone.play();
+            */
+
             /*alarmMgr = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
             Intent intent = new Intent(getApplicationContext(), WorkAlarmReceiver.class);
             alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
@@ -168,13 +186,9 @@ public class AlarmIntentService extends IntentService {
             calendar.setTimeInMillis(System.currentTimeMillis());
 
             calendar.set(Calendar.HOUR_OF_DAY, alarmTimer.getNewAlarmMilitaryHour(getApplicationContext()));
-            //calendar.set(Calendar.HOUR_OF_DAY, 12);
             calendar.set(Calendar.MINUTE, alarmTimer.getNewAlarmMilitaryMinute(getApplicationContext()));
             calendar.set(Calendar.SECOND, 0);
             calendar.set(Calendar.MILLISECOND, 0); //??
-
-
-
 
             alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP,
                     calendar.getTimeInMillis(),
@@ -182,8 +196,9 @@ public class AlarmIntentService extends IntentService {
                     , alarmIntent);
 
             */
-            Ringtone ringtone = (Ringtone) CurrrentRingtoneInstance.getInstance().getArrayList().get(0);
-            ringtone.play();
+
+            //Ringtone ringtone = (Ringtone) CurrrentRingtoneInstance.getInstance().getArrayList().get(0);
+            //ringtone.play();
             notificationManagerCompat.notify(MainActivity.NOTIFICATION_ID, notification);
         }
 
