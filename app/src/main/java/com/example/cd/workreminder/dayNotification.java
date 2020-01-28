@@ -161,5 +161,11 @@ public class DayNotification {
         return this.notificationText;
     }
 
+    public void updateDisplayTime(Context context) {
+        //createNotification(String notificationTitle, String notificationText )
+        AlarmTimer alarmTimer = AlarmTimer.getInstance();
+        AlarmTimeFormatDisplay alarmTimeFormatDisplay =  new AlarmTimeFormatDisplay(context, alarmTimer, true);
+        createNotification("NEW ALARM TIME", alarmTimeFormatDisplay.displayCurrentTime() );
+    }
 
 }//end class

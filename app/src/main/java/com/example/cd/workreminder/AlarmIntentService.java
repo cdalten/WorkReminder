@@ -142,7 +142,7 @@ public class AlarmIntentService extends IntentService {
         Notification notification;
         notification = notificationCompatBuilder.
                 setContentTitle("ALARM GOT UPDATED").
-                setContentText(new AlarmTimeFormatDisplay(this, alarmTimer, true).toString()).
+                setContentText(new AlarmTimeFormatDisplay(this, alarmTimer, true).displayCurrentTime()).
                 build();
 
         if (notification != null) {
@@ -163,6 +163,7 @@ public class AlarmIntentService extends IntentService {
 
 
 
+
             /*final Ringtone ringtone = (Ringtone) CurrrentRingtoneInstance.getInstance().getArrayList().get(0);
             Timer timer = new Timer();
             TimerTask timerTaskObj = new TimerTask() {
@@ -173,10 +174,12 @@ public class AlarmIntentService extends IntentService {
 
             };
 
+
             //timer.schedule(timerTaskObj, 0, 5000L);
-            timer.scheduleAtFixedRate(timerTaskObj, 500, 5000);
+            timer.scheduleAtFixedRate(timerTaskObj, 20 * 1000,  20 * 1000);
             ringtone.play();
             */
+
 
             /*alarmMgr = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
             Intent intent = new Intent(getApplicationContext(), WorkAlarmReceiver.class);

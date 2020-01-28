@@ -86,6 +86,7 @@ public class WorkAlarmReceiver extends BroadcastReceiver {
         dayNotification.setDisplaySnoozeButton(true);
         dayNotification.setNotificationAlarm(alarmUri,true); //pass uri or overload method?
         dayNotification.createNotification(dayNotification.getNotificationTitle(), dayNotification.getNotificationText());
+        dayNotification.updateDisplayTime(context);
 
 
 

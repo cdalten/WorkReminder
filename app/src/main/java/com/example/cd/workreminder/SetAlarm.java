@@ -460,8 +460,12 @@ public class SetAlarm extends AppCompatActivity {
         //alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
         //        1000 * 60 , alarmIntent);
 
-        alarmMgr.setExact(AlarmManager.RTC_WAKEUP,
+        /*alarmMgr.setExact(AlarmManager.RTC_WAKEUP,
                 calendar.getTimeInMillis(), alarmIntent);
+                */
+
+        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                1000 * 60 , alarmIntent);
     }
 
     //Added on 12 - 15 - 2019
@@ -516,7 +520,7 @@ public class SetAlarm extends AppCompatActivity {
     }
     //Added on 10 - 11 - 2019
     public String buildAlarmTimeFormatDisplay(AlarmTimer alarmTimer) {
-        return new AlarmTimeFormatDisplay(context, alarmTimer, false).toString();
+        return new AlarmTimeFormatDisplay(context, alarmTimer, false).displayCurrentTime();
     }
 
     //Added on 10 - 18 -2019. Change channelID to NOTIFICATION_ID???
