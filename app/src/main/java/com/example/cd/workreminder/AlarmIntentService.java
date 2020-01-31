@@ -100,6 +100,15 @@ public class AlarmIntentService extends IntentService {
             Ringtone ringtone = (Ringtone) CurrrentRingtoneInstance.getInstance().getArrayList().get(0);
             ringtone.stop();
 
+
+            alarmMgr = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+            Intent intent = new Intent(getApplicationContext(), WorkAlarmReceiver.class);
+            alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
+
+            if (alarmMgr!= null) {
+                alarmMgr.cancel(alarmIntent);
+            }
+
             NotificationCompat.Builder notificationCompatBuilder =
                     GlobalNotificationBuilder.getNotificationCompatBuilderInstance();
 
@@ -142,17 +151,23 @@ public class AlarmIntentService extends IntentService {
         Notification notification;
         notification = notificationCompatBuilder.
                 setContentTitle("ALARM GOT UPDATED").
-                setContentText(new AlarmTimeFormatDisplay(this, alarmTimer, true).displayCurrentTime()).
+                setContentText(new AlarmTimeFormatDisplay(this, alarmTimer, WorkReaderContract.WorkEntry.SNOOZE_ON).displayCurrentTime()).
                 build();
 
         if (notification != null) {
+
+            //Ringtone ringtone = (Ringtone) CurrrentRingtoneInstance.getInstance().getArrayList().remove(0);
+            //CurrrentRingtoneInstance.getInstance().getArrayList().clear();
+            Ringtone ringtone = (Ringtone) CurrrentRingtoneInstance.getInstance().getArrayList().get(0);
+            ringtone.stop();
+            //CurrrentRingtoneInstance.getInstance().getArrayList().clear();
 
             NotificationManagerCompat notificationManagerCompat =
                     NotificationManagerCompat.from(getApplicationContext());
 
             notificationManagerCompat.cancel(MainActivity.NOTIFICATION_ID);
 
-            try {
+            /*try {
                 //AlarmIntentService.amSnoozed = true;
                 Ringtone ringtone = (Ringtone) CurrrentRingtoneInstance.getInstance().getArrayList().get(0);
                 ringtone.stop();
@@ -160,7 +175,7 @@ public class AlarmIntentService extends IntentService {
             } catch (InterruptedException ex) {
                 Thread.currentThread().interrupt();
             }
-
+            */
 
 
 
@@ -202,7 +217,7 @@ public class AlarmIntentService extends IntentService {
 
             //Ringtone ringtone = (Ringtone) CurrrentRingtoneInstance.getInstance().getArrayList().get(0);
             //ringtone.play();
-            notificationManagerCompat.notify(MainActivity.NOTIFICATION_ID, notification);
+            //notificationManagerCompat.notify(MainActivity.NOTIFICATION_ID, notification);
         }
 
     }

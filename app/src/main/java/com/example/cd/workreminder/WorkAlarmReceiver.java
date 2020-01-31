@@ -42,12 +42,9 @@ import static android.app.Notification.EXTRA_NOTIFICATION_ID;
 
 
 public class WorkAlarmReceiver extends BroadcastReceiver {
-    public static final String ACTION_DISMISS = "com.example.cd.workreminder.action.DISMISS";
-    public static final String ACTION_SNOOZE = "com.example.cd.workreminder.action.SNOOZE";
 
     @Override
     public void onReceive(Context context, Intent intent) {
-
 
         Log.e("PRODUCTION TAG", "WORK ALARM RECEIVER GOT CALLED WITH: " + intent.getAction());
         Log.e("PRODUCTION TAG", "WORK ALARM RECEIVER GOT CALLED WITH: " + intent.getExtras());
@@ -77,6 +74,7 @@ public class WorkAlarmReceiver extends BroadcastReceiver {
 
 
 
+        //CurrrentRingtoneInstance.getInstance().getArrayList().clear();
         Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
         if (alarmUri == null) {
             alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -84,8 +82,13 @@ public class WorkAlarmReceiver extends BroadcastReceiver {
 
         DayNotification dayNotification = new DayNotification(context);
         dayNotification.setDisplaySnoozeButton(true);
-        dayNotification.setNotificationAlarm(alarmUri,true); //pass uri or overload method?
+        dayNotification.setNotificationAlarm(alarmUri);
+        dayNotification.addAlarmNotificationRingtone(WorkReaderContract.WorkEntry.ALARM_NOTIFICATION_RINGS);
+        dayNotification.setAmPlaying(WorkReaderContract.WorkEntry.ALARM_RINGS);
         dayNotification.createNotification(dayNotification.getNotificationTitle(), dayNotification.getNotificationText());
+
+        dayNotification.setNotificationAlarm(alarmUri);
+        dayNotification.addAlarmNotificationRingtone(WorkReaderContract.WorkEntry.ALARM_NOTIFICATION_SILENT);
         dayNotification.updateDisplayTime(context);
 
 

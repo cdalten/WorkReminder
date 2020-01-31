@@ -561,7 +561,7 @@ public class SetAlarm extends AppCompatActivity {
                     */
         }
 
-        DayNotification dayNotification = new DayNotification(context);
+        DayNotification dayNotification = new DayNotification(context, alarmIntent);
         dayNotification.createNotification(notificationTitle, notificationText);
         Log.e(PRODUCTION_TAG, "");
     }

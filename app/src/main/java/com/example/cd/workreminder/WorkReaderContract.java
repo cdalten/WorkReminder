@@ -49,5 +49,12 @@ public final class WorkReaderContract {
         public static final int RESULT_FAILED = 2;
         public static final int RESULT_OKAY_NO_WORK = 3; //Added on 11 - 13 - 2019
         public static final int RESULT_OKAY_UPDATE_WORK_ALARM_TIME = 4; //Added on 12 - 19 - 2019
+
+        public static final boolean ALARM_NOTIFICATION_RINGS = true;
+        public static final boolean ALARM_NOTIFICATION_SILENT = false;
+        public static final boolean SNOOZE_ON = true;
+        public static final boolean SNOOZE_OFF = false;
+        public static final boolean ALARM_RINGS = true; //Added on 1 - 31 - 2020
+        public static final boolean ALARM_SILENT = false; //Added on 1 - 31 - 2020
     }
 }//end class

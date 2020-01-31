@@ -20,19 +20,29 @@ import java.util.ArrayList;
 import static android.app.Notification.EXTRA_NOTIFICATION_ID;
 
 public class DayNotification {
-    private Context context; //Added on 1 - 6 - 2010
+    private Context context; //Added on 1 - 6 - 2020
     public static final int NOTIFICATION_ID = 0; //Added on 10 - 14 - 2019
     private boolean displaySnooze = false; //Added on 1 - 7 - 2020
     private boolean notificationAlarm = false; //Added on 1 - 16 - 2020
+    private boolean amPlaying = false; //Added on 1 - 31 - 202-
     private static String notificationTitle; //Added on 1 - 7 - 2020
     private static String notificationText; //Added on 1 - 7 - 2020
     private Uri alarmUri; //Added on 1 - 16 - 2020
     private Ringtone ringtone;
+    private PendingIntent alarmIntent; //Added on 1 - 31 - 201
 
     public DayNotification(Context context){
         this.context = context;
     }
 
+    public DayNotification(Context context, PendingIntent alarmIntent){
+        this.alarmIntent = alarmIntent;
+        this.context = context;
+    }
+
+    public PendingIntent getAlarmIntent() {
+        return alarmIntent;
+    }
 
     public void createNotification(String notificationTitle, String notificationText ) {
         setNotificationTitle(notificationTitle);
@@ -94,8 +104,14 @@ public class DayNotification {
                     ringtone.setStreamType(AudioManager.STREAM_ALARM);
                 }
                 Log.e("LG_WORK_PHONE", "THE RINGTONE (IN GLOBAL MAIN ACTIVITY) IS: " + ringtone);
-                CurrrentRingtoneInstance.getInstance().getArrayList().add(ringtone);
-                ringtone.play();
+
+
+                if (getAmPlaying() == WorkReaderContract.WorkEntry.ALARM_RINGS) {
+                    CurrrentRingtoneInstance.getInstance().getArrayList().add(ringtone);
+                    Ringtone ringtone = (Ringtone) CurrrentRingtoneInstance.getInstance().getArrayList().get(0);
+                    ringtone.stop(); //stop previous ringtone
+                    ringtone.play();
+                }
             }
 
             Intent snoozeIntent = new Intent(context, AlarmIntentService.class);
@@ -126,14 +142,21 @@ public class DayNotification {
     }
 
 
-    //Added on 1 - 16 - 2020
-    public void setNotificationAlarm(Uri alarmUri, boolean notificationAlarm) {
-        this.alarmUri = alarmUri;
-        this.notificationAlarm = notificationAlarm;
+    //Added on 1 - 31 - 2020
+    public void setAmPlaying(boolean amPlaying) {
+        this.amPlaying = amPlaying;
     }
 
-    public Uri getNotificationAlarmURI() {
-        return this.alarmUri;
+    public boolean getAmPlaying() {
+        return this.amPlaying;
+    }
+    //Added on 1 - 16 - 2020
+    public void setNotificationAlarm(Uri alarmUri) {
+        this.alarmUri = alarmUri;
+    }
+
+    public void addAlarmNotificationRingtone(boolean notificationAlarm) {
+        this.notificationAlarm =  notificationAlarm;
     }
 
     //Added on 1 - 7 - 2020
