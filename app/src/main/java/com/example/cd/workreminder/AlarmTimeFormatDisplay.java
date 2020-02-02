@@ -48,17 +48,16 @@ public class AlarmTimeFormatDisplay {
 
         //Something like 1:5 PM becomes while 1:05 PM while something like 1:10 PM stays 1:10 PM
         if (minute < 10) {
-            timeFormat = dayOfWeek + " " + hour + ":0" + minute + " " + amOrPm;
+            timeFormat = hour + ":0" + minute + " " + amOrPm;
         } else {
-            timeFormat = dayOfWeek + " " + hour + ":" + minute + " " + amOrPm;
+            timeFormat = hour + ":" + minute + " " + amOrPm;
         }
 
+
+        //timeFormat =  formatTime(hour, minute, amOrPm);
         return timeFormat;
     }
 
-    public void setSnoozeTime(int snoozeTime) {
-        this.snoozeTime = snoozeTime;
-    }
     //Added on 1 - 16 - 2020
     //I use dynamic binding because the Android notification API doesn't support callbacks
 
@@ -124,10 +123,21 @@ public class AlarmTimeFormatDisplay {
             String[] time =  d.toString().split(":");;
 
 
-            Log.e("LG_WORK_PHONE", "THE NEW TIME IS: " + time[1]);
-            timeFormat= alarmTimer.getDayOfWeek(context.getApplicationContext()) + " " + sdf.format(d);
+            //Log.e("LG_WORK_PHONE", "THE NEW TIME IS: " + time[1]);
+            timeFormat= sdf.format(d);
+            //timeFormat = formatTime( alarmTimer.getNewAlarmCivilianHour(context.getApplicationContext()),
+            //        alarmTimer.getNewAlarmCivilianMinutes(context.getApplicationContext()),
+            //        alarmTimer.getUpdatedStartAmOrPm(context.getApplicationContext()));
         }
 
         return timeFormat;
+    }
+
+    public String formatTime(int hour, int minute, String amOrPm) {
+        Date d=new Date();
+        String timeFormat = hour + ":" + minute + " " + amOrPm;
+        //SimpleDateFormat sdf=new SimpleDateFormat("h:mm a");
+        SimpleDateFormat sdf=new SimpleDateFormat(timeFormat);
+        return  sdf.format(d);
     }
 }//end class
