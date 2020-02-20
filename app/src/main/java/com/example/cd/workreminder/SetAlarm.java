@@ -34,6 +34,8 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 import static android.app.Notification.EXTRA_NOTIFICATION_ID;
 
 
@@ -254,8 +256,29 @@ public class SetAlarm extends AppCompatActivity {
             saveAlarmTime(alarmTimer, militaryTime);
             setMilitaryTimeForWorkPreferences(militaryTime);
             setNotificationDisplay(context, militaryTime);
+        } else {
+            Calendar cal = Calendar.getInstance();
+            int currentDay = cal.get(Calendar.DAY_OF_WEEK);
+            storeHoursInGUI currentWeek = new storeHoursInGUI(context.getApplicationContext());
+            ArrayList<ArrayList<String>> week = currentWeek.addHours();
+//week.get(currentDay).get(0)
+            int i = 0;
+            for (i = currentDay; i < week.size() - 2; i++) {
+                if (!week.get(currentDay).get(0).equals("OFF")) {
+                    break;
+                }
+            }//end for
+
+            displayNotification(context.getApplicationContext(),
+                    week.get(i).get(0)  //day
+                    + " " + week.get(i).get(1) //hour
+                    + ":" + week.get(i).get(2) //minute
+                    + " " + week.get(i).get(3)); //Am or Pm
+
+
+
         }
-    }
+    }//end method
 
 
     //Added on 1 - 14 - 2010

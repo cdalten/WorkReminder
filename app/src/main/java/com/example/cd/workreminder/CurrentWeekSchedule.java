@@ -57,7 +57,6 @@ public class CurrentWeekSchedule extends ListActivity  {
     private int currentDay = 0; //Added on 3 - 3 - 2019
 
     private String day = ""; //Added on 12 - 17 - 2019
-    private String newStartDay; //Added on 3 - 12 - 2019
     private String newStartHour; //Added on 3 - 2 - 2019
     private String newStartMinute;
     private String newStartAmOrPm;
@@ -70,8 +69,6 @@ public class CurrentWeekSchedule extends ListActivity  {
 
     SharedPreferences pref;
 
-    private AlarmManager alarmMgr; //Added on 8 - 4 - 2019
-    private PendingIntent alarmIntent; //Added on 8 - 4 - 2019
     private int currentHours = 0; //Added on 10 - 17 - 2019
 
     @Override
