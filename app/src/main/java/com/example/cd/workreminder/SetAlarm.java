@@ -402,7 +402,9 @@ public class SetAlarm extends AppCompatActivity {
                 setNewNotificationDisplayAlarm(context,
                         alarmTimer.getCurrentSavedDayOfWeek(context.getApplicationContext()),alarmTimer);
             } else {
-                displayNotification(context.getApplicationContext(), "DID YOU MISS YOUR SHIFT?");
+                //displayNotification(context.getApplicationContext(), "DID YOU MISS YOUR SHIFT?");
+                setNewNotificationDisplayAlarm(context,
+                        alarmTimer.getCurrentSavedDayOfWeek(context.getApplicationContext()),alarmTimer);
             }
         }
     }

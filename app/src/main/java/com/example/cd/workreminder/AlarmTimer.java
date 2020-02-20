@@ -90,7 +90,8 @@ public class AlarmTimer extends AppCompatActivity {
             newMilitaryHour = newMilitaryHour - 1;
         } else if (newMilitaryMinute < 0 && endMilitaryHour > 0) {
             newMilitaryMinute = newMilitaryMinute + 60;
-            newMilitaryHour = newMilitaryHour - endMilitaryHour - 1;
+            //newMilitaryHour = newMilitaryHour - endMilitaryHour - 1;
+            newMilitaryHour = newMilitaryHour - 1;
         }
 
         else {

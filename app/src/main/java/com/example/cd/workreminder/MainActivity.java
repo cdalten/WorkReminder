@@ -616,7 +616,10 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             //Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://" + request.getUrl().getHost()));
             //startActivity(intent);
 
-            startActivity( new Intent(MainActivity.this, CurrentWeekSchedule.class));
+            Intent currentWeekScheduleIntent = new Intent(MainActivity.this, CurrentWeekSchedule.class);
+            if (currentWeekScheduleIntent.resolveActivity(getPackageManager()) != null) {
+                startActivity(currentWeekScheduleIntent);
+            }
             return true;
             //return false;
         }

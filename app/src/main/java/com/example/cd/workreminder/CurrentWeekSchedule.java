@@ -15,6 +15,7 @@ package com.example.cd.workreminder;
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.ListActivity;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -51,7 +52,7 @@ public class CurrentWeekSchedule extends ListActivity  {
     private WS adapter;
 
     ListView list;
-    private Intent i;
+    //private Intent i;
 
     ArrayList<ArrayList<String>> week; //added on 2 - 24 - 2019
     private int currentDay = 0; //Added on 3 - 3 - 2019
@@ -97,8 +98,10 @@ public class CurrentWeekSchedule extends ListActivity  {
         workSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(CurrentWeekSchedule.this, WorkPreferences.class);
-                startActivityForResult(intent, 0);
+                Intent workPreferencesIntent = new Intent(CurrentWeekSchedule.this, WorkPreferences.class);
+                if (workPreferencesIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivityForResult(workPreferencesIntent, 0);
+                }
             }
         });
 
@@ -247,7 +250,7 @@ public class CurrentWeekSchedule extends ListActivity  {
 
     //Added on 10 - 14 - 2019
     private void fillListviewDropdown(
-                              Intent i,
+                              Intent dayIntent,
                               int position,
                               int dayOfWeek,
                               int startHour,
@@ -260,44 +263,46 @@ public class CurrentWeekSchedule extends ListActivity  {
         //pref =  this.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
 
         if ((pref.getString(getString(dayOfWeek), WorkReaderContract.WorkEntry.DAY_OFF_DEFAULT).equals(WorkReaderContract.WorkEntry.DAY_OFF_DEFAULT))) {
-            i.putExtra("DAY_WEEK", position);
-            i.putExtra("START_HOUR",  Integer.parseInt(WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
-            i.putExtra("START_MINUTE",  Integer.parseInt(WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
-            i.putExtra("START_AM_OR_PM",  WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT);
+            dayIntent.putExtra("DAY_WEEK", position);
+            dayIntent.putExtra("START_HOUR",  Integer.parseInt(WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
+            dayIntent.putExtra("START_MINUTE",  Integer.parseInt(WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
+            dayIntent.putExtra("START_AM_OR_PM",  WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT);
 
-            i.putExtra("END_HOUR",  Integer.parseInt(WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
-            i.putExtra("END_MINUTE",  Integer.parseInt(WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
-            i.putExtra("END_AM_OR_PM",  WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT);
+            dayIntent.putExtra("END_HOUR",  Integer.parseInt(WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
+            dayIntent.putExtra("END_MINUTE",  Integer.parseInt(WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
+            dayIntent.putExtra("END_AM_OR_PM",  WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT);
         } else {
-            i.putExtra("DAY_WEEK", position);
-            i.putExtra("START_HOUR", Integer.parseInt(pref.getString(getString(startHour),
+            dayIntent.putExtra("DAY_WEEK", position);
+            dayIntent.putExtra("START_HOUR", Integer.parseInt(pref.getString(getString(startHour),
                     WorkReaderContract.WorkEntry.START_HOUR_DEFAULT))
             );
-            i.putExtra("START_MINUTE",
+            dayIntent.putExtra("START_MINUTE",
                     Integer.parseInt(pref.getString(getString(startMinute),
                             WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT)) / 15);
             if (pref.getString(getString(startAmOrPm),
                     WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT).equals("AM")) {
-                i.putExtra("START_AM_OR_PM", 0);
+                dayIntent.putExtra("START_AM_OR_PM", 0);
             } else {
-                i.putExtra("START_AM_OR_PM", 1);
+                dayIntent.putExtra("START_AM_OR_PM", 1);
             }
 
-            i.putExtra("END_HOUR",
+            dayIntent.putExtra("END_HOUR",
                     Integer.parseInt(pref.getString(getString(endHour),
                             WorkReaderContract.WorkEntry.END_HOUR_DEFAULT)));
-            i.putExtra("END_MINUTE",
+            dayIntent.putExtra("END_MINUTE",
                     Integer.parseInt(pref.getString(getString(endMinute),
                             WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT)) / 15);
             if (pref.getString(getString(endAmOrPm),
                     WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT).equals("AM")) {
-                i.putExtra("END_AM_OR_PM", 0);
+                dayIntent.putExtra("END_AM_OR_PM", 0);
             } else {
-                i.putExtra("END_AM_OR_PM", 1);
+                dayIntent.putExtra("END_AM_OR_PM", 1);
             }
         }
 
-        startActivityForResult(i, 0);
+        if (dayIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(dayIntent, 0);
+        }
 
     }
 
@@ -771,7 +776,13 @@ public class CurrentWeekSchedule extends ListActivity  {
             newPosition = data.getIntExtra("CURRENT_DAY", -99);  //position in listview
             //0 - 6 represent Sun to Sat. 7 represents off. -99 is just to make it work on the hardware
             if (resultCode == WorkReaderContract.WorkEntry.RESULT_OKAY_NO_WORK) {
-                //SetAlarm.displayNotification("ALARM (ON ACTIVITY RESULT)");
+                //copied from Stackoverflow
+                try{
+                    NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    notificationManager.cancelAll();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
                 Log.e(PRODUCTION_TAG, "ALARM CAN'T BE SET");
             }
 
