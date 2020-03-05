@@ -11,6 +11,7 @@
 */
 package com.example.cd.workreminder;
 
+import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -40,7 +41,6 @@ public class WorkPreferences extends AppCompatActivity {
     private Button discard; //Added on 12 - 28 - 2019
     private int alarmHour = 0; //Added on 1 - 15 - 2019
     private int alarmMinutes = 0; //Added on 1 - 15 - 2019
-
     /*
       The Diazepam, which I use for Vertigo, was making me a bit loopy when I wrote this. So yeah,
       I don't know the reasoning behind it since I was high at the time. But I don't touch it
@@ -76,6 +76,7 @@ public class WorkPreferences extends AppCompatActivity {
             }
         });
 
+
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,7 +106,7 @@ public class WorkPreferences extends AppCompatActivity {
                                 Integer.parseInt(updateHour));
 
                 //Acquire End time
-                AlarmTimer alarmTimer = AlarmTimer.getInstance();
+                final AlarmTimer alarmTimer = AlarmTimer.getInstance();
                 alarmTimer.saveMinutesBeforeShift(getApplicationContext(), Integer.parseInt(updateMinutes));
                 alarmTimer.saveHoursBeforeShift(getApplicationContext(), Integer.parseInt(updateHour));
 
@@ -133,8 +134,8 @@ public class WorkPreferences extends AppCompatActivity {
 
     //Added on 12 - 29 - 2019
     private double getEndShiftInMinutes() {
-        AlarmTimer alarmTimer = AlarmTimer.getInstance();
-        MilitaryTime militaryTime = MilitaryTime.getInstance();
+        final AlarmTimer alarmTimer = AlarmTimer.getInstance();
+        final MilitaryTime militaryTime = MilitaryTime.getInstance();
         double endMilitaryMinuteInDecimals = 0.0;
         double totalTime = 0.0;
 

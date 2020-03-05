@@ -48,7 +48,7 @@ public class ExampleUnitTest {
 
     @Test
     public void doIStart_isCorrect() {
-        Calendar cal = Calendar.getInstance();
+        final Calendar cal = Calendar.getInstance();
         int currentHour = cal.get(Calendar.HOUR);
         int currentMinute = cal.get(Calendar.MINUTE);
         int startHour = 12;

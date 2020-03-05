@@ -102,7 +102,7 @@ public class AlarmIntentService extends IntentService {
 
 
             alarmMgr = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-            Intent intent = new Intent(getApplicationContext(), WorkAlarmReceiver.class);
+            Intent intent = new Intent(getApplicationContext(), WorkNotificationReceiver.class);
             alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
 
             if (alarmMgr!= null) {
@@ -132,7 +132,7 @@ public class AlarmIntentService extends IntentService {
     private void handleActionSnooze() {
         Log.e(TAG, "handleActionSnooze()");
 
-        AlarmTimer alarmTimer = AlarmTimer.getInstance();
+        final AlarmTimer alarmTimer = AlarmTimer.getInstance();
         alarmTimer.setAlarmSnoooze((int)SNOOZE_TIME);
         //AlarmIntentService.amSnoozed = true;
 
@@ -252,7 +252,7 @@ public class AlarmIntentService extends IntentService {
 
 
         // 3. Set up main Intent for notification.
-        Intent mainIntent = new Intent(this, AlarmNotificationMainActivity.class);
+        Intent mainIntent = new Intent(this, WorkPreferences.class);
 
         PendingIntent mainPendingIntent =
                 PendingIntent.getActivity(

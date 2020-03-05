@@ -51,7 +51,10 @@ public class DayNotification {
         //Unimplemented****************************************************************************
         Intent intent = new Intent(context, WorkPreferences.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context,
+                0,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, EXTRA_NOTIFICATION_ID)
                 .setSmallIcon(R.drawable.ic_stat_work)
@@ -186,7 +189,7 @@ public class DayNotification {
 
     public void updateDisplayTime(Context context) {
         //createNotification(String notificationTitle, String notificationText )
-        AlarmTimer alarmTimer = AlarmTimer.getInstance();
+        final AlarmTimer alarmTimer = AlarmTimer.getInstance();
         AlarmTimeFormatDisplay alarmTimeFormatDisplay =  new AlarmTimeFormatDisplay(context, alarmTimer, true);
         createNotification("NEW ALARM TIME", alarmTimeFormatDisplay.displayCurrentTime() );
     }

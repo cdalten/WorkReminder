@@ -24,6 +24,8 @@ import android.util.Log;
 
 import static android.content.Context.MODE_PRIVATE;
 
+
+//Used to set the Alarm ringone
 public class AlarmRingtone {
     private static final String PRODUCTION_TAG = "LG_WORK_PHONE"; //Added on 4 - 16 - 2019
     private static AudioAttributes aa;

@@ -198,7 +198,7 @@ public class storeHoursInGUI {
                         pref.getString(context.getString(R.string.SATURDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
 
         //Start new week
-        Calendar cal = Calendar.getInstance();
+        final Calendar cal = Calendar.getInstance();
         if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.SUNDAY) {
             week.get(WorkReaderContract.WorkEntry.OFF).add(0, "NEW_SUNDAY");
             week.get(WorkReaderContract.WorkEntry.OFF).add(WorkReaderContract.WorkEntry.START_HOUR, WorkReaderContract.WorkEntry.START_HOUR_DEFAULT);

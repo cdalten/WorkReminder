@@ -126,7 +126,7 @@ public class DataToMemory extends AppCompatActivity{
         //pref =  this.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
 
-        Calendar cal = Calendar.getInstance();
+        final Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(System.currentTimeMillis()); //?
         //cal.set(Calendar.HOUR, newMilitaryHour);
         cal.set(Calendar.HOUR, newMilitaryHour);
@@ -236,5 +236,33 @@ public class DataToMemory extends AppCompatActivity{
     public int getCurrentEndMilitaryMinute(Context context){
         //pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
         return pref.getInt("CURRENT_MILITARY_MINUTE", 0);
+    }
+
+    //from TimePickerFragment
+    public void saveCurrentCivilianHour(Context context,
+                                        String civlianHour,
+                                        int currentCivilianHour) {
+        //pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putInt(civlianHour, currentCivilianHour);
+        editor.apply();
+    }
+
+    public void saveCurrentCivilianMinute(Context context,
+                                          String civilianMinute,
+                                          int currentCivilianMinute) {
+        //pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putInt(civilianMinute, currentCivilianMinute);
+        editor.apply();
+    }
+
+    public void saveCurrentCivilianAmOrPm(Context context,
+                                          String amOrPm,
+                                          String currentAmOrPm) {
+        //pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString(amOrPm, currentAmOrPm);
+        editor.apply();
     }
 }//end class

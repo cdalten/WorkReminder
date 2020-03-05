@@ -99,7 +99,7 @@ public class SetAlarm extends AppCompatActivity {
     //Schizophrenic method call ripped off from the Android Notification source code -)
     @TargetApi(24)
     public int handleThirdShift() {
-        Calendar cal = Calendar.getInstance();
+        final Calendar cal = Calendar.getInstance();
         int currentDay = cal.get(Calendar.DAY_OF_WEEK); //vs inside if??
         //CurrentWorkHours currentWorkHours = new CurrentWorkHours();
         if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.SUNDAY) {
@@ -237,8 +237,8 @@ public class SetAlarm extends AppCompatActivity {
         newDayOfWeekEndMinute =  pref.getString(context.getString(dayOfWeekEndMinute), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT);
         newDayOfWeekEndAmOrPm = pref.getString(context.getString(dayOfWeekEndAmOrPm), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT);
 
-        militaryTime = MilitaryTime.getInstance();
-        AlarmTimer alarmTimer = AlarmTimer.getInstance();
+        final MilitaryTime militaryTime = MilitaryTime.getInstance();
+        final AlarmTimer alarmTimer = AlarmTimer.getInstance();
 
         pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
 
@@ -257,7 +257,7 @@ public class SetAlarm extends AppCompatActivity {
             setMilitaryTimeForWorkPreferences(militaryTime);
             setNotificationDisplay(context, militaryTime);
         } else {
-            Calendar cal = Calendar.getInstance();
+            final Calendar cal = Calendar.getInstance();
             int currentDay = cal.get(Calendar.DAY_OF_WEEK);
             storeHoursInGUI currentWeek = new storeHoursInGUI(context.getApplicationContext());
             ArrayList<ArrayList<String>> week = currentWeek.addHours();
@@ -305,7 +305,7 @@ public class SetAlarm extends AppCompatActivity {
             int startMilitaryMinute
     )
     {
-        Calendar cal = Calendar.getInstance();
+        final Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, startMilitaryHour);
         cal.set(Calendar.MINUTE, startMilitaryMinute);
 
@@ -319,7 +319,7 @@ public class SetAlarm extends AppCompatActivity {
             int endMilitaryMinute
     )
     {
-        Calendar cal = Calendar.getInstance();
+        final Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, endMilitaryHour);
         cal.set(Calendar.MINUTE, endMilitaryMinute);
 
@@ -332,7 +332,7 @@ public class SetAlarm extends AppCompatActivity {
             int startNewAlarmMilitaryMinute
     )
     {
-        Calendar cal = Calendar.getInstance();
+        final Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, startNewAlarmMilitaryHour);
         cal.set(Calendar.MINUTE, startNewAlarmMilitaryMinute);
 
@@ -341,7 +341,7 @@ public class SetAlarm extends AppCompatActivity {
     //Added on 10 - 23 - 2019
     @TargetApi(24)
     public long getCurrentTime() {
-        Calendar cal = Calendar.getInstance();
+        final Calendar cal = Calendar.getInstance();
         return cal.getTime().getTime();
     }
 
@@ -356,7 +356,7 @@ public class SetAlarm extends AppCompatActivity {
     public void setNotificationDisplay(Context context, MilitaryTime militaryTime)
     {
 
-        AlarmTimer alarmTimer = AlarmTimer.getInstance();
+        final AlarmTimer alarmTimer = AlarmTimer.getInstance();
         setStartMilitaryHour(militaryTime.getStartMilitaryHour());
         setStartMilitaryMinute(militaryTime.getStartMilitaryMinute());
         setStartAmOrPm(militaryTime.getStartAmOrPm());
@@ -466,10 +466,10 @@ public class SetAlarm extends AppCompatActivity {
         //code copied from
         //https://developer.android.com/training/scheduling/alarms
         alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, WorkAlarmReceiver.class);
+        Intent intent = new Intent(context, WorkNotificationReceiver.class);
         alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
-        Calendar calendar = Calendar.getInstance();
+        final Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         /*
           Time changes when the user changes the time before shift from something like
@@ -492,6 +492,7 @@ public class SetAlarm extends AppCompatActivity {
         alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                 1000 * 60 , alarmIntent);
     }
+
 
     //Added on 12 - 15 - 2019
     private void setStartMilitaryHour(int startMilitaryHour) {

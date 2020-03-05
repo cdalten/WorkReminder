@@ -768,8 +768,8 @@ public class CurrentWeekSchedule extends ListActivity  {
 
         int newPosition = -1; // don't enter switch
         //String day = "";
-        MilitaryTime militaryTime = MilitaryTime.getInstance();
-        AlarmTimer alarmTimer = AlarmTimer.getInstance();
+        final MilitaryTime militaryTime = MilitaryTime.getInstance();
+        final AlarmTimer alarmTimer = AlarmTimer.getInstance();
 
 
         if (data != null) {

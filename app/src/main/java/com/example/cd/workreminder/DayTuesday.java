@@ -11,10 +11,12 @@
 */
 package com.example.cd.workreminder;
 
+import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -40,6 +42,7 @@ public class DayTuesday extends FragmentActivity {
     private int dayPosition;
     private final String PRODUCTION_TAG = "LG_WORK_PHONE";
     private SharedPreferences pref; //Added on 5 - 24 - 2019
+    private Button pickTime; //Added on 3 - 3 - 2020
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

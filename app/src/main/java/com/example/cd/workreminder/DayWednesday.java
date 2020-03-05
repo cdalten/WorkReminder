@@ -11,6 +11,7 @@
 */
 package com.example.cd.workreminder;
 
+import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -63,6 +64,7 @@ public class DayWednesday extends FragmentActivity {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.wednesday, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         dayOfTheWeek.setAdapter(adapter);
         dayOfTheWeek.setSelection(0);//get via intent
 

@@ -15,6 +15,8 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 
 import android.app.ProgressDialog;
+import android.content.ComponentName;
+import android.content.pm.PackageManager;
 import android.net.http.HttpResponseCache;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -67,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     public String LANDINGPAGE_URL = "myschedule.safeway.com";
     //public static String LOGIN_URL = "https://myschedule.safeway.com/ESS/AuthN/SwyLogin.aspx?ReturnUrl=%2fESS";
 
+    //public static String LOGIN_URL = "http://192.168.43.114/index.html";
     public static String LOGIN_URL = "http://172.31.99.60/index.html";
     //public static String LOGIN_URL = "http://10.105.185.33/index.html"; //Level D 4104 Dwinelle Hall
 
@@ -178,6 +181,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
         //intent = new Intent(MainActivity.this, CurrentWeekSchedule.class);
 
+        enableBootReceiver();
+
         if (savedInstanceState == null) {
             Log.e(PRODUCTION_TAG, "ONCREATE() WHEN SAVEDINSTANCE() IS NULL");
 
@@ -222,7 +227,23 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
     }
 
+    //Added on 2 - 28 - 2020
+    private void enableBootReceiver() {
+        ComponentName receiver = new ComponentName(this, BootReceiver.class);
+        PackageManager pm = this.getPackageManager();
 
+        pm.setComponentEnabledSetting(receiver,
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
+    }
+
+    private void dispatchCurrentWeekSchedule() {
+        Intent currentWeekScheduleIntent = new Intent(MainActivity.this, CurrentWeekSchedule.class);
+        if (currentWeekScheduleIntent.resolveActivity(getPackageManager()) != null) {
+                startActivity(currentWeekScheduleIntent);
+            }
+
+    }
     //Added on 10 - 16 - 2019
     private void webViewSettings() {
         ConnectivityManager cm =
@@ -234,8 +255,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
         if (!isConnected) {
             Log.e(PRODUCTION_TAG, "INTERNET? " + isConnected);
-            Intent intent = new Intent(MainActivity.this, CurrentWeekSchedule.class);
-            startActivity(intent);
+            dispatchCurrentWeekSchedule();
         }
         else {
 
@@ -598,7 +618,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
                 //pref.getInt(getString(R.string.com_example_cd_shiftreminder_SAVED_DOWNLOAD_DATE),00);
 
-                Calendar cal = Calendar.getInstance();
+                final Calendar cal = Calendar.getInstance();
                     //if (cal.get(Calendar.DAY_OF_WEEK) != pref.getInt(getString(R.string.com_example_cd_shiftreminder_SAVED_DOWNLOAD_DATE),00)
                     //        && pageEnded == true) {
                 Log.e(PRODUCTION_TAG, "SCHEDULE HAS BEEN UPDATED");
