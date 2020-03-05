@@ -26,6 +26,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+//Set the alarm time preferences.
 public class WorkPreferences extends AppCompatActivity {
     Spinner dayPreference;
     private EditText alarmMinutesPreference; //Added on 4 - 5- 2019

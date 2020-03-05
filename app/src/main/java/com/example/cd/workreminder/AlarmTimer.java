@@ -11,7 +11,6 @@
 */
 
 package com.example.cd.workreminder;
-//package com.example.cd.shiftreminder;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -22,6 +21,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 
+/*
+ * This sets the alarm time based on the time preferences from the preference menu.
+ */
 public class AlarmTimer extends AppCompatActivity {
     //private final String PRODUCTION_TAG = "LG_WORK_PHONE"; //Added on 4 - 17 - 2019
     private static Calendar cal;

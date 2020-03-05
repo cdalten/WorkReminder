@@ -29,6 +29,10 @@ import android.widget.Spinner;
 import java.util.Calendar;
 
 //public class HourFormat extends AppCompatActivity {
+/*
+ *This is the menu the user clicks when they click on a particular day. This menu autofills
+ * the shift hours for that day. From there, a user can change those hours.
+ */
 public class HourFormat extends FragmentActivity {
     Spinner startHour; //Added on 1 - 22 - 2019
     Spinner startMinute; //Added on 1 - 23 - 2019
