@@ -39,18 +39,13 @@ import java.util.ArrayList;
 import static android.app.Notification.EXTRA_NOTIFICATION_ID;
 
 
-/*private static AlarmTimer instance = new AlarmTimer();
+/*
+ Sets the notification based on the current day of the week. It does this by retrieving the stored time,
+ which is in military format. Then it converts it to civilian time. From there, it sets the alarm
+ notification.
 
-private AlarmTimer() {
-
-        }
-
-//Added on 6 - 13 - 2019
-public static AlarmTimer getInstance(){
-        return instance;
-        }
-*/
-
+ The reason for storing the time in military time format is so that I can compare times.
+ */
 public class SetAlarm extends AppCompatActivity {
     SharedPreferences pref;
     Context context; //Added on 10 - 14 - 2019
@@ -61,7 +56,6 @@ public class SetAlarm extends AppCompatActivity {
     private Ringtone ringtone; //Added on 11 - 22 - 2019
     private static final String PRODUCTION_TAG = "DAY NOTIFICATION TAG"; //Added on 11 - 15 - 2019
 
-    private String dayOfWeek = ""; //Added on 12 - 16 - 2019
     private int startMilitaryHour = 0; //Added on 12 - 15 - 2019
     private int startMilitaryMinute = 0;
     private String startAmOrPm = ""; //Added on 12 - 18 - 2019
@@ -77,7 +71,6 @@ public class SetAlarm extends AppCompatActivity {
     private String newDayOfWeekEndMinute =  "";
     private String newDayOfWeekEndAmOrPm = "";
     private String previousDay = ""; //Added on 12 - 27 - 2019
-    //private long currentTime = 0;
 
     BroadcastReceiver br;
     IntentFilter intentFilter;
