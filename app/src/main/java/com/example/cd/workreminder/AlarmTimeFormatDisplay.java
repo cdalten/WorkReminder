@@ -6,6 +6,7 @@ import android.util.Log;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+//Used to format the alarm time.
 public class AlarmTimeFormatDisplay {
     private String dayOfWeek;
     private int hour;

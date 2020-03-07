@@ -39,6 +39,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.CookieManager;
 import android.webkit.HttpAuthHandler;
+import android.webkit.JavascriptInterface;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
@@ -69,8 +70,9 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     public String LANDINGPAGE_URL = "myschedule.safeway.com";
     //public static String LOGIN_URL = "https://myschedule.safeway.com/ESS/AuthN/SwyLogin.aspx?ReturnUrl=%2fESS";
 
-    //public static String LOGIN_URL = "http://192.168.43.114/index.html";
-    public static String LOGIN_URL = "http://172.31.99.60/index.html";
+    public static String LOGIN_URL = "https://www.dayforcehcm.com/MyDayforce/MyDayforce.aspx?isCstBrand=true";
+    //public static String LOGIN_URL = "http://192.168.43.114/index.html"; //My phone
+    //public static String LOGIN_URL = "http://172.31.99.60/index.html"; //Starbucks
     //public static String LOGIN_URL = "http://10.105.185.33/index.html"; //Level D 4104 Dwinelle Hall
 
     //public static String LOGIN_URL = "http:/https://usr56.dayforcehcm.com/mydayforce/mydayforce.aspx/";
@@ -114,7 +116,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         super.onCreate(savedInstanceState);
         this.getSupportActionBar().hide();
         setContentView(R.layout.activity_update_job_schedule);
-
 
         Log.e(PRODUCTION_TAG, "ONCREATE() BEFORE SAVEDINSTANCE()");
         final ProgressBar progressBar = findViewById(R.id.progressBar);
@@ -179,7 +180,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             Log.i(PRODUCTION_TAG, "HTTP response cache installation failed:" + e);
         }
 
-        //intent = new Intent(MainActivity.this, CurrentWeekSchedule.class);
 
         enableBootReceiver();
 
@@ -259,9 +259,10 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         }
         else {
 
+            //new JavascriptBridge();
             getSchedule = (WebView) this.findViewById(R.id.CurrentSchedule);
             getSchedule.setWebViewClient(new WWebViewClient());
-            //getSchedule.addJavascriptInterface(new MainActivity.JavaScriptBridge(this), "OFFLINE");
+            getSchedule.addJavascriptInterface(new JavaScriptBridge(), "HTMLOUT");
             getSchedule.getSettings().setLoadWithOverviewMode(true);
             getSchedule.getSettings().setUseWideViewPort(true);
             getSchedule.getSettings().setJavaScriptEnabled(true);
@@ -293,6 +294,12 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         });
         */
 
+    }
+    class JavaScriptBridge {
+        @JavascriptInterface
+        void processHTML(String s) {
+
+        }
     }
 
     @Override
@@ -393,11 +400,17 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     }
 
 
+    //Added on 3 - 5- 2020
+    private void readJSON(URL url) {
+
+    }
     /*
      *Added on 8 - 16 - 2018. Checks for connection when app loads up for the first time
      *
      */
     private String downloadLoginPage(URL url) throws IOException {
+        Log.d(PRODUCTION_TAG, "===> " + url);
+        readJSON(url);
         InputStream inputStream = null;
         //HttpsURLConnection connection = null;
         URLConnection connection = null;
@@ -438,14 +451,10 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             if ( responsecode == HttpsURLConnection.HTTP_MOVED_TEMP  || responsecode == HttpsURLConnection.HTTP_MOVED_PERM) {
 
                 Log.e(PRODUCTION_TAG, "REDIRECT DETECTED");
-                //redirect = true;
-                //Log.e(PRODUCTION_TAG, "URL REDIRECTION DETECTED");
                 //throw new IOException(" Http error code" + responsecode);
                 //return null;
                 throw new IOException("Redirect response code" + responsecode); //added on 10 - 2 - 2018
             }
-
-
 
 
             inputStream = connection.getInputStream();
@@ -462,7 +471,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 //connection.disconnect(); //why no else if??
             }
         }
-
         return result;
     }
 
@@ -492,6 +500,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             result = new String(buffer, 0, numChars);
         }
 
+        //Log.e(PRODUCTION_TAG, "===> " + result);
         return result;
         //return output; //close stream??
     }
@@ -588,8 +597,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
 
             //produces infinite get requests when offline.
-            Log.i(PRODUCTION_TAG, "The url is: " + url);
-            Log.i(PRODUCTION_TAG, "The viewed page is: " + view.getUrl());
+            Log.i(PRODUCTION_TAG, "===>: ONPAGESTARTED" + url);
+            Log.i(PRODUCTION_TAG, "===>: ONPAGESTARTED" + view.getUrl());
         }
 
         //Only download the schedule once a week. Rest of the time have the client handle the connection.
@@ -600,6 +609,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             Log.i(PRODUCTION_TAG, "URL DIDN'T GET CLICKED ON.");
             final Uri uri = request.getUrl();
             final String host = uri.getHost();
+
 
             //Need to change request.getUrl() to host
             //if (request.getUrl().equals("https://myschedule.safeway.com/ESS/Schedule.aspx")) {
@@ -638,10 +648,10 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
             Intent currentWeekScheduleIntent = new Intent(MainActivity.this, CurrentWeekSchedule.class);
             if (currentWeekScheduleIntent.resolveActivity(getPackageManager()) != null) {
-                startActivity(currentWeekScheduleIntent);
+                //startActivity(currentWeekScheduleIntent);
             }
-            return true;
-            //return false;
+            //return true;
+            return false;
         }
 
         //I use JavaScript to automate the login sequence.

@@ -27,6 +27,11 @@ import android.util.Log;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+/*
+  Holds the current ringtone. If the alarm is snoozed, the next ringtone instance is pushed onto the
+  stack. When it the alarm gets dismissed, this same instance is popped off the stack. I do this
+  because I know of any other way to retain the previous instance of an object.
+ */
 final class CurrrentRingtoneInstance {
 
     private static Ringtone ringtone; //Added on 10 - 30 - 2019
