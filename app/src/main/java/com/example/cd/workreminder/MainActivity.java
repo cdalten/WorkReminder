@@ -555,11 +555,13 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         //GZIPInputStream inputStreamReader = new GZIPInputStream(stream);
 
         String result = "";
+        byte buffer[] = new byte[2048];
         int numberOfChars = 0;
         try {
             new BufferedReader(new InputStreamReader(new GZIPInputStream(stream)));
             while ((numberOfChars = stream.read()) > 0) {
-
+                String app = new String(buffer, 0, numberOfChars);
+                result = result + app;
             }
 
         } catch (Exception e) {
@@ -567,7 +569,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         }
 
         Log.e(PRODUCTION_TAG, "THE DECODED STREAM IS: " + result);
-        return "";
+        return result;
     }
 
     private String downloadLoginPage(URL url) throws IOException {
