@@ -16,6 +16,7 @@ import android.annotation.TargetApi;
 
 import android.app.ProgressDialog;
 import android.content.ComponentName;
+import android.content.Entity;
 import android.content.pm.PackageManager;
 import android.net.http.HttpResponseCache;
 import android.os.Handler;
@@ -41,6 +42,7 @@ import android.webkit.CookieManager;
 import android.webkit.HttpAuthHandler;
 import android.webkit.JavascriptInterface;
 import android.webkit.SslErrorHandler;
+import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
@@ -52,16 +54,22 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.List;
+import java.util.zip.GZIPInputStream;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -107,7 +115,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
     private Handler handler = new Handler();
     private int progressStatus = 0;
-
+    private String serverSideCookie = ""; //Added o n 6 - 14 - 2020
+    private  boolean amGzip;
 
     @SuppressLint("ClickableViewAccessibility")
     @TargetApi(19)
@@ -166,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         //readFromDrive(); //need to move to fragment?
 
         //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-        //    if (0 != (getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE)) {
+        //    if (0 != (getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE)
 
         WebView.setWebContentsDebuggingEnabled(true); //vs instance of a class??=
         //   }
@@ -183,6 +192,12 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
         enableBootReceiver();
 
+        //try {
+        //    String cookies = getServerCookie(new URL(LOGIN_URL));
+        //    Log.e(PRODUCTION_TAG, "THE SERVER SIDE COOKIE IS: " + cookies);
+        //} catch (Exception e) {
+        //    Log.e(PRODUCTION_TAG, "CAN'T GET COOKIE");
+        //}
         if (savedInstanceState == null) {
             Log.e(PRODUCTION_TAG, "ONCREATE() WHEN SAVEDINSTANCE() IS NULL");
 
@@ -209,12 +224,10 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             //readFromInternalDirectory(new File(CurrentSchedule + ThisWeek));
 
             webViewSettings();
-
         }
 
-
         /*getSchedule.setWebChromeClient(new WebChromeClient() {
-
+            public
             @Override
             public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
                 Log.d("work", consoleMessage.message() + " --- From line"
@@ -224,6 +237,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             }
         });
         */
+
 
     }
 
@@ -245,6 +259,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
     }
     //Added on 10 - 16 - 2019
+    @TargetApi(21)
     private void webViewSettings() {
         ConnectivityManager cm =
                 (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -263,12 +278,16 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             getSchedule = (WebView) this.findViewById(R.id.CurrentSchedule);
             getSchedule.setWebViewClient(new WWebViewClient());
             getSchedule.addJavascriptInterface(new JavaScriptBridge(), "HTMLOUT");
+            getSchedule.clearCache(true);
+            getSchedule.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+            getSchedule.getSettings().setAppCacheEnabled(false);
+            //determineCacheMode();
             getSchedule.getSettings().setLoadWithOverviewMode(true);
             getSchedule.getSettings().setUseWideViewPort(true);
             getSchedule.getSettings().setJavaScriptEnabled(true);
             getSchedule.getSettings().setDomStorageEnabled(true);
             getSchedule.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT); //added on 9 - 23 - 2018
-            CookieManager.getInstance().setAcceptCookie(true);
+            //CookieManager.getInstance().setAcceptCookie(true);
 
             //double render????
             //mNetworkFragment = WorkNetworkFragment.getInstance(
@@ -279,26 +298,48 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                     getSupportFragmentManager(),
                     LOGIN_URL);
 
+            CookieManager cookieManager = CookieManager.getInstance();
+            //cookieManager.acceptCookie();
+            cookieManager.setAcceptCookie(true);
+            //cookieManager.removeSessionCookie(); // remove
+            //cookieManager.removeAllCookie(); //remove
+            //Namespace=goodeggs&UserName=chad.altenburg
+            //cookieManager.setCookie(LOGIN_URL, "NamespaceCookie=goodeggs");
+            //cookieManager.setCookie(LOGIN_URL, "UserName=chad.altenburg");
+            //cookieManager.setCookie(LOGIN_URL, "LoginCookie=Namespace=goodeggs&UserName=chad.altenburg");
+            cookieManager.setAcceptThirdPartyCookies(getSchedule, true);
+
             getSchedule.loadUrl(LOGIN_URL);
             getSchedule.setVisibility(View.VISIBLE); //disable for debugging.
         }
-        /*getSchedule.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                startDownload();
-                Log.e(PRODUCTION_TAG, "WEBVIEW BUTTON GOT CLICKED");
-                return false;
-            }
-
-
-        });
-        */
 
     }
+    /*
+     Added on 3 - 12 - 2020.
+     Debugging only. Need to remove
+     */
+    private void determineCacheMode(){
+        int mode = getSchedule.getSettings().getCacheMode();
+        switch (mode) {
+            case WebSettings.LOAD_CACHE_ONLY:
+                Log.e(PRODUCTION_TAG, "LOAD_CACHE_ONLY");
+                break;
+            case WebSettings.LOAD_DEFAULT:
+                Log.e(PRODUCTION_TAG, "LOAD_DEFAULT");
+                break;
+            case WebSettings.LOAD_NO_CACHE:
+                Log.e(PRODUCTION_TAG, "LOAD_NO_CACHE");
+                break;
+            case WebSettings.LOAD_CACHE_ELSE_NETWORK:
+                Log.e(PRODUCTION_TAG, "LOAD_CACHE_ELSE_NETWORK");
+                break;
+        }
+    }
+
     class JavaScriptBridge {
         @JavascriptInterface
         void processHTML(String s) {
-
+            Log.e(PRODUCTION_TAG, "===> " + s);
         }
     }
 
@@ -385,8 +426,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
      */
     protected void onResume() {
         super.onResume(); //stupid hack;
-
-        Log.i(PRODUCTION_TAG, "MAIN ACTIVITY ON RESUME ");
     }
 
 
@@ -408,34 +447,154 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
      *Added on 8 - 16 - 2018. Checks for connection when app loads up for the first time
      *
      */
-    private String downloadLoginPage(URL url) throws IOException {
+    private String getServerCookie(URL url) throws IOException {
         Log.d(PRODUCTION_TAG, "===> " + url);
         readJSON(url);
-        InputStream inputStream = null;
+        //InputStream inputStream = null;
+        BufferedReader bufferedReader = null;
         //HttpsURLConnection connection = null;
-        URLConnection connection = null;
+        HttpURLConnection connection = null;
         String result = null;
-        boolean redirect = false; //added on 9 - 25 - 2018
+        String cookies = "";
         int code = 0; //added on 12 - 8 - 2018
         try {
-            //connection = (HttpsURLConnection) url.openConnection();
-            connection = url.openConnection();
+
             //HttpsURLConnection.setFollowRedirects(false);
             //connection.setInstanceFollowRedirects(true);
             //connection.setReadTimeout(9000); //3000ms
             //connection.setConnectTimeout(9000); //3000ms
-            //connection.setRequestMethod("GET");
 
-            if (CookieManager.getInstance().getCookie(connection.getURL().toString()) != null) {
-                //String arr[] = CookieManager.getInstance().getCookie(connection.getURL().toString()).split(";");
-                //connection.setRequestProperty("Cookie", arr[1]);
-                //Log.i(PRODUCTION_TAG, "The client side cookie is: " + arr[1]);
+            //The input form passed from the client to the server is in gzip format.
+            //Any other other type will result in an I/0 error
+            connection = (HttpURLConnection) url.openConnection();
+            //String message = connection.getResponseMessage();
+            //String cookies = connection.getHeaderField("Set-Cookie");
+
+//cookies.split(";")
+            connection.addRequestProperty("Accept", "*/*");
+            connection.addRequestProperty("Accept-Encoding", "gzip, deflate, br");
+            connection.addRequestProperty("X-Requested-With", "XMLHttpRequest");
+            connection.addRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("Cache-Control", "no-cache, no-store, must-revalidate");
+
+            connection.setRequestMethod("GET");
+            connection.setDoInput(true);
+            connection.setDoOutput(true);
+
+            cookies = connection.getHeaderField("Set-Cookie");
+            //connection.setChunkedStreamingMode(0); //added on 9 - 12 - 2018
+            //Fconnection.connect();
+
+            Log.e(PRODUCTION_TAG, "----------------------------------------");
+            Log.e(PRODUCTION_TAG, "THE RESPONSE MESSAGE IS: " + connection.getResponseMessage());
+            Log.e(PRODUCTION_TAG, "THE RESPONSE REQUEST IS: " + connection.getRequestMethod());
+            Log.e(PRODUCTION_TAG, "THE RESPONSE CONTENT ENCONDING IS: " + connection.getContentEncoding());
+            Log.e(PRODUCTION_TAG, "THE RESPONSE HEADERS ARE: " + connection.getHeaderFields());
+            Log.e(PRODUCTION_TAG, "-----------------------------------");
+            //Log.e(PRODUCTION_TAG, "THE RESPONSE CONTENT: " + connection.getContent().toString());
+            //int responsecode = connection.getResponseCode();
+
+            if ( connection.getContentEncoding().equals("gzip")) {
+                amGzip = true;
+            } else {
+                amGzip = false;
+            }
+            int responsecode = ((HttpURLConnection) connection).getResponseCode();
+            Log.e(PRODUCTION_TAG, "THE RESPONSE CODE IS: " + responsecode);
+            //int responsecode = 200;
+            if (responsecode != HttpsURLConnection.HTTP_OK) {
+                Log.e(PRODUCTION_TAG, "POSSIBLE 404? in downloadLogin()");
+
+                //connection.disconnect();
+                //redirect = true;
+                //return null;
+                throw new IOException("Http error code" + responsecode); //disabled in an attempt to debug
+            }
+            if ( responsecode == HttpsURLConnection.HTTP_MOVED_TEMP  || responsecode == HttpsURLConnection.HTTP_MOVED_PERM) {
+
+                Log.e(PRODUCTION_TAG, "REDIRECT DETECTED");
+                //throw new IOException(" Http error code" + responsecode);
+                //return null;
+                throw new IOException("Redirect response code" + responsecode); //added on 10 - 2 - 2018
             }
 
-            connection.setDoInput(true);
+            bufferedReader = new BufferedReader((new InputStreamReader(connection.getInputStream())));
 
+            if (bufferedReader != null) {
+                result = readStream(bufferedReader, amGzip,64000); //Lame way to emulate ping.
+                if (amGzip == true) {
+                  decodeStream(result);
+                  
+                }
+
+            }
+        }
+
+        finally {
+            if (bufferedReader != null) {
+                bufferedReader.close();
+            }
+            if (connection != null) {
+                //connection.disconnect(); //why no else if??
+            }
+        }
+        //OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
+        //out.write(result);
+        //out.close();
+        return cookies;
+    }
+
+    //Added on 6 - 21 - 2020
+    private String decodeStream(String stream) {
+        return "";
+    }
+
+    private String downloadLoginPage(URL url) throws IOException {
+        Log.d(PRODUCTION_TAG, "===> " + url);
+        readJSON(url);
+        //InputStream inputStream = null;
+        BufferedReader bufferedReader = null;
+        //HttpsURLConnection connection = null;
+        HttpURLConnection connection = null;
+        String result = null;
+        String cookies = "";
+        int code = 0; //added on 12 - 8 - 2018
+        try {
+
+            //HttpsURLConnection.setFollowRedirects(false);
+            //connection.setInstanceFollowRedirects(true);
+            //connection.setReadTimeout(9000); //3000ms
+            //connection.setConnectTimeout(9000); //3000ms
+
+            //The input form passed from the client to the server is in gzip format.
+            //Any other other type will result in an I/0 error
+            connection = (HttpURLConnection) url.openConnection();
+            //String message = connection.getResponseMessage();
+            //String cookies = connection.getHeaderField("Set-Cookie");
+
+//cookies.split(";")
+            connection.addRequestProperty("Accept", "*/*");
+            connection.addRequestProperty("Accept-Encoding", "gzip, deflate, br");
+            connection.addRequestProperty("X-Requested-With", "XMLHttpRequest");
+            connection.addRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("Cache-Control", "no-cache, no-store, must-revalidate");
+
+            connection.setRequestMethod("GET");
+            connection.setDoInput(true);
+            connection.setDoOutput(true);
+
+            //cookies = connection.getHeaderField("Set-Cookie");
+            //connection.setRequestProperty("Cookie", cookies);
             //connection.setChunkedStreamingMode(0); //added on 9 - 12 - 2018
-            connection.connect();
+            //Fconnection.connect();
+
+            Log.e(PRODUCTION_TAG, "----------------------------------------");
+            Log.e(PRODUCTION_TAG, "THE RESPONSE MESSAGE IS: " + connection.getResponseMessage());
+            Log.e(PRODUCTION_TAG, "THE RESPONSE REQUEST IS: " + connection.getRequestMethod());
+            Log.e(PRODUCTION_TAG, "THE RESPONSE CONTENT ENCONDING IS: " + connection.getContentEncoding());
+            Log.e(PRODUCTION_TAG, "THE RESPONSE HEADERS ARE: " + connection.getHeaderFields());
+            Log.e(PRODUCTION_TAG, "-----------------------------------");
+            //Log.e(PRODUCTION_TAG, "THE RESPONSE CONTENT: " + connection.getContent().toString());
             //int responsecode = connection.getResponseCode();
             int responsecode = ((HttpURLConnection) connection).getResponseCode();
             Log.e(PRODUCTION_TAG, "THE RESPONSE CODE IS: " + responsecode);
@@ -456,39 +615,45 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 throw new IOException("Redirect response code" + responsecode); //added on 10 - 2 - 2018
             }
 
+            bufferedReader = new BufferedReader((new InputStreamReader(connection.getInputStream())));
 
-            inputStream = connection.getInputStream();
-            if (inputStream != null) {
-                result = readStream(inputStream, 64000); //Lame way to emulate ping.
+            if (bufferedReader != null) {
+                result = readStream(bufferedReader, amGzip, 64000); //Lame way to emulate ping.
             }
         }
 
         finally {
-            if (inputStream != null) {
-                inputStream.close();
+            if (bufferedReader != null) {
+                bufferedReader.close();
             }
             if (connection != null) {
                 //connection.disconnect(); //why no else if??
             }
         }
+        //OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
+        //out.write(result);
+        //out.close();
         return result;
     }
 
     //added on 8 - 16 - 2018.
-    private String readStream(InputStream stream, int offset) throws IOException{
-        InputStreamReader inputStreamReader = new InputStreamReader(stream, "UTF-8");
+    private String readStream(BufferedReader inputStreamReader, boolean amGzip, int offset) throws IOException{
+        //ByteArrayInputStream bais = new ByteArrayInputStream(stream);
+        //InputStreamReader inputStreamReader = new InputStreamReader(stream, "UTF-8");
+        //GZIPInputStream inputStreamReader = new GZIPInputStream(stream);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
-        String result = null; //change from empty to null??! 10 - 4 - 2018
+        String result = ""; //change from empty to null??! 10 - 4 - 2018
         int maxLength = offset; //don't ask
         //int maxLength = 100; //modified on 10 - 7 - 2018
-        char [] buffer = new char[maxLength];
+        //char [] buffer = new char[maxLength];
+        byte [] buffer = new byte[maxLength];
         int numChars = 0;
         int readSize = 0;
-
         //START REVISED CODE
         //Possibly reading too large data stream. Hence why the insufficient resource error?
         //Log.d(PRODUCTION_TAG, "STARTED TO READ STREAM"); //added on 10 - 4- 2018
-        while (numChars < maxLength && readSize != -1) {
+        /*while (numChars < maxLength && readSize != -1) {
             numChars += readSize;;
             inputStreamReader.read();
             readSize = inputStreamReader.read(buffer, numChars, buffer.length - numChars);
@@ -499,7 +664,26 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             numChars = Math.min(numChars, maxLength);
             result = new String(buffer, 0, numChars);
         }
+        */
 
+        //code ripped of from stackoverflow
+        int length;
+        String input = "";
+
+        while ((input = inputStreamReader.readLine()) != null) {
+        //while(inputStreamReader.ready()) {
+            //String next = inputStreamReader.readLine().trim();
+        //    if(next.isEmpty()) {
+                //inDefinition = false;
+        //        Log.e(PRODUCTION_TAG, "FOUND BLANK LINE IS RESPONSE BODY");
+        //    }
+            //byteArrayOutputStream.write(buffer, 0, length);
+            result = result + input + "--";
+        }
+
+
+
+        //result = new String(byteArrayOutputStream.toByteArray(), "UTF-8" );
         //Log.e(PRODUCTION_TAG, "===> " + result);
         return result;
         //return output; //close stream??
@@ -518,7 +702,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         //Log path. Used from debugging purposes only.
         @TargetApi(21)
         @Override
-        public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request){
+        public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
             Log.d(PRODUCTION_TAG, " ");
             Log.d(PRODUCTION_TAG, "URI AUTHORITY " + request.getUrl().getAuthority() + "");
             Log.d(PRODUCTION_TAG, "URI ENCODING " + request.getUrl().getEncodedPath() + "");
@@ -531,6 +715,11 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             Log.d(PRODUCTION_TAG, "URI PATH " + request.getUrl().getPath());
             Log.d(PRODUCTION_TAG, "REQUEST HEADERS " + request.getRequestHeaders());
             Log.d(PRODUCTION_TAG, "METHOD TYPE " + request.getMethod());
+            Log.d(PRODUCTION_TAG, "THE QUERY BODY IS:  " + request.getUrl().getQuery());
+            Log.d(PRODUCTION_TAG, "THE PARAMETERS NAMES BODY IS:  " + request.getUrl().getQueryParameterNames());
+            //Log.d(PRODUCTION_TAG, "THE PARAMETERS NAMES BODY IS:  " + request.getUrl);
+
+
             Log.d(PRODUCTION_TAG, "++++++++++++++++++++++++++++++++++++");
             Log.d(PRODUCTION_TAG, " ");
 
@@ -547,8 +736,12 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
 
             try {
-                String result = downloadLoginPage(new URL(request.getUrl().toString()));
-                //Log.i(PRODUCTION_TAG, "THE RESULT IS: " + result);
+                URL url = new URL(request.getUrl().toString());
+                serverSideCookie = getServerCookie(url);
+                Log.e(PRODUCTION_TAG, "THE SERVER SIDE COOKIE IS: " + serverSideCookie);
+                String result = downloadLoginPage(url);
+                Log.e(PRODUCTION_TAG, "THE RESULT URL IS: " + url);
+                Log.e(PRODUCTION_TAG, "THE RESULT IS: " + result);
                 if (result == null) {
                     Log.e(PRODUCTION_TAG, "INTENT STARTED ON NULL HTTP RESPONSE");
                     //return new WebResourceResponse("text/html",
@@ -570,25 +763,61 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 Log.e(PRODUCTION_TAG, "IO ERROR " + e);
             }
 
-            /*if (request.getUrl().toString().contains("LaborSelect.js")
-                        || request.getUrl().toString().contains("GenericTree.js")
-                        || request.getUrl().toString().contains("jquery-custom-libs.js")
-                        || request.getUrl().toString().contains("LoadTree.js")
-                        ) {
-               Log.e(PRODUCTION_TAG, "FOUND JS SCRIPTS");
-                try {
-                    return new WebResourceResponse("text/javascript", "UTF-8", getAssets().open("index.html"));
-                } catch (Exception e) {
-                        //pass
-                }
-            } */ //end if
+            String result = ""; //Debug only. Need to remove.
+
+
+            try {
+                //    return new WebResourceResponse("text/javascript", "UTF-8", getAssets().open("index.html"));
+                //return new WebResourceResponse("text/javascript", "UTF-8",  );
+
+                //if (request.getUrl().toString().contains("GetEmployeeBalanceDisplay")){
+                    WebResourceResponse webResourceResponse = webResourceResponse(new URL(request.getUrl().toString()));
+                    //return webResourceResponse(new URL(request.getUrl().toString()));
+                    //super.shouldInterceptRequest(view, request);
+            //https://usr57.dayforcehcm.com/MyDayforce/u/XzNaUiyPFkadhacwISpHjg/HR/Employee/GetEmployeeBalanceDisplay
+
+                URL url = new URL(request.getUrl().toString());
+                URLConnection connection = url.openConnection();
+                    //result = readStream(webResourceResponse.getData(), 64000); //Force debug line
+                    result = readStream(new BufferedReader((new InputStreamReader(connection.getInputStream()))),amGzip, 64000); //Force debug line
+                //result = readStream(null, 64000); //Force debug line
+                    Log.e(PRODUCTION_TAG, "===> " + request.getUrl().toString());
+                    Log.e(PRODUCTION_TAG, "THE RESPONSE DATA ==>: " + result);
+                    //Log.e(PRODUCTION_TAG, "ShouldIntercept() CONTENT ENCODING IS: " + connection.getContentEncoding());
+                    //Log.e(PRODUCTION_TAG, "ShouldIntercept() CONTENT  IS: " + connection.getContent().toString());
+                //}
+            } catch (Exception e) {
+                Log.e(PRODUCTION_TAG, "ERROR IN SHOULDINTERCEPT() " + e);
+            }
 
             Log.i(PRODUCTION_TAG, "----------------------------------------------------");
 
-
             return super.shouldInterceptRequest(view, request);
+
         }
 
+        private WebResourceResponse webResourceResponse(URL url) {
+            URLConnection connection = null;
+            try {
+                connection = url.openConnection();
+                //connection.connect();
+
+                return new WebResourceResponse("application/json", "UTF-8", connection.getInputStream());
+            } catch (IOException e) {
+                Log.e(PRODUCTION_TAG, "CANNOT READ STREAM");
+            }
+            return null;
+        }
+
+
+        /*
+         This is an alternative to using a JavaScript bridge. See onPageFinished() method
+         for more details.
+         */
+        public void rememberLogin() {
+
+
+        }
         /*
          *Possibly add menu visibility here? This is because this appears to be the the only webview
          * entry point when I click on the login button.
@@ -597,8 +826,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
 
             //produces infinite get requests when offline.
-            Log.i(PRODUCTION_TAG, "===>: ONPAGESTARTED" + url);
-            Log.i(PRODUCTION_TAG, "===>: ONPAGESTARTED" + view.getUrl());
+            //Log.i(PRODUCTION_TAG, "===>: ONPAGESTARTED" + url);
+            //Log.i(PRODUCTION_TAG, "===>: ONPAGESTARTED" + view.getUrl());
         }
 
         //Only download the schedule once a week. Rest of the time have the client handle the connection.
@@ -618,6 +847,9 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             // }
 
 
+            Log.e(PRODUCTION_TAG, "THE URL IS: " + request.getUrl().toString());
+            Log.e(PRODUCTION_TAG, "THE URL QUERY IS: " + request.getUrl().getQuery());
+            Log.e(PRODUCTION_TAG, "THE URL LAST PATH SEGMENT IS: " + request.getUrl().getLastPathSegment());
             //Need to manually set scheduleGotUpdated flag to false on every other day.
             //Check for bad connection before resetting flag?
             //if (host.equals("myschedule.safeway.com")) {
@@ -626,6 +858,9 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 Log.i(PRODUCTION_TAG, "CLICKED VIEW URL IS: " + view.getUrl());
                 Log.i(PRODUCTION_TAG, "REQUESTED URL IS: " + request.getUrl());
 
+                Log.e(PRODUCTION_TAG, "THE URL IS: " + request.getUrl().toString());
+                Log.e(PRODUCTION_TAG, "THE URL QUERY IS: " + request.getUrl().getQuery());
+                Log.e(PRODUCTION_TAG, "THE URL LAST PATH SEGMENT IS: " + request.getUrl().getLastPathSegment());
                 //pref.getInt(getString(R.string.com_example_cd_shiftreminder_SAVED_DOWNLOAD_DATE),00);
 
                 final Calendar cal = Calendar.getInstance();
@@ -650,7 +885,13 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             if (currentWeekScheduleIntent.resolveActivity(getPackageManager()) != null) {
                 //startActivity(currentWeekScheduleIntent);
             }
+            //Toast.makeText(getApplicationContext(),request.getUrl()., Toast.LENGTH_LONG).show();
             //return true;
+            Log.e(PRODUCTION_TAG, "-------------------------------------------");
+            Log.e(PRODUCTION_TAG, "THE URL IS: " + request.getUrl().toString());
+            Log.e(PRODUCTION_TAG, "THE URL QUERY IS: " + request.getUrl().getQuery());
+            Log.e(PRODUCTION_TAG, "THE URL LAST PATH SEGMENT IS: " + request.getUrl().getLastPathSegment());
+            Log.e(PRODUCTION_TAG, "THE SERVER SIDE COOKIE AGAIN IS: " + serverSideCookie);
             return false;
         }
 
@@ -665,16 +906,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
             if (getSchedule.getUrl().equals(LOGIN_URL)) {
                 //if (view.getUrl().equals(url)) {
                 //getSchedule.setVisibility(View.VISIBLE);
-                //Update.setVisibility(View.VISIBLE);
-                /*getSchedule.loadUrl(
-                        "javascript:var bld = document.getElementById('EmpID').style.color = 'red' " + ";"
-                                + "javascript:var x = document.getElementById('EmpID').value = " + name + ";"
-                                //+ "javascript:var y = document.getElementById('Password').style.display = 'none' " + ";"
-                                //+ "javascript:var a = ''" + ";"
-                                //+ "javascript:var b = document.getElementById('').value = " + 'a' + ";"
-
-                );
-                */
 
                 //Default on initial installation
                 if (pref.getBoolean("SAVE_PASSWORD", false) == true) {
@@ -702,13 +933,8 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                         null); }
 
 
-            else if (url.equals("https://myschedule.safeway.com/ESS/Schedule.aspx")) {
-                Log.e(PRODUCTION_TAG, "DID THE SCHEDULE GET UPDATED? " + scheduleGotUpdated);
-                //getSchedule.setVisibility(View.VISIBLE);
-                startActivity(intent);
-                //Update.setVisibility(View.VISIBLE);
 
-            }
+
             */
 
 
