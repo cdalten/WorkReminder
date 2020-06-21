@@ -524,7 +524,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 result = readStream(bufferedReader, amGzip,64000); //Lame way to emulate ping.
                 if (amGzip == true) {
                   decodeStream(result);
-                  
+
                 }
 
             }
