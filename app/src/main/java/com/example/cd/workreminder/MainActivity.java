@@ -58,6 +58,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -518,12 +519,15 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
                 throw new IOException("Redirect response code" + responsecode); //added on 10 - 2 - 2018
             }
 
-            bufferedReader = new BufferedReader((new InputStreamReader(connection.getInputStream())));
+            InputStreamReader inputStreamReader = (new InputStreamReader(connection.getInputStream()));
+            InputStream inputStream = connection.getInputStream();
+
+            bufferedReader = new BufferedReader(inputStreamReader);
 
             if (bufferedReader != null) {
                 result = readStream(bufferedReader, amGzip,64000); //Lame way to emulate ping.
                 if (amGzip == true) {
-                  decodeStream(result);
+                  decodeStream(inputStream);
 
                 }
 
@@ -545,7 +549,24 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
     }
 
     //Added on 6 - 21 - 2020
-    private String decodeStream(String stream) {
+    private String decodeStream(InputStream stream) {
+        //ByteArrayInputStream bais = new ByteArrayInputStream(stream);
+        //InputStreamReader inputStreamReader = new InputStreamReader(stream, "UTF-8");
+        //GZIPInputStream inputStreamReader = new GZIPInputStream(stream);
+
+        String result = "";
+        int numberOfChars = 0;
+        try {
+            new BufferedReader(new InputStreamReader(new GZIPInputStream(stream)));
+            while ((numberOfChars = stream.read()) > 0) {
+
+            }
+
+        } catch (Exception e) {
+
+        }
+
+        Log.e(PRODUCTION_TAG, "THE DECODED STREAM IS: " + result);
         return "";
     }
 
@@ -638,9 +659,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionCallbac
 
     //added on 8 - 16 - 2018.
     private String readStream(BufferedReader inputStreamReader, boolean amGzip, int offset) throws IOException{
-        //ByteArrayInputStream bais = new ByteArrayInputStream(stream);
-        //InputStreamReader inputStreamReader = new InputStreamReader(stream, "UTF-8");
-        //GZIPInputStream inputStreamReader = new GZIPInputStream(stream);
+
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
         String result = ""; //change from empty to null??! 10 - 4 - 2018
