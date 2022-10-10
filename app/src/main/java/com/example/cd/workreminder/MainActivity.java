@@ -75,9 +75,8 @@ public class MainActivity extends AppCompatActivity {
 
             pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE); //redudant??
             //readFromInternalDirectory(new File(CurrentSchedule + ThisWeek));
-            
-        }
 
+        }
     }
 
     //Added on 2 - 28 - 2020
