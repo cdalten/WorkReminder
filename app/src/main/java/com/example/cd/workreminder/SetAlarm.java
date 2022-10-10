@@ -251,7 +251,7 @@ public class SetAlarm extends AppCompatActivity {
             setNotificationDisplay(context, militaryTime);
         } else {
             final Calendar cal = Calendar.getInstance();
-            int currentDay = cal.get(Calendar.DAY_OF_WEEK);
+            int currentDay = cal.get(Calendar.DAY_OF_WEEK_IN_MONTH);
             storeHoursInGUI currentWeek = new storeHoursInGUI(context.getApplicationContext());
             ArrayList<ArrayList<String>> week = currentWeek.addHours();
 //week.get(currentDay).get(0)
@@ -263,6 +263,7 @@ public class SetAlarm extends AppCompatActivity {
             }//end for
 
             displayNotification(context.getApplicationContext(),
+
                     week.get(i).get(0)  //day
                     + " " + week.get(i).get(1) //hour
                     + ":" + week.get(i).get(2) //minute
