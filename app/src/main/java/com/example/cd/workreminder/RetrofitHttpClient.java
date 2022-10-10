@@ -22,6 +22,7 @@ public class RetrofitHttpClient extends AppCompatActivity {
         //        .build();
     }
 
+
     //@GET("")
     //Call<ResponseBody> getIP;
     interface Api {
