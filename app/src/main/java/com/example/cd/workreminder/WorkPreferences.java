@@ -55,7 +55,7 @@ public class WorkPreferences extends AppCompatActivity {
         this.pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
         alarmMinutesPreference = (EditText) findViewById(R.id.alarmMinutesPreference);
         alarmHourPreference = (EditText) findViewById(R.id.alarmHourPreferences);
-        rememberPassword = (Button) findViewById(R.id.RememberPassword);
+        //rememberPassword = (Button) findViewById(R.id.RememberPassword);
 
         //currentPassword = (EditText) findViewById(R.id.currentPassword);
         save = (Button) findViewById(R.id.save);
@@ -70,13 +70,13 @@ public class WorkPreferences extends AppCompatActivity {
         alarmHourPreference.setText(newAlarmTimeHour + "");
 
         //Not implemented
-        rememberPassword.setOnClickListener(new View.OnClickListener() {
+        /*rememberPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(WorkPreferences.this, RememberMe.class));
             }
         });
-
+        */
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -51,13 +51,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.getSupportActionBar().hide();
+        //this.getSupportActionBar().hide();
         setContentView(R.layout.activity_update_job_schedule);
 
         Log.e(PRODUCTION_TAG, "ONCREATE() BEFORE SAVEDINSTANCE()");
 
         dispatchCurrentWeekSchedule();
         enableBootReceiver();
+        disableBootReceiver();
 
         if (savedInstanceState == null) {
             Log.e(PRODUCTION_TAG, "ONCREATE() WHEN SAVEDINSTANCE() IS NULL");
@@ -89,6 +90,19 @@ public class MainActivity extends AppCompatActivity {
                 PackageManager.DONT_KILL_APP);
     }
 
+    //Added on 10 - 10 - 2022
+    private void disableBootReceiver() {
+        ComponentName receiver = new ComponentName(this, BootReceiver.class);
+        PackageManager pm = this.getPackageManager();
+
+        pm.setComponentEnabledSetting(receiver,
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+
+        //I'm not that sure where to put this function at.
+        Log.d(PRODUCTION_TAG, "BOOT RECEIVER GOT DISABLED");
+    }
+
     private void dispatchCurrentWeekSchedule() {
         Intent currentWeekScheduleIntent = new Intent(MainActivity.this, CurrentWeekSchedule.class);
         if (currentWeekScheduleIntent.resolveActivity(getPackageManager()) != null) {
@@ -96,34 +110,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-    //Added on 10 - 16 - 2019
-    /*
-     Added on 3 - 12 - 2020.
-     Debugging only. Need to remove
-     */
 
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
     }//end onStart()
 
 
-
-    public void onStart() {
-        super.onStart();
-
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-}
-
-    //Crashes when I press the back key. 8 - 13 - 2018
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-    }
 
     @Override
     /*
@@ -133,17 +125,6 @@ public class MainActivity extends AppCompatActivity {
         Log.e(PRODUCTION_TAG, "ON RESUME GOT CALLED");
         super.onResume(); //stupid hack;
     }
-
-
-    //Kill the http connection and flush the cache.
-    @Override
-    protected void onDestroy() {
-        //super.onDestroy();
-
-        //cancel();
-        super.onDestroy(); //why?
-    }
-
 
 }//end Main// Activity
 

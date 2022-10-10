@@ -93,7 +93,7 @@ public class CurrentWeekSchedule extends ListActivity  {
         list = getListView();
 
         workSettings = (Button) findViewById(R.id.workSettings);
-        logout = (Button) findViewById(R.id.logout);
+        //logout = (Button) findViewById(R.id.logout);
 
         workSettings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,7 +105,7 @@ public class CurrentWeekSchedule extends ListActivity  {
             }
         });
 
-        logout.setOnClickListener(new View.OnClickListener() {
+        /*logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 SharedPreferences.Editor editPref = pref.edit();
@@ -114,6 +114,7 @@ public class CurrentWeekSchedule extends ListActivity  {
                 startActivity(new Intent(CurrentWeekSchedule.this, Logout.class));
             }
         });
+        */
         //Send hours when I click on a particular day in the list view
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
