@@ -93,7 +93,7 @@ public class SetAlarm extends AppCompatActivity {
     @TargetApi(24)
     public int handleThirdShift() {
         final Calendar cal = Calendar.getInstance();
-        int currentDay = cal.get(Calendar.DAY_OF_WEEK); //vs inside if??
+        int currentDay = cal.get(Calendar.DAY_OF_WEEK_IN_MONTH); //vs inside if??
         //CurrentWorkHours currentWorkHours = new CurrentWorkHours();
         if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.SUNDAY) {
             setNotification(
