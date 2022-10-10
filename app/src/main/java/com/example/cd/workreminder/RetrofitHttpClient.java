@@ -20,7 +20,6 @@ public class RetrofitHttpClient extends AppCompatActivity {
         //Retrofit retrofit = new Retrofit.Builder()
         //        .baseUrl(MainActivity.LOGIN_URL + "/")
         //        .build();
-
     }
 
     //@GET("")

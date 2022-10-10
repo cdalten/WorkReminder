@@ -11,20 +11,20 @@
 
 package com.example.cd.workreminder;
 
-        import android.annotation.SuppressLint;
-        import android.annotation.TargetApi;
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 
-        import android.content.ComponentName;
-        import android.content.pm.PackageManager;
-        import android.os.Handler;
-        import android.preference.PreferenceManager;
-        import android.content.Context;
-        import android.content.Intent;
-        import android.content.SharedPreferences;
+import android.content.ComponentName;
+import android.content.pm.PackageManager;
+import android.os.Handler;
+import android.preference.PreferenceManager;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 
-        import android.os.Bundle;
-        import android.support.v7.app.AppCompatActivity;
-        import android.util.Log;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 
 public class MainActivity extends AppCompatActivity {
