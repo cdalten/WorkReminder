@@ -1,5 +1,5 @@
 /*
- Copyright © 2017-2019 Chad Altenburg <cdalten@PumpingDansHotLookingStepMom.com>
+ Copyright © 2017-2022 Chad Altenburg <cdalten@PumpingDansHotLookingStepMom.com>
 
  Permission to use, copy, modify, distribute, and sell this software and its
  documentation for any purpose is hereby granted without fee, provided that
@@ -17,9 +17,11 @@ import android.app.IntentService;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.icu.util.Calendar;
 import android.media.AudioAttributes;
@@ -60,9 +62,6 @@ public class AlarmIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        //Log.e(TAG, "onHandleIntent(): " + intent)
-
-
         if (intent != null) {
             final String action = intent.getAction();
             if (ACTION_DISMISS.equals(action)) {
@@ -108,6 +107,8 @@ public class AlarmIntentService extends IntentService {
             if (alarmMgr!= null) {
                 alarmMgr.cancel(alarmIntent);
             }
+
+            //disableBootReceiver();
 
             NotificationCompat.Builder notificationCompatBuilder =
                     GlobalNotificationBuilder.getNotificationCompatBuilderInstance();
@@ -346,5 +347,15 @@ public class AlarmIntentService extends IntentService {
 
         return notificationCompatBuilder;
     }
+
+    //Added on 10 - 10 - 2022
+    private void disableBootReceiver() {
+        ComponentName receiver = new ComponentName(this, WorkNotificationReceiver.class);
+        PackageManager pm = this.getPackageManager();
+
+        pm.setComponentEnabledSetting(receiver,
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
     }
+}
 

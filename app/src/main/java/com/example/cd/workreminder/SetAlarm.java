@@ -17,10 +17,12 @@ import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.icu.util.Calendar;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -459,9 +461,11 @@ public class SetAlarm extends AppCompatActivity {
 
         //code copied from
         //https://developer.android.com/training/scheduling/alarms
+        //enableBootReceiver();
         alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, WorkNotificationReceiver.class);
         alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+
 
         final Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
@@ -487,6 +491,27 @@ public class SetAlarm extends AppCompatActivity {
                 1000 * 60 , alarmIntent);
     }
 
+
+
+    //Added on 10 - 10 - 2022
+    private void enableBootReceiver() {
+        ComponentName receiver = new ComponentName(this, WorkNotificationReceiver.class);
+        PackageManager pm = this.getPackageManager();
+
+        pm.setComponentEnabledSetting(receiver,
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
+    }
+
+    //Added on 10 - 10 - 2022
+    public void disableBootReceiver() {
+        ComponentName receiver = new ComponentName(context, WorkNotificationReceiver.class);
+        PackageManager pm = context.getPackageManager();
+
+        pm.setComponentEnabledSetting(receiver,
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+    }
 
     //Added on 12 - 15 - 2019
     private void setStartMilitaryHour(int startMilitaryHour) {

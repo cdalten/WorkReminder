@@ -246,7 +246,6 @@ public class CurrentWeekSchedule extends ListActivity  {
         //            R.layout.schedule_list, week);
         //    setListAdapter(adapter);
         //}
-
     } //end onCreate()
 
     //Added on 10 - 14 - 2019

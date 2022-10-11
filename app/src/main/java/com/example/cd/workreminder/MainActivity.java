@@ -30,21 +30,12 @@ import android.util.Log;
 public class MainActivity extends AppCompatActivity {
     public static final int NOTIFICATION_ID = 0; //Added on 10 - 14 - 2019
     public static final String ALARM_RINGTONE = "ALARM_RINGTONE"; //Added on 11  - 26 - 2019
-
-    private final String name = "9857701"; //modified on 1 - 8 - 201
-    public static boolean refreshDisplay = true; //added on 6 - 14 - 2018
-
     private final String PRODUCTION_TAG = "LG_WORK_WEB: "; //used for hardware only
     private SharedPreferences pref; //added on 9 - 21 - 2018
 
     private Intent intent; //Added on 11 - 21 - 2018
 
-    // Boolean telling us whether a download is in progress, so we don't trigger overlapping
-    // downloads with consecutive button clicks.
-    private boolean mDownloading = false;
     private static boolean scheduleGotUpdated = false; //Added on 1 - 22 - 2019
-
-    private Handler handler = new Handler();
 
     @SuppressLint("ClickableViewAccessibility")
     @TargetApi(19)
@@ -115,16 +106,32 @@ public class MainActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
     }//end onStart()
 
-
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.e(PRODUCTION_TAG, "ON PAUSE GOT CALLED");
+    }
 
     @Override
     /*
      * Attempt to suppress "Failed to locate a binder for interface: autofill::mojom::PasswordManagerDriver"
      */
     protected void onResume() {
+        super.onResume();
         Log.e(PRODUCTION_TAG, "ON RESUME GOT CALLED");
-        super.onResume(); //stupid hack;
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.e(PRODUCTION_TAG, "ON RESTART GOT CALLED");
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.e(PRODUCTION_TAG, "ON DESTROY GOT CALLED");
+    }
 }//end Main// Activity
 
