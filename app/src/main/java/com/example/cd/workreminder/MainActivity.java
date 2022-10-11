@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
     private static boolean scheduleGotUpdated = false; //Added on 1 - 22 - 2019
 
     @SuppressLint("ClickableViewAccessibility")
-    @TargetApi(19)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
         dispatchCurrentWeekSchedule();
         enableBootReceiver();
-        disableBootReceiver();
+        enablWorkNotifcationReceiver();
 
         if (savedInstanceState == null) {
             Log.e(PRODUCTION_TAG, "ONCREATE() WHEN SAVEDINSTANCE() IS NULL");
@@ -79,6 +78,15 @@ public class MainActivity extends AppCompatActivity {
                 PackageManager.DONT_KILL_APP);
     }
 
+    private void enablWorkNotifcationReceiver() {
+        ComponentName receiver = new ComponentName(this, WorkNotificationReceiver.class);
+        PackageManager pm = this.getPackageManager();
+
+        pm.setComponentEnabledSetting(receiver,
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
+    }
+
     //Added on 10 - 10 - 2022
     private void disableBootReceiver() {
         ComponentName receiver = new ComponentName(this, BootReceiver.class);
@@ -91,6 +99,18 @@ public class MainActivity extends AppCompatActivity {
         //I'm not that sure where to put this function at.
         Log.d(PRODUCTION_TAG, "BOOT RECEIVER GOT DISABLED");
     }
+
+    //Added on 10 - 10 - 2022
+    public void disableWorkNoticationReceiver() {
+        ComponentName receiver = new ComponentName(this, WorkNotificationReceiver.class);
+        PackageManager pm = this.getPackageManager();
+
+        pm.setComponentEnabledSetting(receiver,
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+    }
+
+
 
     private void dispatchCurrentWeekSchedule() {
         Intent currentWeekScheduleIntent = new Intent(MainActivity.this, CurrentWeekSchedule.class);
@@ -107,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        Log.e(PRODUCTION_TAG, "ON PAUSE GOT CALLED");
+        Log.e("MAIN", "ON PAUSE GOT CALLED");
     }
 
     @Override
@@ -116,20 +136,22 @@ public class MainActivity extends AppCompatActivity {
      */
     protected void onResume() {
         super.onResume();
-        Log.e(PRODUCTION_TAG, "ON RESUME GOT CALLED");
+        Log.e("MAIN", "ON RESUME GOT CALLED");
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        Log.e(PRODUCTION_TAG, "ON RESTART GOT CALLED");
+        Log.e("MAIN", "ON RESTART GOT CALLED");
     }
 
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.e(PRODUCTION_TAG, "ON DESTROY GOT CALLED");
+        disableBootReceiver();
+        disableWorkNoticationReceiver();
+        Log.e("MAIN", "ON DESTROY GOT CALLED");
     }
 }//end Main// Activity
 

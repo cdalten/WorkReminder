@@ -17,10 +17,12 @@ import android.app.AlarmManager;
 import android.app.ListActivity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -590,6 +592,8 @@ public class CurrentWeekSchedule extends ListActivity{
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
                 finish();
+                //finishAffinity();
+
                 System.exit(0);
     }
 });
@@ -1002,18 +1006,23 @@ private void updateHours(String newStartDay, String newStartHour, String newStar
 
 
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.e("CWS", "ON DESTORY GOT CALLED IN CWS");
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        Log.e("CWS", "ON PAUSSE GOT CALLED IN CWS");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        Log.e("CWS", "ON STOP GOT CALLED IN CWS");
     }
 }//End class

@@ -558,26 +558,6 @@ public class SetAlarm extends AppCompatActivity {
 
 
 
-    //Added on 10 - 10 - 2022
-    private void enableBootReceiver() {
-        ComponentName receiver = new ComponentName(this, WorkNotificationReceiver.class);
-        PackageManager pm = this.getPackageManager();
-
-        pm.setComponentEnabledSetting(receiver,
-                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                PackageManager.DONT_KILL_APP);
-    }
-
-    //Added on 10 - 10 - 2022
-    public void disableBootReceiver() {
-        ComponentName receiver = new ComponentName(context, WorkNotificationReceiver.class);
-        PackageManager pm = context.getPackageManager();
-
-        pm.setComponentEnabledSetting(receiver,
-                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                PackageManager.DONT_KILL_APP);
-    }
-
     //Added on 12 - 15 - 2019
     private void setStartMilitaryHour(int startMilitaryHour) {
         this.startMilitaryHour = startMilitaryHour;
