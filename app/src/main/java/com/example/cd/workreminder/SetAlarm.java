@@ -36,7 +36,9 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import static android.app.Notification.EXTRA_NOTIFICATION_ID;
 
@@ -90,14 +92,44 @@ public class SetAlarm extends AppCompatActivity {
         Log.e("LG_WORK_PHONE", "DAY NOTIFICATION ONCREATE() GOT CALLED");
     }
 
+    //Google Calendar only works with API level 24 and higher
+    public int dayOfWeek() {
+        int day = 0;
+        //SimpleDateFormat sdf = new SimpleDateFormat(" ");
+        //Date d = new Date();
+        //String dayOfTheWeek = sdf.format(d);
+        //String[] dayofWeek = dayOfTheWeek.split(" ");
+        //SimpleDateFormat simpleformat = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
+        SimpleDateFormat simpleformat = new SimpleDateFormat("E");
+        String dayofWeek = simpleformat.format(new Date());
+        if (dayofWeek.equals("Sun")) {
+            day = 0;
+        } else if (dayofWeek.equals("Mon")) {
+            day = 1;
+        } else if (dayofWeek.equals("Tue")) {
+            day = 2;
+        } else if (dayofWeek.equals("Wed")) {
+            day = 3;
+        } else if (dayofWeek.equals("Thu")) {
+            day = 4;
+        }else if( dayofWeek.equals("Fri")) {
+            day = 5;
+        }else if( dayofWeek.equals("Sat")) {
+            day = 6;
+        }
+
+        return day;
+    }
+
+
     //Added on 7 - 1 - 2019
     //Schizophrenic method call ripped off from the Android Notification source code -)
-    @TargetApi(24)
     public int handleThirdShift() {
-        final Calendar cal = Calendar.getInstance();
-        int currentDay = cal.get(Calendar.DAY_OF_WEEK_IN_MONTH); //vs inside if??
+        //final Calendar cal = Calendar.getInstance();
+        //int currentDay = cal.get(Calendar.DAY_OF_WEEK); //vs inside if??
         //CurrentWorkHours currentWorkHours = new CurrentWorkHours();
-        if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.SUNDAY) {
+        int day = dayOfWeek();
+        if (day == 0) {
             setNotification(
                     R.string.SUNDAY,
                     R.string.SUNDAY_START_HOUR,
@@ -112,7 +144,7 @@ public class SetAlarm extends AppCompatActivity {
                     R.string.MONDAY_START_MINUTE,
                     R.string.MONDAY_START_AM_OR_PM
             );
-        } else if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.MONDAY) {
+        } else if (day == 1) {
             //if(!week.get(position).get(0).equals("OFF")) {
             setNotification(
                     R.string.MONDAY,
@@ -128,7 +160,7 @@ public class SetAlarm extends AppCompatActivity {
                     R.string.TUESDAY_START_MINUTE,
                     R.string.TUESDAY_START_AM_OR_PM
             );
-        } else if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.TUESDAY) {
+        } else if (day == 2) {
             setNotification(
                     R.string.TUESDAY,
                     R.string.TUESDAY_START_HOUR,
@@ -143,7 +175,7 @@ public class SetAlarm extends AppCompatActivity {
                     R.string.WEDNESDAY_START_MINUTE,
                     R.string.WEDNESDAY_START_AM_OR_PM
             );
-        } else if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.WEDNESDAY) {
+        } else if (day == 3) {
             setNotification(
                     R.string.WEDNESDAY,
                     R.string.WEDNESDAY_START_HOUR,
@@ -158,7 +190,7 @@ public class SetAlarm extends AppCompatActivity {
                     R.string.THURSDAY_START_MINUTE,
                     R.string.THURSDAY_START_AM_OR_PM
             );
-        }else if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.THURSDAY) {
+        }else if (day == 4) {
             setNotification(
                     R.string.THURSDAY,
                     R.string.THURSDAY_START_HOUR,
@@ -173,7 +205,7 @@ public class SetAlarm extends AppCompatActivity {
                     R.string.FRIDAY_START_MINUTE,
                     R.string.FRIDAY_START_AM_OR_PM
             );
-        } else if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.FRIDAY) {
+        } else if (day == 5) {
             //if(!week.get(position).get(0).equals("OFF")) {
             setNotification(
                     R.string.FRIDAY,
@@ -190,7 +222,7 @@ public class SetAlarm extends AppCompatActivity {
                     R.string.SATURDAY_START_AM_OR_PM
             );
         }
-        else if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.SATURDAY) {
+        else if (day == 6) {
             setNotification(
                     R.string.SATURDAY,
                     R.string.SATURDAY_START_HOUR,
@@ -207,7 +239,7 @@ public class SetAlarm extends AppCompatActivity {
             );
         }
 
-        return currentDay;
+        return day;
     }
 
 
@@ -252,8 +284,9 @@ public class SetAlarm extends AppCompatActivity {
             setMilitaryTimeForWorkPreferences(militaryTime);
             setNotificationDisplay(context, militaryTime);
         } else {
-            final Calendar cal = Calendar.getInstance();
-            int currentDay = cal.get(Calendar.DAY_OF_WEEK_IN_MONTH);
+            //final Calendar cal = Calendar.getInstance();
+            int currentDay = getDayOfWeek();
+                    //cal.get(Calendar.DAY_OF_WEEK);
             storeHoursInGUI currentWeek = new storeHoursInGUI(context.getApplicationContext());
             ArrayList<ArrayList<String>> week = currentWeek.addHours();
 //week.get(currentDay).get(0)
@@ -275,6 +308,38 @@ public class SetAlarm extends AppCompatActivity {
 
         }
     }//end method
+
+
+    public int getDayOfWeek() {
+        int day = 0;
+        //SimpleDateFormat sdf = new SimpleDateFormat(" ");
+        //Date d = new Date();
+        //String dayOfTheWeek = sdf.format(d);
+        //String[] dayofWeek = dayOfTheWeek.split(" ");
+        SimpleDateFormat simpleformat = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
+        simpleformat = new SimpleDateFormat("E");
+        String dayofWeek = simpleformat.format(new Date());
+        if (dayofWeek.equals("Sun")) {
+            day = 0;
+        } else if (dayofWeek.equals("Mon")) {
+            day = 1;
+        } else if (dayofWeek.equals("Tue")) {
+            day = 2;
+        } else if (dayofWeek.equals("Wed")) {
+            day = 3;
+        } else if (dayofWeek.equals("Thu")) {
+            day = 4;
+        }else if( dayofWeek.equals("Fri")) {
+            day = 5;
+        }else if( dayofWeek.equals("Sat")) {
+            day = 6;
+        }
+
+        return day;
+    }
+
+
+
 
 
     //Added on 1 - 14 - 2010

@@ -133,6 +133,30 @@ public class CurrentWeekSchedule extends ListActivity{
                 currentDay = position; //Stupid hack
                 currentPosition = position; //position on clicked list
                 switch (position) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                     case WorkReaderContract.WorkEntry.SUNDAY:
                         //currentPosition = 6; //handle integer wrap around case
                         //if (week.get(WorkReaderContract.WorkEntry.SUNDAY).get(0).equals("OFF")) {
@@ -526,7 +550,7 @@ public class CurrentWeekSchedule extends ListActivity{
             //text_day.setHeight(120); // Height in pixels. Not dip?
 
 
-            if (currentHours == position + 1) {
+            if (currentHours == position) {
                 text_start_hour.setTypeface(text_start_hour.getTypeface(), Typeface.BOLD);  //vs null??
                 text_separator.setTypeface(text_separator.getTypeface(), Typeface.BOLD);  //vs null??
                 text_end_hour.setTypeface(text_end_hour.getTypeface(), Typeface.BOLD);  //vs null??
@@ -567,20 +591,20 @@ public class CurrentWeekSchedule extends ListActivity{
                 // User clicked OK button
                 finish();
                 System.exit(0);
-            }
-        });
+    }
+});
         //builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-         //   public void onClick(DialogInterface dialog, int id) {
-          //      // User cancelled the dialog
-           // }
+        //   public void onClick(DialogInterface dialog, int id) {
+        //      // User cancelled the dialog
+        // }
         //});
         //builder.create().show();
         ;
-    }
-    //Added on 3 - 6 - 2019
-    //Update new hours in the list view
-    private void updateHours(String newStartDay, String newStartHour, String newStartMinute, String newStartAmOrPm,
-                             String newEndHour, String newEndMinute, String newEndAmOrPm) {
+        }
+//Added on 3 - 6 - 2019
+//Update new hours in the list view
+private void updateHours(String newStartDay, String newStartHour, String newStartMinute, String newStartAmOrPm,
+        String newEndHour, String newEndMinute, String newEndAmOrPm) {
         //int pos = list.getCheckedItemPosition();
         //week.add(currentPosition, getCurrentHours);
 
