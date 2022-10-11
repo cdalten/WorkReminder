@@ -55,7 +55,7 @@ public class WorkNotificationReceiver extends BroadcastReceiver {
         Log.e("PRODUCTION TAG", "WORK ALARM RECEIVER GOT CALLED WITH: " + intent.getExtras());
 
         Log.e("LG_WORK_PHONE", "ONRECEIVE() GOT CALLED");
-        
+
         Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
         if (alarmUri == null) {
             alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);

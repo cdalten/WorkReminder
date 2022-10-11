@@ -66,8 +66,6 @@ public class MainActivity extends AppCompatActivity {
             savedInstanceState.getString("UPDATED_SCHEDULE"); //???
 
             pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE); //redudant??
-            //readFromInternalDirectory(new File(CurrentSchedule + ThisWeek));
-
         }
     }
 
