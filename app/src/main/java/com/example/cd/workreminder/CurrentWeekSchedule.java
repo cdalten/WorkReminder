@@ -18,6 +18,7 @@ import android.app.ListActivity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -25,6 +26,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
 
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +42,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class CurrentWeekSchedule extends ListActivity  {
+public class CurrentWeekSchedule extends ListActivity{
 
     private static final String PRODUCTION_TAG = "LG_WORK_PHONE";
 
@@ -75,8 +79,10 @@ public class CurrentWeekSchedule extends ListActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
+        //setContentView(R.layout.login);
+        //ListActivity listActivity = new ListActivity();
 
+        setContentView(R.layout.login);
         Log.e(PRODUCTION_TAG, "CURRENT WEEK SCHEDULE GOT CALLED.");
 
         pref =  this.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
@@ -90,7 +96,7 @@ public class CurrentWeekSchedule extends ListActivity  {
         final SetAlarm SetAlarm = new SetAlarm(this);
         currentHours = SetAlarm.handleThirdShift();
 
-        list = getListView();
+        //list = listActivity.getListView();
 
         workSettings = (Button) findViewById(R.id.workSettings);
         //logout = (Button) findViewById(R.id.logout);
@@ -116,6 +122,7 @@ public class CurrentWeekSchedule extends ListActivity  {
         });
         */
         //Send hours when I click on a particular day in the list view
+        list = getListView();
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -238,14 +245,6 @@ public class CurrentWeekSchedule extends ListActivity  {
                     R.layout.schedule_list, week);
             setListAdapter(adapter);
 
-        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        //spinner.setAdapter(adapter);
-        //} else {
-        //    week = currentWeek.addHours();
-        //    adapter = new WS(this,
-        //            R.layout.schedule_list, week);
-        //    setListAdapter(adapter);
-        //}
     } //end onCreate()
 
     //Added on 10 - 14 - 2019
@@ -474,18 +473,6 @@ public class CurrentWeekSchedule extends ListActivity  {
                 convertView = getLayoutInflater().inflate(R.layout.schedule_list, parent, false);
             }
 
-            /*Display display;
-            Point size;
-            int width, height;
-            float txtsize;
-
-            display = getWindowManager().getDefaultDisplay();
-            size = new Point();
-            display.getSize(size);
-            width = size.x;
-            height = size.y;
-            */
-
             //((TextView) view.findViewById(android.R.id.text1)).setText("-");
             // Need to erase values that trail "off" header byes??
             if (week.get(position).get(0).equals("SUNDAY")) {
@@ -547,6 +534,7 @@ public class CurrentWeekSchedule extends ListActivity  {
 
             }
 
+
             //return super.getView(position, convertView, parent);
             return convertView;
         }//end method
@@ -565,6 +553,29 @@ public class CurrentWeekSchedule extends ListActivity  {
         editor.putString("PREVIOUS_SATURDAY_START_AM_OR_PM", pref.getString(getString(R.string.SATURDAY_START_AM_OR_PM), ""));
 
         editor.apply();
+    }
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder =
+                new AlertDialog.Builder(this);
+        //builder.setTitle("Exit");
+
+        //builder.setMessage("ARE YOU SURE YOU WANT TO EXIT?");
+        builder.setPositiveButton("", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked OK button
+                finish();
+                System.exit(0);
+            }
+        });
+        //builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+         //   public void onClick(DialogInterface dialog, int id) {
+          //      // User cancelled the dialog
+           // }
+        //});
+        //builder.create().show();
+        ;
     }
     //Added on 3 - 6 - 2019
     //Update new hours in the list view
@@ -822,19 +833,6 @@ public class CurrentWeekSchedule extends ListActivity  {
                 SetAlarm SetAlarm = new SetAlarm(
                         getApplicationContext());
                 currentHours = SetAlarm.handleThirdShift();
-                /*String day = dayNotification.getCurrentDay();
-
-                militaryTime.convertStartCivilianTimeToMilitaryTime(
-                        dayNotification.getStartMilitaryHour() + "",
-                        dayNotification.getStartMilitaryMinute() +"",
-                        dayNotification.getStartAmOrPm() +"");
-                militaryTime.convertEndCivilianTimeToMilitaryTime(
-                        dayNotification.getEndMilitaryHour() +"",
-                        dayNotification.getEndMilitaryMinute() +"",
-                        dayNotification.getEndAmOrPm() +"");
-                        */
-                //dayNotification.setNotificationDisplay(getApplicationContext(), militaryTime);
-                //dayNotification.setNewNotificationDisplayAlarm(alarmTimer);
             }
 
         }
@@ -977,6 +975,7 @@ public class CurrentWeekSchedule extends ListActivity  {
                             WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT);
             }
     }
+
 
 
     @Override

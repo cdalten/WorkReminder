@@ -193,6 +193,7 @@ public class WorkPreferences extends AppCompatActivity {
         AlertDialog.Builder builder =
         new AlertDialog.Builder(this);
         builder.setTitle("Discard Changes");
+
         builder.setMessage("ARE YOU SURE YOU WANT TO DISCARD ANY POSSIBLE CHANGES?");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {

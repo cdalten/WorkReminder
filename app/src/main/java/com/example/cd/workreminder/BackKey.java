@@ -11,6 +11,7 @@
 */
 package com.example.cd.workreminder;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
