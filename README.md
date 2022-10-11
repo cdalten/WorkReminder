@@ -20,7 +20,7 @@ MainActivity - Used to set up the web page display. <br>
 Military Time - Convert to military time. Needed for time comparisons. <br>
 RememberMe - Save my name and password. <br>
 StoreHoursInGUI - Have the current schedule stored in a list. Needed to display as list <br>
-WorkAlarmReceiver - So that I don't have to have the phone check every minute to see if I have to work. <br>
+WorkNotificationReceiver - Sets the notification alarm for when I have to work. <br>
 WorkNetworkFragment - Handle when I lose my wifi signal. <br>
 WorkPreferences - Save how many minutes before my shift should the alarm go off. <br>
 WorkReaderContract - For global variables that the resource file can't handle. <br>
