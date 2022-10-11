@@ -188,7 +188,6 @@ public class DayNotification {
     }
 
     public void updateDisplayTime(Context context) {
-        //createNotification(String notificationTitle, String notificationText )
         final AlarmTimer alarmTimer = AlarmTimer.getInstance();
         AlarmTimeFormatDisplay alarmTimeFormatDisplay =  new AlarmTimeFormatDisplay(context, alarmTimer, true);
         createNotification("NEW ALARM TIME", alarmTimeFormatDisplay.displayCurrentTime() );

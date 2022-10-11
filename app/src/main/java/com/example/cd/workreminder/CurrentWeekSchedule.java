@@ -1004,9 +1004,6 @@ private void updateHours(String newStartDay, String newStartHour, String newStar
             }
     }
 
-
-
-
     @Override
     protected void onDestroy() {
         super.onDestroy();

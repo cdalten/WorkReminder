@@ -93,43 +93,14 @@ public class SetAlarm extends AppCompatActivity {
     }
 
     //Google Calendar only works with API level 24 and higher
-    public int dayOfWeek() {
-        int day = 0;
-        //SimpleDateFormat sdf = new SimpleDateFormat(" ");
-        //Date d = new Date();
-        //String dayOfTheWeek = sdf.format(d);
-        //String[] dayofWeek = dayOfTheWeek.split(" ");
-        //SimpleDateFormat simpleformat = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
-        SimpleDateFormat simpleformat = new SimpleDateFormat("E");
-        String dayofWeek = simpleformat.format(new Date());
-        if (dayofWeek.equals("Sun")) {
-            day = 0;
-        } else if (dayofWeek.equals("Mon")) {
-            day = 1;
-        } else if (dayofWeek.equals("Tue")) {
-            day = 2;
-        } else if (dayofWeek.equals("Wed")) {
-            day = 3;
-        } else if (dayofWeek.equals("Thu")) {
-            day = 4;
-        }else if( dayofWeek.equals("Fri")) {
-            day = 5;
-        }else if( dayofWeek.equals("Sat")) {
-            day = 6;
-        }
-
-        return day;
-    }
-
-
     //Added on 7 - 1 - 2019
     //Schizophrenic method call ripped off from the Android Notification source code -)
     public int handleThirdShift() {
         //final Calendar cal = Calendar.getInstance();
         //int currentDay = cal.get(Calendar.DAY_OF_WEEK); //vs inside if??
         //CurrentWorkHours currentWorkHours = new CurrentWorkHours();
-        int day = dayOfWeek();
-        if (day == 0) {
+        int day = getDayOfWeek();
+        if (day == WorkReaderContract.WorkEntry.SUNDAY) {
             setNotification(
                     R.string.SUNDAY,
                     R.string.SUNDAY_START_HOUR,
@@ -144,7 +115,7 @@ public class SetAlarm extends AppCompatActivity {
                     R.string.MONDAY_START_MINUTE,
                     R.string.MONDAY_START_AM_OR_PM
             );
-        } else if (day == 1) {
+        } else if (day ==  WorkReaderContract.WorkEntry.MONDAY) {
             //if(!week.get(position).get(0).equals("OFF")) {
             setNotification(
                     R.string.MONDAY,
@@ -160,7 +131,7 @@ public class SetAlarm extends AppCompatActivity {
                     R.string.TUESDAY_START_MINUTE,
                     R.string.TUESDAY_START_AM_OR_PM
             );
-        } else if (day == 2) {
+        } else if (day ==  WorkReaderContract.WorkEntry.TUESDAY) {
             setNotification(
                     R.string.TUESDAY,
                     R.string.TUESDAY_START_HOUR,
@@ -175,7 +146,7 @@ public class SetAlarm extends AppCompatActivity {
                     R.string.WEDNESDAY_START_MINUTE,
                     R.string.WEDNESDAY_START_AM_OR_PM
             );
-        } else if (day == 3) {
+        } else if (day ==  WorkReaderContract.WorkEntry.WEDNESDAY) {
             setNotification(
                     R.string.WEDNESDAY,
                     R.string.WEDNESDAY_START_HOUR,
@@ -190,7 +161,7 @@ public class SetAlarm extends AppCompatActivity {
                     R.string.THURSDAY_START_MINUTE,
                     R.string.THURSDAY_START_AM_OR_PM
             );
-        }else if (day == 4) {
+        }else if (day ==  WorkReaderContract.WorkEntry.THURSDAY) {
             setNotification(
                     R.string.THURSDAY,
                     R.string.THURSDAY_START_HOUR,
@@ -205,7 +176,7 @@ public class SetAlarm extends AppCompatActivity {
                     R.string.FRIDAY_START_MINUTE,
                     R.string.FRIDAY_START_AM_OR_PM
             );
-        } else if (day == 5) {
+        } else if (day ==  WorkReaderContract.WorkEntry.FRIDAY) {
             //if(!week.get(position).get(0).equals("OFF")) {
             setNotification(
                     R.string.FRIDAY,
@@ -222,7 +193,7 @@ public class SetAlarm extends AppCompatActivity {
                     R.string.SATURDAY_START_AM_OR_PM
             );
         }
-        else if (day == 6) {
+        else if (day == WorkReaderContract.WorkEntry.SATURDAY) {
             setNotification(
                     R.string.SATURDAY,
                     R.string.SATURDAY_START_HOUR,
@@ -320,27 +291,23 @@ public class SetAlarm extends AppCompatActivity {
         simpleformat = new SimpleDateFormat("E");
         String dayofWeek = simpleformat.format(new Date());
         if (dayofWeek.equals("Sun")) {
-            day = 0;
+            day = WorkReaderContract.WorkEntry.SUNDAY;
         } else if (dayofWeek.equals("Mon")) {
-            day = 1;
+            day = WorkReaderContract.WorkEntry.MONDAY;
         } else if (dayofWeek.equals("Tue")) {
-            day = 2;
+            day = WorkReaderContract.WorkEntry.TUESDAY;
         } else if (dayofWeek.equals("Wed")) {
-            day = 3;
+            day = WorkReaderContract.WorkEntry.WEDNESDAY;;
         } else if (dayofWeek.equals("Thu")) {
-            day = 4;
+            day = WorkReaderContract.WorkEntry.THURSDAY;;
         }else if( dayofWeek.equals("Fri")) {
-            day = 5;
+            day = WorkReaderContract.WorkEntry.FRIDAY;;
         }else if( dayofWeek.equals("Sat")) {
-            day = 6;
+            day = WorkReaderContract.WorkEntry.SATURDAY;
         }
 
         return day;
     }
-
-
-
-
 
     //Added on 1 - 14 - 2010
     private void saveAlarmTime(AlarmTimer alarmTimer, MilitaryTime militaryTime) {
@@ -479,40 +446,18 @@ public class SetAlarm extends AppCompatActivity {
          need to shift time to calculate the time time based on the minutes set
          before the start the start of the minutes
          */
-        /*alarmTimer.setSavedAlarmTime(context,
-                day,
-                getStartMilitaryHour(),
-                getStartMilitaryMinute(),
-                true
-        );
-        */
 
-
-        /*alarmTimer.setSavedAlarmTime(context,
-                day,
-                alarmTimer.getNewMilitaryHour(),
-                alarmTimer.getNewMilitaryMinute(),
-                true
-        );
-        */
 
         //Calendar cal = Calendar.getInstance();
         //if (alarmTimer.getNewAlarmMilitaryMinute(context) > cal.get(Calendar.MINUTE)) {
             displayNotification(alarmTimer, false, true,
                     "ALARM");
             setAlarm(context, alarmTimer);
-        //}
-        //br = new WorkAlarmReceiver();
-        //intentFilter = new IntentFilter();
-        //intentFilter.addAction(Intent.ACTION_BOOT_COMPLETED);
-        //intentFilter.addAction(Intent.ACTION_SEND);
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        //context.registerReceiver(br, intentFilter);
     }
 
     @Override
@@ -540,20 +485,24 @@ public class SetAlarm extends AppCompatActivity {
           the start of a shift.
          */
         calendar.set(Calendar.HOUR_OF_DAY, alarmTimer.getNewAlarmMilitaryHour(context));
-        //calendar.set(Calendar.HOUR_OF_DAY, 12);
         calendar.set(Calendar.MINUTE, alarmTimer.getNewAlarmMilitaryMinute(context));
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0); //??
 
-        //alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-        //        1000 * 60 , alarmIntent);
-
-        /*alarmMgr.setExact(AlarmManager.RTC_WAKEUP,
-                calendar.getTimeInMillis(), alarmIntent);
-                */
-
         alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                 1000 * 60 , alarmIntent);
+    }
+
+
+
+    //Added on 10 - 10 - 2022
+    private void enableBootReceiver() {
+        ComponentName receiver = new ComponentName(this, WorkNotificationReceiver.class);
+        PackageManager pm = this.getPackageManager();
+
+        pm.setComponentEnabledSetting(receiver,
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
     }
 
 
