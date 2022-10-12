@@ -17,7 +17,6 @@ GlobalNotificationBuilder - Memory management stuff. <br>
 HourFormat - This autofills and updates the menu with the shift the person clicked on. <br>
 MainActivity - Used to set up the web page display. <br>
 Military Time - Convert to military time. Needed for time comparisons. <br>
-RememberMe - Save my name and password. <br>
 StoreHoursInGUI - Have the current schedule stored in a list. Needed to display as list <br>
 WorkNotificationReceiver - Sets the notification alarm for when I have to work. <br>
 WorkNetworkFragment - Handle when I lose my wifi signal. <br>
