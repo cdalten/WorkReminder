@@ -128,37 +128,9 @@ public class CurrentWeekSchedule extends ListActivity{
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String value = (String)adapter.getItem(position);
-                //values.add("FOO");
-
-                //i = new Intent(CurrentWeekSchedule.this, HourFormat.class);
                 currentDay = position; //Stupid hack
                 currentPosition = position; //position on clicked list
                 switch (position) {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                     case WorkReaderContract.WorkEntry.SUNDAY:
                         //currentPosition = 6; //handle integer wrap around case
                         //if (week.get(WorkReaderContract.WorkEntry.SUNDAY).get(0).equals("OFF")) {
@@ -175,7 +147,6 @@ public class CurrentWeekSchedule extends ListActivity{
                         );
                         break;
                     case WorkReaderContract.WorkEntry.MONDAY:
-                        //i = new Intent(CurrentWeekSchedule.this, DayMonday.class);
                         fillListviewDropdown(
                                 new Intent(CurrentWeekSchedule.this, DayMonday.class),
                                 position,
@@ -255,17 +226,12 @@ public class CurrentWeekSchedule extends ListActivity{
                         );
                         break;
                 }//end
-
-                //startActivityForResult(i, 0);
             }
         });
 
 
         storeHoursInGUI currentWeek = new storeHoursInGUI(this);
-        //if (savedInstanceState == null) {
-            week = currentWeek.addHours();
-
-        //final Spinner spinner = (Spinner) findViewById(R.id.dayOfTheWeek);
+        week = currentWeek.addHours();
 
         adapter = new WS(this,
                     R.layout.schedule_list, week);
@@ -285,8 +251,6 @@ public class CurrentWeekSchedule extends ListActivity{
                               int endMinute,
                               int endAmOrPm)
     {
-        //pref =  this.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
-
         if ((pref.getString(getString(dayOfWeek), WorkReaderContract.WorkEntry.DAY_OFF_DEFAULT).equals(WorkReaderContract.WorkEntry.DAY_OFF_DEFAULT))) {
             dayIntent.putExtra("DAY_WEEK", position);
             dayIntent.putExtra("START_HOUR",  Integer.parseInt(WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
@@ -498,8 +462,6 @@ public class CurrentWeekSchedule extends ListActivity{
             if (convertView == null) {
                 convertView = getLayoutInflater().inflate(R.layout.schedule_list, parent, false);
             }
-
-            //((TextView) view.findViewById(android.R.id.text1)).setText("-");
             // Need to erase values that trail "off" header byes??
             if (week.get(position).get(0).equals("SUNDAY")) {
                 savePreviousSaturday();
@@ -585,34 +547,27 @@ public class CurrentWeekSchedule extends ListActivity{
     public void onBackPressed() {
         AlertDialog.Builder builder =
                 new AlertDialog.Builder(this);
-        //builder.setTitle("Exit");
 
         //builder.setMessage("ARE YOU SURE YOU WANT TO EXIT?");
         builder.setPositiveButton("", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
-                finish();
+                //if (savedInstanceState f null) {
+                android.os.Process.killProcess(android.os.Process.myPid());
+                //finish();
                 //finishAffinity();
 
-                System.exit(0);
-    }
-});
-        //builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-        //   public void onClick(DialogInterface dialog, int id) {
-        //      // User cancelled the dialog
-        // }
-        //});
-        //builder.create().show();
-        ;
+                //System.exit(0);
+            }
+
+        });
         }
 //Added on 3 - 6 - 2019
 //Update new hours in the list view
 private void updateHours(String newStartDay, String newStartHour, String newStartMinute, String newStartAmOrPm,
         String newEndHour, String newEndMinute, String newEndAmOrPm) {
-        //int pos = list.getCheckedItemPosition();
-        //week.add(currentPosition, getCurrentHours);
-
         ArrayList<String> updatedHour = new ArrayList<String>();
+
         updatedHour.clear();
         updatedHour.add(newStartDay);
         updatedHour.add(newStartHour);
@@ -625,7 +580,6 @@ private void updateHours(String newStartDay, String newStartHour, String newStar
         week.remove(currentPosition); //??
         week.add(currentPosition, updatedHour); //??
 
-        //editor.putString(getString(R.string.com_example_cd_shiftreminder_SAVE_DAY), updatedHour);
         switch(currentPosition){
             case WorkReaderContract.WorkEntry.SUNDAY:
                 saveDataToMemory(R.string.SUNDAY,
@@ -826,17 +780,6 @@ private void updateHours(String newStartDay, String newStartHour, String newStar
             }
 
             if (resultCode == WorkReaderContract.WorkEntry.RESULT_OK_WORK) {
-                //if (newPosition != -99 && newPosition != 7) { //possibly need to remove
-
-                    /*newStartHour = data.getStringExtra(getString(R.string.START_HOUR)); //hardware bug??
-                    newStartMinute = data.getStringExtra(getString(R.string.START_MINUTE));
-                    newStartAmOrPm = data.getStringExtra(getString(R.string.START_AM_OR_PM));
-                    newEndHour = data.getStringExtra(getString(R.string.END_HOUR));
-                    newEndMinute = data.getStringExtra(getString(R.string.END_MINUTE));
-                    newEndAmOrPm = data.getStringExtra(getString(R.string.END_AM_OR_PM));
-                    day = data.getStringExtra(getString(R.string.DAY_OF_WEEK));
-                    */
-
                 newStartHour = data.getStringExtra("START_HOUR"); //hardware bug??
                 newStartMinute = data.getStringExtra("START_MINUTE");
                 newStartAmOrPm = data.getStringExtra("START_AM_OR_PM");
