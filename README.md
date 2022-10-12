@@ -15,7 +15,6 @@ CurrentWeekSchedule - Display and possibly update the schedule list because HTML
 dayNotification - set the Nofication based on the the day and the current time. <br>
 GlobalNotificationBuilder - Memory management stuff. <br>
 HourFormat - This autofills and updates the menu with the shift the person clicked on. <br>
-Logout - Logout the user. <br>
 MainActivity - Used to set up the web page display. <br>
 Military Time - Convert to military time. Needed for time comparisons. <br>
 RememberMe - Save my name and password. <br>
