@@ -950,14 +950,14 @@ private void updateHours(String newStartDay, String newStartHour, String newStar
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.e("CWS", "ON DESTORY GOT CALLED IN CWS");
+        Log.e("CWS", "ON DESTROY GOT CALLED IN CWS");
 
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Log.e("CWS", "ON PAUSSE GOT CALLED IN CWS");
+        Log.e("CWS", "ON PAUSE GOT CALLED IN CWS");
     }
 
     @Override
