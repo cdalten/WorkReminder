@@ -108,8 +108,6 @@ public class AlarmIntentService extends IntentService {
                 alarmMgr.cancel(alarmIntent);
             }
 
-            //disableBootReceiver();
-
             NotificationCompat.Builder notificationCompatBuilder =
                     GlobalNotificationBuilder.getNotificationCompatBuilderInstance();
 
@@ -156,69 +154,14 @@ public class AlarmIntentService extends IntentService {
                 build();
 
         if (notification != null) {
-
-            //Ringtone ringtone = (Ringtone) CurrrentRingtoneInstance.getInstance().getArrayList().remove(0);
-            //CurrrentRingtoneInstance.getInstance().getArrayList().clear();
             Ringtone ringtone = (Ringtone) CurrrentRingtoneInstance.getInstance().getArrayList().get(0);
             ringtone.stop();
-            //CurrrentRingtoneInstance.getInstance().getArrayList().clear();
 
             NotificationManagerCompat notificationManagerCompat =
                     NotificationManagerCompat.from(getApplicationContext());
 
             notificationManagerCompat.cancel(MainActivity.NOTIFICATION_ID);
 
-            /*try {
-                //AlarmIntentService.amSnoozed = true;
-                Ringtone ringtone = (Ringtone) CurrrentRingtoneInstance.getInstance().getArrayList().get(0);
-                ringtone.stop();
-                Thread.sleep(SNOOZE_TIME);
-            } catch (InterruptedException ex) {
-                Thread.currentThread().interrupt();
-            }
-            */
-
-
-
-            /*final Ringtone ringtone = (Ringtone) CurrrentRingtoneInstance.getInstance().getArrayList().get(0);
-            Timer timer = new Timer();
-            TimerTask timerTaskObj = new TimerTask() {
-                @Override
-                public void run() {
-                    ringtone.stop();
-                }
-
-            };
-
-
-            //timer.schedule(timerTaskObj, 0, 5000L);
-            timer.scheduleAtFixedRate(timerTaskObj, 20 * 1000,  20 * 1000);
-            ringtone.play();
-            */
-
-
-            /*alarmMgr = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-            Intent intent = new Intent(getApplicationContext(), WorkAlarmReceiver.class);
-            alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
-
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(System.currentTimeMillis());
-
-            calendar.set(Calendar.HOUR_OF_DAY, alarmTimer.getNewAlarmMilitaryHour(getApplicationContext()));
-            calendar.set(Calendar.MINUTE, alarmTimer.getNewAlarmMilitaryMinute(getApplicationContext()));
-            calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.MILLISECOND, 0); //??
-
-            alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP,
-                    calendar.getTimeInMillis(),
-                    1000*60 * SNOOZE_TIME
-                    , alarmIntent);
-
-            */
-
-            //Ringtone ringtone = (Ringtone) CurrrentRingtoneInstance.getInstance().getArrayList().get(0);
-            //ringtone.play();
-            //notificationManagerCompat.notify(MainActivity.NOTIFICATION_ID, notification);
         }
 
     }

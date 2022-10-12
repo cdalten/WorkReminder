@@ -26,7 +26,6 @@ import android.util.Log;
  */
 public class AlarmTimer extends AppCompatActivity {
     //private final String PRODUCTION_TAG = "LG_WORK_PHONE"; //Added on 4 - 17 - 2019
-    private static Calendar cal;
     private SharedPreferences pref; //Added on 5 - 14 - 2019
     private int startMilitaryMinute; //Added on 6 - 27 -2019
     private int startMilitaryHour; //Added on 6 - 27 -2017
@@ -40,11 +39,7 @@ public class AlarmTimer extends AppCompatActivity {
     private String updatedAmOrPm = ""; //Added on 12 - 18 - 2019
     private int snoozeTime = 2; //5 minute default. Added on 12 - 20 - 2019
     private int milliSecondsToMinutes = 60000; //Added on 12 - 22 - 2019
-    private String currenDayOfWeek = ""; //Added on 12 - 27 - 2019
-    private String previousDayOfWeek = "";
-    private int currentSnoozeTime = 0; //Added on 1 - 16 - 2020
-    private int currentEndMilitaryMinute = 0; //Added on 12 - 29 - 2019
-
+    private int alarmDefaultValue = 0;
     private static AlarmTimer instance = new AlarmTimer();
 
     private AlarmTimer() {
@@ -72,27 +67,24 @@ public class AlarmTimer extends AppCompatActivity {
           The algorithm was taken from a math book that I got from an Elementary School teacher
           in Oakland. This code is a direct translation found in the 4th grade book.
          */
-        if (timeBeforeShift < 60) {
+        if (timeBeforeShift < WorkReaderContract.WorkEntry.hour) {
             newMilitaryHour = startMilitaryHour;
             //endMilitaryMinute = timeBeforeShift;
             endMilitaryMinute = pref.getInt(context.getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_MINUTE_DEFAULT);
-            endMilitaryHour = pref.getInt("ALARM_HOUR", 0);
+            endMilitaryHour = pref.getInt("ALARM_HOUR", alarmDefaultValue);
         }
 
-        //newMilitaryHour = startMilitaryHour - endMilitaryHour;
-        //newMilitaryMinute = startMilitaryMinute - endMilitaryMinute;
         newMilitaryMinute = startMilitaryMinute - pref.getInt(context.getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_MINUTE_DEFAULT);
-        endMilitaryHour = pref.getInt("ALARM_HOUR", 0);
+        endMilitaryHour = pref.getInt("ALARM_HOUR", alarmDefaultValue);
 
         if (startMilitaryHour == 0) {
             newMilitaryHour = 24;
         }
         if (newMilitaryMinute < 0 && endMilitaryHour == 0) {
-            newMilitaryMinute = newMilitaryMinute + 60;
+            newMilitaryMinute = newMilitaryMinute + WorkReaderContract.WorkEntry.hour;
             newMilitaryHour = newMilitaryHour - 1;
         } else if (newMilitaryMinute < 0 && endMilitaryHour > 0) {
-            newMilitaryMinute = newMilitaryMinute + 60;
-            //newMilitaryHour = newMilitaryHour - endMilitaryHour - 1;
+            newMilitaryMinute = newMilitaryMinute + WorkReaderContract.WorkEntry.hour;
             newMilitaryHour = newMilitaryHour - 1;
         }
 
@@ -126,7 +118,7 @@ public class AlarmTimer extends AppCompatActivity {
     }
     //Added on 1 - 23 - 2020
     //----USED TO GET CURRENT TIME IN ALARM------------------------
-    public void setNewAlarmMilitaryHour(Context context, int newMilitaryHour) {
+    private void setNewAlarmMilitaryHour(Context context, int newMilitaryHour) {
         DataToMemory dataToMemory = new DataToMemory(context);
         dataToMemory.saveNewAlarmMilitaryHour(context, newMilitaryHour);
     }
@@ -136,7 +128,7 @@ public class AlarmTimer extends AppCompatActivity {
         return dataToMemory.getNewAlarmMilitaryHour(context);
     }
 
-    public void setNewAlarmMilitaryMinute(Context context, int newMilitaryMinute) {
+    private void setNewAlarmMilitaryMinute(Context context, int newMilitaryMinute) {
         DataToMemory dataToMemory = new DataToMemory(context);
         dataToMemory.saveNewAlarmMilitaryMinute(context, newMilitaryMinute);
     }
@@ -153,7 +145,6 @@ public class AlarmTimer extends AppCompatActivity {
         DataToMemory dataToMemory = new DataToMemory(context);
         dataToMemory.saveMinutesBeforeShift(minutesBeforeShift);
     }
-
 
     public void saveHoursBeforeShift(Context context, int hoursBeforeShift) {
         DataToMemory dataToMemory = new DataToMemory(context);

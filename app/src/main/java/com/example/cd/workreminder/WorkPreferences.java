@@ -31,15 +31,14 @@ public class WorkPreferences extends AppCompatActivity {
     Spinner dayPreference;
     private EditText alarmMinutesPreference; //Added on 4 - 5- 2019
     private EditText alarmHourPreference; //Added on 1 - 15 - 2019
-    private Intent i;
+    private Intent getWorkPrefTime;
     private SharedPreferences pref;
     private int newAlarmTimeMinutes; //Added on 10 - 28 - 2019
     private int newAlarmTimeHour;
 
     private Button save; //Added on 6 - 24 - 2019
     private Button discard; //Added on 12 - 28 - 2019
-    private int alarmHour = 0; //Added on 1 - 15 - 2019
-    private int alarmMinutes = 0; //Added on 1 - 15 - 2019
+
     /*
       The Diazepam, which I use for Vertigo, was making me a bit loopy when I wrote this. So yeah,
       I don't know the reasoning behind it since I was high at the time. But I don't touch it
@@ -53,28 +52,16 @@ public class WorkPreferences extends AppCompatActivity {
         this.pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
         alarmMinutesPreference = (EditText) findViewById(R.id.alarmMinutesPreference);
         alarmHourPreference = (EditText) findViewById(R.id.alarmHourPreferences);
-        //rememberPassword = (Button) findViewById(R.id.RememberPassword);
-
-        //currentPassword = (EditText) findViewById(R.id.currentPassword);
         save = (Button) findViewById(R.id.save);
         discard = (Button) findViewById(R.id.discard);
 
-        i = getIntent();
+        getWorkPrefTime = getIntent();
 
         pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
         newAlarmTimeMinutes = pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_MINUTE_DEFAULT);
         newAlarmTimeHour = pref.getInt(getString(R.string.ALARM_HOURS), WorkReaderContract.WorkEntry.ALARM_HOUR_DEFAULT);
         alarmMinutesPreference.setText(newAlarmTimeMinutes + "");
         alarmHourPreference.setText(newAlarmTimeHour + "");
-
-        //Not implemented
-        /*rememberPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(WorkPreferences.this, RememberMe.class));
-            }
-        });
-        */
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +80,7 @@ public class WorkPreferences extends AppCompatActivity {
 
                 else if (updateMinutes.equals("") || updateMinutes == null ||
                         Integer.parseInt(updateMinutes) < 0
-                        || Integer.parseInt(updateMinutes) > 60
+                        || Integer.parseInt(updateMinutes) > WorkReaderContract.WorkEntry.hour
                         )
                 {
                     updateMinutes =  pref.getString("NEW_ALARM_TIME", "20");
@@ -116,7 +103,7 @@ public class WorkPreferences extends AppCompatActivity {
                   bunch of different files. Yeah, this might suck. But it makes debugging 10x
                   easier.
                  */
-                setResult(WorkReaderContract.WorkEntry.RESULT_OKAY_UPDATE_WORK_ALARM_TIME, i);
+                setResult(WorkReaderContract.WorkEntry.RESULT_OKAY_UPDATE_WORK_ALARM_TIME, getWorkPrefTime);
                 finish();
             }
         });
@@ -134,7 +121,6 @@ public class WorkPreferences extends AppCompatActivity {
     //Added on 12 - 29 - 2019
     private double getEndShiftInMinutes() {
         final AlarmTimer alarmTimer = AlarmTimer.getInstance();
-        final MilitaryTime militaryTime = MilitaryTime.getInstance();
         double endMilitaryMinuteInDecimals = 0.0;
         double totalTime = 0.0;
 

@@ -56,5 +56,9 @@ public final class WorkReaderContract {
         public static final boolean SNOOZE_OFF = false;
         public static final boolean ALARM_RINGS = true; //Added on 1 - 31 - 2020
         public static final boolean ALARM_SILENT = false; //Added on 1 - 31 - 2020
+
+        public static final int hour = 60;
+
+        public static int alarm_default = 20;
     }
 }//end class

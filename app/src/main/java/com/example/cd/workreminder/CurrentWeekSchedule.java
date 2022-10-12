@@ -119,7 +119,7 @@ public class CurrentWeekSchedule extends ListActivity{
                 SharedPreferences.Editor editPref = pref.edit();
                 editPref.putBoolean("SAVE_PASSWORD", false);
                 editPref.apply();
-                startActivity(new Intent(CurrentWeekSchedule.this, Logout.class));
+                startActivity(new Intent(CurrentWeekSchedule.this, ogout.class));
             }
         });
         */
