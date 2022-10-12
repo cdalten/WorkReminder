@@ -48,13 +48,14 @@ import static android.app.Notification.EXTRA_NOTIFICATION_ID;
  */
 public class WorkNotificationReceiver extends BroadcastReceiver {
 
+    private final String PRODUCTION_TAG = "WORK_RECEIVER: ";
     @Override
     public void onReceive(Context context, Intent intent) {
 
         Log.e("PRODUCTION TAG", "WORK ALARM RECEIVER GOT CALLED WITH: " + intent.getAction());
         Log.e("PRODUCTION TAG", "WORK ALARM RECEIVER GOT CALLED WITH: " + intent.getExtras());
 
-        Log.e("LG_WORK_PHONE", "ONRECEIVE() GOT CALLED");
+        Log.e(PRODUCTION_TAG, "ONRECEIVE() GOT CALLED");
 
         Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
         if (alarmUri == null) {

@@ -30,7 +30,7 @@ import android.util.Log;
 public class MainActivity extends AppCompatActivity {
     public static final int NOTIFICATION_ID = 0; //Added on 10 - 14 - 2019
     public static final String ALARM_RINGTONE = "ALARM_RINGTONE"; //Added on 11  - 26 - 2019
-    private final String PRODUCTION_TAG = "LG_WORK_WEB: "; //used for hardware only
+    private final String PRODUCTION_TAG = "MAIN_ACTIVITY_LG: "; //used for hardware only
     private SharedPreferences pref; //added on 9 - 21 - 2018
 
     private Intent intent; //Added on 11 - 21 - 2018

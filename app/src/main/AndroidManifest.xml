@@ -53,17 +53,6 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".Logout"
-            android:label="@string/app_name">
-            <intent-filter>
-                <!--<action android:name="android.intent.action.SEND" />-->
-
-                <category android:name="android.intent.category.LAUNCHER" />
-
-                <data android:mimeType="text/plain" />
-            </intent-filter>
-        </activity>
 
         <!-- Added on 10 - 28 - 2019 -->
         <service
@@ -99,8 +88,6 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED"></action>
             </intent-filter>
         </receiver>
-
-        <activity android:name=".RememberMe" />
 
         <activity
             android:name=".DaySunday"

@@ -40,7 +40,7 @@ public class DayTuesday extends FragmentActivity {
     Intent intent; //Added on 1 - 24 - 2019
     Button finish; //Added on 2 - 1- 2019
     private int dayPosition;
-    private final String PRODUCTION_TAG = "LG_WORK_PHONE";
+    private final String PRODUCTION_TAG = "DAY_TUESDAY:";
     private SharedPreferences pref; //Added on 5 - 24 - 2019
     private Button pickTime; //Added on 3 - 3 - 2020
 

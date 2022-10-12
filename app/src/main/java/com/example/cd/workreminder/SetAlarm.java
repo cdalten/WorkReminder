@@ -58,7 +58,7 @@ public class SetAlarm extends AppCompatActivity {
     private String day; //Added on 10 - 31 - 2019
     private long newAlarmTime; //Added on 11 - 2 - 2019
     private Ringtone ringtone; //Added on 11 - 22 - 2019
-    private static final String PRODUCTION_TAG = "DAY NOTIFICATION TAG"; //Added on 11 - 15 - 2019
+    private static final String PRODUCTION_TAG = "SET_ALARM_TAG:"; //Added on 11 - 15 - 2019
 
     private int startMilitaryHour = 0; //Added on 12 - 15 - 2019
     private int startMilitaryMinute = 0;

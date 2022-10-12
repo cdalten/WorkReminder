@@ -26,7 +26,7 @@ public class BootReceiver extends BroadcastReceiver {
         Log.e("PRODUCTION TAG", "WORK BOOT RECEIVER GOT CALLED WITH: " + intent.getAction());
         Log.e("PRODUCTION TAG", "WORK BOOT RECEIVER GOT CALLED WITH: " + intent.getExtras());
 
-        Log.e("LG_WORK_PHONE", "ONRECEIVE() GOT CALLED");
+        Log.e("BOOT_RECEIVER:", "ONRECEIVE() GOT CALLED");
 
          /*
          Otherwise the alarm won't fire when the user changes the alarm time after the device after
@@ -34,7 +34,6 @@ public class BootReceiver extends BroadcastReceiver {
          https://developer.android.com/training/scheduling/alarms
          */
 
-        //Intent.ACTION_BOOT_COMPLETED
         try {
             if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
                 //Toast.makeText(context, "Boot Detected.", Toast.LENGTH_LONG).show();

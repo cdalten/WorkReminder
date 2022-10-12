@@ -31,8 +31,6 @@ public class WorkPreferences extends AppCompatActivity {
     Spinner dayPreference;
     private EditText alarmMinutesPreference; //Added on 4 - 5- 2019
     private EditText alarmHourPreference; //Added on 1 - 15 - 2019
-    private EditText currentPassword; //Added on 4 - 4- 2019
-    private Button rememberPassword; //Added on 7 - 3- 2019
     private Intent i;
     private SharedPreferences pref;
     private int newAlarmTimeMinutes; //Added on 10 - 28 - 2019
