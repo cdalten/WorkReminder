@@ -1,5 +1,5 @@
 /*
- Copyright © 2017-2020 Chad Altenburg <cdalten@PumpingDansHotLookingStepMom.com>
+ Copyright © 2017-2022 Chad Altenburg <cdalten@PumpingDansHotLookingStepMom.com>
 
  Permission to use, copy, modify, distribute, and sell this software and its
  documentation for any purpose is hereby granted without fee, provided that
@@ -25,7 +25,6 @@ public class BootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.e(PRODUCTION_TAG, "WORK BOOT RECEIVER GOT CALLED WITH: " + intent.getAction());
-
         Log.e(PRODUCTION_TAG, "ONRECEIVE() GOT CALLED");
 
          /*

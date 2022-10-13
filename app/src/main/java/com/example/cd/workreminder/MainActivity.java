@@ -32,9 +32,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String ALARM_RINGTONE = "ALARM_RINGTONE"; //Added on 11  - 26 - 2019
     private final String PRODUCTION_TAG = "MAIN_ACTIVITY_LG: "; //used for hardware only
     private SharedPreferences pref; //added on 9 - 21 - 2018
-
-    private Intent intent; //Added on 11 - 21 - 2018
-
+    
     private static boolean scheduleGotUpdated = false; //Added on 1 - 22 - 2019
 
     @SuppressLint("ClickableViewAccessibility")
