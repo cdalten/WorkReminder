@@ -46,7 +46,7 @@ import java.util.List;
 
 public class CurrentWeekSchedule extends ListActivity{
 
-    private static final String PRODUCTION_TAG = "LG_WORK_PHONE";
+    private static final String PRODUCTION_TAG = "CURRENT_WEEK_SCHEDULE";
 
     TextView text_day; //Added on 2 - 10 - 2019
     TextView text_start_hour; //Added on 2 - 10 -2019
@@ -58,11 +58,9 @@ public class CurrentWeekSchedule extends ListActivity{
     private WS adapter;
 
     ListView list;
-    //private Intent i;
 
     ArrayList<ArrayList<String>> week; //added on 2 - 24 - 2019
     private int currentDay = 0; //Added on 3 - 3 - 2019
-
     private String day = ""; //Added on 12 - 17 - 2019
     private String newStartHour; //Added on 3 - 2 - 2019
     private String newStartMinute;
@@ -72,7 +70,6 @@ public class CurrentWeekSchedule extends ListActivity{
     private String newEndAmOrPm;
 
     private Button workSettings; //Added on 6 - 24 - 2019
-    private Button logout; //Added on 7 - 2- 2019
 
     SharedPreferences pref;
 
@@ -85,7 +82,7 @@ public class CurrentWeekSchedule extends ListActivity{
         //ListActivity listActivity = new ListActivity();
 
         setContentView(R.layout.login);
-        Log.e(PRODUCTION_TAG, "CURRENT WEEK SCHEDULE GOT CALLED.");
+        Log.d(PRODUCTION_TAG, "CURRENT WEEK SCHEDULE GOT CALLED.");
 
         pref =  this.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
 

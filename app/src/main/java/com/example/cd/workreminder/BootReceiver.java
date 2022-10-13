@@ -21,12 +21,12 @@ import android.util.Log;
   on the first few alarms because Android is too busy loading up all the crapware/spyware.
  */
 public class BootReceiver extends BroadcastReceiver {
+    private final String PRODUCTION_TAG = "BOOT RECEIVER";
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.e("PRODUCTION TAG", "WORK BOOT RECEIVER GOT CALLED WITH: " + intent.getAction());
-        Log.e("PRODUCTION TAG", "WORK BOOT RECEIVER GOT CALLED WITH: " + intent.getExtras());
+        Log.e(PRODUCTION_TAG, "WORK BOOT RECEIVER GOT CALLED WITH: " + intent.getAction());
 
-        Log.e("BOOT_RECEIVER:", "ONRECEIVE() GOT CALLED");
+        Log.e(PRODUCTION_TAG, "ONRECEIVE() GOT CALLED");
 
          /*
          Otherwise the alarm won't fire when the user changes the alarm time after the device after
@@ -37,15 +37,15 @@ public class BootReceiver extends BroadcastReceiver {
         try {
             if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
                 //Toast.makeText(context, "Boot Detected.", Toast.LENGTH_LONG).show();
-                Log.e("LG_WORK_PHONE: ", "DEVICE BOOT DETECTED");
+                Log.e(PRODUCTION_TAG, "DEVICE BOOT DETECTED");
 
             } else {
-                Log.e("LG_WORK_PHONE", "DEVICE BOOT NOT DETECTED");
+                Log.e(PRODUCTION_TAG, "DEVICE BOOT NOT DETECTED");
             }
 
 
         } catch (Exception e) {
-            Log.e("LG_WORK_PHONE ", "BOOT ERROR IS: " + e);
+            Log.e(PRODUCTION_TAG, "BOOT ERROR IS: " + e);
         }
 
         final AlarmTimer alarmTimer = AlarmTimer.getInstance();

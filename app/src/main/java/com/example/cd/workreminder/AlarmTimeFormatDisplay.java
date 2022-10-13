@@ -14,6 +14,7 @@ public class AlarmTimeFormatDisplay {
     private static int offset = 0;
     private boolean amSnoozed = false;
     private int currentAlarmTime = 0; //Added on 1 - 27 - 2020
+    private final String PRODUCTION_TAG = "ALARM_TIME_FORMAT:";
 
     public AlarmTimeFormatDisplay(Context context, AlarmTimer alarmTimer, boolean amSnoozed) {
         this.amSnoozed = amSnoozed;
@@ -48,14 +49,10 @@ public class AlarmTimeFormatDisplay {
             timeFormat = hour + ":" + minute + " " + amOrPm;
         }
 
-
-        //timeFormat =  formatTime(hour, minute, amOrPm);
         return timeFormat;
     }
 
     //Added on 1 - 16 - 2020
-    //I use dynamic binding because the Android notification API doesn't support callbacks
-
     public String displayCurrentTime()  {
         String timeFormat = "";
 
@@ -85,26 +82,18 @@ public class AlarmTimeFormatDisplay {
 
              */
             currentAlarmTime = alarmTimer.getNewAlarmMilitaryMinute(context);
-            //snoozeTime = alarmTimer.getNewAlarmMilitaryMinute(context) + alarmTimer.getAlarmSnooze() + offset;
 
             snoozeTime = currentAlarmTime + alarmTimer.getAlarmSnooze() + offset;
             if (snoozeTime == 60) {
-                //currentAlarmTime = 0;
                 offset = 0;
-                //alarmTimer.setNewAlarmMilitaryMinute(context, 0);
             }
             offset = offset + 1;
-            Log.e("LG_WORK_PHONE", "THE SNOOZE TIME IS: " + snoozeTime);
+            Log.d(PRODUCTION_TAG, "THE SNOOZE TIME IS: " + snoozeTime);
             Date d=new Date();
             SimpleDateFormat sdf=new SimpleDateFormat("h:mm a");
             String[] time =  d.toString().split(":");;
 
-
-            //Log.e("LG_WORK_PHONE", "THE NEW TIME IS: " + time[1]);
             timeFormat= sdf.format(d);
-            //timeFormat = formatTime( alarmTimer.getNewAlarmCivilianHour(context.getApplicationContext()),
-            //        alarmTimer.getNewAlarmCivilianMinutes(context.getApplicationContext()),
-            //        alarmTimer.getUpdatedStartAmOrPm(context.getApplicationContext()));
         }
 
         return timeFormat;

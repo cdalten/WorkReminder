@@ -26,6 +26,7 @@ public class AlarmSound extends IntentService{
     private Ringtone ringtone;
     private AudioAttributes aa;
     private SharedPreferences pref; //Added on 12  30 - 2019
+    private final String PRODUCTION_TAG = "ALARM_SOUND";
 
     public AlarmSound() {
         super(" DayNofiticationWithSnooze");
@@ -50,7 +51,7 @@ public class AlarmSound extends IntentService{
     public void onCreate() {
         super.onCreate();
 
-        Log.e("LG_WORK_PHONE", "DayNofiticationWithSnooze onCreate()");
+        Log.d(PRODUCTION_TAG, "DayNofiticationWithSnooze onCreate()");
         Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
         if (alarmUri == null) {
             alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -77,7 +78,7 @@ public class AlarmSound extends IntentService{
 
     @Override
     public void onDestroy() {
-        Log.e("LG_WORK_PHONE", "DayNofiticationWithSnooze onDestroy()");
+        Log.d(PRODUCTION_TAG, "DayNofiticationWithSnooze onDestroy()");
         super.onDestroy();
     }
 

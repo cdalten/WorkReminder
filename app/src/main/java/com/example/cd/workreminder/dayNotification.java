@@ -30,6 +30,7 @@ public class DayNotification {
     private Uri alarmUri; //Added on 1 - 16 - 2020
     private Ringtone ringtone;
     private PendingIntent alarmIntent; //Added on 1 - 31 - 201
+    private final String PRODUCTION_TAG = "DAY_NOTIFICATION";
 
     public DayNotification(Context context){
         this.context = context;
@@ -47,7 +48,7 @@ public class DayNotification {
     public void createNotification(String notificationTitle, String notificationText ) {
         setNotificationTitle(notificationTitle);
         seteNotificationText(notificationText);
-        Log.e("LG_WORK_PHONE", "createNotification() got called");
+        Log.d(PRODUCTION_TAG, "createNotification() got called");
         //Unimplemented****************************************************************************
         Intent intent = new Intent(context, WorkPreferences.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -101,12 +102,12 @@ public class DayNotification {
 
 
                     ringtone.setAudioAttributes(aa);
-                    Log.e("LG_WORK_PHONE", "GREATER THAN LOLLIPOP");
+                    Log.d(PRODUCTION_TAG, "GREATER THAN LOLLIPOP");
                 } else {
-                    Log.e("LG_WORK_PHONE", "LESS THAN LOLLIPOP");
+                    Log.d(PRODUCTION_TAG, "LESS THAN LOLLIPOP");
                     ringtone.setStreamType(AudioManager.STREAM_ALARM);
                 }
-                Log.e("LG_WORK_PHONE", "THE RINGTONE (IN GLOBAL MAIN ACTIVITY) IS: " + ringtone);
+                Log.e(PRODUCTION_TAG, "THE RINGTONE (IN GLOBAL MAIN ACTIVITY) IS: " + ringtone);
 
 
                 if (getAmPlaying() == WorkReaderContract.WorkEntry.ALARM_RINGS) {

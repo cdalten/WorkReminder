@@ -1,5 +1,6 @@
+//Dev post, indeed, lever.co? for coding jobs?
 /*
- Copyright © 2017-2019 Chad Altenburg <cdalten@PumpingDansHotLookingStepMom.com>
+ Copyright © 2017-2022 Chad Altenburg <cdalten@PumpingDansHotLookingStepMom.com>
 
  Permission to use, copy, modify, distribute, and sell this software and its
  documentation for any purpose is hereby granted without fee, provided that
@@ -36,7 +37,7 @@ public class DayMonday extends FragmentActivity {
     Spinner endAmOrPm;
     Spinner dayOfTheWeek; //Added on 2 - 1 - 2019
 
-    Intent intent; //Added on 1 - 24 - 2019
+    Intent setMondayHours; //Added on 1 - 24 - 2019
     Button finish; //Added on 2 - 1- 2019
     private int dayPosition;
     private final String PRODUCTION_TAG = "DAY_MONDAY:";
@@ -59,7 +60,7 @@ public class DayMonday extends FragmentActivity {
         pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
         final SharedPreferences.Editor editor = pref.edit();
         //Pipe data back.
-        intent = getIntent();
+        setMondayHours = getIntent();
 
         //Get day of week from drop down menu. If off, make list view row blank
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -71,20 +72,15 @@ public class DayMonday extends FragmentActivity {
         dayOfTheWeek.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //intent.putExtra(getString(R.string.com_example_cd_shiftreminder_DAY_OF_THE_WEEK),
-                //        parent.getItemAtPosition(position).toString());
-
-                Log.e(PRODUCTION_TAG, "MONDAY DAY POSITION IS: " + position);
+                Log.d(PRODUCTION_TAG, "MONDAY DAY POSITION IS: " + position);
                 //dayPosition = position;
                 switch (position) {
-                    case 0:
-                        intent.putExtra("CURRENT_DAY", WorkReaderContract.WorkEntry.MONDAY);
-                        //editor.putString(getString(R.string.MONDAY), "MONDAY");
-                        //editor.putString(getString(R.string.MONDAY), "OFF");
-                        setResult(WorkReaderContract.WorkEntry.RESULT_OK_WORK, intent);
+                    case WorkReaderContract.WorkEntry.ON_DAY:
+                        setMondayHours.putExtra("CURRENT_DAY", WorkReaderContract.WorkEntry.MONDAY);
+                        setResult(WorkReaderContract.WorkEntry.RESULT_OK_WORK, setMondayHours);
                         //saveDay = position;
                         break;
-                    case 1: //OFF
+                    case WorkReaderContract.WorkEntry.OFF_DAY: //OFF
                         SharedPreferences.Editor editor = pref.edit();
                         //switch(saveDay) {
                         //case WorkReaderContract.WorkEntry.TUESDAY:
@@ -95,11 +91,11 @@ public class DayMonday extends FragmentActivity {
                         editor.putString(getString(R.string.MONDAY_END_HOUR), "");
                         editor.putString(getString(R.string.MONDAY_END_MINUTE), "");
                         editor.putString(getString(R.string.MONDAY_END_AM_OR_PM), "");
-                        intent.putExtra("POSITION", WorkReaderContract.WorkEntry.OFF); //??
+                        setMondayHours.putExtra("POSITION", WorkReaderContract.WorkEntry.OFF); //??
                         //   break;
                         //}
 
-                        intent.putExtra("CURRENT_DAY", WorkReaderContract.WorkEntry.OFF);
+                        setMondayHours.putExtra("CURRENT_DAY", WorkReaderContract.WorkEntry.OFF);
                         startHour.setVisibility(View.INVISIBLE);
                         startMinute.setVisibility(View.INVISIBLE);
                         startAmOrPm.setVisibility(View.INVISIBLE);
@@ -107,17 +103,14 @@ public class DayMonday extends FragmentActivity {
                         endMinute.setVisibility(View.INVISIBLE);
                         endAmOrPm.setVisibility(View.INVISIBLE);
 
-                        setResult(WorkReaderContract.WorkEntry.RESULT_OKAY_NO_WORK, intent);
+                        setResult(WorkReaderContract.WorkEntry.RESULT_OKAY_NO_WORK, setMondayHours);
                         editor.apply();
                         break;
                 }//end switch
 
 
                 Log.e(PRODUCTION_TAG, "THE DAY OF THE WEEK IS: " + position);
-
-                //intent.putExtra("CURRENT_DAY", WorkReaderContract.WorkEntry.MONDAY);
-                intent.putExtra("DAY_WEEK",  parent.getItemAtPosition(0).toString());
-                //setResult(WorkReaderContract.WorkEntry.RESULT_OK_WORK, intent);
+                setMondayHours.putExtra("DAY_WEEK",  parent.getItemAtPosition(0).toString());
             }
 
             @Override
@@ -132,7 +125,8 @@ public class DayMonday extends FragmentActivity {
                 R.array.start_hour, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         startHour.setAdapter(adapter);
-        startHour.setSelection(intent.getIntExtra("START_HOUR", 0));
+        startHour.setSelection(setMondayHours.getIntExtra("START_HOUR",
+                WorkReaderContract.WorkEntry.SELECTION_DEFAULT_VALUE));
         //Need to check fo "OFF"
         //startHour.setSelection(Integer.parseInt( pref.getString(getString(R.string.SUNDAY_START_HOUR),
         //        WorkReaderContract.WorkEntry.START_HOUR_DEFAULT)));
@@ -143,10 +137,10 @@ public class DayMonday extends FragmentActivity {
                         //pref.getString(getString(R.string.MONDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
                         parent.getItemAtPosition(position).toString());
 
-                intent.putExtra(getString(R.string.START_HOUR),
+                setMondayHours.putExtra(getString(R.string.START_HOUR),
                         parent.getItemAtPosition(position).toString());
                 editor.putString(getString(R.string.MONDAY), "MONDAY");
-                setResult(WorkReaderContract.WorkEntry.RESULT_OK_WORK, intent);
+                setResult(WorkReaderContract.WorkEntry.RESULT_OK_WORK, setMondayHours);
             }
 
             @Override
@@ -161,17 +155,18 @@ public class DayMonday extends FragmentActivity {
                 R.array.start_minute, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         startMinute.setAdapter(adapter);
-        startMinute.setSelection(intent.getIntExtra("START_MINUTE", 0));
+        startMinute.setSelection(setMondayHours.getIntExtra("START_MINUTE",
+                WorkReaderContract.WorkEntry.SELECTION_DEFAULT_VALUE));
         startMinute.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Log.e(PRODUCTION_TAG, "THE POSITION BEFORE IS: " + position);
                 editor.putString(getString(R.string.MONDAY_START_MINUTE),
                         parent.getItemAtPosition(position).toString());
-                intent.putExtra(getString(R.string.START_MINUTE),
+                setMondayHours.putExtra(getString(R.string.START_MINUTE),
                         parent.getItemAtPosition(position).toString());
                 editor.putString(getString(R.string.MONDAY), "MONDAY");
-                setResult(WorkReaderContract.WorkEntry.RESULT_OK_WORK, intent);
+                setResult(WorkReaderContract.WorkEntry.RESULT_OK_WORK, setMondayHours);
             }
 
             @Override
@@ -181,22 +176,22 @@ public class DayMonday extends FragmentActivity {
             }
         });
 
-
         //Get starting am or pm from down down menu
         adapter = ArrayAdapter.createFromResource(this,
                 R.array.start_am_or_pm, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         startAmOrPm.setAdapter(adapter);
-        startAmOrPm.setSelection(intent.getIntExtra("START_AM_OR_PM", 0));
+        startAmOrPm.setSelection(setMondayHours.getIntExtra("START_AM_OR_PM",
+                WorkReaderContract.WorkEntry.SELECTION_DEFAULT_VALUE));
         //Because interfaces still suck massive dick
         startAmOrPm.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 editor.putString(getString(R.string.MONDAY_START_AM_OR_PM),
                         parent.getItemAtPosition(position).toString());
-                intent.putExtra(getString(R.string.START_AM_OR_PM), parent.getItemAtPosition(position).toString());
+                setMondayHours.putExtra(getString(R.string.START_AM_OR_PM), parent.getItemAtPosition(position).toString());
                 editor.putString(getString(R.string.MONDAY), "MONDAY");
-                setResult(WorkReaderContract.WorkEntry.RESULT_OK_WORK, intent);
+                setResult(WorkReaderContract.WorkEntry.RESULT_OK_WORK, setMondayHours);
             }
 
             @Override
@@ -210,16 +205,17 @@ public class DayMonday extends FragmentActivity {
                 R.array.end_hour, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         endHour.setAdapter(adapter);
-        endHour.setSelection(intent.getIntExtra("END_HOUR", 0));
+        endHour.setSelection(setMondayHours.getIntExtra("END_HOUR",
+                WorkReaderContract.WorkEntry.SELECTION_DEFAULT_VALUE));
         endHour.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 editor.putString(getString(R.string.MONDAY_END_HOUR),
                         parent.getItemAtPosition(position).toString());
-                intent.putExtra(getString(R.string.END_HOUR),
+                setMondayHours.putExtra(getString(R.string.END_HOUR),
                         parent.getItemAtPosition(position).toString());
                 editor.putString(getString(R.string.MONDAY), "MONDAY");
-                setResult(WorkReaderContract.WorkEntry.RESULT_OK_WORK, intent);
+                setResult(WorkReaderContract.WorkEntry.RESULT_OK_WORK, setMondayHours);
             }
 
             @Override
@@ -233,16 +229,17 @@ public class DayMonday extends FragmentActivity {
                 R.array.end_minute, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         endMinute.setAdapter(adapter);
-        endMinute.setSelection(intent.getIntExtra("END_MINUTE", 0));
+        endMinute.setSelection(setMondayHours.getIntExtra("END_MINUTE",
+                WorkReaderContract.WorkEntry.SELECTION_DEFAULT_VALUE));
         endMinute.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 editor.putString(getString(R.string.MONDAY_END_MINUTE),
                         parent.getItemAtPosition(position).toString());
 
-                intent.putExtra(getString(R.string.END_MINUTE), parent.getItemAtPosition(position).toString());
+                setMondayHours.putExtra(getString(R.string.END_MINUTE), parent.getItemAtPosition(position).toString());
                 editor.putString(getString(R.string.MONDAY), "MONDAY");
-                setResult(WorkReaderContract.WorkEntry.RESULT_OK_WORK, intent);
+                setResult(WorkReaderContract.WorkEntry.RESULT_OK_WORK, setMondayHours);
             }
 
             @Override
@@ -256,15 +253,16 @@ public class DayMonday extends FragmentActivity {
                 R.array.end_am_or_pm, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         endAmOrPm.setAdapter(adapter);
-        endAmOrPm.setSelection(intent.getIntExtra("END_AM_OR_PM", 0));
+        endAmOrPm.setSelection(setMondayHours.getIntExtra("END_AM_OR_PM",
+                WorkReaderContract.WorkEntry.SELECTION_DEFAULT_VALUE));
         endAmOrPm.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 editor.putString(getString(R.string.MONDAY_END_AM_OR_PM),
                         parent.getItemAtPosition(position).toString());
-                intent.putExtra(getString(R.string.END_AM_OR_PM), parent.getItemAtPosition(position).toString());
+                setMondayHours.putExtra(getString(R.string.END_AM_OR_PM), parent.getItemAtPosition(position).toString());
                 editor.putString(getString(R.string.MONDAY), "MONDAY");
-                setResult(WorkReaderContract.WorkEntry.RESULT_OK_WORK, intent);
+                setResult(WorkReaderContract.WorkEntry.RESULT_OK_WORK, setMondayHours);
             }
 
             @Override
@@ -294,7 +292,7 @@ public class DayMonday extends FragmentActivity {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
                 //dialog.cancel();
-                setResult(WorkReaderContract.WorkEntry.RESULT_FAILED, intent);
+                setResult(WorkReaderContract.WorkEntry.RESULT_FAILED, setMondayHours);
                 finish();
             }
         });

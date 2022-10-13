@@ -27,7 +27,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 //Used to set the Alarm ringone
 public class AlarmRingtone {
-    private static final String PRODUCTION_TAG = "LG_WORK_PHONE"; //Added on 4 - 16 - 2019
+    private static final String PRODUCTION_TAG = "ALARM RINGTONE:"; //Added on 4 - 16 - 2019
     private static AudioAttributes aa;
     private static SharedPreferences pref; //Added on 10 - 25 - 2019
     private static Ringtone ringtone; //Added on 10 - 25 - 2019
@@ -35,7 +35,7 @@ public class AlarmRingtone {
     }
 
     public static void handleActionDismiss(Context context) {
-        Log.e(PRODUCTION_TAG, "handleActionDismiss()");
+        Log.d(PRODUCTION_TAG, "handleActionDismiss()");
 
         playRingtone(context);
         NotificationManagerCompat notificationManagerCompat =
@@ -66,19 +66,20 @@ public class AlarmRingtone {
                         .build();
 
                 ringtone.setAudioAttributes(aa);
-                Log.e(PRODUCTION_TAG, "GREATER THAN LOLLIPOP");
+                Log.d(PRODUCTION_TAG, "GREATER THAN LOLLIPOP");
             } else {
-                Log.e(PRODUCTION_TAG, "LESS THAN LOLLIPOP");
+                Log.d(PRODUCTION_TAG, "LESS THAN LOLLIPOP");
                 ringtone.setStreamType(AudioManager.STREAM_ALARM);
             }
         }
 
-        Log.e(PRODUCTION_TAG, "THE RINGTONE INSTANCE IS: " + ringtone);
+        Log.d(PRODUCTION_TAG, "THE RINGTONE INSTANCE IS: " + ringtone);
 
         if (pref.getBoolean("RINGTONE", false) == true) {
             ringtone.play();
+            Log.d(PRODUCTION_TAG, "ALARM GOT PLAYED");
         } else {
             ringtone.stop();
         }
     }
-}//end class
+}
