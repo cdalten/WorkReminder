@@ -118,35 +118,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
     }//end onStart()
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.e("MAIN", "ON PAUSE GOT CALLED");
-    }
-
-    @Override
-    /*
-     * Attempt to suppress "Failed to locate a binder for interface: autofill::mojom::PasswordManagerDriver"
-     */
-    protected void onResume() {
-        super.onResume();
-        Log.e("MAIN", "ON RESUME GOT CALLED");
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        Log.e("MAIN", "ON RESTART GOT CALLED");
-    }
-
-
+    
     @Override
     protected void onDestroy() {
         super.onDestroy();
         disableBootReceiver();
         disableWorkNoticationReceiver();
-        Log.e("MAIN", "ON DESTROY GOT CALLED");
+        Log.e(PRODUCTION_TAG, "ON DESTROY GOT CALLED");
     }
 }//end Main// Activity
 

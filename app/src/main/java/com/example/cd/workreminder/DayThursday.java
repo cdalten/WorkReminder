@@ -25,7 +25,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
-public class DayThursday extends FragmentActivity {
+public class DayThursday extends BackKey {
     Spinner startHour; //Added on 1 - 22 - 2019
     Spinner startMinute; //Added on 1 - 23 - 2019
     Spinner startAmOrPm;
@@ -287,25 +287,7 @@ public class DayThursday extends FragmentActivity {
 
     @Override
     public void onBackPressed() {
-        AlertDialog.Builder builder =
-                new AlertDialog.Builder(this);
-
-        builder.setTitle("Discard Changes");
-        builder.setMessage("ARE YOU SURE YOU WANT TO DISCARD ANY POSSIBLE CHANGES?");
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User clicked OK button
-                //dialog.cancel();
-                setResult(WorkReaderContract.WorkEntry.RESULT_FAILED, setHoursThursday);
-                finish();
-            }
-        });
-        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User cancelled the dialog
-            }
-        });
-        builder.create().show();
+        super.onBackPressed();
     }
 }//end class
 
