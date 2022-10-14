@@ -39,24 +39,23 @@ public class MainActivity extends AppCompatActivity {
         //this.getSupportActionBar().hide();
         setContentView(R.layout.activity_update_job_schedule);
 
-        Log.e(PRODUCTION_TAG, "ONCREATE() BEFORE SAVEDINSTANCE()");
+        Log.d(PRODUCTION_TAG, "ONCREATE() BEFORE SAVEDINSTANCE()");
 
         dispatchCurrentWeekSchedule();
         enableBootReceiver();
         enablWorkNotifcationReceiver();
 
         if (savedInstanceState == null) {
-            Log.e(PRODUCTION_TAG, "ONCREATE() WHEN SAVEDINSTANCE() IS NULL");
+            Log.d(PRODUCTION_TAG, "ONCREATE() WHEN SAVEDINSTANCE() IS NULL");
 
             //Attempt to invoke interface method 'java.lang.String android.content.SharedPreferences.getString(java.lang.String, java.lang.String)'
             //on a null object reference
-
             pref = this.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
 
             //12AM represents midnight on my phone
 
         } else {
-            Log.e(PRODUCTION_TAG, "ONCREATE() WHEN SAVEDINSTANCE() IS NOT NULL");
+            Log.d(PRODUCTION_TAG, "ONCREATE() WHEN SAVEDINSTANCE() IS NOT NULL");
             savedInstanceState.getString("UPDATED_SCHEDULE"); //???
 
             pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE); //redudant??
@@ -124,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         disableBootReceiver();
         disableWorkNoticationReceiver();
-        Log.e(PRODUCTION_TAG, "ON DESTROY GOT CALLED");
+        Log.d(PRODUCTION_TAG, "ON DESTROY GOT CALLED");
     }
 }//end Main// Activity
 

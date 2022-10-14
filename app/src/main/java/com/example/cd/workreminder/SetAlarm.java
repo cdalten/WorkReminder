@@ -408,10 +408,10 @@ public class SetAlarm extends AppCompatActivity {
          I guess if you want to see this in action, go work as a 3rd shift at a place like Walmart
          or Target for a couple of months.
          */
-        if (militaryTime.getStartMilitaryHour() == 0 && militaryTime.getStartAmOrPm().equals("AM")) {
-            setNewNotificationDisplayAlarm(context.getApplicationContext(),
-                    alarmTimer.getPreviousDayOfWeekSavedDayOfWeek(context.getApplicationContext()),alarmTimer);
-        } else {
+        //if (militaryTime.getStartMilitaryHour() == 0 && militaryTime.getStartAmOrPm().equals("AM")) {
+        //    setNewNotificationDisplayAlarm(context.getApplicationContext(),
+        //            alarmTimer.getPreviousDayOfWeekSavedDayOfWeek(context.getApplicationContext()),alarmTimer);
+        //} else {
             if (currentTime > startTime && currentTime < endTime) {
                 displayNotification(context.getApplicationContext(),"YOU'RE SUPPOSED TO BE AT WORK");
             } else if (currentTime == startTime) {
@@ -423,11 +423,11 @@ public class SetAlarm extends AppCompatActivity {
             } else if(currentAlarmTime > currentTime) {
 
 
-                Log.e(PRODUCTION_TAG, "-----------------------------------------------------------");
-                Log.e(PRODUCTION_TAG, "THE UPDATED ALARM TIME IS: " + alarmTimer.getNewAlarmMilitaryMinute(context));
+                Log.d(PRODUCTION_TAG, "-----------------------------------------------------------");
+                Log.d(PRODUCTION_TAG, "THE UPDATED ALARM TIME IS: " + alarmTimer.getNewAlarmMilitaryMinute(context));
 
-                Log.e(PRODUCTION_TAG, "THE END ALARM TIME IS: " + getStartMilitaryMinute());
-                Log.e(PRODUCTION_TAG, "-------------------------------------------------------------");
+                Log.d(PRODUCTION_TAG, "THE END ALARM TIME IS: " + getStartMilitaryMinute());
+                Log.d(PRODUCTION_TAG, "-------------------------------------------------------------");
                 setNewNotificationDisplayAlarm(context,
                         alarmTimer.getCurrentSavedDayOfWeek(context.getApplicationContext()),alarmTimer);
             } else {
@@ -435,7 +435,7 @@ public class SetAlarm extends AppCompatActivity {
                 setNewNotificationDisplayAlarm(context,
                         alarmTimer.getCurrentSavedDayOfWeek(context.getApplicationContext()),alarmTimer);
             }
-        }
+        //}
     }
 
     //Added on 10 - 23 - 2019
@@ -485,7 +485,12 @@ public class SetAlarm extends AppCompatActivity {
           20 minutes before the start of the shift to something like 10 minutes before
           the start of a shift.
          */
-        calendar.set(Calendar.HOUR_OF_DAY, alarmTimer.getNewAlarmMilitaryHour(context));
+        if (alarmTimer.getNewAlarmMilitaryHour(context) == 24) {
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+        } else {
+            calendar.set(Calendar.HOUR_OF_DAY,alarmTimer.getNewAlarmMilitaryHour(context));
+        }
+        ;
         calendar.set(Calendar.MINUTE, alarmTimer.getNewAlarmMilitaryMinute(context));
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0); //??
