@@ -283,6 +283,7 @@ public class DayFriday extends BackKey {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        setIntent(setFridayHours);
     }
 }//end class
 

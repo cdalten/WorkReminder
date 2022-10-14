@@ -280,7 +280,8 @@ public class SetAlarm extends AppCompatActivity {
         }
     }//end method
 
-
+    //I don't use Goog;e Calendar get day of week because it produces an off by one error on the
+    //p
     public int getDayOfWeek() {
         int day = 0;
         //SimpleDateFormat sdf = new SimpleDateFormat(" ");

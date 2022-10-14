@@ -26,6 +26,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 
 public class BackKey extends FragmentActivity {
+    Intent dayOfWeek;
     /*Intent setFridayHours; //Added on 1 - 24 - 2019
 
     @Override
@@ -34,6 +35,11 @@ public class BackKey extends FragmentActivity {
         setFridayHours = getIntent();
     }
     */
+
+    public void setIntent(Intent dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
+
+    }
 
     @Override
     public void onBackPressed() {
@@ -46,7 +52,7 @@ public class BackKey extends FragmentActivity {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
                 //dialog.cancel();
-                //setResult(WorkReaderContract.WorkEntry.RESULT_FAILED, setFridayHours);
+                setResult(WorkReaderContract.WorkEntry.RESULT_FAILED, dayOfWeek);
                 finish();
             }
         });
