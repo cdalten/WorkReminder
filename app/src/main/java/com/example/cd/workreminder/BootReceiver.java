@@ -24,8 +24,8 @@ public class BootReceiver extends BroadcastReceiver {
     private final String PRODUCTION_TAG = "BOOT RECEIVER";
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.e(PRODUCTION_TAG, "WORK BOOT RECEIVER GOT CALLED WITH: " + intent.getAction());
-        Log.e(PRODUCTION_TAG, "ONRECEIVE() GOT CALLED");
+        Log.d(PRODUCTION_TAG, "WORK BOOT RECEIVER GOT CALLED WITH: " + intent.getAction());
+        Log.d(PRODUCTION_TAG, "ONRECEIVE() GOT CALLED");
 
          /*
          Otherwise the alarm won't fire when the user changes the alarm time after the device after
@@ -36,10 +36,10 @@ public class BootReceiver extends BroadcastReceiver {
         try {
             if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
                 //Toast.makeText(context, "Boot Detected.", Toast.LENGTH_LONG).show();
-                Log.e(PRODUCTION_TAG, "DEVICE BOOT DETECTED");
+                Log.d(PRODUCTION_TAG, "DEVICE BOOT DETECTED");
 
             } else {
-                Log.e(PRODUCTION_TAG, "DEVICE BOOT NOT DETECTED");
+                Log.d(PRODUCTION_TAG, "DEVICE BOOT NOT DETECTED");
             }
 
 
@@ -47,8 +47,9 @@ public class BootReceiver extends BroadcastReceiver {
             Log.e(PRODUCTION_TAG, "BOOT ERROR IS: " + e);
         }
 
-        final AlarmTimer alarmTimer = AlarmTimer.getInstance();
+        /*final AlarmTimer alarmTimer = AlarmTimer.getInstance();
         SetAlarm setAlarm = new SetAlarm();
         setAlarm.setAlarm(context, alarmTimer);
+        */
     }
 }//end class

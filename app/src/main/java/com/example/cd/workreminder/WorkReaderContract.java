@@ -64,5 +64,9 @@ public final class WorkReaderContract {
         public static final int ON_DAY = 0; //Added on 10 - 12 - 2022
         public static final int OFF_DAY = 1; //Added onn 10 - 12 - 2022
         public static int SELECTION_DEFAULT_VALUE = 0; //Added on 10 - 12 - 2022
+        public static final String SAVED_PREFERENCESS = "BECAUSE INTENTS SUCK MASSIVE DICK";
+
+
+
     }
 }//end class

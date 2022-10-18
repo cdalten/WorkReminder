@@ -31,7 +31,7 @@ public class storeHoursInGUI {
 
     @TargetApi(24)
     public ArrayList addHours() {
-        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        pref = context.getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
         week = new ArrayList<ArrayList<String>>();
         //week.clear(); //stupid hack. Don't ask.
 

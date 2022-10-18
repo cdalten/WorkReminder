@@ -49,7 +49,7 @@ public class WorkPreferences extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_work_preferences);
         //dayPreference = (Spinner) findViewById(R.id.dayPreference);
-        this.pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        this.pref = getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
         alarmMinutesPreference = (EditText) findViewById(R.id.alarmMinutesPreference);
         alarmHourPreference = (EditText) findViewById(R.id.alarmHourPreferences);
         save = (Button) findViewById(R.id.save);
@@ -57,7 +57,7 @@ public class WorkPreferences extends AppCompatActivity {
 
         getWorkPrefTime = getIntent();
 
-        pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        pref = getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
         newAlarmTimeMinutes = pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_MINUTE_DEFAULT);
         newAlarmTimeHour = pref.getInt(getString(R.string.ALARM_HOURS), WorkReaderContract.WorkEntry.ALARM_HOUR_DEFAULT);
         alarmMinutesPreference.setText(newAlarmTimeMinutes + "");

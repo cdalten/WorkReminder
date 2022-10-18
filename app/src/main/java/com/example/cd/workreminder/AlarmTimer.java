@@ -57,7 +57,7 @@ public class AlarmTimer extends AppCompatActivity {
                              int startMilitaryMinute,
                              boolean shouldISaveTheAlarmTime )
     {
-        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        pref = context.getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
         this.dayOfWeek = dayOfWeek;
         this.startMilitaryMinute = startMilitaryMinute;
         this.startMilitaryHour = startMilitaryHour;
@@ -159,7 +159,7 @@ public class AlarmTimer extends AppCompatActivity {
     }
 
     public String getCurrentSavedDayOfWeek(Context context) {
-        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        pref = context.getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
         return pref.getString("CURRENT_DAY", "");
     }
 
@@ -169,7 +169,7 @@ public class AlarmTimer extends AppCompatActivity {
     }
 
     public String getPreviousDayOfWeekSavedDayOfWeek(Context context) {
-        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        pref = context.getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
         return pref.getString("PREVIOUS_DAY", "");
     }
 
@@ -210,13 +210,13 @@ public class AlarmTimer extends AppCompatActivity {
 
     //Added on 12 - 18 - 2019
     public String getUpdatedStartAmOrPm(Context context) {
-        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        pref = context.getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
         return pref.getString("AMORPM", updatedAmOrPm);
     }
 
     //Added on 11 - 4 - 2019
     public String getDayOfWeek(Context context) {
-        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        pref = context.getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
         return pref.getString("DAY_OF_WEEK", "");
     }
 

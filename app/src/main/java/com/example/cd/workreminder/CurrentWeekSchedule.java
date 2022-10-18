@@ -84,7 +84,7 @@ public class CurrentWeekSchedule extends ListActivity{
         setContentView(R.layout.login);
         Log.d(PRODUCTION_TAG, "CURRENT WEEK SCHEDULE GOT CALLED.");
 
-        pref =  this.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        pref =  this.getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
 
         //Update = (Button) findViewById(R.id.Update);
         //WorkPrefences = (Button) findViewById(R.id.ferences);

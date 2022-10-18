@@ -226,7 +226,7 @@ public class SetAlarm extends AppCompatActivity {
             int endDayOfWeekStartHour, int endDayOfWeekStartMinute, int endDayOfWeekStartAmOrPm
     )
     {
-        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        pref = context.getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
 
         newDayOfWeekStartHour = pref.getString(context.getString(dayOfWeekStartHour), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT);
         newDayOfWeekStartMinute = pref.getString(context.getString(dayOfWeekStartMinute), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT);
@@ -238,7 +238,7 @@ public class SetAlarm extends AppCompatActivity {
         final MilitaryTime militaryTime = MilitaryTime.getInstance();
         final AlarmTimer alarmTimer = AlarmTimer.getInstance();
 
-        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        pref = context.getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
 
         this.day = pref.getString(context.getString(currentDayOfWeek), "OFF");
 

@@ -50,7 +50,7 @@ public class AlarmRingtone {
 
     //Added on 10 - 23 - 2019
     private static void playRingtone(Context context) {
-        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        pref = context.getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
         //Part of the code copied and pasted from stackoverflow
         Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
         if (alarmUri == null) {

@@ -39,7 +39,7 @@ public class DataToMemory extends AppCompatActivity{
 
     public DataToMemory(Context context) {
         this.context = context;
-        pref =  context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        pref =  context.getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
     }    //From CurrentWeekSchedule.java
     public void saveDataToMemory(
             int day,
@@ -142,12 +142,12 @@ public class DataToMemory extends AppCompatActivity{
 
 
     public int getNewAlarmCivilianHour(Context context) {
-        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        pref = context.getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
         return pref.getInt("NEW_ALARM_HOUR", 0);
     }
 
     public int getNewAlarmCivilianMinutes(Context context) {
-        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        pref = context.getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
         return pref.getInt("NEW_ALARM_MINUTES", 0);
     }
 
@@ -160,7 +160,7 @@ public class DataToMemory extends AppCompatActivity{
     }
 
     public int getNewAlarmMilitaryHour(Context context) {
-        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        pref = context.getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
         return pref.getInt("NEW_MILITARY_ALARM_HOUR", 0);
     }
 
@@ -173,7 +173,7 @@ public class DataToMemory extends AppCompatActivity{
     }
 
     public int getNewAlarmMilitaryMinute(Context context) {
-        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        pref = context.getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
         return pref.getInt("NEW_ALARM_MINUTES", 0);
     }
     //Added on 10 - 21 - 2019
@@ -202,7 +202,7 @@ public class DataToMemory extends AppCompatActivity{
     }
 
     public String getCurrentSavedDayOfWeek(Context context) {
-        pref = context.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        pref = context.getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
         return pref.getString("CURRENT_DAY", "");
     }
 

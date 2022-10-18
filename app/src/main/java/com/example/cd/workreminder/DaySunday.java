@@ -54,7 +54,7 @@ public class DaySunday extends BackKey {
         endAmOrPm = (Spinner) findViewById(R.id.endAmOrPm);
         finish = (Button) findViewById(R.id.finish);
 
-        pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        pref = getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
         final SharedPreferences.Editor editor = pref.edit();
         //Pipe data back.
         setSundayHours = getIntent();

@@ -64,7 +64,7 @@ public class HourFormat extends FragmentActivity {
         endAmOrPm = (Spinner) findViewById(R.id.endAmOrPm);
         finish = (Button) findViewById(R.id.finish);
 
-        pref = getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
+        pref = getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
         //Pipe data back.
         intent = getIntent();
 
@@ -85,31 +85,31 @@ public class HourFormat extends FragmentActivity {
                 switch (position) {
                     case WorkReaderContract.WorkEntry.SUNDAY:
                         saveDay = position;
-                        Log.e(PRODUCTION_TAG, "THE DAY IS SUNDAY");
+                        Log.d(PRODUCTION_TAG, "THE DAY IS SUNDAY");
                         break;
                     case WorkReaderContract.WorkEntry.MONDAY:
                         saveDay = position;
-                        Log.e(PRODUCTION_TAG, "THE DAY IS MONDAY");
+                        Log.d(PRODUCTION_TAG, "THE DAY IS MONDAY");
                         break;
                     case WorkReaderContract.WorkEntry.TUESDAY:
                         saveDay = position;
-                        Log.e(PRODUCTION_TAG, "THE DAY IS TUESDAY");
+                        Log.d(PRODUCTION_TAG, "THE DAY IS TUESDAY");
                         break;
                     case WorkReaderContract.WorkEntry.WEDNESDAY:
                         saveDay = position;
-                        Log.e(PRODUCTION_TAG, "THE DAY IS WEDNESDAY");
+                        Log.d(PRODUCTION_TAG, "THE DAY IS WEDNESDAY");
                         break;
                     case WorkReaderContract.WorkEntry.THURSDAY:
                         saveDay = position;
-                        Log.e(PRODUCTION_TAG, "THE DAY IS THURSDAY");
+                        Log.d(PRODUCTION_TAG, "THE DAY IS THURSDAY");
                         break;
                     case WorkReaderContract.WorkEntry.FRIDAY:
                         saveDay = position;
-                        Log.e(PRODUCTION_TAG, "THE DAY IS FRIDAY");
+                        Log.d(PRODUCTION_TAG, "THE DAY IS FRIDAY");
                         break;
                     case WorkReaderContract.WorkEntry.SATURDAY:
                         saveDay = position;
-                        Log.e(PRODUCTION_TAG, "THE DAY IS SATURDAY");
+                        Log.d(PRODUCTION_TAG, "THE DAY IS SATURDAY");
                         break;
                     case WorkReaderContract.WorkEntry.OFF:
                         SharedPreferences.Editor editor = pref.edit();
