@@ -27,6 +27,7 @@ import android.icu.util.Calendar;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
@@ -39,6 +40,7 @@ import android.util.Log;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 import static android.app.Notification.EXTRA_NOTIFICATION_ID;
 
@@ -79,7 +81,7 @@ public class SetAlarm extends AppCompatActivity {
     BroadcastReceiver br;
     IntentFilter intentFilter;
     public SetAlarm() {} //Added on 11 - 22 - 2019
-    @TargetApi(24)
+
     public SetAlarm(Context context) {
         this.context = context;
         // calendar = Calendar.getInstance();
@@ -216,7 +218,6 @@ public class SetAlarm extends AppCompatActivity {
 
     //Added on 10 - 7 - 2019
     //Do I need the last three args in the function??
-    @TargetApi(24)
     public void setNotification(
             int currentDayOfWeek,
             int dayOfWeekStartHour, int dayOfWeekStartMinute, int dayOfWeekStartAmOrPm,
@@ -323,57 +324,6 @@ public class SetAlarm extends AppCompatActivity {
         this.militaryTime = militaryTime;
     }
 
-    public MilitaryTime getCurrentMilitaryTime() {
-        return this.militaryTime;
-    }
-
-    //Added on 10 - 23 - 2019
-    @TargetApi(24)
-    public long convertToStartTime(
-            int startMilitaryHour,
-            int startMilitaryMinute
-    )
-    {
-        final Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, startMilitaryHour);
-        cal.set(Calendar.MINUTE, startMilitaryMinute);
-
-        return cal.getTime().getTime();
-    }
-
-    //Added on 10 -23 - 2019
-    @TargetApi(24)
-    public long convertToEndTime(
-            int endMilitaryHour,
-            int endMilitaryMinute
-    )
-    {
-        final Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, endMilitaryHour);
-        cal.set(Calendar.MINUTE, endMilitaryMinute);
-
-        return cal.getTime().getTime();
-    }
-
-    @TargetApi(24)
-    public long convertAlarmTime(
-            int startNewAlarmMilitaryHour,
-            int startNewAlarmMilitaryMinute
-    )
-    {
-        final Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, startNewAlarmMilitaryHour);
-        cal.set(Calendar.MINUTE, startNewAlarmMilitaryMinute);
-
-        return cal.getTime().getTime();
-    }
-    //Added on 10 - 23 - 2019
-    @TargetApi(24)
-    public long getCurrentTime() {
-        final Calendar cal = Calendar.getInstance();
-        return cal.getTime().getTime();
-    }
-
     //Added on 11 - 2  2019
     //Reason 1007 why Java sucks massive dick. Fuck Java. Fuck OOP. And fuck this cold weather.
     public long getNewAlarmTime() {
@@ -381,25 +331,28 @@ public class SetAlarm extends AppCompatActivity {
     }
 
     //Added on 10 - 18 - 2019
-    @TargetApi(24)
-    public void setNotificationDisplay(Context context, MilitaryTime militaryTime)
-    {
+    public void setNotificationDisplay(Context context, MilitaryTime militaryTime) {
 
         final AlarmTimer alarmTimer = AlarmTimer.getInstance();
-        setStartMilitaryHour(militaryTime.getStartMilitaryHour());
-        setStartMilitaryMinute(militaryTime.getStartMilitaryMinute());
         setStartAmOrPm(militaryTime.getStartAmOrPm());
-        setEndMilitaryHour(militaryTime.getEndMilitaryHour());
-        setEndMilitaryMinute(militaryTime.getEndMilitaryMinute());
         setEndAmOrPm(militaryTime.getEndAmOrPm());
 
-        long startTime = convertToStartTime(militaryTime.getStartMilitaryHour(),militaryTime.getStartMilitaryMinute());
-        long endTime = convertToEndTime(militaryTime.getEndMilitaryHour(), militaryTime.getEndMilitaryMinute());
-        alarmTimer.setSavedAlarmTime(context,day, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(), false);
+        alarmTimer.setSavedAlarmTime(context, day, militaryTime.getStartMilitaryHour(), militaryTime.getStartMilitaryMinute(), false);
 
-        long currentAlarmTime = convertAlarmTime(alarmTimer.getNewAlarmMilitaryHour(context), alarmTimer.getNewAlarmMilitaryMinute(context));
-        long currentTime = getCurrentTime();
+        int currentHour = 0;
+        int currentMinute = 0;
 
+        // /java.text.DateFormat.getTimeInstance().format(new Date());//new SimpleDateFormat("HH:mm", Locale.getDefault().fot);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            currentHour = android.icu.util.Calendar.getInstance().get(android.icu.util.Calendar.HOUR_OF_DAY);
+            currentMinute = android.icu.util.Calendar.getInstance().get(android.icu.util.Calendar.MINUTE);
+        } else {
+            currentHour = java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY);
+            currentMinute = java.util.Calendar.getInstance().get(java.util.Calendar.MINUTE);
+            //get(java.util.Calendar.MILLISECOND);
+        }
+
+        //This doesn't work for after hours
         /*
          For all you people who have never experienced working third shift for a drunk pervert,
          third shift usually starts at 12 AM on the NEXT day. And because the shift scheduling
@@ -412,35 +365,61 @@ public class SetAlarm extends AppCompatActivity {
         //    setNewNotificationDisplayAlarm(context.getApplicationContext(),
         //            alarmTimer.getPreviousDayOfWeekSavedDayOfWeek(context.getApplicationContext()),alarmTimer);
         //} else {
-            if (currentTime > startTime && currentTime < endTime) {
-                displayNotification(context.getApplicationContext(),"YOU'RE SUPPOSED TO BE AT WORK");
-            } else if (currentTime == startTime) {
-                displayNotification(context.getApplicationContext(), "YOU'RE SUPPOSED TO BE AT WORK");
-            } else if (currentTime == endTime) {
-                displayNotification(context.getApplicationContext(),"YOU'RE SUPPOSED TO BE AT WORK");
-            } else if (currentTime > endTime) {
+        if (currentHour >= militaryTime.getStartMilitaryHour()
+                && currentMinute <= militaryTime.getStartMilitaryMinute() // :09 < :15
+                && currentHour <= militaryTime.getEndMilitaryHour() //6 <= 8
+                && currentMinute < militaryTime.getEndMilitaryMinute() // :11 < 45
+                ) {
+            displayNotification(context.getApplicationContext(), "YOU'RE SUPPOSED TO BE AT WORK");
+        }
+        else if(currentHour >= militaryTime.getStartMilitaryHour()
+                &&currentMinute > militaryTime.getStartMilitaryMinute()
+                && currentHour < militaryTime.getEndMilitaryHour()
+                && currentMinute > militaryTime.getEndMilitaryMinute()) {
+            displayNotification(context.getApplicationContext(), "YOU ARE SUPPOSED TO BE AT WORK");
+
+        }else if (currentHour >= militaryTime.getStartMilitaryHour()
+                && currentMinute >= militaryTime.getStartMilitaryMinute() // :14 > :00
+                && currentHour >= militaryTime.getEndMilitaryHour() //6 >=8/
+                && currentMinute > militaryTime.getEndMilitaryMinute() // < :15 <45
+                )
+
+        {
+            displayNotification(context.getApplicationContext(), "YOU MISSED YOUR SHIFT");
+
+        } else if (currentHour >= militaryTime.getStartMilitaryHour()
+                && currentMinute >= militaryTime.getStartMilitaryMinute()
+                && currentHour >= militaryTime.getEndMilitaryHour() // 6 >= 8
+                && currentMinute < militaryTime.getEndMilitaryMinute()
+                ){
+            displayNotification(context.getApplicationContext(), "YOU MISSED YOUR SHIFT");
+    }
+
+            else if (currentHour >= militaryTime.getEndMilitaryHour()
+                    && currentMinute > militaryTime.getEndMilitaryMinute()
+                    )
+            {
+                //displayNotification(context.getApplicationContext(),"YOU'RE SUPPOSED TO BE AT WORK");
                 displayNotification(context.getApplicationContext(), "YOU MISSED YOUR SHIFT");
-            } else if(currentAlarmTime > currentTime) {
+
+            //} else if(currentAlarmTime > currentTime) {
 
 
                 Log.d(PRODUCTION_TAG, "-----------------------------------------------------------");
                 Log.d(PRODUCTION_TAG, "THE UPDATED ALARM TIME IS: " + alarmTimer.getNewAlarmMilitaryMinute(context));
-
-                Log.d(PRODUCTION_TAG, "THE END ALARM TIME IS: " + getStartMilitaryMinute());
                 Log.d(PRODUCTION_TAG, "-------------------------------------------------------------");
-                setNewNotificationDisplayAlarm(context,
-                        alarmTimer.getCurrentSavedDayOfWeek(context.getApplicationContext()),alarmTimer);
+                //setNewNotificationDisplayAlarm(context,
+                //        alarmTimer.getCurrentSavedDayOfWeek(context.getApplicationContext()),alarmTimer);
             } else {
                 //displayNotification(context.getApplicationContext(), "DID YOU MISS YOUR SHIFT?");
-                setNewNotificationDisplayAlarm(context,
-                        alarmTimer.getCurrentSavedDayOfWeek(context.getApplicationContext()),alarmTimer);
-            }
-        //}
-    }
+
 
     //Added on 10 - 23 - 2019
     //A wrapper because I'm so drunk that it hurts to think correctly.
-    @TargetApi(24)
+        setNewNotificationDisplayAlarm(context,
+                                   alarmTimer.getCurrentSavedDayOfWeek(context.getApplicationContext()),alarmTimer);
+        }
+    }
     public void setNewNotificationDisplayAlarm(Context context, String day, AlarmTimer alarmTimer)
     {
         /*
@@ -467,7 +446,6 @@ public class SetAlarm extends AppCompatActivity {
         //context.unregisterReceiver(br);
     }
 
-    @TargetApi(24)
     public void setAlarm(Context context, AlarmTimer alarmTimer) {
 
         //code copied from
@@ -478,83 +456,60 @@ public class SetAlarm extends AppCompatActivity {
         alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
 
-        final Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            //final Calendar calendar = Calendar.getInstance();
+            android.icu.util.Calendar.getInstance().setTimeInMillis(System.currentTimeMillis());
         /*
           Time changes when the user changes the time before shift from something like
           20 minutes before the start of the shift to something like 10 minutes before
           the start of a shift.
          */
-        if (alarmTimer.getNewAlarmMilitaryHour(context) == 24) {
-            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            if (alarmTimer.getNewAlarmMilitaryHour(context) == 24) {
+                android.icu.util.Calendar.getInstance().set(android.icu.util.Calendar.HOUR_OF_DAY, 0);
+            } else {
+                android.icu.util.Calendar.getInstance().set(android.icu.util.Calendar.HOUR_OF_DAY, alarmTimer.getNewAlarmMilitaryHour(context));
+            }
+            ;
+            android.icu.util.Calendar.getInstance().set(
+                    android.icu.util.Calendar.MINUTE, alarmTimer.getNewAlarmMilitaryMinute(context));
+            android.icu.util.Calendar.getInstance().set(android.icu.util.Calendar.SECOND, 0);
+            android.icu.util.Calendar.getInstance().set(android.icu.util.Calendar.MILLISECOND, 0); //??
+
+            alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, android.icu.util.Calendar.getInstance().getTimeInMillis(),
+                    1000 * 60, alarmIntent);
         } else {
-            calendar.set(Calendar.HOUR_OF_DAY,alarmTimer.getNewAlarmMilitaryHour(context));
+            java.util.Calendar.getInstance().setTimeInMillis(System.currentTimeMillis());
+
+            if (alarmTimer.getNewAlarmMilitaryHour(context)== 24) {
+                java.util.Calendar.getInstance().set(java.util.Calendar.HOUR_OF_DAY, 0);
+
+            } else {
+                java.util.Calendar.getInstance().set(java.util.Calendar.HOUR_OF_DAY, alarmTimer.getNewAlarmMilitaryHour(context));
+            }
+
+            java.util.Calendar.getInstance().set(java.util.Calendar.MINUTE, alarmTimer.getNewAlarmMilitaryMinute(context));
+            java.util.Calendar.getInstance().set(java.util.Calendar.SECOND, 0);
+            java.util.Calendar.getInstance().set(java.util.Calendar.MILLISECOND, 0);
         }
-        ;
-        calendar.set(Calendar.MINUTE, alarmTimer.getNewAlarmMilitaryMinute(context));
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0); //??
 
-        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                1000 * 60 , alarmIntent);
     }
 
-
-
-    //Added on 10 - 10 - 2022
-    private void enableBootReceiver() {
-        ComponentName receiver = new ComponentName(this, WorkNotificationReceiver.class);
-        PackageManager pm = this.getPackageManager();
-
-        pm.setComponentEnabledSetting(receiver,
-                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                PackageManager.DONT_KILL_APP);
-    }
-
-
-
-    //Added on 12 - 15 - 2019
-    private void setStartMilitaryHour(int startMilitaryHour) {
-        this.startMilitaryHour = startMilitaryHour;
-    }
-
-    private void setStartMilitaryMinute(int startMilitaryMinute) {
-        this.startMilitaryMinute = startMilitaryMinute;
-    }
 
     //Added on 12 - 18 - 2019
     private void setStartAmOrPm(String startAmOrPm) {
         this.startAmOrPm = startAmOrPm;
     }
 
-    //Added on 12 - 18 - 2019
-    private void setEndMilitaryHour(int endMilitaryHour) {
-        this.endMilitaryHour = endMilitaryHour;
-    }
-
-    private void setEndMilitaryMinute(int endMilitaryMinute) {
-        this.endMilitaryMinute = startMilitaryMinute;
-    }
 
     //Added on 12 - 18 - 2019
     private void setEndAmOrPm(String endAmOrPm) {
         this.endAmOrPm = endAmOrPm;
     }
 
-    public int getStartMilitaryHour() {
-        return this.startMilitaryHour;
-    }
-
-    public int getStartMilitaryMinute() {
-        return this.startMilitaryMinute;
-    }
 
     //Added on 12 - 18 - 2019
     public String getStartAmOrPm() {
         return this.startAmOrPm;
-    }
-    public int getEndMilitaryHour() {
-        return this.endMilitaryHour;
     }
 
     public int getEndMilitaryMinute() {

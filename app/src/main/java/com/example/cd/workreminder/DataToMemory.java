@@ -116,7 +116,6 @@ public class DataToMemory extends AppCompatActivity{
 
     //From AlarmTimer.java
     //Added on 12 - 16 - 2019
-    @TargetApi(24)
     public void saveCivilianAlarmTime(
             String dayOfWeek,
             int newMilitaryHour,

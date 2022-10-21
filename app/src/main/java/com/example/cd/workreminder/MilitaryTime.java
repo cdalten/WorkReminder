@@ -44,7 +44,6 @@ public class MilitaryTime extends FragmentActivity {
 
 
     //Added on 7 - 9 - 2019
-    @TargetApi(24)
     public void convertEndCivilianTimeToMilitaryTime(String endHour, String endMinute, String endAmOrPm) {
         String timeFormat = endHour + " " + endMinute  + " " + endAmOrPm;
         DateFormat df = new SimpleDateFormat("hh mm aa");
@@ -72,7 +71,6 @@ public class MilitaryTime extends FragmentActivity {
 
     }
 
-    @TargetApi(24)
     public void convertStartCivilianTimeToMilitaryTime(String startHour, String startMinute, String startAmOrPm) {
         String timeFormat = startHour + " " + startMinute  + " " + startAmOrPm;
         DateFormat df = new SimpleDateFormat("hh mm aa");

@@ -29,7 +29,6 @@ public class storeHoursInGUI {
         this.context = context;
     }
 
-    @TargetApi(24)
     public ArrayList addHours() {
         pref = context.getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
         week = new ArrayList<ArrayList<String>>();

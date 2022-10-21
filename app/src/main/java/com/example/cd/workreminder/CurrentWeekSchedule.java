@@ -450,8 +450,6 @@ public class CurrentWeekSchedule extends ListActivity{
             }
             return view;
         }
-
-        @TargetApi(24)
         @NonNull
         @Override
         public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -733,7 +731,6 @@ private void updateHours(String newStartDay, String newStartHour, String newStar
     }
 
     //Added on 11 - 2 - 2019
-    @TargetApi(24)
     private void displayUpdatedAlarm() {
         SetAlarm SetAlarm = new SetAlarm(this);
         long currentTime = SetAlarm.getCurrentTime();
@@ -748,7 +745,7 @@ private void updateHours(String newStartDay, String newStartHour, String newStar
     }
 
     //Added on 2 - 27 - 2019
-    @TargetApi(24)
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

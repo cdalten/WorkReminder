@@ -75,7 +75,6 @@ public class AlarmIntentService extends IntentService {
     /**
      * Handles action Dismiss in the provided background thread.
      */
-    @TargetApi(24)
     private void handleActionDismiss() {
         Log.e(TAG, "handleActionDismiss()");
 
@@ -127,7 +126,7 @@ public class AlarmIntentService extends IntentService {
     /**
      * Handles action Snooze in the provided background thread.
      */
-    @TargetApi(24)
+
     private void handleActionSnooze() {
         Log.e(TAG, "handleActionSnooze()");
 
