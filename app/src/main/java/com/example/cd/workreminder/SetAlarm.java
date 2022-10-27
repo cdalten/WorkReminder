@@ -342,6 +342,11 @@ public class SetAlarm extends AppCompatActivity {
         int currentHour = 0;
         int currentMinute = 0;
 
+
+        long currentTime = 0;
+        long startTime = 0;
+        long endTime = 0;
+
         // /java.text.DateFormat.getTimeInstance().format(new Date());//new SimpleDateFormat("HH:mm", Locale.getDefault().fot);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             currentHour = android.icu.util.Calendar.getInstance().get(android.icu.util.Calendar.HOUR_OF_DAY);
@@ -352,6 +357,43 @@ public class SetAlarm extends AppCompatActivity {
             //get(java.util.Calendar.MILLISECOND);
         }
 
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            currentTime = android.icu.util.Calendar
+                    .getInstance()
+                    .getTime()
+                    .getTime();
+        } else {
+            currentTime = java.util.Calendar
+                    .getInstance()
+                    .getTime()
+                    .getTime();
+        }
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            final android.icu.util.Calendar calendarStartTime =  android.icu.util.Calendar.getInstance();
+            calendarStartTime.set(android.icu.util.Calendar.HOUR_OF_DAY, militaryTime.getStartMilitaryHour());
+            calendarStartTime.set(Calendar.MINUTE, militaryTime.getStartMilitaryMinute());
+            startTime = calendarStartTime.getTime().getTime();
+        } else {
+            final java.util.Calendar calendarStartTime = java.util.Calendar.getInstance();
+            calendarStartTime.set(java.util.Calendar.HOUR_OF_DAY, militaryTime.getStartMilitaryHour());
+            calendarStartTime.set(java.util.Calendar.MINUTE, militaryTime.getStartMilitaryMinute());
+            startTime = calendarStartTime.getTime().getTime();
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            final android.icu.util.Calendar calendarEndTime = android.icu.util.Calendar.getInstance();
+            calendarEndTime.set(android.icu.util.Calendar.HOUR_OF_DAY, militaryTime.getEndMilitaryHour());
+            calendarEndTime.set(android.icu.util.Calendar.MINUTE, militaryTime.getStartMilitaryMinute());
+            endTime = calendarEndTime.getTime().getTime();
+        } else {
+            final java.util.Calendar calendarEndTime = java.util.Calendar.getInstance();
+            calendarEndTime.set(java.util.Calendar.HOUR_OF_DAY, militaryTime.getEndMilitaryHour());
+            calendarEndTime.set(java.util.Calendar.MINUTE, militaryTime.getEndMilitaryMinute());
+            endTime = calendarEndTime.getTime().getTime();
+        }
         //This doesn't work for after hours
         /*
          For all you people who have never experienced working third shift for a drunk pervert,
@@ -365,7 +407,7 @@ public class SetAlarm extends AppCompatActivity {
         //    setNewNotificationDisplayAlarm(context.getApplicationContext(),
         //            alarmTimer.getPreviousDayOfWeekSavedDayOfWeek(context.getApplicationContext()),alarmTimer);
         //} else {
-        if (currentHour >= militaryTime.getStartMilitaryHour()
+        /*if (currentHour >= militaryTime.getStartMilitaryHour()
                 && currentMinute <= militaryTime.getStartMilitaryMinute() // :09 < :15
                 && currentHour <= militaryTime.getEndMilitaryHour() //6 <= 8
                 && currentMinute < militaryTime.getEndMilitaryMinute() // :11 < 45
@@ -404,13 +446,20 @@ public class SetAlarm extends AppCompatActivity {
 
             //} else if(currentAlarmTime > currentTime) {
 
+*/
+        if (currentTime > startTime && currentTime < endTime) {
+            displayNotification(context.getApplicationContext(), "YOU ARE SUPPOSED TO BE AT WORK");
 
                 Log.d(PRODUCTION_TAG, "-----------------------------------------------------------");
                 Log.d(PRODUCTION_TAG, "THE UPDATED ALARM TIME IS: " + alarmTimer.getNewAlarmMilitaryMinute(context));
                 Log.d(PRODUCTION_TAG, "-------------------------------------------------------------");
                 //setNewNotificationDisplayAlarm(context,
                 //        alarmTimer.getCurrentSavedDayOfWeek(context.getApplicationContext()),alarmTimer);
-            } else {
+        } else if (currentTime > endTime) {
+            displayNotification(context.getApplicationContext(), "YOU MISSED YOUR SHIFT");
+        }
+
+        else if (currentTime < startTime) {
                 //displayNotification(context.getApplicationContext(), "DID YOU MISS YOUR SHIFT?");
 
 

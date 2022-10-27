@@ -731,7 +731,7 @@ private void updateHours(String newStartDay, String newStartHour, String newStar
     }
 
     //Added on 11 - 2 - 2019
-    private void displayUpdatedAlarm() {
+    /*private void displayUpdatedAlarm() {
         SetAlarm SetAlarm = new SetAlarm(this);
         long currentTime = SetAlarm.getCurrentTime();
         long getNewAlarmTime = SetAlarm.getNewAlarmTime();
@@ -743,6 +743,7 @@ private void updateHours(String newStartDay, String newStartHour, String newStar
             //display shit right away
         }
     }
+    */
 
     //Added on 2 - 27 - 2019
 
