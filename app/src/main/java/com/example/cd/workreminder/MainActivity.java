@@ -42,8 +42,6 @@ public class MainActivity extends AppCompatActivity {
         Log.d(PRODUCTION_TAG, "ONCREATE() BEFORE SAVEDINSTANCE()");
 
         dispatchCurrentWeekSchedule();
-        enableBootReceiver();
-        enablWorkNotifcationReceiver();
 
         if (savedInstanceState == null) {
             Log.d(PRODUCTION_TAG, "ONCREATE() WHEN SAVEDINSTANCE() IS NULL");
@@ -62,54 +60,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //Added on 2 - 28 - 2020
-    private void enableBootReceiver() {
-        ComponentName receiver = new ComponentName(this, BootReceiver.class);
-        PackageManager pm = this.getPackageManager();
-
-        pm.setComponentEnabledSetting(receiver,
-                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                PackageManager.DONT_KILL_APP);
-    }
-
-    private void enablWorkNotifcationReceiver() {
-        ComponentName receiver = new ComponentName(this, WorkNotificationReceiver.class);
-        PackageManager pm = this.getPackageManager();
-
-        pm.setComponentEnabledSetting(receiver,
-                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                PackageManager.DONT_KILL_APP);
-    }
-
-    //Added on 10 - 10 - 2022
-    private void disableBootReceiver() {
-        ComponentName receiver = new ComponentName(this, BootReceiver.class);
-        PackageManager pm = this.getPackageManager();
-
-        pm.setComponentEnabledSetting(receiver,
-                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                PackageManager.DONT_KILL_APP);
-
-        //I'm not that sure where to put this function at.
-        Log.d(PRODUCTION_TAG, "BOOT RECEIVER GOT DISABLED");
-    }
-
-    //Added on 10 - 10 - 2022
-    public void disableWorkNoticationReceiver() {
-        ComponentName receiver = new ComponentName(this, WorkNotificationReceiver.class);
-        PackageManager pm = this.getPackageManager();
-
-        pm.setComponentEnabledSetting(receiver,
-                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                PackageManager.DONT_KILL_APP);
-    }
-
-
-
     private void dispatchCurrentWeekSchedule() {
         Intent currentWeekScheduleIntent = new Intent(MainActivity.this, CurrentWeekSchedule.class);
         if (currentWeekScheduleIntent.resolveActivity(getPackageManager()) != null) {
             startActivity(currentWeekScheduleIntent);
+            //finish();;
         }
 
     }
@@ -117,12 +72,22 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
     }//end onStart()
-    
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(PRODUCTION_TAG, "ON RESUME GOT CALLED");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(PRODUCTION_TAG, "ON PAUSE GOT CALLED");
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        disableBootReceiver();
-        disableWorkNoticationReceiver();
         Log.d(PRODUCTION_TAG, "ON DESTROY GOT CALLED");
     }
 }//end Main// Activity

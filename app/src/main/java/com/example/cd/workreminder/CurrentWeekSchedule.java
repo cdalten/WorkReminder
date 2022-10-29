@@ -13,7 +13,9 @@
 package com.example.cd.workreminder;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.Application;
 import android.app.ListActivity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -44,7 +46,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class CurrentWeekSchedule extends ListActivity{
+public class CurrentWeekSchedule extends ListActivity {
 
     private static final String PRODUCTION_TAG = "CURRENT_WEEK_SCHEDULE";
 
@@ -70,10 +72,11 @@ public class CurrentWeekSchedule extends ListActivity{
     private String newEndAmOrPm;
 
     private Button workSettings; //Added on 6 - 24 - 2019
-
+    public static boolean amEnabled = false; // Added on 10 - 29 - 2022
     SharedPreferences pref;
 
     private int currentHours = 0; //Added on 10 - 17 - 2019
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,19 +86,16 @@ public class CurrentWeekSchedule extends ListActivity{
 
         setContentView(R.layout.login);
         Log.d(PRODUCTION_TAG, "CURRENT WEEK SCHEDULE GOT CALLED.");
+        //enableBootReceiver();
+        //enableWorkNotificationReceiver();
 
         pref =  this.getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
 
         //Update = (Button) findViewById(R.id.Update);
-        //WorkPrefences = (Button) findViewById(R.id.ferences);
 
-        //Finish = (Button) findViewById(R.id.Finish);
-        //list = (ListView) findViewById(android.R.id.list);
 
         final SetAlarm SetAlarm = new SetAlarm(this);
         currentHours = SetAlarm.handleThirdShift();
-
-        //list = listActivity.getListView();
 
         workSettings = (Button) findViewById(R.id.workSettings);
         //logout = (Button) findViewById(R.id.logout);
@@ -235,6 +235,50 @@ public class CurrentWeekSchedule extends ListActivity{
             setListAdapter(adapter);
 
     } //end onCreate()
+
+
+    //Added on 2 - 28 - 2020
+    private void enableBootReceiver() {
+        ComponentName receiver = new ComponentName(this, BootReceiver.class);
+        PackageManager pm = this.getPackageManager();
+
+        pm.setComponentEnabledSetting(receiver,
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
+    }
+
+
+    private void enableWorkNotificationReceiver() {
+        ComponentName receiver = new ComponentName(this, WorkNotificationReceiver.class);
+        PackageManager pm = this.getPackageManager();
+
+        pm.setComponentEnabledSetting(receiver,
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
+    }
+
+    //Added on 10 - 10 - 2022
+    private void disableBootReceiver() {
+        ComponentName receiver = new ComponentName(this, BootReceiver.class);
+        PackageManager pm = this.getPackageManager();
+
+        pm.setComponentEnabledSetting(receiver,
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+
+        //I'm not that sure where to put this function at.
+        Log.d(PRODUCTION_TAG, "BOOT RECEIVER GOT DISABLED");
+    }
+
+    //Added on 10 - 10 - 2022
+    public void disableWorkNoticationReceiver() {
+        ComponentName receiver = new ComponentName(this, WorkNotificationReceiver.class);
+        PackageManager pm = this.getPackageManager();
+
+        pm.setComponentEnabledSetting(receiver,
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+    }
 
     //Added on 10 - 14 - 2019
     private void fillListviewDropdown(
@@ -410,7 +454,6 @@ public class CurrentWeekSchedule extends ListActivity{
 
         WS(Context context, int resource, List<java.lang.String> Objects) {
             super(context, resource, Objects);
-            //this.visibleMenuOptions = visibleMenuOptions;
         }
 
         public void setItemToHide(int itemToHide)
@@ -755,11 +798,11 @@ private void updateHours(String newStartDay, String newStartHour, String newStar
         Log.e(PRODUCTION_TAG, "THE RESULT CODE IS: " + resultCode);
 
         int newPosition = -1; // don't enter switch
-        //String day = "";
-        final MilitaryTime militaryTime = MilitaryTime.getInstance();
         final AlarmTimer alarmTimer = AlarmTimer.getInstance();
 
 
+        //String day = "";
+        final MilitaryTime militaryTime = MilitaryTime.getInstance();
         if (data != null) {
             newPosition = data.getIntExtra("CURRENT_DAY", -99);  //position in listview
             //0 - 6 represent Sun to Sat. 7 represents off. -99 is just to make it work on the hardware
@@ -945,19 +988,38 @@ private void updateHours(String newStartDay, String newStartHour, String newStar
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.e("CWS", "ON DESTROY GOT CALLED IN CWS");
+        Log.d("CWS", "ON DESTROY GOT CALLED IN CWS");
 
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Log.e("CWS", "ON PAUSE GOT CALLED IN CWS");
+        //finish();
+        Log.d("CWS", "ON PAUSE GOT CALLED");
+        if (amEnabled == true) {
+            //enableBootReceiver();
+            //enableWorkNotificationReceiver();
+            disableBootReceiver();
+            disableWorkNoticationReceiver();
+           amEnabled = false;
+            //Log.d("CWS", "ON PAUSE GOT CALLED");
+        }
+
+        else if (amEnabled == false) {
+            //disableBootReceiver();
+            //disableWorkNoticationReceiver();
+            enableBootReceiver();
+            enableWorkNotificationReceiver();
+            amEnabled = true;
+        }
+        Log.d("CWS", "AM ENABLED? " + amEnabled);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.e("CWS", "ON STOP GOT CALLED IN CWS");
+        Log.d("CWS", "ON STOP GOT CALLED IN CWS");
     }
+
 }//End class

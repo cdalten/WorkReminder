@@ -447,7 +447,10 @@ public class SetAlarm extends AppCompatActivity {
             //} else if(currentAlarmTime > currentTime) {
 
 */
-        if (currentTime > startTime && currentTime < endTime) {
+        if (militaryTime.getStartMilitaryHour() == militaryTime.getEndMilitaryHour()) {
+            Log.d(PRODUCTION_TAG, "DON'T SET HOURS");
+        }
+        else if (currentTime > startTime && currentTime < endTime) {
             displayNotification(context.getApplicationContext(), "YOU ARE SUPPOSED TO BE AT WORK");
 
                 Log.d(PRODUCTION_TAG, "-----------------------------------------------------------");
