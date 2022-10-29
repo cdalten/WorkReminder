@@ -989,7 +989,6 @@ private void updateHours(String newStartDay, String newStartHour, String newStar
     protected void onDestroy() {
         super.onDestroy();
         Log.d("CWS", "ON DESTROY GOT CALLED IN CWS");
-
     }
 
     @Override
