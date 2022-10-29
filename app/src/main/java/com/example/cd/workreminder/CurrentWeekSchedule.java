@@ -998,8 +998,6 @@ private void updateHours(String newStartDay, String newStartHour, String newStar
         //finish();
         Log.d("CWS", "ON PAUSE GOT CALLED");
         if (amEnabled == true) {
-            //enableBootReceiver();
-            //enableWorkNotificationReceiver();
             disableBootReceiver();
             disableWorkNoticationReceiver();
            amEnabled = false;
@@ -1007,8 +1005,6 @@ private void updateHours(String newStartDay, String newStartHour, String newStar
         }
 
         else if (amEnabled == false) {
-            //disableBootReceiver();
-            //disableWorkNoticationReceiver();
             enableBootReceiver();
             enableWorkNotificationReceiver();
             amEnabled = true;
