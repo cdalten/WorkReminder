@@ -994,7 +994,6 @@ private void updateHours(String newStartDay, String newStartHour, String newStar
     @Override
     protected void onPause() {
         super.onPause();
-        //finish();
         WorkReaderContract.START_HOUR_DEFAULT =null;
         WorkReaderContract.START_MINUTE_DEFAULT = null;
         WorkReaderContract.START_AM_OR_PM_DEFAULT = null;
