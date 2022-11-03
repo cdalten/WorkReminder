@@ -49,7 +49,7 @@ public class WorkPreferences extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_work_preferences);
         //dayPreference = (Spinner) findViewById(R.id.dayPreference);
-        this.pref = getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
+        this.pref = getSharedPreferences("BECAUSE_INTENTS_SUCK_MASSIVE_DICK", MODE_PRIVATE);
         alarmMinutesPreference = (EditText) findViewById(R.id.alarmMinutesPreference);
         alarmHourPreference = (EditText) findViewById(R.id.alarmHourPreferences);
         save = (Button) findViewById(R.id.save);
@@ -57,9 +57,9 @@ public class WorkPreferences extends AppCompatActivity {
 
         getWorkPrefTime = getIntent();
 
-        pref = getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
-        newAlarmTimeMinutes = pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_MINUTE_DEFAULT);
-        newAlarmTimeHour = pref.getInt(getString(R.string.ALARM_HOURS), WorkReaderContract.WorkEntry.ALARM_HOUR_DEFAULT);
+        pref = getSharedPreferences("BECAUSE_INTENTS_SUCK_MASSIVE_DICK", MODE_PRIVATE);
+        newAlarmTimeMinutes = pref.getInt(getString(R.string.ALARM_MINUTES), WorkReaderContract.ALARM_MINUTE_DEFAULT);
+        newAlarmTimeHour = pref.getInt(getString(R.string.ALARM_HOURS), WorkReaderContract.ALARM_HOUR_DEFAULT);
         alarmMinutesPreference.setText(newAlarmTimeMinutes + "");
         alarmHourPreference.setText(newAlarmTimeHour + "");
 
@@ -80,7 +80,7 @@ public class WorkPreferences extends AppCompatActivity {
 
                 else if (updateMinutes.equals("") || updateMinutes == null ||
                         Integer.parseInt(updateMinutes) < 0
-                        || Integer.parseInt(updateMinutes) > WorkReaderContract.WorkEntry.hour
+                        || Integer.parseInt(updateMinutes) > WorkReaderContract.hour
                         )
                 {
                     updateMinutes =  pref.getString("NEW_ALARM_TIME", "20");
@@ -103,7 +103,7 @@ public class WorkPreferences extends AppCompatActivity {
                   bunch of different files. Yeah, this might suck. But it makes debugging 10x
                   easier.
                  */
-                setResult(WorkReaderContract.WorkEntry.RESULT_OKAY_UPDATE_WORK_ALARM_TIME, getWorkPrefTime);
+                setResult(WorkReaderContract.RESULT_OKAY_UPDATE_WORK_ALARM_TIME, getWorkPrefTime);
                 finish();
             }
         });

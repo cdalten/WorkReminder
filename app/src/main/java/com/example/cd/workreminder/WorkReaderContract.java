@@ -16,7 +16,7 @@ import android.provider.BaseColumns;
 public final class WorkReaderContract {
     private WorkReaderContract() {}
 
-    public static class WorkEntry implements BaseColumns {
+  //  public static class WorkEntry implements BaseColumns {
 
         public static final int ALARM_MINUTE_DEFAULT = 20; //20 minutes before start of shift
         public static final int ALARM_HOUR_DEFAULT = 0; //0 hours before start of shift
@@ -64,9 +64,10 @@ public final class WorkReaderContract {
         public static final int ON_DAY = 0; //Added on 10 - 12 - 2022
         public static final int OFF_DAY = 1; //Added onn 10 - 12 - 2022
         public static int SELECTION_DEFAULT_VALUE = 0; //Added on 10 - 12 - 2022
-        public static final String SAVED_PREFERENCESS = "BECAUSE INTENTS SUCK MASSIVE DICK";
 
 
+        //change int to Integer.
 
-    }
+
+    //}
 }//end class

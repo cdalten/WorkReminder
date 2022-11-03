@@ -60,7 +60,7 @@ public class SetAlarm extends AppCompatActivity {
     private String day; //Added on 10 - 31 - 2019
     private long newAlarmTime; //Added on 11 - 2 - 2019
     private Ringtone ringtone; //Added on 11 - 22 - 2019
-    private static final String PRODUCTION_TAG = "SET_ALARM_TAG:"; //Added on 11 - 15 - 2019
+    private final String PRODUCTION_TAG = "SET_ALARM_TAG:"; //Added on 11 - 15 - 2019
 
     private int startMilitaryHour = 0; //Added on 12 - 15 - 2019
     private int startMilitaryMinute = 0;
@@ -102,7 +102,7 @@ public class SetAlarm extends AppCompatActivity {
         //int currentDay = cal.get(Calendar.DAY_OF_WEEK); //vs inside if??
         //CurrentWorkHours currentWorkHours = new CurrentWorkHours();
         int day = getDayOfWeek();
-        if (day == WorkReaderContract.WorkEntry.SUNDAY) {
+        if (day == WorkReaderContract.SUNDAY) {
             setNotification(
                     R.string.SUNDAY,
                     R.string.SUNDAY_START_HOUR,
@@ -117,7 +117,7 @@ public class SetAlarm extends AppCompatActivity {
                     R.string.MONDAY_START_MINUTE,
                     R.string.MONDAY_START_AM_OR_PM
             );
-        } else if (day ==  WorkReaderContract.WorkEntry.MONDAY) {
+        } else if (day ==  WorkReaderContract.MONDAY) {
             //if(!week.get(position).get(0).equals("OFF")) {
             setNotification(
                     R.string.MONDAY,
@@ -133,7 +133,7 @@ public class SetAlarm extends AppCompatActivity {
                     R.string.TUESDAY_START_MINUTE,
                     R.string.TUESDAY_START_AM_OR_PM
             );
-        } else if (day ==  WorkReaderContract.WorkEntry.TUESDAY) {
+        } else if (day ==  WorkReaderContract.TUESDAY) {
             setNotification(
                     R.string.TUESDAY,
                     R.string.TUESDAY_START_HOUR,
@@ -148,7 +148,7 @@ public class SetAlarm extends AppCompatActivity {
                     R.string.WEDNESDAY_START_MINUTE,
                     R.string.WEDNESDAY_START_AM_OR_PM
             );
-        } else if (day ==  WorkReaderContract.WorkEntry.WEDNESDAY) {
+        } else if (day ==  WorkReaderContract.WEDNESDAY) {
             setNotification(
                     R.string.WEDNESDAY,
                     R.string.WEDNESDAY_START_HOUR,
@@ -163,7 +163,7 @@ public class SetAlarm extends AppCompatActivity {
                     R.string.THURSDAY_START_MINUTE,
                     R.string.THURSDAY_START_AM_OR_PM
             );
-        }else if (day ==  WorkReaderContract.WorkEntry.THURSDAY) {
+        }else if (day ==  WorkReaderContract.THURSDAY) {
             setNotification(
                     R.string.THURSDAY,
                     R.string.THURSDAY_START_HOUR,
@@ -178,7 +178,7 @@ public class SetAlarm extends AppCompatActivity {
                     R.string.FRIDAY_START_MINUTE,
                     R.string.FRIDAY_START_AM_OR_PM
             );
-        } else if (day ==  WorkReaderContract.WorkEntry.FRIDAY) {
+        } else if (day ==  WorkReaderContract.FRIDAY) {
             //if(!week.get(position).get(0).equals("OFF")) {
             setNotification(
                     R.string.FRIDAY,
@@ -186,6 +186,7 @@ public class SetAlarm extends AppCompatActivity {
                     R.string.FRIDAY_START_MINUTE,
                     R.string.FRIDAY_START_AM_OR_PM,
                     R.string.FRIDAY_END_HOUR,
+
                     R.string.FRIDAY_END_MINUTE,
                     R.string.FRIDAY_END_AM_OR_PM,
 
@@ -195,7 +196,7 @@ public class SetAlarm extends AppCompatActivity {
                     R.string.SATURDAY_START_AM_OR_PM
             );
         }
-        else if (day == WorkReaderContract.WorkEntry.SATURDAY) {
+        else if (day == WorkReaderContract.SATURDAY) {
             setNotification(
                     R.string.SATURDAY,
                     R.string.SATURDAY_START_HOUR,
@@ -227,19 +228,19 @@ public class SetAlarm extends AppCompatActivity {
             int endDayOfWeekStartHour, int endDayOfWeekStartMinute, int endDayOfWeekStartAmOrPm
     )
     {
-        pref = context.getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
+        pref = context.getSharedPreferences("BECAUSE_INTENTS_SUCK_MASSIVE_DICK", MODE_PRIVATE);
 
-        newDayOfWeekStartHour = pref.getString(context.getString(dayOfWeekStartHour), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT);
-        newDayOfWeekStartMinute = pref.getString(context.getString(dayOfWeekStartMinute), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT);
-        newDayOfWeekStartAmOrPm = pref.getString(context.getString(dayOfWeekStartAmOrPm), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT);
-        newDayOfWeekEndHour = pref.getString(context.getString(dayOfWeekEndHour), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT);
-        newDayOfWeekEndMinute =  pref.getString(context.getString(dayOfWeekEndMinute), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT);
-        newDayOfWeekEndAmOrPm = pref.getString(context.getString(dayOfWeekEndAmOrPm), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT);
+        newDayOfWeekStartHour = pref.getString(context.getString(dayOfWeekStartHour), WorkReaderContract.START_HOUR_DEFAULT);
+        newDayOfWeekStartMinute = pref.getString(context.getString(dayOfWeekStartMinute), WorkReaderContract.START_MINUTE_DEFAULT);
+        newDayOfWeekStartAmOrPm = pref.getString(context.getString(dayOfWeekStartAmOrPm), WorkReaderContract.START_AM_OR_PM_DEFAULT);
+        newDayOfWeekEndHour = pref.getString(context.getString(dayOfWeekEndHour), WorkReaderContract.END_HOUR_DEFAULT);
+        newDayOfWeekEndMinute =  pref.getString(context.getString(dayOfWeekEndMinute), WorkReaderContract.END_MINUTE_DEFAULT);
+        newDayOfWeekEndAmOrPm = pref.getString(context.getString(dayOfWeekEndAmOrPm), WorkReaderContract.END_AM_OR_PM_DEFAULT);
 
         final MilitaryTime militaryTime = MilitaryTime.getInstance();
         final AlarmTimer alarmTimer = AlarmTimer.getInstance();
 
-        pref = context.getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
+        pref = context.getSharedPreferences("BECAUSE_INTENTS_SUCK_MASSIVE_DICK", MODE_PRIVATE);
 
         this.day = pref.getString(context.getString(currentDayOfWeek), "OFF");
 
@@ -293,19 +294,19 @@ public class SetAlarm extends AppCompatActivity {
         simpleformat = new SimpleDateFormat("E");
         String dayofWeek = simpleformat.format(new Date());
         if (dayofWeek.equals("Sun")) {
-            day = WorkReaderContract.WorkEntry.SUNDAY;
+            day = WorkReaderContract.SUNDAY;
         } else if (dayofWeek.equals("Mon")) {
-            day = WorkReaderContract.WorkEntry.MONDAY;
+            day = WorkReaderContract.MONDAY;
         } else if (dayofWeek.equals("Tue")) {
-            day = WorkReaderContract.WorkEntry.TUESDAY;
+            day = WorkReaderContract.TUESDAY;
         } else if (dayofWeek.equals("Wed")) {
-            day = WorkReaderContract.WorkEntry.WEDNESDAY;;
+            day = WorkReaderContract.WEDNESDAY;;
         } else if (dayofWeek.equals("Thu")) {
-            day = WorkReaderContract.WorkEntry.THURSDAY;;
+            day = WorkReaderContract.THURSDAY;;
         }else if( dayofWeek.equals("Fri")) {
-            day = WorkReaderContract.WorkEntry.FRIDAY;;
+            day = WorkReaderContract.FRIDAY;;
         }else if( dayofWeek.equals("Sat")) {
-            day = WorkReaderContract.WorkEntry.SATURDAY;
+            day = WorkReaderContract.SATURDAY;
         }
 
         return day;

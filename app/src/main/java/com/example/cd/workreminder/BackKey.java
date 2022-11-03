@@ -52,7 +52,7 @@ public class BackKey extends FragmentActivity {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
                 //dialog.cancel();
-                setResult(WorkReaderContract.WorkEntry.RESULT_FAILED, dayOfWeek);
+                setResult(WorkReaderContract.RESULT_FAILED, dayOfWeek);
                 finish();
             }
         });

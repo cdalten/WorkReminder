@@ -63,12 +63,12 @@ public class WorkNotificationReceiver extends BroadcastReceiver {
         DayNotification dayNotification = new DayNotification(context);
         dayNotification.setDisplaySnoozeButton(true);
         dayNotification.setNotificationAlarm(alarmUri);
-        dayNotification.addAlarmNotificationRingtone(WorkReaderContract.WorkEntry.ALARM_NOTIFICATION_RINGS);
-        dayNotification.setAmPlaying(WorkReaderContract.WorkEntry.ALARM_RINGS);
+        dayNotification.addAlarmNotificationRingtone(WorkReaderContract.ALARM_NOTIFICATION_RINGS);
+        dayNotification.setAmPlaying(WorkReaderContract.ALARM_RINGS);
         dayNotification.createNotification(dayNotification.getNotificationTitle(), dayNotification.getNotificationText());
 
         dayNotification.setNotificationAlarm(alarmUri);
-        dayNotification.addAlarmNotificationRingtone(WorkReaderContract.WorkEntry.ALARM_NOTIFICATION_SILENT);
+        dayNotification.addAlarmNotificationRingtone(WorkReaderContract.ALARM_NOTIFICATION_SILENT);
         dayNotification.updateDisplayTime(context);
 
 

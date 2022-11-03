@@ -54,7 +54,7 @@ public class DaySaturday extends BackKey {
         endAmOrPm = (Spinner) findViewById(R.id.endAmOrPm);
         finish = (Button) findViewById(R.id.finish);
 
-        pref = getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
+        pref = getSharedPreferences("BECAUSE_INTENTS_SUCK_MASSIVE_DICK", MODE_PRIVATE);
         final SharedPreferences.Editor editor = pref.edit();
         //Pipe data back.
         setSaturdayHours = getIntent();
@@ -64,7 +64,7 @@ public class DaySaturday extends BackKey {
                 R.array.saturday, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dayOfTheWeek.setAdapter(adapter);
-        dayOfTheWeek.setSelection(WorkReaderContract.WorkEntry.SELECTION_DEFAULT_VALUE);//get via intent
+        dayOfTheWeek.setSelection(WorkReaderContract.SELECTION_DEFAULT_VALUE);//get via intent
 
         dayOfTheWeek.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -75,12 +75,12 @@ public class DaySaturday extends BackKey {
                 Log.d(PRODUCTION_TAG, "SATURDAY DAY POSITION IS: " + position);
                 //dayPosition = position;
                 switch (position) {
-                    case WorkReaderContract.WorkEntry.ON_DAY:
-                        setSaturdayHours.putExtra("CURRENT_DAY", WorkReaderContract.WorkEntry.SATURDAY);
-                        setResult(WorkReaderContract.WorkEntry.RESULT_OK_WORK, setSaturdayHours);
+                    case WorkReaderContract.ON_DAY:
+                        setSaturdayHours.putExtra("CURRENT_DAY", WorkReaderContract.SATURDAY);
+                        setResult(WorkReaderContract.RESULT_OK_WORK, setSaturdayHours);
                         //saveDay = position;
                         break;
-                    case WorkReaderContract.WorkEntry.OFF_DAY: //OFF
+                    case WorkReaderContract.OFF_DAY: //OFF
                         SharedPreferences.Editor editor = pref.edit();
                         editor.putString(getString(R.string.SATURDAY), "OFF");
                         editor.putString(getString(R.string.SATURDAY_START_HOUR), "");
@@ -89,11 +89,11 @@ public class DaySaturday extends BackKey {
                         editor.putString(getString(R.string.SATURDAY_END_HOUR), "");
                         editor.putString(getString(R.string.SATURDAY_END_MINUTE), "");
                         editor.putString(getString(R.string.SATURDAY_END_AM_OR_PM), "");
-                        setSaturdayHours.putExtra("POSITION", WorkReaderContract.WorkEntry.OFF); //??
+                        setSaturdayHours.putExtra("POSITION", WorkReaderContract.OFF); //??
                         //   break;
                         //}
 
-                        setSaturdayHours.putExtra("CURRENT_DAY", WorkReaderContract.WorkEntry.OFF);
+                        setSaturdayHours.putExtra("CURRENT_DAY", WorkReaderContract.OFF);
                         startHour.setVisibility(View.INVISIBLE);
                         startMinute.setVisibility(View.INVISIBLE);
                         startAmOrPm.setVisibility(View.INVISIBLE);
@@ -101,7 +101,7 @@ public class DaySaturday extends BackKey {
                         endMinute.setVisibility(View.INVISIBLE);
                         endAmOrPm.setVisibility(View.INVISIBLE);
 
-                        setResult(WorkReaderContract.WorkEntry.RESULT_OKAY_NO_WORK, setSaturdayHours);
+                        setResult(WorkReaderContract.RESULT_OKAY_NO_WORK, setSaturdayHours);
                         editor.apply();
                         break;
                 }//end switch
@@ -127,7 +127,7 @@ public class DaySaturday extends BackKey {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         startHour.setAdapter(adapter);
         startHour.setSelection(setSaturdayHours.getIntExtra("START_HOUR",
-                WorkReaderContract.WorkEntry.SELECTION_DEFAULT_VALUE));
+                WorkReaderContract.SELECTION_DEFAULT_VALUE));
         //Need to check fo "OFF"
         //startHour.setSelection(Integer.parseInt( pref.getString(getString(R.string.SUNDAY_START_HOUR),
         //        WorkReaderContract.WorkEntry.START_HOUR_DEFAULT)));
@@ -141,7 +141,7 @@ public class DaySaturday extends BackKey {
                 setSaturdayHours.putExtra(getString(R.string.START_HOUR),
                         parent.getItemAtPosition(position).toString());
                 editor.putString(getString(R.string.SATURDAY), "SATURDAY");
-                setResult(WorkReaderContract.WorkEntry.RESULT_OK_WORK, setSaturdayHours);
+                setResult(WorkReaderContract.RESULT_OK_WORK, setSaturdayHours);
             }
 
             @Override
@@ -157,7 +157,7 @@ public class DaySaturday extends BackKey {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         startMinute.setAdapter(adapter);
         startMinute.setSelection(setSaturdayHours.getIntExtra("START_MINUTE",
-                WorkReaderContract.WorkEntry.SELECTION_DEFAULT_VALUE));
+                WorkReaderContract.SELECTION_DEFAULT_VALUE));
         startMinute.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -167,7 +167,7 @@ public class DaySaturday extends BackKey {
                 setSaturdayHours.putExtra(getString(R.string.START_MINUTE),
                         parent.getItemAtPosition(position).toString());
                 editor.putString(getString(R.string.SATURDAY), "SATURDAY");
-                setResult(WorkReaderContract.WorkEntry.RESULT_OK_WORK, setSaturdayHours);
+                setResult(WorkReaderContract.RESULT_OK_WORK, setSaturdayHours);
             }
 
             @Override
@@ -184,7 +184,7 @@ public class DaySaturday extends BackKey {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         startAmOrPm.setAdapter(adapter);
         startAmOrPm.setSelection(setSaturdayHours.getIntExtra("START_AM_OR_PM",
-                WorkReaderContract.WorkEntry.SELECTION_DEFAULT_VALUE));
+                WorkReaderContract.SELECTION_DEFAULT_VALUE));
         //Because interfaces still suck massive dick
         startAmOrPm.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -193,7 +193,7 @@ public class DaySaturday extends BackKey {
                         parent.getItemAtPosition(position).toString());
                 setSaturdayHours.putExtra(getString(R.string.START_AM_OR_PM), parent.getItemAtPosition(position).toString());
                 editor.putString(getString(R.string.SATURDAY), "SATURDAY");
-                setResult(WorkReaderContract.WorkEntry.RESULT_OK_WORK, setSaturdayHours);
+                setResult(WorkReaderContract.RESULT_OK_WORK, setSaturdayHours);
             }
 
             @Override
@@ -208,7 +208,7 @@ public class DaySaturday extends BackKey {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         endHour.setAdapter(adapter);
         endHour.setSelection(setSaturdayHours.getIntExtra("END_HOUR",
-                WorkReaderContract.WorkEntry.SELECTION_DEFAULT_VALUE));
+                WorkReaderContract.SELECTION_DEFAULT_VALUE));
         endHour.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -217,7 +217,7 @@ public class DaySaturday extends BackKey {
                 setSaturdayHours.putExtra(getString(R.string.END_HOUR),
                         parent.getItemAtPosition(position).toString());
                 editor.putString(getString(R.string.SATURDAY), "SATURDAY");
-                setResult(WorkReaderContract.WorkEntry.RESULT_OK_WORK, setSaturdayHours);
+                setResult(WorkReaderContract.RESULT_OK_WORK, setSaturdayHours);
             }
 
             @Override
@@ -232,7 +232,7 @@ public class DaySaturday extends BackKey {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         endMinute.setAdapter(adapter);
         endMinute.setSelection(setSaturdayHours.getIntExtra("END_MINUTE",
-                WorkReaderContract.WorkEntry.SELECTION_DEFAULT_VALUE));
+                WorkReaderContract.SELECTION_DEFAULT_VALUE));
         endMinute.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -241,7 +241,7 @@ public class DaySaturday extends BackKey {
 
                 setSaturdayHours.putExtra(getString(R.string.END_MINUTE), parent.getItemAtPosition(position).toString());
                 editor.putString(getString(R.string.SATURDAY), "SATURDAY");
-                setResult(WorkReaderContract.WorkEntry.RESULT_OK_WORK, setSaturdayHours);
+                setResult(WorkReaderContract.RESULT_OK_WORK, setSaturdayHours);
             }
 
             @Override
@@ -256,7 +256,7 @@ public class DaySaturday extends BackKey {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         endAmOrPm.setAdapter(adapter);
         endAmOrPm.setSelection(setSaturdayHours.getIntExtra("END_AM_OR_PM",
-                WorkReaderContract.WorkEntry.SELECTION_DEFAULT_VALUE));
+                WorkReaderContract.SELECTION_DEFAULT_VALUE));
         endAmOrPm.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -264,7 +264,7 @@ public class DaySaturday extends BackKey {
                         parent.getItemAtPosition(position).toString());
                 setSaturdayHours.putExtra(getString(R.string.END_AM_OR_PM), parent.getItemAtPosition(position).toString());
                 editor.putString(getString(R.string.SATURDAY), "SATURDAY");
-                setResult(WorkReaderContract.WorkEntry.RESULT_OK_WORK, setSaturdayHours);
+                setResult(WorkReaderContract.RESULT_OK_WORK, setSaturdayHours);
             }
 
             @Override

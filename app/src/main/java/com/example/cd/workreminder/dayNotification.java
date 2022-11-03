@@ -110,7 +110,7 @@ public class DayNotification {
                 Log.e(PRODUCTION_TAG, "THE RINGTONE (IN GLOBAL MAIN ACTIVITY) IS: " + ringtone);
 
 
-                if (getAmPlaying() == WorkReaderContract.WorkEntry.ALARM_RINGS) {
+                if (getAmPlaying() == WorkReaderContract.ALARM_RINGS) {
                     CurrrentRingtoneInstance.getInstance().getArrayList().add(ringtone);
                     Ringtone ringtone = (Ringtone) CurrrentRingtoneInstance.getInstance().getArrayList().get(0);
                     ringtone.stop(); //stop previous ringtone

@@ -15,12 +15,14 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.icu.util.Calendar;
+import android.os.Build;
+import android.support.v4.app.FragmentActivity;
 
 import java.util.ArrayList;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class storeHoursInGUI {
+public class storeHoursInGUI extends FragmentActivity{
     ArrayList<ArrayList<String>> week;
     SharedPreferences pref;
     Context context; //Added on 10 - 8 - 2019
@@ -30,182 +32,195 @@ public class storeHoursInGUI {
     }
 
     public ArrayList addHours() {
-        pref = context.getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
+        pref = context.getSharedPreferences("BECAUSE_INTENTS_SUCK_MASSIVE_DICK", MODE_PRIVATE);
         week = new ArrayList<ArrayList<String>>();
         //week.clear(); //stupid hack. Don't ask.
 
-        week.add(WorkReaderContract.WorkEntry.SUNDAY, new ArrayList());
-        week.add(WorkReaderContract.WorkEntry.MONDAY, new ArrayList());
-        week.add(WorkReaderContract.WorkEntry.TUESDAY, new ArrayList());
-        week.add(WorkReaderContract.WorkEntry.WEDNESDAY, new ArrayList());
-        week.add(WorkReaderContract.WorkEntry.THURSDAY, new ArrayList());
-        week.add(WorkReaderContract.WorkEntry.FRIDAY, new ArrayList());
-        week.add(WorkReaderContract.WorkEntry.SATURDAY, new ArrayList());
-        week.add(WorkReaderContract.WorkEntry.OFF, new ArrayList());
+        week.add(WorkReaderContract.SUNDAY, new ArrayList());
+        week.add(WorkReaderContract.MONDAY, new ArrayList());
+        week.add(WorkReaderContract.TUESDAY, new ArrayList());
+        week.add(WorkReaderContract.WEDNESDAY, new ArrayList());
+        week.add(WorkReaderContract.THURSDAY, new ArrayList());
+        week.add(WorkReaderContract.FRIDAY, new ArrayList());
+        week.add(WorkReaderContract.SATURDAY, new ArrayList());
+        week.add(WorkReaderContract.OFF, new ArrayList());
 
 
-        week.get(WorkReaderContract.WorkEntry.SUNDAY);
-        week.get(WorkReaderContract.WorkEntry.SUNDAY).add(0,
+        week.get(WorkReaderContract.SUNDAY);
+        week.get(WorkReaderContract.SUNDAY).add(0,
                 pref.getString(context.getString(R.string.SUNDAY), context.getString(R.string.SUNDAY)));
-        week.get(WorkReaderContract.WorkEntry.SUNDAY)
-                .add(WorkReaderContract.WorkEntry.START_HOUR,
-                        pref.getString(context.getString(R.string.SUNDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
-        week.get(WorkReaderContract.WorkEntry.SUNDAY)
-                .add(WorkReaderContract.WorkEntry.START_MINUTE,
-                        pref.getString(context.getString(R.string.SUNDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
-        week.get(WorkReaderContract.WorkEntry.SUNDAY)
-                .add(WorkReaderContract.WorkEntry.START_AM_OR_PM,
-                        pref.getString(context.getString(R.string.SUNDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-        week.get(WorkReaderContract.WorkEntry.SUNDAY)
-                .add(WorkReaderContract.WorkEntry.END_HOUR,
-                        pref.getString(context.getString(R.string.SUNDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
-        week.get(WorkReaderContract.WorkEntry.SUNDAY)
-                .add(WorkReaderContract.WorkEntry.END_MINUTE,
-                        pref.getString(context.getString(R.string.SUNDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
-        week.get(WorkReaderContract.WorkEntry.SUNDAY)
-                .add(WorkReaderContract.WorkEntry.END_AM_OR_PM,
-                        pref.getString(context.getString(R.string.SUNDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
+        week.get(WorkReaderContract.SUNDAY)
+                .add(WorkReaderContract.START_HOUR,
+                        pref.getString(context.getString(R.string.SUNDAY_START_HOUR), WorkReaderContract.START_HOUR_DEFAULT));
+        week.get(WorkReaderContract.SUNDAY)
+                .add(WorkReaderContract.START_MINUTE,
+                        pref.getString(context.getString(R.string.SUNDAY_START_MINUTE), WorkReaderContract.START_MINUTE_DEFAULT));
+        week.get(WorkReaderContract.SUNDAY)
+                .add(WorkReaderContract.START_AM_OR_PM,
+                        pref.getString(context.getString(R.string.SUNDAY_START_AM_OR_PM), WorkReaderContract.START_AM_OR_PM_DEFAULT));
+        week.get(WorkReaderContract.SUNDAY)
+                .add(WorkReaderContract.END_HOUR,
+                        pref.getString(context.getString(R.string.SUNDAY_END_HOUR), WorkReaderContract.END_HOUR_DEFAULT));
+        week.get(WorkReaderContract.SUNDAY)
+                .add(WorkReaderContract.END_MINUTE,
+                        pref.getString(context.getString(R.string.SUNDAY_END_MINUTE), WorkReaderContract.END_MINUTE_DEFAULT));
+        week.get(WorkReaderContract.SUNDAY)
+                .add(WorkReaderContract.END_AM_OR_PM,
+                        pref.getString(context.getString(R.string.SUNDAY_END_AM_OR_PM), WorkReaderContract.END_AM_OR_PM_DEFAULT));
 
-        week.get(WorkReaderContract.WorkEntry.MONDAY).add(0,
+        week.get(WorkReaderContract.MONDAY).add(0,
                 pref.getString(context.getString(R.string.MONDAY), context.getString(R.string.MONDAY)));
-        week.get(WorkReaderContract.WorkEntry.MONDAY)
-                .add(WorkReaderContract.WorkEntry.START_HOUR,
-                        pref.getString(context.getString(R.string.MONDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
-        week.get(WorkReaderContract.WorkEntry.MONDAY)
-                .add(WorkReaderContract.WorkEntry.START_MINUTE,
-                        pref.getString(context.getString(R.string.MONDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
-        week.get(WorkReaderContract.WorkEntry.MONDAY)
-                .add(WorkReaderContract.WorkEntry.START_AM_OR_PM,
-                        pref.getString(context.getString(R.string.MONDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-        week.get(WorkReaderContract.WorkEntry.MONDAY)
-                .add(WorkReaderContract.WorkEntry.END_HOUR,
-                        pref.getString(context.getString(R.string.MONDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
-        week.get(WorkReaderContract.WorkEntry.MONDAY)
-                .add(WorkReaderContract.WorkEntry.END_MINUTE,
-                        pref.getString(context.getString(R.string.MONDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
-        week.get(WorkReaderContract.WorkEntry.MONDAY)
-                .add(WorkReaderContract.WorkEntry.END_AM_OR_PM,
-                        pref.getString(context.getString(R.string.MONDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
+        week.get(WorkReaderContract.MONDAY)
+                .add(WorkReaderContract.START_HOUR,
+                        pref.getString(context.getString(R.string.MONDAY_START_HOUR), WorkReaderContract.START_HOUR_DEFAULT));
+        week.get(WorkReaderContract.MONDAY)
+                .add(WorkReaderContract.START_MINUTE,
+                        pref.getString(context.getString(R.string.MONDAY_START_MINUTE), WorkReaderContract.START_MINUTE_DEFAULT));
+        week.get(WorkReaderContract.MONDAY)
+                .add(WorkReaderContract.START_AM_OR_PM,
+                        pref.getString(context.getString(R.string.MONDAY_START_AM_OR_PM), WorkReaderContract.START_AM_OR_PM_DEFAULT));
+        week.get(WorkReaderContract.MONDAY)
+                .add(WorkReaderContract.END_HOUR,
+                        pref.getString(context.getString(R.string.MONDAY_END_HOUR), WorkReaderContract.END_HOUR_DEFAULT));
+        week.get(WorkReaderContract.MONDAY)
+                .add(WorkReaderContract.END_MINUTE,
+                        pref.getString(context.getString(R.string.MONDAY_END_MINUTE), WorkReaderContract.END_MINUTE_DEFAULT));
+        week.get(WorkReaderContract.MONDAY)
+                .add(WorkReaderContract.END_AM_OR_PM,
+                        pref.getString(context.getString(R.string.MONDAY_END_AM_OR_PM), WorkReaderContract.END_AM_OR_PM_DEFAULT));
 
-        week.get(WorkReaderContract.WorkEntry.TUESDAY).add(0,
+        week.get(WorkReaderContract.TUESDAY).add(0,
                 pref.getString(context.getString(R.string.TUESDAY), context.getString(R.string.TUESDAY)));
-        week.get(WorkReaderContract.WorkEntry.TUESDAY)
-                .add(WorkReaderContract.WorkEntry.START_HOUR,
-                        pref.getString(context.getString(R.string.TUESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
-        week.get(WorkReaderContract.WorkEntry.TUESDAY)
-                .add(WorkReaderContract.WorkEntry.START_MINUTE,
-                        pref.getString(context.getString(R.string.TUESDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
-        week.get(WorkReaderContract.WorkEntry.TUESDAY)
-                .add(WorkReaderContract.WorkEntry.START_AM_OR_PM,
-                        pref.getString(context.getString(R.string.TUESDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-        week.get(WorkReaderContract.WorkEntry.TUESDAY)
-                .add(WorkReaderContract.WorkEntry.END_HOUR,
-                        pref.getString(context.getString(R.string.TUESDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
-        week.get(WorkReaderContract.WorkEntry.TUESDAY)
-                .add(WorkReaderContract.WorkEntry.END_MINUTE,
-                        pref.getString(context.getString(R.string.TUESDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
-        week.get(WorkReaderContract.WorkEntry.TUESDAY)
-                .add(WorkReaderContract.WorkEntry.END_AM_OR_PM,
-                        pref.getString(context.getString(R.string.TUESDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
+        week.get(WorkReaderContract.TUESDAY)
+                .add(WorkReaderContract.START_HOUR,
+                        pref.getString(context.getString(R.string.TUESDAY_START_HOUR), WorkReaderContract.START_HOUR_DEFAULT));
+        week.get(WorkReaderContract.TUESDAY)
+                .add(WorkReaderContract.START_MINUTE,
+                        pref.getString(context.getString(R.string.TUESDAY_START_MINUTE), WorkReaderContract.START_MINUTE_DEFAULT));
+        week.get(WorkReaderContract.TUESDAY)
+                .add(WorkReaderContract.START_AM_OR_PM,
+                        pref.getString(context.getString(R.string.TUESDAY_START_AM_OR_PM), WorkReaderContract.START_AM_OR_PM_DEFAULT));
+        week.get(WorkReaderContract.TUESDAY)
+                .add(WorkReaderContract.END_HOUR,
+                        pref.getString(context.getString(R.string.TUESDAY_END_HOUR), WorkReaderContract.END_HOUR_DEFAULT));
+        week.get(WorkReaderContract.TUESDAY)
+                .add(WorkReaderContract.END_MINUTE,
+                        pref.getString(context.getString(R.string.TUESDAY_END_MINUTE), WorkReaderContract.END_MINUTE_DEFAULT));
+        week.get(WorkReaderContract.TUESDAY)
+                .add(WorkReaderContract.END_AM_OR_PM,
+                        pref.getString(context.getString(R.string.TUESDAY_END_AM_OR_PM), WorkReaderContract.END_AM_OR_PM_DEFAULT));
 
 
-        week.get(WorkReaderContract.WorkEntry.WEDNESDAY).add(0,
+        week.get(WorkReaderContract.WEDNESDAY).add(0,
                 pref.getString(context.getString(R.string.WEDNESDAY), context.getString(R.string.WEDNESDAY)));
-        week.get(WorkReaderContract.WorkEntry.WEDNESDAY)
-                .add(WorkReaderContract.WorkEntry.START_HOUR,
-                        pref.getString(context.getString(R.string.WEDNESDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
-        week.get(WorkReaderContract.WorkEntry.WEDNESDAY)
-                .add(WorkReaderContract.WorkEntry.START_MINUTE,
-                        pref.getString(context.getString(R.string.WEDNESDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
-        week.get(WorkReaderContract.WorkEntry.WEDNESDAY)
-                .add(WorkReaderContract.WorkEntry.START_AM_OR_PM,
-                        pref.getString(context.getString(R.string.WEDNESDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-        week.get(WorkReaderContract.WorkEntry.WEDNESDAY)
-                .add(WorkReaderContract.WorkEntry.END_HOUR,
-                        pref.getString(context.getString(R.string.WEDNESDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
-        week.get(WorkReaderContract.WorkEntry.WEDNESDAY)
-                .add(WorkReaderContract.WorkEntry.END_MINUTE,
-                        pref.getString(context.getString(R.string.WEDNESDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
-        week.get(WorkReaderContract.WorkEntry.WEDNESDAY)
-                .add(WorkReaderContract.WorkEntry.END_AM_OR_PM,
-                        pref.getString(context.getString(R.string.WEDNESDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
+        week.get(WorkReaderContract.WEDNESDAY)
+                .add(WorkReaderContract.START_HOUR,
+                        pref.getString(context.getString(R.string.WEDNESDAY_START_HOUR), WorkReaderContract.START_HOUR_DEFAULT));
+        week.get(WorkReaderContract.WEDNESDAY)
+                .add(WorkReaderContract.START_MINUTE,
+                        pref.getString(context.getString(R.string.WEDNESDAY_START_MINUTE), WorkReaderContract.START_MINUTE_DEFAULT));
+        week.get(WorkReaderContract.WEDNESDAY)
+                .add(WorkReaderContract.START_AM_OR_PM,
+                        pref.getString(context.getString(R.string.WEDNESDAY_START_AM_OR_PM), WorkReaderContract.START_AM_OR_PM_DEFAULT));
+        week.get(WorkReaderContract.WEDNESDAY)
+                .add(WorkReaderContract.END_HOUR,
+                        pref.getString(context.getString(R.string.WEDNESDAY_END_HOUR), WorkReaderContract.END_HOUR_DEFAULT));
+        week.get(WorkReaderContract.WEDNESDAY)
+                .add(WorkReaderContract.END_MINUTE,
+                        pref.getString(context.getString(R.string.WEDNESDAY_END_MINUTE), WorkReaderContract.END_MINUTE_DEFAULT));
+        week.get(WorkReaderContract.WEDNESDAY)
+                .add(WorkReaderContract.END_AM_OR_PM,
+                        pref.getString(context.getString(R.string.WEDNESDAY_END_AM_OR_PM), WorkReaderContract.END_AM_OR_PM_DEFAULT));
 
 
-        week.get(WorkReaderContract.WorkEntry.THURSDAY).add(0,
+        week.get(WorkReaderContract.THURSDAY).add(0,
                 pref.getString(context.getString(R.string.THURSDAY), context.getString(R.string.THURSDAY)));
-        week.get(WorkReaderContract.WorkEntry.THURSDAY)
-                .add(WorkReaderContract.WorkEntry.START_HOUR,
-                        pref.getString(context.getString(R.string.THURSDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
-        week.get(WorkReaderContract.WorkEntry.THURSDAY)
-                .add(WorkReaderContract.WorkEntry.START_MINUTE,
-                        pref.getString(context.getString(R.string.THURSDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
-        week.get(WorkReaderContract.WorkEntry.THURSDAY)
-                .add(WorkReaderContract.WorkEntry.START_AM_OR_PM,
-                        pref.getString(context.getString(R.string.THURSDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-        week.get(WorkReaderContract.WorkEntry.THURSDAY)
-                .add(WorkReaderContract.WorkEntry.END_HOUR,
-                        pref.getString(context.getString(R.string.THURSDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
-        week.get(WorkReaderContract.WorkEntry.THURSDAY)
-                .add(WorkReaderContract.WorkEntry.END_MINUTE,
-                        pref.getString(context.getString(R.string.THURSDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
-        week.get(WorkReaderContract.WorkEntry.THURSDAY)
-                .add(WorkReaderContract.WorkEntry.END_AM_OR_PM,
-                        pref.getString(context.getString(R.string.THURSDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
+        week.get(WorkReaderContract.THURSDAY)
+                .add(WorkReaderContract.START_HOUR,
+                        pref.getString(context.getString(R.string.THURSDAY_START_HOUR), WorkReaderContract.START_HOUR_DEFAULT));
+        week.get(WorkReaderContract.THURSDAY)
+                .add(WorkReaderContract.START_MINUTE,
+                        pref.getString(context.getString(R.string.THURSDAY_START_MINUTE), WorkReaderContract.START_MINUTE_DEFAULT));
+        week.get(WorkReaderContract.THURSDAY)
+                .add(WorkReaderContract.START_AM_OR_PM,
+                        pref.getString(context.getString(R.string.THURSDAY_START_AM_OR_PM), WorkReaderContract.START_AM_OR_PM_DEFAULT));
+        week.get(WorkReaderContract.THURSDAY)
+                .add(WorkReaderContract.END_HOUR,
+                        pref.getString(context.getString(R.string.THURSDAY_END_HOUR), WorkReaderContract.END_HOUR_DEFAULT));
+        week.get(WorkReaderContract.THURSDAY)
+                .add(WorkReaderContract.END_MINUTE,
+                        pref.getString(context.getString(R.string.THURSDAY_END_MINUTE), WorkReaderContract.END_MINUTE_DEFAULT));
+        week.get(WorkReaderContract.THURSDAY)
+                .add(WorkReaderContract.END_AM_OR_PM,
+                        pref.getString(context.getString(R.string.THURSDAY_END_AM_OR_PM), WorkReaderContract.END_AM_OR_PM_DEFAULT));
 
 
-        week.get(WorkReaderContract.WorkEntry.FRIDAY).add(0,
+        week.get(WorkReaderContract.FRIDAY).add(0,
                 pref.getString(context.getString(R.string.FRIDAY), context.getString(R.string.FRIDAY)));
-        week.get(WorkReaderContract.WorkEntry.FRIDAY)
-                .add(WorkReaderContract.WorkEntry.START_HOUR,
-                        pref.getString(context.getString(R.string.FRIDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
-        week.get(WorkReaderContract.WorkEntry.FRIDAY)
-                .add(WorkReaderContract.WorkEntry.START_MINUTE,
-                        pref.getString(context.getString(R.string.FRIDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
-        week.get(WorkReaderContract.WorkEntry.FRIDAY)
-                .add(WorkReaderContract.WorkEntry.START_AM_OR_PM,
-                        pref.getString(context.getString(R.string.FRIDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-        week.get(WorkReaderContract.WorkEntry.FRIDAY)
-                .add(WorkReaderContract.WorkEntry.END_HOUR,
-                        pref.getString(context.getString(R.string.FRIDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
-        week.get(WorkReaderContract.WorkEntry.FRIDAY)
-                .add(WorkReaderContract.WorkEntry.END_MINUTE,
-                        pref.getString(context.getString(R.string.FRIDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
-        week.get(WorkReaderContract.WorkEntry.FRIDAY)
-                .add(WorkReaderContract.WorkEntry.END_AM_OR_PM,
-                        pref.getString(context.getString(R.string.FRIDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
+        week.get(WorkReaderContract.FRIDAY)
+                .add(WorkReaderContract.START_HOUR,
+                        pref.getString(context.getString(R.string.FRIDAY_START_HOUR), WorkReaderContract.START_HOUR_DEFAULT));
+        week.get(WorkReaderContract.FRIDAY)
+                .add(WorkReaderContract.START_MINUTE,
+                        pref.getString(context.getString(R.string.FRIDAY_START_MINUTE), WorkReaderContract.START_MINUTE_DEFAULT));
+        week.get(WorkReaderContract.FRIDAY)
+                .add(WorkReaderContract.START_AM_OR_PM,
+                        pref.getString(context.getString(R.string.FRIDAY_START_AM_OR_PM), WorkReaderContract.START_AM_OR_PM_DEFAULT));
+        week.get(WorkReaderContract.FRIDAY)
+                .add(WorkReaderContract.END_HOUR,
+                        pref.getString(context.getString(R.string.FRIDAY_END_HOUR), WorkReaderContract.END_HOUR_DEFAULT));
+        week.get(WorkReaderContract.FRIDAY)
+                .add(WorkReaderContract.END_MINUTE,
+                        pref.getString(context.getString(R.string.FRIDAY_END_MINUTE), WorkReaderContract.END_MINUTE_DEFAULT));
+        week.get(WorkReaderContract.FRIDAY)
+                .add(WorkReaderContract.END_AM_OR_PM,
+                        pref.getString(context.getString(R.string.FRIDAY_END_AM_OR_PM), WorkReaderContract.END_AM_OR_PM_DEFAULT));
 
 
-        week.get(WorkReaderContract.WorkEntry.SATURDAY).add(0,
+        week.get(WorkReaderContract.SATURDAY).add(0,
                 pref.getString(context.getString(R.string.SATURDAY), context.getString(R.string.SATURDAY)));
-        week.get(WorkReaderContract.WorkEntry.SATURDAY)
-                .add(WorkReaderContract.WorkEntry.START_HOUR,
-                        pref.getString(context.getString(R.string.SATURDAY_START_HOUR), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
-        week.get(WorkReaderContract.WorkEntry.SATURDAY)
-                .add(WorkReaderContract.WorkEntry.START_MINUTE,
-                        pref.getString(context.getString(R.string.SATURDAY_START_MINUTE), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
-        week.get(WorkReaderContract.WorkEntry.SATURDAY)
-                .add(WorkReaderContract.WorkEntry.START_AM_OR_PM,
-                        pref.getString(context.getString(R.string.SATURDAY_START_AM_OR_PM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
-        week.get(WorkReaderContract.WorkEntry.SATURDAY)
-                .add(WorkReaderContract.WorkEntry.END_HOUR,
-                        pref.getString(context.getString(R.string.SATURDAY_END_HOUR), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
-        week.get(WorkReaderContract.WorkEntry.SATURDAY)
-                .add(WorkReaderContract.WorkEntry.END_MINUTE,
-                        pref.getString(context.getString(R.string.SATURDAY_END_MINUTE), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
-        week.get(WorkReaderContract.WorkEntry.SATURDAY)
-                .add(WorkReaderContract.WorkEntry.END_AM_OR_PM,
-                        pref.getString(context.getString(R.string.SATURDAY_END_AM_OR_PM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
+        week.get(WorkReaderContract.SATURDAY)
+                .add(WorkReaderContract.START_HOUR,
+                        pref.getString(context.getString(R.string.SATURDAY_START_HOUR), WorkReaderContract.START_HOUR_DEFAULT));
+        week.get(WorkReaderContract.SATURDAY)
+                .add(WorkReaderContract.START_MINUTE,
+                        pref.getString(context.getString(R.string.SATURDAY_START_MINUTE), WorkReaderContract.START_MINUTE_DEFAULT));
+        week.get(WorkReaderContract.SATURDAY)
+                .add(WorkReaderContract.START_AM_OR_PM,
+                        pref.getString(context.getString(R.string.SATURDAY_START_AM_OR_PM), WorkReaderContract.START_AM_OR_PM_DEFAULT));
+        week.get(WorkReaderContract.SATURDAY)
+                .add(WorkReaderContract.END_HOUR,
+                        pref.getString(context.getString(R.string.SATURDAY_END_HOUR), WorkReaderContract.END_HOUR_DEFAULT));
+        week.get(WorkReaderContract.SATURDAY)
+                .add(WorkReaderContract.END_MINUTE,
+                        pref.getString(context.getString(R.string.SATURDAY_END_MINUTE), WorkReaderContract.END_MINUTE_DEFAULT));
+        week.get(WorkReaderContract.SATURDAY)
+                .add(WorkReaderContract.END_AM_OR_PM,
+                        pref.getString(context.getString(R.string.SATURDAY_END_AM_OR_PM), WorkReaderContract.END_AM_OR_PM_DEFAULT));
 
         //Start new week
-        final Calendar cal = Calendar.getInstance();
-        if (cal.get(Calendar.DAY_OF_WEEK) == java.util.Calendar.SUNDAY) {
-            week.get(WorkReaderContract.WorkEntry.OFF).add(0, "NEW_SUNDAY");
-            week.get(WorkReaderContract.WorkEntry.OFF).add(WorkReaderContract.WorkEntry.START_HOUR, WorkReaderContract.WorkEntry.START_HOUR_DEFAULT);
-            week.get(WorkReaderContract.WorkEntry.OFF).add(WorkReaderContract.WorkEntry.START_MINUTE, WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT);
-            week.get(WorkReaderContract.WorkEntry.OFF).add(WorkReaderContract.WorkEntry.START_AM_OR_PM, WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT);
-            week.get(WorkReaderContract.WorkEntry.OFF).add(WorkReaderContract.WorkEntry.END_HOUR, WorkReaderContract.WorkEntry.END_HOUR_DEFAULT);
-            week.get(WorkReaderContract.WorkEntry.OFF).add(WorkReaderContract.WorkEntry.END_MINUTE, WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT);
-            week.get(WorkReaderContract.WorkEntry.OFF).add(WorkReaderContract.WorkEntry.END_AM_OR_PM, WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            final android.icu.util.Calendar cal = Calendar.getInstance();
+            if (cal.get(android.icu.util.Calendar.DAY_OF_WEEK) == android.icu.util.Calendar.SUNDAY) {
+                week.get(WorkReaderContract.OFF).add(0, "NEW_SUNDAY");
+                week.get(WorkReaderContract.OFF).add(WorkReaderContract.START_HOUR, WorkReaderContract.START_HOUR_DEFAULT);
+                week.get(WorkReaderContract.OFF).add(WorkReaderContract.START_MINUTE, WorkReaderContract.START_MINUTE_DEFAULT);
+                week.get(WorkReaderContract.OFF).add(WorkReaderContract.START_AM_OR_PM, WorkReaderContract.START_AM_OR_PM_DEFAULT);
+                week.get(WorkReaderContract.OFF).add(WorkReaderContract.END_HOUR, WorkReaderContract.END_HOUR_DEFAULT);
+                week.get(WorkReaderContract.OFF).add(WorkReaderContract.END_MINUTE, WorkReaderContract.END_MINUTE_DEFAULT);
+                week.get(WorkReaderContract.OFF).add(WorkReaderContract.END_AM_OR_PM, WorkReaderContract.END_AM_OR_PM_DEFAULT);
+            }
+        } else {
+            final java.util.Calendar cal = java.util.Calendar.getInstance();
+            if (cal.get(java.util.Calendar.DAY_OF_WEEK) == java.util.Calendar.SUNDAY) {
+                week.get(WorkReaderContract.OFF).add("NEW_SUNDAY");
+                week.get(WorkReaderContract.OFF).add(WorkReaderContract.START_HOUR, WorkReaderContract.START_HOUR_DEFAULT);
+                week.get(WorkReaderContract.OFF).add(WorkReaderContract.START_MINUTE, WorkReaderContract.START_MINUTE_DEFAULT);
+                week.get(WorkReaderContract.OFF).add(WorkReaderContract.START_AM_OR_PM, WorkReaderContract.START_AM_OR_PM_DEFAULT);
+                week.get(WorkReaderContract.OFF).add(WorkReaderContract.END_HOUR, WorkReaderContract.END_HOUR_DEFAULT);
+                week.get(WorkReaderContract.OFF).add(WorkReaderContract.END_MINUTE, WorkReaderContract.END_MINUTE_DEFAULT);
+                week.get(WorkReaderContract.OFF).add(WorkReaderContract.END_AM_OR_PM, WorkReaderContract.END_AM_OR_PM_DEFAULT);
+            }
         }
 
         return week;

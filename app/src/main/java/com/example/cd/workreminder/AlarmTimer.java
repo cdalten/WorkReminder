@@ -57,7 +57,7 @@ public class AlarmTimer extends AppCompatActivity {
                              int startMilitaryMinute,
                              boolean shouldISaveTheAlarmTime )
     {
-        pref = context.getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
+        pref = context.getSharedPreferences("BECAUSE_INTENTS_SUCK_MASSIVE_DICK", MODE_PRIVATE);
         this.dayOfWeek = dayOfWeek;
         this.startMilitaryMinute = startMilitaryMinute;
         this.startMilitaryHour = startMilitaryHour;
@@ -67,24 +67,24 @@ public class AlarmTimer extends AppCompatActivity {
           The algorithm was taken from a math book that I got from an Elementary School teacher
           in Oakland. This code is a direct translation found in the 4th grade book.
          */
-        if (timeBeforeShift < WorkReaderContract.WorkEntry.hour) {
+        if (timeBeforeShift < WorkReaderContract.hour) {
             newMilitaryHour = startMilitaryHour;
             //endMilitaryMinute = timeBeforeShift;
-            endMilitaryMinute = pref.getInt(context.getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_MINUTE_DEFAULT);
+            endMilitaryMinute = pref.getInt(context.getString(R.string.ALARM_MINUTES), WorkReaderContract.ALARM_MINUTE_DEFAULT);
             endMilitaryHour = pref.getInt("ALARM_HOUR", alarmDefaultValue);
         }
 
-        newMilitaryMinute = startMilitaryMinute - pref.getInt(context.getString(R.string.ALARM_MINUTES), WorkReaderContract.WorkEntry.ALARM_MINUTE_DEFAULT);
+        newMilitaryMinute = startMilitaryMinute - pref.getInt(context.getString(R.string.ALARM_MINUTES), WorkReaderContract.ALARM_MINUTE_DEFAULT);
         endMilitaryHour = pref.getInt("ALARM_HOUR", alarmDefaultValue);
 
         if (startMilitaryHour == 0) {
             newMilitaryHour = 24;
         }
         if (newMilitaryMinute < 0 && endMilitaryHour == 0) {
-            newMilitaryMinute = newMilitaryMinute + WorkReaderContract.WorkEntry.hour;
+            newMilitaryMinute = newMilitaryMinute + WorkReaderContract.hour;
             newMilitaryHour = newMilitaryHour - 1;
         } else if (newMilitaryMinute < 0 && endMilitaryHour > 0) {
-            newMilitaryMinute = newMilitaryMinute + WorkReaderContract.WorkEntry.hour;
+            newMilitaryMinute = newMilitaryMinute + WorkReaderContract.hour;
             newMilitaryHour = newMilitaryHour - 1;
         }
 
@@ -159,7 +159,7 @@ public class AlarmTimer extends AppCompatActivity {
     }
 
     public String getCurrentSavedDayOfWeek(Context context) {
-        pref = context.getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
+        pref = context.getSharedPreferences("BECAUSE_INTENTS_SUCK_MASSIVE_DICK", MODE_PRIVATE);
         return pref.getString("CURRENT_DAY", "");
     }
 
@@ -169,7 +169,7 @@ public class AlarmTimer extends AppCompatActivity {
     }
 
     public String getPreviousDayOfWeekSavedDayOfWeek(Context context) {
-        pref = context.getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
+        pref = context.getSharedPreferences("BECAUSE_INTENTS_SUCK_MASSIVE_DICK", MODE_PRIVATE);
         return pref.getString("PREVIOUS_DAY", "");
     }
 
@@ -210,13 +210,13 @@ public class AlarmTimer extends AppCompatActivity {
 
     //Added on 12 - 18 - 2019
     public String getUpdatedStartAmOrPm(Context context) {
-        pref = context.getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
+        pref = context.getSharedPreferences("BECAUSE_INTENTS_SUCK_MASSIVE_DICK", MODE_PRIVATE);
         return pref.getString("AMORPM", updatedAmOrPm);
     }
 
     //Added on 11 - 4 - 2019
     public String getDayOfWeek(Context context) {
-        pref = context.getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
+        pref = context.getSharedPreferences("BECAUSE_INTENTS_SUCK_MASSIVE_DICK", MODE_PRIVATE);
         return pref.getString("DAY_OF_WEEK", "");
     }
 

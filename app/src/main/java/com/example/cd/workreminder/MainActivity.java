@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
             //Attempt to invoke interface method 'java.lang.String android.content.SharedPreferences.getString(java.lang.String, java.lang.String)'
             //on a null object reference
-            pref = this.getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
+            pref = this.getSharedPreferences("BECAUSE_INTENTS_SUCK_MASSIVE_DICK", MODE_PRIVATE);
 
             //12AM represents midnight on my phone
 
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d(PRODUCTION_TAG, "ONCREATE() WHEN SAVEDINSTANCE() IS NOT NULL");
             savedInstanceState.getString("UPDATED_SCHEDULE"); //???
 
-            pref = getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE); //redudant??
+            pref = getSharedPreferences("BECAUSE_INTENTS_SUCK_MASSIVE_DICK", MODE_PRIVATE); //redudant??
         }
     }
 

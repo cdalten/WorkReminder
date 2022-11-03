@@ -149,7 +149,7 @@ public class AlarmIntentService extends IntentService {
         Notification notification;
         notification = notificationCompatBuilder.
                 setContentTitle("ALARM GOT UPDATED").
-                setContentText(new AlarmTimeFormatDisplay(this, alarmTimer, WorkReaderContract.WorkEntry.SNOOZE_ON).displayCurrentTime()).
+                setContentText(new AlarmTimeFormatDisplay(this, alarmTimer, WorkReaderContract.SNOOZE_ON).displayCurrentTime()).
                 build();
 
         if (notification != null) {

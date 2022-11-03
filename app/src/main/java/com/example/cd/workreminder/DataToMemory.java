@@ -16,6 +16,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.icu.util.Calendar;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -39,7 +40,7 @@ public class DataToMemory extends AppCompatActivity{
 
     public DataToMemory(Context context) {
         this.context = context;
-        pref =  context.getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
+        pref =  context.getSharedPreferences("BECAUSE_INTENTS_SUCK_MASSIVE_DICK", MODE_PRIVATE);
     }    //From CurrentWeekSchedule.java
     public void saveDataToMemory(
             int day,
@@ -63,7 +64,7 @@ public class DataToMemory extends AppCompatActivity{
         //pref =  this.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
 
-        if (!dayOnOrOff.equals(WorkReaderContract.WorkEntry.DAY_OFF_DEFAULT)) {
+        if (!dayOnOrOff.equals(WorkReaderContract.DAY_OFF_DEFAULT)) {
             editor.putString(context.getString(day), context.getString(day));
             editor.putString(context.getString(startHour), newStartHour);
             editor.putString(context.getString(startMinute), newStartMinute);
@@ -72,7 +73,7 @@ public class DataToMemory extends AppCompatActivity{
             editor.putString(context.getString(endMinute), newEndMinute);
             editor.putString(context.getString(endAmOrPM), newEndAmOrPm);
         } else {
-            editor.putString(context.getString(day), WorkReaderContract.WorkEntry.DAY_OFF_DEFAULT);
+            editor.putString(context.getString(day), WorkReaderContract.DAY_OFF_DEFAULT);
             editor.putString(context.getString(startHour), newStartHour);
             editor.putString(context.getString(startMinute), newStartMinute);
             editor.putString(context.getString(startAmOrPm), newStartAmOrPm);
@@ -99,17 +100,17 @@ public class DataToMemory extends AppCompatActivity{
 
         outState.putString(key,  pref.getString(context.getString(day), context.getString(day)));
         outState.putString(context.getString(startHour),
-                pref.getString(context.getString(startHour), WorkReaderContract.WorkEntry.START_HOUR_DEFAULT));
+                pref.getString(context.getString(startHour), WorkReaderContract.START_HOUR_DEFAULT));
         outState.putString(context.getString(startMinute),
-                pref.getString(context.getString(startMinute), WorkReaderContract.WorkEntry.START_MINUTE_DEFAULT));
+                pref.getString(context.getString(startMinute), WorkReaderContract.START_MINUTE_DEFAULT));
         outState.putString(context.getString(startAmOrPM),
-                pref.getString(context.getString(startAmOrPM), WorkReaderContract.WorkEntry.START_AM_OR_PM_DEFAULT));
+                pref.getString(context.getString(startAmOrPM), WorkReaderContract.START_AM_OR_PM_DEFAULT));
         outState.putString(context.getString(endHour),
-                pref.getString(context.getString(endHour), WorkReaderContract.WorkEntry.END_HOUR_DEFAULT));
+                pref.getString(context.getString(endHour), WorkReaderContract.END_HOUR_DEFAULT));
         outState.putString(context.getString(endMinute),
-                pref.getString(context.getString(endMinute), WorkReaderContract.WorkEntry.END_MINUTE_DEFAULT));
+                pref.getString(context.getString(endMinute), WorkReaderContract.END_MINUTE_DEFAULT));
         outState.putString(context.getString(endAmOrPM),
-                pref.getString(context.getString(endAmOrPM), WorkReaderContract.WorkEntry.END_AM_OR_PM_DEFAULT));
+                pref.getString(context.getString(endAmOrPM), WorkReaderContract.END_AM_OR_PM_DEFAULT));
 
         editor.apply();
     }
@@ -125,28 +126,39 @@ public class DataToMemory extends AppCompatActivity{
         //pref =  this.getSharedPreferences("BECAUSE INTENTS SUCK MASSIVE DICK", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
 
-        final Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(System.currentTimeMillis()); //?
-        //cal.set(Calendar.HOUR, newMilitaryHour);
-        cal.set(Calendar.HOUR, newMilitaryHour);
-        cal.set(Calendar.MINUTE, newMilitaryMinute);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            final android.icu.util.Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(System.currentTimeMillis()); //?
+            //cal.set(Calendar.HOUR, newMilitaryHour);
+            cal.set(android.icu.util.Calendar.HOUR, newMilitaryHour);
+            cal.set(android.icu.util.Calendar.MINUTE, newMilitaryMinute);
 
-        Log.e("LG_WORK_PHONE", "ALARM GOT CALLED");
-        //editor.putInt("MILITARY_HOUR", cal.get(Calendar.HOUR)); //military. Do I need?
-        editor.putString("DAY_OF_WEEK", dayOfWeek);
-        editor.putInt("NEW_ALARM_HOUR", cal.get(Calendar.HOUR)); // gets passed to alarm receiver
-        editor.putInt("NEW_ALARM_MINUTES", cal.get(Calendar.MINUTE));
-        editor.apply();
+            Log.d("DATA TO MEMORY", "ALARM GOT CALLED");
+            //editor.putInt("MILITARY_HOUR", cal.get(Calendar.HOUR)); //military. Do I need?
+            editor.putString("DAY_OF_WEEK", dayOfWeek);
+            editor.putInt("NEW_ALARM_HOUR", cal.get(android.icu.util.Calendar.HOUR)); // gets passed to alarm receiver
+            editor.putInt("NEW_ALARM_MINUTES", cal.get(android.icu.util.Calendar.MINUTE));
+            editor.apply();
+        } else {
+            final java.util.Calendar cal = java.util.Calendar.getInstance();
+            cal.set(java.util.Calendar.HOUR, newMilitaryHour);
+            cal.set(java.util.Calendar.MINUTE, newMilitaryMinute);
+
+            editor.putString("DAY_OF_WEEK", dayOfWeek);
+            editor.putInt("NEW_ALARM_HOUR", java.util.Calendar.HOUR);
+            editor.putInt("NEW_ALAEM_MINUTES", cal.get(java.util.Calendar.MINUTE));
+            editor.apply();
+        }
     }
 
 
     public int getNewAlarmCivilianHour(Context context) {
-        pref = context.getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
+        pref = context.getSharedPreferences("BECAUSE_INTENTS_SUCK_MASSIVE_DICK", MODE_PRIVATE);
         return pref.getInt("NEW_ALARM_HOUR", 0);
     }
 
     public int getNewAlarmCivilianMinutes(Context context) {
-        pref = context.getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
+        pref = context.getSharedPreferences("BECAUSE_INTENTS_SUCK_MASSIVE_DICK", MODE_PRIVATE);
         return pref.getInt("NEW_ALARM_MINUTES", 0);
     }
 
@@ -159,7 +171,7 @@ public class DataToMemory extends AppCompatActivity{
     }
 
     public int getNewAlarmMilitaryHour(Context context) {
-        pref = context.getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
+        pref = context.getSharedPreferences("BECAUSE_INTENTS_SUCK_MASSIVE_DICK", MODE_PRIVATE);
         return pref.getInt("NEW_MILITARY_ALARM_HOUR", 0);
     }
 
@@ -172,7 +184,7 @@ public class DataToMemory extends AppCompatActivity{
     }
 
     public int getNewAlarmMilitaryMinute(Context context) {
-        pref = context.getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
+        pref = context.getSharedPreferences("BECAUSE_INTENTS_SUCK_MASSIVE_DICK", MODE_PRIVATE);
         return pref.getInt("NEW_ALARM_MINUTES", 0);
     }
     //Added on 10 - 21 - 2019
@@ -201,7 +213,7 @@ public class DataToMemory extends AppCompatActivity{
     }
 
     public String getCurrentSavedDayOfWeek(Context context) {
-        pref = context.getSharedPreferences(WorkReaderContract.WorkEntry.SAVED_PREFERENCESS, MODE_PRIVATE);
+        pref = context.getSharedPreferences("BECAUSE_INTENTS_SUCK_MASSIVE_DICK", MODE_PRIVATE);
         return pref.getString("CURRENT_DAY", "");
     }
 
