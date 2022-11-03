@@ -226,6 +226,15 @@ public class storeHoursInGUI extends FragmentActivity{
         return week;
     }
 
-
+    @Override
+    protected void onPause() {
+        super.onPause();
+        WorkReaderContract.START_HOUR_DEFAULT = null;
+        WorkReaderContract.START_MINUTE_DEFAULT = null;
+        WorkReaderContract.START_AM_OR_PM_DEFAULT = null;
+        WorkReaderContract.END_HOUR_DEFAULT = null;
+        WorkReaderContract.END_MINUTE_DEFAULT = null;
+        WorkReaderContract.END_AM_OR_PM_DEFAULT = null;
+    }
 }//ned storeHoursInGUI
 

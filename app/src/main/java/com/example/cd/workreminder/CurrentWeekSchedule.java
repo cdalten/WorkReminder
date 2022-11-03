@@ -995,7 +995,14 @@ private void updateHours(String newStartDay, String newStartHour, String newStar
     protected void onPause() {
         super.onPause();
         //finish();
-        Log.d("CWS", "ON PAUSE GOT CALLED");
+        WorkReaderContract.START_HOUR_DEFAULT =null;
+        WorkReaderContract.START_MINUTE_DEFAULT = null;
+        WorkReaderContract.START_AM_OR_PM_DEFAULT = null;
+        WorkReaderContract.END_HOUR_DEFAULT = null;
+        WorkReaderContract.END_MINUTE_DEFAULT = null;
+        WorkReaderContract.END_AM_OR_PM_DEFAULT = null;
+
+        Log.d(PRODUCTION_TAG, "ON PAUSE GOT CALLED");
         if (amEnabled == true) {
             disableBootReceiver();
             disableWorkNoticationReceiver();
@@ -1008,13 +1015,13 @@ private void updateHours(String newStartDay, String newStartHour, String newStar
             enableWorkNotificationReceiver();
             amEnabled = true;
         }
-        Log.d("CWS", "AM ENABLED? " + amEnabled);
+        Log.d(PRODUCTION_TAG, "AM ENABLED? " + amEnabled);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.d("CWS", "ON STOP GOT CALLED IN CWS");
+        Log.d(PRODUCTION_TAG, "ON STOP GOT CALLED IN CWS");
     }
 
 }//End class

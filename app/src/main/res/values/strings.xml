@@ -36,7 +36,7 @@
 
     <string name="ALARM_MINUTES">ALARM_MINUTES</string>
     <string name="ALARM_HOURS">ALARM_HOURS</string>
-    <string name = "BECAUSE_INTENTS_SUCK_MASSIVE_DICK">SAVED_PREFERENCES</string>
+    
     <string-array name="day_of_the_week">
         <item>SUNDAY</item>
         <item>MONDAY</item>

@@ -624,7 +624,6 @@ public class SetAlarm extends AppCompatActivity {
     //Ringtone from WorkAlarmReceiver
     public void setNotificationAlarmSound(Ringtone ringtone) {
         this.ringtone = ringtone;
-        Log.e("DAY NOTIFICATION TAG", "THE WORK ALARM RECEIVER INSTANCE IS: " + ringtone);
     }
 
     //Added on 11 - 22 - 2019;
@@ -635,7 +634,12 @@ public class SetAlarm extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        Log.e("DAY NOTIFICATION"," DAY NOTIFICATION PAUSE CALLED");
+        WorkReaderContract.END_HOUR_DEFAULT = null;
+        WorkReaderContract.START_MINUTE_DEFAULT = null;
+        WorkReaderContract.START_MINUTE_DEFAULT = null;
+        WorkReaderContract.START_HOUR_DEFAULT = null;
+        WorkReaderContract.END_MINUTE_DEFAULT = null;
+        WorkReaderContract.END_AM_OR_PM_DEFAULT = null;
     }
 
 }//end class
