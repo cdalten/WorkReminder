@@ -57,10 +57,6 @@ public class AlarmNotification extends FragmentActivity {
         protected void onCreate(Bundle savedInstanceState){
            super.onCreate(savedInstanceState);
 
-                // Log.d(PRODUCTION_TAG, "WORK ALARM RECEIVER GOT CALLED WITH: " + intent.getAction());
-                //Log.d(PRODUCTION_TAG, "ONRECEIVE() GOT CALLED");
-
-                //Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
                 Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
 
                 if (alarmUri == null) {

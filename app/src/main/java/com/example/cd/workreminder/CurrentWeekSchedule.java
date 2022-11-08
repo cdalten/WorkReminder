@@ -773,23 +773,7 @@ private void updateHours(String newStartDay, String newStartHour, String newStar
 
     }
 
-    //Added on 11 - 2 - 2019
-    /*private void displayUpdatedAlarm() {
-        SetAlarm SetAlarm = new SetAlarm(this);
-        long currentTime = SetAlarm.getCurrentTime();
-        long getNewAlarmTime = SetAlarm.getNewAlarmTime();
-        //SetAlarm.setAlarm();
-
-        if (getNewAlarmTime < currentTime) {
-
-        } else {
-            //display shit right away
-        }
-    }
-    */
-
     //Added on 2 - 27 - 2019
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -814,7 +798,7 @@ private void updateHours(String newStartDay, String newStartHour, String newStar
                 }catch (Exception e){
                     e.printStackTrace();
                 }
-                Log.e(PRODUCTION_TAG, "ALARM CAN'T BE SET");
+                Log.d(PRODUCTION_TAG, "ALARM CAN'T BE SET");
             }
 
             if (resultCode == WorkReaderContract.RESULT_OK_WORK) {
@@ -850,7 +834,6 @@ private void updateHours(String newStartDay, String newStartHour, String newStar
             switch (newPosition) {
                 case WorkReaderContract.SUNDAY:
                     updateHours(
-                            //pref.getString(getString(R.string.SUNDAY),getString(R.string.SUNDAY)),
                             "SUNDAY",
                             pref.getString(getString(R.string.SUNDAY_START_HOUR),
                                     WorkReaderContract.START_HOUR_DEFAULT),
@@ -867,7 +850,6 @@ private void updateHours(String newStartDay, String newStartHour, String newStar
                     break;
                 case WorkReaderContract.MONDAY:
                     updateHours(
-                            //pref.getString(getString(R.string.MONDAY),getString(R.string.MONDAY)),
                             "MONDAY",
                             pref.getString(getString(R.string.MONDAY_START_HOUR),
                                     WorkReaderContract.START_HOUR_DEFAULT),
@@ -884,7 +866,6 @@ private void updateHours(String newStartDay, String newStartHour, String newStar
                     break;
                 case WorkReaderContract.TUESDAY:
                     updateHours(
-                            //pref.getString(getString(R.string.TUESDAY),getString(R.string.TUESDAY)),
                             "TUESDAY",
                             pref.getString(getString(R.string.TUESDAY_START_HOUR),
                                     WorkReaderContract.START_HOUR_DEFAULT),
@@ -918,7 +899,6 @@ private void updateHours(String newStartDay, String newStartHour, String newStar
                     break;
                 case WorkReaderContract.THURSDAY:
                     updateHours(
-                            //pref.getString(getString(R.string.THURSDAY),getString(R.string.THURSDAY)),
                             "THURSDAY",
                             pref.getString(getString(R.string.THURSDAY_START_HOUR),
                                     WorkReaderContract.START_HOUR_DEFAULT),
@@ -935,7 +915,6 @@ private void updateHours(String newStartDay, String newStartHour, String newStar
                     break;
                 case WorkReaderContract.FRIDAY:
                     updateHours(
-                            //pref.getString(getString(R.string.FRIDAY),getString(R.string.FRIDAY)),
                             "FRIDAY",
                             pref.getString(getString(R.string.FRIDAY_START_HOUR),
                                     WorkReaderContract.START_HOUR_DEFAULT),
@@ -952,7 +931,6 @@ private void updateHours(String newStartDay, String newStartHour, String newStar
                     break;
                 case WorkReaderContract.SATURDAY:
                     updateHours(
-                            //pref.getString(getString(R.string.SATURDAY),getString(R.string.SATURDAY)),
                             "SATURDAY",
                             pref.getString(getString(R.string.SATURDAY_START_HOUR),
                                     WorkReaderContract.START_HOUR_DEFAULT),
@@ -969,27 +947,15 @@ private void updateHours(String newStartDay, String newStartHour, String newStar
                     break;
                 case 7:
                     updateHours(WorkReaderContract.DAY_OFF_DEFAULT,
-                            //pref.getString(getString(R.string.OFF),
-                            //        WorkReaderContract.WorkEntry.START_HOUR_DEFAULT),
                             WorkReaderContract.START_HOUR_DEFAULT,
-                            //newWorkHours.getStartMinute(),
                             WorkReaderContract.START_MINUTE_DEFAULT,
-                            //newWorkHours.getStartAmOrPm(),
                             WorkReaderContract.START_AM_OR_PM_DEFAULT,
-                            //newWorkHours.getEndHour(),
                             WorkReaderContract.END_HOUR_DEFAULT,
-                            //newWorkHours.getEndMinute(),
                             WorkReaderContract.END_AM_OR_PM_DEFAULT,
-                            //newWorkHours.getEndAmOrPm()
                             WorkReaderContract.END_AM_OR_PM_DEFAULT);
             }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.d("CWS", "ON DESTROY GOT CALLED IN CWS");
-    }
 
     @Override
     protected void onPause() {
