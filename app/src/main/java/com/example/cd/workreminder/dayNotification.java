@@ -32,6 +32,7 @@ public class DayNotification {
     private PendingIntent alarmIntent; //Added on 1 - 31 - 201
     private final String PRODUCTION_TAG = "DAY_NOTIFICATION";
 
+    public  DayNotification() {}
     public DayNotification(Context context){
         this.context = context;
     }
