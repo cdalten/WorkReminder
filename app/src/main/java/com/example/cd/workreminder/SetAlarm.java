@@ -634,12 +634,13 @@ public class SetAlarm extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        WorkReaderContract.END_HOUR_DEFAULT = null;
+        /*WorkReaderContract.END_HOUR_DEFAULT = null;
         WorkReaderContract.START_MINUTE_DEFAULT = null;
         WorkReaderContract.START_MINUTE_DEFAULT = null;
         WorkReaderContract.START_HOUR_DEFAULT = null;
         WorkReaderContract.END_MINUTE_DEFAULT = null;
         WorkReaderContract.END_AM_OR_PM_DEFAULT = null;
+        */
     }
 
 }//end class

@@ -86,8 +86,8 @@ public class CurrentWeekSchedule extends ListActivity {
 
         setContentView(R.layout.login);
         Log.d(PRODUCTION_TAG, "CURRENT WEEK SCHEDULE GOT CALLED.");
-        //enableBootReceiver();
-        //enableWorkNotificationReceiver();
+        enableBootReceiver();
+        enableWorkNotificationReceiver();
 
         pref =  this.getSharedPreferences("BECAUSE_INTENTS_SUCK_MASSIVE_DICK", MODE_PRIVATE);
 
@@ -257,28 +257,6 @@ public class CurrentWeekSchedule extends ListActivity {
                 PackageManager.DONT_KILL_APP);
     }
 
-    //Added on 10 - 10 - 2022
-    private void disableBootReceiver() {
-        ComponentName receiver = new ComponentName(this, BootReceiver.class);
-        PackageManager pm = this.getPackageManager();
-
-        pm.setComponentEnabledSetting(receiver,
-                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                PackageManager.DONT_KILL_APP);
-
-        //I'm not that sure where to put this function at.
-        Log.d(PRODUCTION_TAG, "BOOT RECEIVER GOT DISABLED");
-    }
-
-    //Added on 10 - 10 - 2022
-    public void disableWorkNoticationReceiver() {
-        ComponentName receiver = new ComponentName(this, WorkNotificationReceiver.class);
-        PackageManager pm = this.getPackageManager();
-
-        pm.setComponentEnabledSetting(receiver,
-                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                PackageManager.DONT_KILL_APP);
-    }
 
     //Added on 10 - 14 - 2019
     private void fillListviewDropdown(
@@ -960,18 +938,19 @@ private void updateHours(String newStartDay, String newStartHour, String newStar
     @Override
     protected void onPause() {
         super.onPause();
-        WorkReaderContract.START_HOUR_DEFAULT =null;
+        /*WorkReaderContract.START_HOUR_DEFAULT =null;
         WorkReaderContract.START_MINUTE_DEFAULT = null;
         WorkReaderContract.START_AM_OR_PM_DEFAULT = null;
         WorkReaderContract.END_HOUR_DEFAULT = null;
         WorkReaderContract.END_MINUTE_DEFAULT = null;
         WorkReaderContract.END_AM_OR_PM_DEFAULT = null;
+        */
 
         Log.d(PRODUCTION_TAG, "ON PAUSE GOT CALLED");
-        if (amEnabled == true) {
-            disableBootReceiver();
-            disableWorkNoticationReceiver();
-           amEnabled = false;
+        /*if (amEnabled == true) {
+            //disableBootReceiver();
+            //disableWorkNoticationReceiver();
+           //amEnabled = false;
             //Log.d("CWS", "ON PAUSE GOT CALLED");
         }
 
@@ -979,7 +958,7 @@ private void updateHours(String newStartDay, String newStartHour, String newStar
             enableBootReceiver();
             enableWorkNotificationReceiver();
             amEnabled = true;
-        }
+        }*/
         Log.d(PRODUCTION_TAG, "AM ENABLED? " + amEnabled);
     }
 

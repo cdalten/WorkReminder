@@ -18,10 +18,12 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.icu.util.Calendar;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
@@ -50,31 +52,38 @@ import static android.app.Notification.EXTRA_NOTIFICATION_ID;
  */
 public class AlarmNotification extends FragmentActivity {
 
-        private final String PRODUCTION_TAG = "WORK_RECEIVER: ";
-        //@Override
-        //public void onReceive(Context context, Intent intent) {
-
+    private final String PRODUCTION_TAG = "ALARM NOTIFICATION:";
         protected void onCreate(Bundle savedInstanceState){
            super.onCreate(savedInstanceState);
+           Log.d(PRODUCTION_TAG, "GOT CALLED");
 
-                Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+           Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
 
-                if (alarmUri == null) {
-                                alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                }
+           if (alarmUri == null) {
+               alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+           }
 
-                DayNotification dayNotification = new DayNotification(this);
-                dayNotification.setDisplaySnoozeButton(true);
-                dayNotification.setNotificationAlarm(alarmUri);
-                dayNotification.addAlarmNotificationRingtone(WorkReaderContract.ALARM_NOTIFICATION_RINGS);
-                dayNotification.setAmPlaying(WorkReaderContract.ALARM_RINGS);
-                dayNotification.createNotification(dayNotification.getNotificationTitle(), dayNotification.getNotificationText());
+           DayNotification dayNotification = new DayNotification(this);
+           dayNotification.setDisplaySnoozeButton(true);
+           dayNotification.setNotificationAlarm(alarmUri);
+           dayNotification.addAlarmNotificationRingtone(WorkReaderContract.ALARM_NOTIFICATION_RINGS);
+           dayNotification.setAmPlaying(WorkReaderContract.ALARM_RINGS);
+           dayNotification.createNotification(dayNotification.getNotificationTitle(), dayNotification.getNotificationText());
 
-                dayNotification.setNotificationAlarm(alarmUri);
-                dayNotification.addAlarmNotificationRingtone(WorkReaderContract.ALARM_NOTIFICATION_SILENT);
-                dayNotification.updateDisplayTime(this);
+           dayNotification.setNotificationAlarm(alarmUri);
+           dayNotification.addAlarmNotificationRingtone(WorkReaderContract.ALARM_NOTIFICATION_SILENT);
+
+           dayNotification.updateDisplayTime(this);
 
 
         }
-        //}
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(PRODUCTION_TAG, "ALARM ON PAUSE GOT CALLED");
+    }
+
+
+    //}
 }//end class

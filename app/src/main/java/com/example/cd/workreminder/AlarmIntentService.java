@@ -43,7 +43,7 @@ import java.util.concurrent.TimeUnit;
 
 //Added on 10 - 8 - 2019. Handle snooze, dismiss
 public class AlarmIntentService extends IntentService {
-    private static final String TAG = "AlarmService";
+    private final String TAG = "AlarmService";
 
     public static final String ACTION_DISMISS =
             "com.example.cd.workreminder.action.DISMISS";
@@ -76,7 +76,9 @@ public class AlarmIntentService extends IntentService {
      * Handles action Dismiss in the provided background thread.
      */
     private void handleActionDismiss() {
-        Log.e(TAG, "handleActionDismiss()");
+        Log.d(TAG, "handleActionDismiss()");
+        disableBootReceiver();
+        disableWorkNoticationReceiver();
 
         //Because some dumbass thought that hitting the dismiss button SHOULDN'T clear the notification
 
@@ -291,7 +293,22 @@ public class AlarmIntentService extends IntentService {
     }
 
     //Added on 10 - 10 - 2022
+    //Added on 2 - 28 - 2020
+    //Added on 10 - 10 - 2022
     private void disableBootReceiver() {
+        ComponentName receiver = new ComponentName(this, BootReceiver.class);
+        PackageManager pm = this.getPackageManager();
+
+        pm.setComponentEnabledSetting(receiver,
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+
+        //I'm not that sure where to put this function at.
+        //Log.d(PRODUCTION_TAG, "BOOT RECEIVER GOT DISABLED");
+    }
+
+    //Added on 10 - 10 - 2022
+    public void disableWorkNoticationReceiver() {
         ComponentName receiver = new ComponentName(this, WorkNotificationReceiver.class);
         PackageManager pm = this.getPackageManager();
 
@@ -299,5 +316,11 @@ public class AlarmIntentService extends IntentService {
                 PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP);
     }
+
+
+
+
+
+
 }
 

@@ -14,19 +14,22 @@ package com.example.cd.workreminder;
 import android.provider.BaseColumns;
 
 public final class WorkReaderContract {
-    private WorkReaderContract() {}
 
   //  public static class WorkEntry implements BaseColumns {
 
+        /*
+         These have public static final otherwise the values become null when
+         the device changes orientation.
+         */
         public static final int ALARM_MINUTE_DEFAULT = 20; //20 minutes before start of shift
         public static final int ALARM_HOUR_DEFAULT = 0; //0 hours before start of shift
-        public static String DAY_OFF_DEFAULT = "OFF"; //Added on 11 - 15 - 2019
-        public static String START_HOUR_DEFAULT = "12"; //Added on 5 - 22 - 2019
-        public static String START_MINUTE_DEFAULT = "00";
-        public static String START_AM_OR_PM_DEFAULT = "AM";
-        public static String END_HOUR_DEFAULT = "12";
-        public static String END_MINUTE_DEFAULT = "00";
-        public static String END_AM_OR_PM_DEFAULT = "AM";
+        public static final String DAY_OFF_DEFAULT = "OFF"; //Added on 11 - 15 - 2019
+        public static final String START_HOUR_DEFAULT = "12"; //Added on 5 - 22 - 2019
+        public static final String START_MINUTE_DEFAULT = "00";
+        public static final String START_AM_OR_PM_DEFAULT = "AM";
+        public static final String END_HOUR_DEFAULT = "12";
+        public static final String END_MINUTE_DEFAULT = "00";
+        public static final String END_AM_OR_PM_DEFAULT = "AM";
 
         public static final int SUNDAY = 0;
         public static final int MONDAY = 1;
@@ -58,16 +61,10 @@ public final class WorkReaderContract {
         public static final boolean ALARM_SILENT = false; //Added on 1 - 31 - 2020
 
         public static final int hour = 60;
-
         public static int alarm_default = 20;
 
         public static final int ON_DAY = 0; //Added on 10 - 12 - 2022
         public static final int OFF_DAY = 1; //Added onn 10 - 12 - 2022
         public static int SELECTION_DEFAULT_VALUE = 0; //Added on 10 - 12 - 2022
-
-
-        //change int to Integer.
-
-
     //}
 }//end class
