@@ -78,9 +78,10 @@ public class SetAlarm extends AppCompatActivity {
     private String newDayOfWeekEndAmOrPm = "";
     private String previousDay = ""; //Added on 12 - 27 - 2019
 
-    private long currentTime = 0;
-    private long startTime = 0;
-    private long endTime = 0;
+    private long currentTime = 0; //Added on 11 - 10 - 2022
+    private long startTime = 0; //Added on 11 - 10 - 2022
+    private long endTime = 0; //Added on 11 - 10 - 2022
+    private long alarmSetTime = 0; //Added on 11 - 11 - 20202
 
     BroadcastReceiver br;
     IntentFilter intentFilter;
@@ -352,6 +353,8 @@ public class SetAlarm extends AppCompatActivity {
         startTime = 0;
         endTime = 0;
 
+        alarmSetTime = 0;
+
         // /java.text.DateFormat.getTimeInstance().format(new Date());//new SimpleDateFormat("HH:mm", Locale.getDefault().fot);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             currentHour = android.icu.util.Calendar.getInstance().get(android.icu.util.Calendar.HOUR_OF_DAY);
@@ -398,6 +401,18 @@ public class SetAlarm extends AppCompatActivity {
             calendarEndTime.set(java.util.Calendar.HOUR_OF_DAY, militaryTime.getEndMilitaryHour());
             calendarEndTime.set(java.util.Calendar.MINUTE, militaryTime.getEndMilitaryMinute());
             endTime = calendarEndTime.getTime().getTime();
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            final android.icu.util.Calendar calendarAlarmSetTime = android.icu.util.Calendar.getInstance();
+            calendarAlarmSetTime.set(android.icu.util.Calendar.HOUR_OF_DAY, alarmTimer.getNewAlarmMilitaryHour(context));
+            calendarAlarmSetTime.set(android.icu.util.Calendar.MINUTE, alarmTimer.getNewAlarmCivilianMinutes(context));
+            alarmSetTime = calendarAlarmSetTime.getTime().getTime();
+        } else {
+            final java.util.Calendar calendarAlarmSetTime = java.util.Calendar.getInstance();
+            calendarAlarmSetTime.set(java.util.Calendar.HOUR_OF_DAY, alarmTimer.getNewAlarmMilitaryHour(context));
+            calendarAlarmSetTime.set(java.util.Calendar.MINUTE, alarmTimer.getNewAlarmMilitaryMinute(context));
+            alarmSetTime = calendarAlarmSetTime.getTime().getTime();
         }
         //This doesn't work for after hours
         /*
@@ -467,7 +482,7 @@ public class SetAlarm extends AppCompatActivity {
             displayNotification(context.getApplicationContext(), "YOU MISSED YOUR SHIFT");
         }
 
-        else if (currentTime < startTime) {
+        else if (alarmSetTime >- currentTime && currentTime < startTime) {
                 //displayNotification(context.getApplicationContext(), "DID YOU MISS YOUR SHIFT?");
 
 
