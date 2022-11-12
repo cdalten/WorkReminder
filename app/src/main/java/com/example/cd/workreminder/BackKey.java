@@ -43,6 +43,7 @@ public class BackKey extends FragmentActivity {
 
     @Override
     public void onBackPressed() {
+        WorkReaderContract.amAconnected = false;
         AlertDialog.Builder builder =
                 new AlertDialog.Builder(this);
 

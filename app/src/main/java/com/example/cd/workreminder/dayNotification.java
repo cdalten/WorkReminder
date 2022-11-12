@@ -138,14 +138,28 @@ public class DayNotification {
         }
 
 
+
+        //setNotificationMessage(notificationCompatBuilder, notificationTitle, notificationText);//notificationTitle, notificationText);
         notificationCompatBuilder.setContentTitle(notificationTitle);
         notificationCompatBuilder.setContentText(notificationText);
         NotificationManagerCompat mNotificationManagerCompat;
         mNotificationManagerCompat = NotificationManagerCompat.from(context.getApplicationContext());
         Notification notification = notificationCompatBuilder.build();
-        mNotificationManagerCompat.notify(0, notification);
+        //
+         mNotificationManagerCompat.notify(0, notification);
+
     }
 
+    public void setNotificationMessage(NotificationCompat.Builder notificationMessage,
+                                       String notificationTitle,
+                                       String notificationText) {
+        notificationMessage.setContentTitle(notificationTitle);
+        notificationMessage.setContentText(notificationText);
+        NotificationManagerCompat mMotificationManagerCompat;
+        mMotificationManagerCompat = NotificationManagerCompat.from(context.getApplicationContext());
+        Notification notification = notificationMessage.build();
+        mMotificationManagerCompat.notify(0, notification);
+    }
 
     //Added on 1 - 31 - 2020
     public void setAmPlaying(boolean amPlaying) {
@@ -189,10 +203,12 @@ public class DayNotification {
         return this.notificationText;
     }
 
-    public void updateDisplayTime(Context context) {
+    public void updateDisplayNotification(Context context) {
         final AlarmTimer alarmTimer = AlarmTimer.getInstance();
         AlarmTimeFormatDisplay alarmTimeFormatDisplay =  new AlarmTimeFormatDisplay(context, alarmTimer, true);
+        ;
         createNotification("NEW ALARM TIME", alarmTimeFormatDisplay.displayCurrentTime() );
     }
+
 
 }//end class

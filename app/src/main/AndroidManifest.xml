@@ -22,6 +22,7 @@
         </activity>
         <activity
             android:name=".CurrentWeekSchedule"
+            android:screenOrientation="portrait"
             android:label="@string/app_name">
             <intent-filter>
 
@@ -183,5 +184,13 @@
             </intent-filter>
 
         </activity>
+
+        <activity
+            android:name=".SetAlarm"
+            android:configChanges="orientation|screenLayout"
+            android:label="@string/app_name">
+
+            <!-- android:configurationChanges="orientation|screenlayout" -->
+        </activity >
     </application>
 </manifest>

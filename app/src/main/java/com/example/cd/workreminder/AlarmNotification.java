@@ -52,9 +52,11 @@ import static android.app.Notification.EXTRA_NOTIFICATION_ID;
  */
 public class AlarmNotification extends FragmentActivity {
 
+
     private final String PRODUCTION_TAG = "ALARM NOTIFICATION:";
         protected void onCreate(Bundle savedInstanceState){
            super.onCreate(savedInstanceState);
+           SetAlarm setAlarm = new SetAlarm(this);
            Log.d(PRODUCTION_TAG, "GOT CALLED");
 
            Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
@@ -63,18 +65,19 @@ public class AlarmNotification extends FragmentActivity {
                alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
            }
 
-           DayNotification dayNotification = new DayNotification(this);
-           dayNotification.setDisplaySnoozeButton(true);
-           dayNotification.setNotificationAlarm(alarmUri);
-           dayNotification.addAlarmNotificationRingtone(WorkReaderContract.ALARM_NOTIFICATION_RINGS);
-           dayNotification.setAmPlaying(WorkReaderContract.ALARM_RINGS);
-           dayNotification.createNotification(dayNotification.getNotificationTitle(), dayNotification.getNotificationText());
+           //if (setAlarm.getCurrentTime() < setAlarm.getStartTime()) {
+               DayNotification dayNotification = new DayNotification(this);
+               dayNotification.setDisplaySnoozeButton(true);
+               dayNotification.setNotificationAlarm(alarmUri);
+               dayNotification.addAlarmNotificationRingtone(WorkReaderContract.ALARM_NOTIFICATION_RINGS);
+               dayNotification.setAmPlaying(WorkReaderContract.ALARM_RINGS);
+               dayNotification.createNotification(dayNotification.getNotificationTitle(), dayNotification.getNotificationText());
 
-           dayNotification.setNotificationAlarm(alarmUri);
-           dayNotification.addAlarmNotificationRingtone(WorkReaderContract.ALARM_NOTIFICATION_SILENT);
+               dayNotification.setNotificationAlarm(alarmUri);
+               dayNotification.addAlarmNotificationRingtone(WorkReaderContract.ALARM_NOTIFICATION_SILENT);
 
-           dayNotification.updateDisplayTime(this);
-
+               dayNotification.updateDisplayNotification(this);
+           //}
 
         }
 

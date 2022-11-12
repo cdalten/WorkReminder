@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.net.wifi.WifiManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
@@ -74,6 +75,7 @@ public class CurrentWeekSchedule extends ListActivity {
     private Button workSettings; //Added on 6 - 24 - 2019
     public static boolean amEnabled = false; // Added on 10 - 29 - 2022
     SharedPreferences pref;
+    private Intent closedIntent;
 
     private int currentHours = 0; //Added on 10 - 17 - 2019
 
@@ -965,7 +967,19 @@ private void updateHours(String newStartDay, String newStartHour, String newStar
     @Override
     protected void onStop() {
         super.onStop();
-        Log.d(PRODUCTION_TAG, "ON STOP GOT CALLED IN CWS");
+        closedIntent = new Intent();
+        if (WorkReaderContract.amAconnected == false) {
+            closedIntent.putExtra("AMCLOSED", true);
+            sendBroadcast(closedIntent);
+        }
+        //    Intent intent = new Intent(this, AlarmNotification.class);
+         //   startActivity(intent);
+        //}
+        //Log.d(PRODUCTION_TAG, "AM I CONNECTED? " + WorkReaderContract.amAconnected);
+        //Intent intent = new Intent(this, CurrentWeekSchedule.class);
+        //this.startActivity(intent);
+
+        //super.onBackPressed();
     }
 
 }//End class

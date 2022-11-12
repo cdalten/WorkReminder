@@ -78,6 +78,10 @@ public class SetAlarm extends AppCompatActivity {
     private String newDayOfWeekEndAmOrPm = "";
     private String previousDay = ""; //Added on 12 - 27 - 2019
 
+    private long currentTime = 0;
+    private long startTime = 0;
+    private long endTime = 0;
+
     BroadcastReceiver br;
     IntentFilter intentFilter;
     public SetAlarm() {} //Added on 11 - 22 - 2019
@@ -91,7 +95,7 @@ public class SetAlarm extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.e("LG_WORK_PHONE", "DAY NOTIFICATION ONCREATE() GOT CALLED");
+        Log.d("LG_WORK_PHONE", "DAY NOTIFICATION ONCREATE() GOT CALLED");
     }
 
     //Google Calendar only works with API level 24 and higher
@@ -344,9 +348,9 @@ public class SetAlarm extends AppCompatActivity {
         int currentMinute = 0;
 
 
-        long currentTime = 0;
-        long startTime = 0;
-        long endTime = 0;
+        currentTime = 0;
+        startTime = 0;
+        endTime = 0;
 
         // /java.text.DateFormat.getTimeInstance().format(new Date());//new SimpleDateFormat("HH:mm", Locale.getDefault().fot);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -543,6 +547,9 @@ public class SetAlarm extends AppCompatActivity {
             java.util.Calendar.getInstance().set(java.util.Calendar.MINUTE, alarmTimer.getNewAlarmMilitaryMinute(context));
             java.util.Calendar.getInstance().set(java.util.Calendar.SECOND, 0);
             java.util.Calendar.getInstance().set(java.util.Calendar.MILLISECOND, 0);
+
+            alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, java.util.Calendar.getInstance().getTimeInMillis(),
+                    1000 * 60, alarmIntent);
         }
 
     }
@@ -631,6 +638,20 @@ public class SetAlarm extends AppCompatActivity {
         return ringtone;
     }
 
+    //Added on 11 - 10 - 2022
+    public long getCurrentTime() {
+        return currentTime;
+    }
+
+    //Added on 11 - 10 - 2020;
+    public long getStartTime() {
+        return startTime;
+    }
+
+    //Added on 11 - 10 - 2020
+    public long getEndTime() {
+        return endTime;
+    }
     @Override
     protected void onPause() {
         super.onPause();

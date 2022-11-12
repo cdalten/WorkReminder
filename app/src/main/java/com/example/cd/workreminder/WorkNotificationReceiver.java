@@ -53,10 +53,14 @@ public class WorkNotificationReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         Log.d(PRODUCTION_TAG, "BROADCAST RECEIVER GOT CALLED");
-        intent = new Intent(context, AlarmNotification.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
-        /*Log.d(PRODUCTION_TAG, "WORK ALARM RECEIVER GOT CALLED WITH: " + intent.getAction());
+        if (intent.getBooleanExtra("AMCONNECTED", false) == true) {
+            Log.d(PRODUCTION_TAG, "AM CONNECTED GOT CALLED");
+            intent = new Intent(context, AlarmNotification.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+
+        }
+        Log.d(PRODUCTION_TAG, "WORK ALARM RECEIVER GOT CALLED WITH: " + intent.getAction());
         Log.d(PRODUCTION_TAG, "ONRECEIVE() GOT CALLED");
 
         Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
@@ -73,8 +77,7 @@ public class WorkNotificationReceiver extends BroadcastReceiver {
 
         dayNotification.setNotificationAlarm(alarmUri);
         dayNotification.addAlarmNotificationRingtone(WorkReaderContract.ALARM_NOTIFICATION_SILENT);
-        dayNotification.updateDisplayTime(context);
-        */
+        dayNotification.updateDisplayNotification(context);
 
 
     }
