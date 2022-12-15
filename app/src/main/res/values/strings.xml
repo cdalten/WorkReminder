@@ -14,14 +14,68 @@
 
     <string name="action_share">DISMISS</string>
     <string name="action_reply">SNOOZE</string>
-    <string name="SUNDAY">SUNDAY</string>
-    <string name="MONDAY">MONDAY</string>
-    <string name="TUESDAY">TUESDAY</string>
-    <string name="WEDNESDAY">WEDNESDAY</string>
-    <string name="THURSDAY">THURSDAY</string>
-    <string name="FRIDAY">FRIDAY</string>
-    <string name="SATURDAY">SATURDAY</string>
-    <string name="OFF">OFF</string>
+    <string name="SUNDAY_HOURS">SUNDAY</string>
+    <string name="MONDAY_HOURS">MONDAY</string>
+    <string name="TUESDAY_HOURS">TUESDAY</string>
+    <string name="WEDNESDAY_HOURS">WEDNESDAY</string>
+    <string name="THURSDAY_HOURS">THURSDAY</string>
+    <string name="FRIDAY_HOURS">FRIDAY</string>
+    <string name="SATURDAY_HOURS">SATURDAY</string>
+    <string name="OFF_DAY">OFF_DAY</string>
+
+
+    <!--public static final int ALARM_MINUTE_DEFAULT = 20; //20 minutes before start of shift
+
+    ALARM_HOUR_DEFAULT = 0; //0 hours before start of shift
+    -->
+    <string name="DAY_OFF_DEFAULT">"OFF"</string> //Added on 11 - 15 - 2019
+    <string name="START_HOUR_DEFAULT">"12"</string> //Added on 5 - 22 - 2019
+    <string name="START_MINUTE_DEFAULT">"00"</string>
+    <string name="START_AM_OR_PM_DEFAULT">"AM"</string>
+    <string name="END_HOUR_DEFAULT">"12"</string>
+    <string name="END_MINUTE_DEFAULT">"00"</string>
+    <string name="END_AM_OR_PM_DEFAULT">"AM"</string>
+
+    <!--
+    public static final int SUNDAY = 0;
+    public static final int MONDAY = 1;
+    public static final int TUESDAY = 2;
+    public static final int WEDNESDAY = 3;
+    public static final int THURSDAY = 4;
+    public static final int FRIDAY = 5;
+    public static final int SATURDAY = 6;
+    public static final int OFF = 7; //Added on 5 - 28 - 2019
+
+    public static final int DAY_OF_WEEK = 0; //Added on 11 - 15 - 2019
+    public static final int START_HOUR = 1; //Added on 5 - 29 - 2019
+    public static final int START_MINUTE = 2;
+    public static final int START_AM_OR_PM = 3;
+    public static final int END_HOUR = 4;
+    public static final int END_MINUTE = 5;
+    public static final int END_AM_OR_PM = 6;
+
+    public static final int RESULT_OK_WORK = 1; //Added on 11 - 12 - 2019
+    public static final int RESULT_FAILED = 2;
+    public static final int RESULT_OKAY_NO_WORK = 3; //Added on 11 - 13 - 2019
+    public static final int RESULT_OKAY_UPDATE_WORK_ALARM_TIME = 4; //Added on 12 - 19 - 2019
+
+    public static final boolean ALARM_NOTIFICATION_RINGS = true;
+    public static final boolean ALARM_NOTIFICATION_SILENT = false;
+    public static final boolean SNOOZE_ON = true;
+    public static final boolean SNOOZE_OFF = false;
+    public static final boolean ALARM_RINGS = true; //Added on 1 - 31 - 2020
+    public static final boolean ALARM_SILENT = false; //Added on 1 - 31 - 2020
+
+    public static final int hour = 60;
+    public static int alarm_default = 20;
+
+    public static final int ON_DAY = 0; //Added on 10 - 12 - 2022
+    public static final int OFF_DAY = 1; //Added onn 10 - 12 - 2022
+    public static int SELECTION_DEFAULT_VALUE = 0; //Added on 10 - 12 - 2022
+    public static boolean amAconnected = false;
+    -->
+
+
 
     <string name="I_WORK_TODAY">I_WORK_TODAY</string>
     <string name="DAY_OF_WEEK">DAY_OF_WEEK</string>

@@ -30,7 +30,8 @@ import android.util.Log;
 public class MainActivity extends AppCompatActivity {
     public static final int NOTIFICATION_ID = 0; //Added on 10 - 14 - 2019
     private final String PRODUCTION_TAG = "MAIN_ACTIVITY_LG: "; //used for hardware only
-    private SharedPreferences pref; //added on 9 - 21 - 2018
+    //private SharedPreferences pref; //added on 9 - 21 - 2018
+    SharedPreferences.Editor editor;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(PRODUCTION_TAG, "ONCREATE() BEFORE SAVEDINSTANCE()");
 
+        //initConstants();
         dispatchCurrentWeekSchedule();
 
         if (savedInstanceState == null) {
@@ -48,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
             //Attempt to invoke interface method 'java.lang.String android.content.SharedPreferences.getString(java.lang.String, java.lang.String)'
             //on a null object reference
-            pref = this.getSharedPreferences("BECAUSE_INTENTS_SUCK_MASSIVE_DICK", MODE_PRIVATE);
+            SharedPreferences pref = this.getSharedPreferences("BECAUSE_INTENTS_SUCK_MASSIVE_DICK", MODE_PRIVATE);
 
             //12AM represents midnight on my phone
 
@@ -56,8 +58,110 @@ public class MainActivity extends AppCompatActivity {
             Log.d(PRODUCTION_TAG, "ONCREATE() WHEN SAVEDINSTANCE() IS NOT NULL");
             savedInstanceState.getString("UPDATED_SCHEDULE"); //???
 
-            pref = getSharedPreferences("BECAUSE_INTENTS_SUCK_MASSIVE_DICK", MODE_PRIVATE); //redudant??
+            SharedPreferences pref = getSharedPreferences("BECAUSE_INTENTS_SUCK_MASSIVE_DICK", MODE_PRIVATE); //redudant??
         }
+    }
+
+    private void initConstants() {
+
+            //  public static class WorkEntry implements BaseColumns {
+
+
+        SharedPreferences preferences = getApplicationContext().getSharedPreferences("CONSTANTS", MODE_PRIVATE);
+        editor = preferences.edit();
+            //public static final int ALARM_MINUTE_DEFAULT = 20; //20 minutes before start of shift
+            //public static final int ALARM_HOUR_DEFAULT = 0; //0 hours before start of shift
+        editor.putString("DAY_OFF_DEFAULT", "OFF");
+        editor.putString("START_HOUR_DEFAULT", "12");
+        editor.putString("START_MINUTE_DEFAULT", "00");
+        editor.putString("START_AM_OR_PM_DEFAULT", "AM");
+        editor.putString("END_HOUR_DEFAULT", "12");
+        editor.putString("END_MINUTE_DEFAULT", "00");
+        editor.putString("END_AM_OR_PM_DEFAULT", "AM");
+            //public static final String DAY_OFF_DEFAULT = "OFF"; //Added on 11 - 15 - 2019
+            //public static final String START_HOUR_DEFAULT = "12"; //Added on 5 - 22 - 2019
+            //public static final String START_MINUTE_DEFAULT = "00";
+            //public static final String START_AM_OR_PM_DEFAULT = "AM";
+            //public static final String END_HOUR_DEFAULT = "12";
+            //public static final String END_MINUTE_DEFAULT = "00";
+            //public static final String END_AM_OR_PM_DEFAULT = "AM";
+
+
+        editor.putInt("SUNDAY", 0);
+        editor.putInt("MONDAY", 1);
+        editor.putInt("TUESDAY", 2);
+        editor.putInt("WEDNESDAY", 3);
+        editor.putInt("THURSDAY", 4);
+        editor.putInt("FRIDAY", 5);
+        editor.putInt("SATURDAY", 6);
+        editor.putInt("OFF", 7);
+
+            //public static final int SUNDAY = 0;
+            //public static final int MONDAY = 1;
+            //public static final int TUESDAY = 2;
+            //public static final int WEDNESDAY = 3;
+            //public static final int THURSDAY = 4;
+            //public static final int FRIDAY = 5;
+            //public static final int SATURDAY = 6;
+            //public static final int OFF = 7; //Added on 5 - 28 - 2019
+
+        editor.putInt("DAY_OF_WEEK", 0);
+        editor.putInt("START_HOUR", 1);
+        editor.putInt("START_MINUTE", 2);
+        editor.putInt("START_AM_OR_PM", 3);
+        editor.putInt("END_HOUR", 4);
+        editor.putInt("END_MINUTE", 5);
+        editor.putInt("END_AM_OR_PM", 6);
+
+            //public static final int DAY_OF_WEEK = 0; //Added on 11 - 15 - 2019
+            //public static final int START_HOUR = 1; //Added on 5 - 29 - 2019
+            //public static final int START_MINUTE = 2;
+            //public static final int START_AM_OR_PM = 3;
+            //public static final int END_HOUR = 4;
+            //public static final int END_MINUTE = 5;
+            //public static final int END_AM_OR_PM = 6;
+
+        editor.putInt("RESULT_OK_WORK",1);
+        editor.putInt("RESULT_FAILED", 2);
+        editor.putInt("RESULT_OKAY_NO_WORK", 3);
+        editor.putInt("RESULT_OKAY_UPDATE_WORK_ALARM_TIME", 4);
+            //public static final int RESULT_OK_WORK = 1; //Added on 11 - 12 - 2019
+            //public static final int RESULT_FAILED = 2;
+            //public static final int RESULT_OKAY_NO_WORK = 3; //Added on 11 - 13 - 2019
+            //public static final int RESULT_OKAY_UPDATE_WORK_ALARM_TIME = 4; //Added on 12 - 19 - 2019
+
+        editor.putBoolean("ALARM_NOTIFICATION_RINGS", true);
+        editor.putBoolean("ALARM_NOTIFICASTION_SILENT", false);
+        editor.putBoolean("SNOOZE_ON", true);
+        editor.putBoolean("SNOOZE_OFF", false);
+        editor.putBoolean("ALARM_RINGS", false);
+        editor.putBoolean("ALARM_SILENT", false);
+            //public static final boolean ALARM_NOTIFICATION_RINGS = true;
+            //public static final boolean ALARM_NOTIFICATION_SILENT = false;
+            //public static final boolean SNOOZE_ON = true;
+            //public static final boolean SNOOZE_OFF = false;
+            //public static final boolean ALARM_RINGS = true; //Added on 1 - 31 - 2020
+            //public static final boolean ALARM_SILENT = false; //Added on 1 - 31 - 2020
+
+
+         editor.putInt("HOUR", 60);
+         editor.putInt("ALARM_DEFAULT", 20);
+            //public static final int hour = 60;
+            //public static int alarm_default = 20;
+
+
+         editor.putInt("ON_DAY", 0);
+         editor.putInt("OFF_DAY", 1);
+         editor.putInt("SELECTION_DEFAULT_VALUE", 0);
+         editor.putBoolean("amCoonnected", false);
+            //public static final int ON_DAY = 0; //Added on 10 - 12 - 2022
+            //public static final int OFF_DAY = 1; //Added onn 10 - 12 - 2022
+            //public static int SELECTION_DEFAULT_VALUE = 0; //Added on 10 - 12 - 2022
+            //public static boolean amAconnected = false;
+
+         editor.commit();
+            //}
+
     }
 
     private void dispatchCurrentWeekSchedule() {

@@ -109,7 +109,7 @@ public class SetAlarm extends AppCompatActivity {
         int day = getDayOfWeek();
         if (day == WorkReaderContract.SUNDAY) {
             setNotification(
-                    R.string.SUNDAY,
+                    R.string.SUNDAY_HOURS,
                     R.string.SUNDAY_START_HOUR,
                     R.string.SUNDAY_START_MINUTE,
                     R.string.SUNDAY_START_AM_OR_PM,
@@ -125,7 +125,7 @@ public class SetAlarm extends AppCompatActivity {
         } else if (day ==  WorkReaderContract.MONDAY) {
             //if(!week.get(position).get(0).equals("OFF")) {
             setNotification(
-                    R.string.MONDAY,
+                    R.string.MONDAY_HOURS,
                     R.string.MONDAY_START_HOUR,
                     R.string.MONDAY_START_MINUTE,
                     R.string.MONDAY_START_AM_OR_PM,
@@ -140,7 +140,7 @@ public class SetAlarm extends AppCompatActivity {
             );
         } else if (day ==  WorkReaderContract.TUESDAY) {
             setNotification(
-                    R.string.TUESDAY,
+                    R.string.TUESDAY_HOURS,
                     R.string.TUESDAY_START_HOUR,
                     R.string.TUESDAY_START_MINUTE,
                     R.string.TUESDAY_START_AM_OR_PM,
@@ -155,7 +155,7 @@ public class SetAlarm extends AppCompatActivity {
             );
         } else if (day ==  WorkReaderContract.WEDNESDAY) {
             setNotification(
-                    R.string.WEDNESDAY,
+                    R.string.WEDNESDAY_HOURS,
                     R.string.WEDNESDAY_START_HOUR,
                     R.string.WEDNESDAY_START_MINUTE,
                     R.string.WEDNESDAY_START_AM_OR_PM,
@@ -170,7 +170,7 @@ public class SetAlarm extends AppCompatActivity {
             );
         }else if (day ==  WorkReaderContract.THURSDAY) {
             setNotification(
-                    R.string.THURSDAY,
+                    R.string.THURSDAY_HOURS,
                     R.string.THURSDAY_START_HOUR,
                     R.string.THURSDAY_START_MINUTE,
                     R.string.THURSDAY_START_AM_OR_PM,
@@ -186,7 +186,7 @@ public class SetAlarm extends AppCompatActivity {
         } else if (day ==  WorkReaderContract.FRIDAY) {
             //if(!week.get(position).get(0).equals("OFF")) {
             setNotification(
-                    R.string.FRIDAY,
+                    R.string.FRIDAY_HOURS,
                     R.string.FRIDAY_START_HOUR,
                     R.string.FRIDAY_START_MINUTE,
                     R.string.FRIDAY_START_AM_OR_PM,
@@ -203,7 +203,7 @@ public class SetAlarm extends AppCompatActivity {
         }
         else if (day == WorkReaderContract.SATURDAY) {
             setNotification(
-                    R.string.SATURDAY,
+                    R.string.SATURDAY_HOURS,
                     R.string.SATURDAY_START_HOUR,
                     R.string.SATURDAY_START_MINUTE,
                     R.string.SATURDAY_START_AM_OR_PM,
@@ -406,7 +406,7 @@ public class SetAlarm extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             final android.icu.util.Calendar calendarAlarmSetTime = android.icu.util.Calendar.getInstance();
             calendarAlarmSetTime.set(android.icu.util.Calendar.HOUR_OF_DAY, alarmTimer.getNewAlarmMilitaryHour(context));
-            calendarAlarmSetTime.set(android.icu.util.Calendar.MINUTE, alarmTimer.getNewAlarmCivilianMinutes(context));
+            calendarAlarmSetTime.set(android.icu.util.Calendar.MINUTE, alarmTimer.getNewAlarmMilitaryMinute(context));
             alarmSetTime = calendarAlarmSetTime.getTime().getTime();
         } else {
             final java.util.Calendar calendarAlarmSetTime = java.util.Calendar.getInstance();
@@ -421,7 +421,7 @@ public class SetAlarm extends AppCompatActivity {
          is usually done by a complete dipshit, the NEXT day becomes the PREVIOUS day.
 
          I guess if you want to see this in action, go work as a 3rd shift at a place like Walmart
-         or Target for a couple of months.
+         or Target for a cuple of months.
          */
         //if (militaryTime.getStartMilitaryHour() == 0 && militaryTime.getStartAmOrPm().equals("AM")) {
         //    setNewNotificationDisplayAlarm(context.getApplicationContext(),
@@ -482,7 +482,7 @@ public class SetAlarm extends AppCompatActivity {
             displayNotification(context.getApplicationContext(), "YOU MISSED YOUR SHIFT");
         }
 
-        else if (alarmSetTime >- currentTime && currentTime < startTime) {
+        else if (alarmSetTime >= currentTime && currentTime < startTime) {
                 //displayNotification(context.getApplicationContext(), "DID YOU MISS YOUR SHIFT?");
 
 
@@ -530,40 +530,61 @@ public class SetAlarm extends AppCompatActivity {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             //final Calendar calendar = Calendar.getInstance();
-            android.icu.util.Calendar.getInstance().setTimeInMillis(System.currentTimeMillis());
+            android.icu.util.Calendar calendar = Calendar.getInstance();
+            //android.icu.util.Calendar.getInstance()
+                    calendar.setTimeInMillis(System.currentTimeMillis());
         /*
           Time changes when the user changes the time before shift from something like
           20 minutes before the start of the shift to something like 10 minutes before
           the start of a shift.
          */
             if (alarmTimer.getNewAlarmMilitaryHour(context) == 24) {
-                android.icu.util.Calendar.getInstance().set(android.icu.util.Calendar.HOUR_OF_DAY, 0);
+                //android.icu.util.Calendar.getInstance().
+                        calendar.set(android.icu.util.Calendar.HOUR_OF_DAY, 0);
             } else {
-                android.icu.util.Calendar.getInstance().set(android.icu.util.Calendar.HOUR_OF_DAY, alarmTimer.getNewAlarmMilitaryHour(context));
+                //android.icu.util.Calendar.getInstance().
+                        calendar.set(android.icu.util.Calendar.HOUR_OF_DAY,
+                        alarmTimer.getNewAlarmMilitaryHour(context)
+                        //19
+                        );
             }
             ;
-            android.icu.util.Calendar.getInstance().set(
-                    android.icu.util.Calendar.MINUTE, alarmTimer.getNewAlarmMilitaryMinute(context));
-            android.icu.util.Calendar.getInstance().set(android.icu.util.Calendar.SECOND, 0);
-            android.icu.util.Calendar.getInstance().set(android.icu.util.Calendar.MILLISECOND, 0); //??
+            //android.icu.util.Calendar.getInstance().
+                    calendar.set(
+                    android.icu.util.Calendar.MINUTE,
+                    alarmTimer.getNewAlarmMilitaryMinute(context)
+                    //40
+                    );
+            //android.icu.util.Calendar.getInstance().set(android.icu.util.Calendar.SECOND, 0);
+            //android.icu.util.Calendar.getInstance().set(android.icu.util.Calendar.MILLISECOND, 0); //??
 
-            alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, android.icu.util.Calendar.getInstance().getTimeInMillis(),
+            Log.d(PRODUCTION_TAG, "ALARM HOUR:" + alarmTimer.getNewAlarmMilitaryHour(context)
+                    + " ALARM MINUTES:" + alarmTimer.getNewAlarmMilitaryMinute(context));
+            alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP,
+                    //android.icu.util.Calendar.getInstance().
+                    calendar.getTimeInMillis(),
                     1000 * 60, alarmIntent);
         } else {
-            java.util.Calendar.getInstance().setTimeInMillis(System.currentTimeMillis());
+            java.util.Calendar calendar = java.util.Calendar.getInstance();
+                    calendar.setTimeInMillis(System.currentTimeMillis());
 
             if (alarmTimer.getNewAlarmMilitaryHour(context)== 24) {
-                java.util.Calendar.getInstance().set(java.util.Calendar.HOUR_OF_DAY, 0);
+                //java.util.Calendar.getInstance().
+                        calendar.set(java.util.Calendar.HOUR_OF_DAY, 0);
 
             } else {
-                java.util.Calendar.getInstance().set(java.util.Calendar.HOUR_OF_DAY, alarmTimer.getNewAlarmMilitaryHour(context));
+                //java.util.Calendar.getInstance().
+                        calendar.set(java.util.Calendar.HOUR_OF_DAY, alarmTimer.getNewAlarmMilitaryHour(context));
             }
 
-            java.util.Calendar.getInstance().set(java.util.Calendar.MINUTE, alarmTimer.getNewAlarmMilitaryMinute(context));
-            java.util.Calendar.getInstance().set(java.util.Calendar.SECOND, 0);
-            java.util.Calendar.getInstance().set(java.util.Calendar.MILLISECOND, 0);
+            //java.util.Calendar.getInstance().
+                    calendar.set(java.util.Calendar.MINUTE, alarmTimer.getNewAlarmMilitaryMinute(context));
+            //java.util.Calendar.getInstance().set(java.util.Calendar.SECOND, 0);
+            //java.util.Calendar.getInstance().set(java.util.Calendar.MILLISECOND, 0);
 
-            alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, java.util.Calendar.getInstance().getTimeInMillis(),
+            alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP,
+                    //java.util.Calendar.getInstance().
+                    calendar.getTimeInMillis(),
                     1000 * 60, alarmIntent);
         }
 

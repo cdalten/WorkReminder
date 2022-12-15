@@ -60,6 +60,7 @@ public class WorkNotificationReceiver extends BroadcastReceiver {
             context.startActivity(intent);
 
         }
+
         Log.d(PRODUCTION_TAG, "WORK ALARM RECEIVER GOT CALLED WITH: " + intent.getAction());
         Log.d(PRODUCTION_TAG, "ONRECEIVE() GOT CALLED");
 
@@ -77,7 +78,7 @@ public class WorkNotificationReceiver extends BroadcastReceiver {
 
         dayNotification.setNotificationAlarm(alarmUri);
         dayNotification.addAlarmNotificationRingtone(WorkReaderContract.ALARM_NOTIFICATION_SILENT);
-        dayNotification.updateDisplayNotification(context);
+        //dayNotification.updateDisplayNotification(context);
 
 
     }

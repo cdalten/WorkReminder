@@ -48,7 +48,7 @@ public class storeHoursInGUI extends FragmentActivity{
 
         week.get(WorkReaderContract.SUNDAY);
         week.get(WorkReaderContract.SUNDAY).add(0,
-                pref.getString(context.getString(R.string.SUNDAY), context.getString(R.string.SUNDAY)));
+                pref.getString(context.getString(R.string.SUNDAY_HOURS), context.getString(R.string.SUNDAY_HOURS)));
         week.get(WorkReaderContract.SUNDAY)
                 .add(WorkReaderContract.START_HOUR,
                         pref.getString(context.getString(R.string.SUNDAY_START_HOUR), WorkReaderContract.START_HOUR_DEFAULT));
@@ -69,7 +69,7 @@ public class storeHoursInGUI extends FragmentActivity{
                         pref.getString(context.getString(R.string.SUNDAY_END_AM_OR_PM), WorkReaderContract.END_AM_OR_PM_DEFAULT));
 
         week.get(WorkReaderContract.MONDAY).add(0,
-                pref.getString(context.getString(R.string.MONDAY), context.getString(R.string.MONDAY)));
+                pref.getString(context.getString(R.string.MONDAY_HOURS), context.getString(R.string.MONDAY_HOURS)));
         week.get(WorkReaderContract.MONDAY)
                 .add(WorkReaderContract.START_HOUR,
                         pref.getString(context.getString(R.string.MONDAY_START_HOUR), WorkReaderContract.START_HOUR_DEFAULT));
@@ -90,7 +90,7 @@ public class storeHoursInGUI extends FragmentActivity{
                         pref.getString(context.getString(R.string.MONDAY_END_AM_OR_PM), WorkReaderContract.END_AM_OR_PM_DEFAULT));
 
         week.get(WorkReaderContract.TUESDAY).add(0,
-                pref.getString(context.getString(R.string.TUESDAY), context.getString(R.string.TUESDAY)));
+                pref.getString(context.getString(R.string.TUESDAY_HOURS), context.getString(R.string.TUESDAY_HOURS)));
         week.get(WorkReaderContract.TUESDAY)
                 .add(WorkReaderContract.START_HOUR,
                         pref.getString(context.getString(R.string.TUESDAY_START_HOUR), WorkReaderContract.START_HOUR_DEFAULT));
@@ -112,7 +112,7 @@ public class storeHoursInGUI extends FragmentActivity{
 
 
         week.get(WorkReaderContract.WEDNESDAY).add(0,
-                pref.getString(context.getString(R.string.WEDNESDAY), context.getString(R.string.WEDNESDAY)));
+                pref.getString(context.getString(R.string.WEDNESDAY_HOURS), context.getString(R.string.WEDNESDAY_HOURS)));
         week.get(WorkReaderContract.WEDNESDAY)
                 .add(WorkReaderContract.START_HOUR,
                         pref.getString(context.getString(R.string.WEDNESDAY_START_HOUR), WorkReaderContract.START_HOUR_DEFAULT));
@@ -134,7 +134,7 @@ public class storeHoursInGUI extends FragmentActivity{
 
 
         week.get(WorkReaderContract.THURSDAY).add(0,
-                pref.getString(context.getString(R.string.THURSDAY), context.getString(R.string.THURSDAY)));
+                pref.getString(context.getString(R.string.THURSDAY_HOURS), context.getString(R.string.THURSDAY_HOURS)));
         week.get(WorkReaderContract.THURSDAY)
                 .add(WorkReaderContract.START_HOUR,
                         pref.getString(context.getString(R.string.THURSDAY_START_HOUR), WorkReaderContract.START_HOUR_DEFAULT));
@@ -156,7 +156,7 @@ public class storeHoursInGUI extends FragmentActivity{
 
 
         week.get(WorkReaderContract.FRIDAY).add(0,
-                pref.getString(context.getString(R.string.FRIDAY), context.getString(R.string.FRIDAY)));
+                pref.getString(context.getString(R.string.FRIDAY_HOURS), context.getString(R.string.FRIDAY_HOURS)));
         week.get(WorkReaderContract.FRIDAY)
                 .add(WorkReaderContract.START_HOUR,
                         pref.getString(context.getString(R.string.FRIDAY_START_HOUR), WorkReaderContract.START_HOUR_DEFAULT));
@@ -178,7 +178,7 @@ public class storeHoursInGUI extends FragmentActivity{
 
 
         week.get(WorkReaderContract.SATURDAY).add(0,
-                pref.getString(context.getString(R.string.SATURDAY), context.getString(R.string.SATURDAY)));
+                pref.getString(context.getString(R.string.SATURDAY_HOURS), context.getString(R.string.SATURDAY_HOURS)));
         week.get(WorkReaderContract.SATURDAY)
                 .add(WorkReaderContract.START_HOUR,
                         pref.getString(context.getString(R.string.SATURDAY_START_HOUR), WorkReaderContract.START_HOUR_DEFAULT));

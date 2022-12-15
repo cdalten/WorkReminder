@@ -136,7 +136,7 @@ public class CurrentWeekSchedule extends ListActivity {
                         fillListviewDropdown(
                                 new Intent(CurrentWeekSchedule.this, DaySunday.class),
                                 position,
-                                R.string.SUNDAY,
+                                R.string.SUNDAY_HOURS,
                                 R.string.SUNDAY_START_HOUR,
                                 R.string.SUNDAY_START_MINUTE,
                                 R.string.SUNDAY_START_AM_OR_PM,
@@ -149,7 +149,7 @@ public class CurrentWeekSchedule extends ListActivity {
                         fillListviewDropdown(
                                 new Intent(CurrentWeekSchedule.this, DayMonday.class),
                                 position,
-                                R.string.MONDAY,
+                                R.string.MONDAY_HOURS,
                                 R.string.MONDAY_START_HOUR,
                                 R.string.MONDAY_START_MINUTE,
                                 R.string.MONDAY_START_AM_OR_PM,
@@ -162,7 +162,7 @@ public class CurrentWeekSchedule extends ListActivity {
                         fillListviewDropdown(
                                 new Intent(CurrentWeekSchedule.this, DayTuesday.class),
                                 position,
-                                R.string.TUESDAY,
+                                R.string.TUESDAY_HOURS,
                                 R.string.TUESDAY_START_HOUR,
                                 R.string.TUESDAY_START_MINUTE,
                                 R.string.TUESDAY_START_AM_OR_PM,
@@ -175,7 +175,7 @@ public class CurrentWeekSchedule extends ListActivity {
                         fillListviewDropdown(
                                 new Intent(CurrentWeekSchedule.this, DayWednesday.class),
                                 position,
-                                R.string.WEDNESDAY,
+                                R.string.WEDNESDAY_HOURS,
                                 R.string.WEDNESDAY_START_HOUR,
                                 R.string.WEDNESDAY_START_MINUTE,
                                 R.string.WEDNESDAY_START_AM_OR_PM,
@@ -188,7 +188,7 @@ public class CurrentWeekSchedule extends ListActivity {
                         fillListviewDropdown(
                                 new Intent(CurrentWeekSchedule.this, DayThursday.class),
                                 position,
-                                R.string.THURSDAY,
+                                R.string.THURSDAY_HOURS,
                                 R.string.THURSDAY_START_HOUR,
                                 R.string.THURSDAY_START_MINUTE,
                                 R.string.THURSDAY_START_AM_OR_PM,
@@ -201,7 +201,7 @@ public class CurrentWeekSchedule extends ListActivity {
                         fillListviewDropdown(
                                 new Intent(CurrentWeekSchedule.this, DayFriday.class),
                                 position,
-                                R.string.FRIDAY,
+                                R.string.FRIDAY_HOURS,
                                 R.string.FRIDAY_START_HOUR,
                                 R.string.FRIDAY_START_MINUTE,
                                 R.string.FRIDAY_START_AM_OR_PM,
@@ -215,7 +215,7 @@ public class CurrentWeekSchedule extends ListActivity {
                         fillListviewDropdown(
                                 new Intent(CurrentWeekSchedule.this, DaySaturday.class),
                                 position,
-                                R.string.SATURDAY,
+                                R.string.SATURDAY_HOURS,
                                 R.string.SATURDAY_START_HOUR,
                                 R.string.SATURDAY_START_MINUTE,
                                 R.string.SATURDAY_START_AM_OR_PM,
@@ -342,7 +342,7 @@ public class CurrentWeekSchedule extends ListActivity {
         saveDataOnRotation(
                 outState,
                 "DAY_SUNDAY",
-                R.string.SUNDAY,
+                R.string.SUNDAY_HOURS,
                 R.string.SUNDAY_START_HOUR,
                 R.string.SUNDAY_START_MINUTE,
                 R.string.SUNDAY_START_AM_OR_PM,
@@ -355,7 +355,7 @@ public class CurrentWeekSchedule extends ListActivity {
         saveDataOnRotation(
                 outState,
                 "DAY_MONDAY",
-                R.string.MONDAY,
+                R.string.MONDAY_HOURS,
                 R.string.MONDAY_START_HOUR,
                 R.string.MONDAY_START_MINUTE,
                 R.string.MONDAY_START_AM_OR_PM,
@@ -367,7 +367,7 @@ public class CurrentWeekSchedule extends ListActivity {
         saveDataOnRotation(
                 outState,
                 "DAY_TUESDAY",
-                R.string.TUESDAY,
+                R.string.TUESDAY_HOURS,
                 R.string.TUESDAY_START_HOUR,
                 R.string.TUESDAY_START_MINUTE,
                 R.string.TUESDAY_START_AM_OR_PM,
@@ -379,7 +379,7 @@ public class CurrentWeekSchedule extends ListActivity {
         saveDataOnRotation(
                 outState,
                 "DAY_WEDNESDAY",
-                R.string.WEDNESDAY,
+                R.string.WEDNESDAY_HOURS,
                 R.string.WEDNESDAY_START_HOUR,
                 R.string.WEDNESDAY_START_MINUTE,
                 R.string.WEDNESDAY_START_AM_OR_PM,
@@ -391,7 +391,7 @@ public class CurrentWeekSchedule extends ListActivity {
         saveDataOnRotation(
                 outState,
                 "DAY_THURSDAY",
-                R.string.THURSDAY,
+                R.string.THURSDAY_HOURS,
                 R.string.THURSDAY_START_HOUR,
                 R.string.THURSDAY_START_MINUTE,
                 R.string.THURSDAY_START_AM_OR_PM,
@@ -403,7 +403,7 @@ public class CurrentWeekSchedule extends ListActivity {
         saveDataOnRotation(
                 outState,
                 "DAY_FRIDAY",
-                R.string.FRIDAY,
+                R.string.FRIDAY_HOURS,
                 R.string.FRIDAY_START_HOUR,
                 R.string.FRIDAY_START_MINUTE,
                 R.string.FRIDAY_START_AM_OR_PM,
@@ -416,7 +416,7 @@ public class CurrentWeekSchedule extends ListActivity {
         saveDataOnRotation(
                 outState,
                 "DAY_SATURDAY",
-                R.string.SATURDAY,
+                R.string.SATURDAY_HOURS,
                 R.string.SATURDAY_START_HOUR,
                 R.string.SATURDAY_START_MINUTE,
                 R.string.SATURDAY_START_AM_OR_PM,
@@ -600,7 +600,7 @@ private void updateHours(String newStartDay, String newStartHour, String newStar
 
         switch(currentPosition){
             case WorkReaderContract.SUNDAY:
-                saveDataToMemory(R.string.SUNDAY,
+                saveDataToMemory(R.string.SUNDAY_HOURS,
                         R.string.SUNDAY_START_HOUR,
                         R.string.SUNDAY_START_MINUTE,
                         R.string.SUNDAY_START_AM_OR_PM,
@@ -616,7 +616,7 @@ private void updateHours(String newStartDay, String newStartHour, String newStar
                         newEndAmOrPm);
                 break;
             case WorkReaderContract.MONDAY:
-                saveDataToMemory(R.string.SATURDAY,
+                saveDataToMemory(R.string.SATURDAY_HOURS,
                         R.string.MONDAY_START_HOUR,
                         R.string.MONDAY_START_MINUTE,
                         R.string.MONDAY_START_AM_OR_PM,
@@ -632,7 +632,7 @@ private void updateHours(String newStartDay, String newStartHour, String newStar
                         newEndAmOrPm);
                 break;
             case WorkReaderContract.TUESDAY:
-                saveDataToMemory(R.string.TUESDAY,
+                saveDataToMemory(R.string.TUESDAY_HOURS,
                         R.string.TUESDAY_START_HOUR,
                         R.string.TUESDAY_START_MINUTE,
                         R.string.TUESDAY_START_AM_OR_PM,
@@ -648,7 +648,7 @@ private void updateHours(String newStartDay, String newStartHour, String newStar
                         newEndAmOrPm);
                 break;
             case WorkReaderContract.WEDNESDAY:
-                saveDataToMemory(R.string.WEDNESDAY,
+                saveDataToMemory(R.string.WEDNESDAY_HOURS,
                         R.string.WEDNESDAY_START_HOUR,
                         R.string.WEDNESDAY_START_MINUTE,
                         R.string.WEDNESDAY_START_AM_OR_PM,
@@ -664,7 +664,7 @@ private void updateHours(String newStartDay, String newStartHour, String newStar
                         newEndAmOrPm);
                 break;
             case WorkReaderContract.THURSDAY:
-                saveDataToMemory(R.string.THURSDAY,
+                saveDataToMemory(R.string.THURSDAY_HOURS,
                         R.string.THURSDAY_START_HOUR,
                         R.string.THURSDAY_START_MINUTE,
                         R.string.THURSDAY_START_AM_OR_PM,
@@ -680,7 +680,7 @@ private void updateHours(String newStartDay, String newStartHour, String newStar
                         newEndAmOrPm);
                 break;
             case WorkReaderContract.FRIDAY:
-                saveDataToMemory(R.string.FRIDAY,
+                saveDataToMemory(R.string.FRIDAY_HOURS,
                         R.string.FRIDAY_START_HOUR,
                         R.string.FRIDAY_START_MINUTE,
                         R.string.FRIDAY_START_AM_OR_PM,
@@ -696,7 +696,7 @@ private void updateHours(String newStartDay, String newStartHour, String newStar
                         newEndAmOrPm);
                 break;
             case WorkReaderContract.SATURDAY:
-                saveDataToMemory(R.string.SATURDAY,
+                saveDataToMemory(R.string.SATURDAY_HOURS,
                         R.string.SATURDAY_START_HOUR,
                         R.string.SATURDAY_START_MINUTE,
                         R.string.SATURDAY_START_AM_OR_PM,

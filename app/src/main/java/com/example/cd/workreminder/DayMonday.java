@@ -42,7 +42,7 @@ public class DayMonday extends BackKey {
     Button finish; //Added on 2 - 1- 2019
     private int dayPosition;
     private final String PRODUCTION_TAG = "DAY_MONDAY:";
-    private SharedPreferences pref; //Added on 5 - 24 - 2019
+    //private SharedPreferences pref; //Added on 5 - 24 - 2019
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +58,7 @@ public class DayMonday extends BackKey {
         endAmOrPm = (Spinner) findViewById(R.id.endAmOrPm);
         finish = (Button) findViewById(R.id.finish);
 
-        pref = getSharedPreferences("BECAUSE_INTENTS_SUCK_MASSIVE_DICK", MODE_PRIVATE);
+        SharedPreferences pref = getSharedPreferences("BECAUSE_INTENTS_SUCK_MASSIVE_DICK", MODE_PRIVATE);
         final SharedPreferences.Editor editor = pref.edit();
         //Pipe data back.
         setMondayHours = getIntent();
@@ -85,7 +85,7 @@ public class DayMonday extends BackKey {
                         SharedPreferences.Editor editor = pref.edit();
                         //switch(saveDay) {
                         //case WorkReaderContract.WorkEntry.TUESDAY:
-                        editor.putString(getString(R.string.MONDAY), "OFF");
+                        editor.putString(getString(R.string.MONDAY_HOURS), "OFF");
                         editor.putString(getString(R.string.MONDAY_START_HOUR), "");
                         editor.putString(getString(R.string.MONDAY_START_MINUTE), "");
                         editor.putString(getString(R.string.MONDAY_START_AM_OR_PM), "");
@@ -140,7 +140,7 @@ public class DayMonday extends BackKey {
 
                 setMondayHours.putExtra(getString(R.string.START_HOUR),
                         parent.getItemAtPosition(position).toString());
-                editor.putString(getString(R.string.MONDAY), "MONDAY");
+                editor.putString(getString(R.string.MONDAY_HOURS), "MONDAY");
                 setResult(WorkReaderContract.RESULT_OK_WORK, setMondayHours);
             }
 
@@ -166,7 +166,7 @@ public class DayMonday extends BackKey {
                         parent.getItemAtPosition(position).toString());
                 setMondayHours.putExtra(getString(R.string.START_MINUTE),
                         parent.getItemAtPosition(position).toString());
-                editor.putString(getString(R.string.MONDAY), "MONDAY");
+                editor.putString(getString(R.string.MONDAY_HOURS), "MONDAY");
                 setResult(WorkReaderContract.RESULT_OK_WORK, setMondayHours);
             }
 
@@ -191,7 +191,7 @@ public class DayMonday extends BackKey {
                 editor.putString(getString(R.string.MONDAY_START_AM_OR_PM),
                         parent.getItemAtPosition(position).toString());
                 setMondayHours.putExtra(getString(R.string.START_AM_OR_PM), parent.getItemAtPosition(position).toString());
-                editor.putString(getString(R.string.MONDAY), "MONDAY");
+                editor.putString(getString(R.string.MONDAY_HOURS), "MONDAY");
                 setResult(WorkReaderContract.RESULT_OK_WORK, setMondayHours);
             }
 
@@ -215,7 +215,7 @@ public class DayMonday extends BackKey {
                         parent.getItemAtPosition(position).toString());
                 setMondayHours.putExtra(getString(R.string.END_HOUR),
                         parent.getItemAtPosition(position).toString());
-                editor.putString(getString(R.string.MONDAY), "MONDAY");
+                editor.putString(getString(R.string.MONDAY_HOURS), "MONDAY");
                 setResult(WorkReaderContract.RESULT_OK_WORK, setMondayHours);
             }
 
@@ -239,7 +239,7 @@ public class DayMonday extends BackKey {
                         parent.getItemAtPosition(position).toString());
 
                 setMondayHours.putExtra(getString(R.string.END_MINUTE), parent.getItemAtPosition(position).toString());
-                editor.putString(getString(R.string.MONDAY), "MONDAY");
+                editor.putString(getString(R.string.MONDAY_HOURS), "MONDAY");
                 setResult(WorkReaderContract.RESULT_OK_WORK, setMondayHours);
             }
 
@@ -262,7 +262,7 @@ public class DayMonday extends BackKey {
                 editor.putString(getString(R.string.MONDAY_END_AM_OR_PM),
                         parent.getItemAtPosition(position).toString());
                 setMondayHours.putExtra(getString(R.string.END_AM_OR_PM), parent.getItemAtPosition(position).toString());
-                editor.putString(getString(R.string.MONDAY), "MONDAY");
+                editor.putString(getString(R.string.MONDAY_HOURS), "MONDAY");
                 setResult(WorkReaderContract.RESULT_OK_WORK, setMondayHours);
             }
 
